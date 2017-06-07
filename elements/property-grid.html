@@ -1,0 +1,673 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<link rel="import" href="../../polymer/polymer.html">
+<dom-module id="property-grid">
+  <style>
+    :host {
+      display: block;
+    }
+    /*Property Grid Styles*/
+
+    .table {
+      font-size: 14px;
+    }
+
+    .table-header {
+      border-bottom: 1px solid var(--divider-color);
+      border-top: 1px solid var(--divider-color);
+      font-weight: bold;
+      padding: 0px 16px;
+      color: var(--secondary-text-color);
+    }
+
+    .table-row {
+      padding: 0px 16px;
+      border-bottom: 1px solid var(--divider-color);
+      position: relative;
+      height: 44px;
+    }
+
+    .table-row.edit-state {
+      height: auto;
+    }
+
+    .table-header .gridCol,
+    .table-row .gridCol {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+      white-space: nowrap;
+      padding: 0px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .table-header .gridCol {
+      padding: 12px 5px;
+    }
+
+    .table-header .checkrow,
+    .table-row .checkrow {
+      width: 40px;
+    }
+
+    iron-icon+span {
+      margin-left: 5px;
+    }
+
+    .options {
+      visibility: hidden;
+      display: flex;
+      height: 100%;
+      flex: 1;
+      justify-content: space-around !important;
+      padding: 0px 16px !important;
+    }
+
+    .table-row:hover {
+      background: #f6f6f6;
+    }
+
+    .table-row:hover .options {
+      visibility: visible;
+    }
+
+    .edit,
+    .delete {
+      display: inline-block;
+      cursor: pointer
+    }
+
+    paper-button iron-icon.small {
+      width: 16px;
+      height: 16px;
+    }
+
+    paper-menu-button iron-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .add-property-container {
+      padding: 16px 0px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    .text {
+      color: var(--secondary-text-color);
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    .add-property {
+      padding: 8px 16px;
+    }
+
+    .empty-state {
+      padding: 30px;
+      text-align: center;
+    }
+
+    paper-checkbox {
+      padding: 12px 5px;
+    }
+
+    .tooltip-card {
+      background: transparent;
+    }
+
+    .tooltip-card label {
+      font-size: 12px;
+      display: block;
+      padding: 4px 8px;
+    }
+
+    .prop-name,
+    .prop-type,
+    .prop-required,
+    .prop-validation,
+    .prop-index {
+      flex: 2;
+    }
+
+    .table-row .prop-validation paper-button {
+      display: none;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      font-size: 12px;
+    }
+
+    .table-row .prop-validation iron-icon {
+      margin-right: 16px;
+    }
+
+    .table-row:hover .prop-validation paper-button {
+      display: inline;
+    }
+    /*Validation Container Styles*/
+
+    .valid-setting>* {
+      padding-right: 8px;
+      box-sizing: border-box;
+    }
+
+    .validations-container {
+      padding: 16px 16px 0px 16px;
+      box-sizing: border-box;
+      min-width: 200px;
+    }
+
+    .validations-container .title {
+      font-size: 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      margin-bottom: 8px;
+    }
+
+    .custom-buttons,
+    .toggle-btn-container {
+      padding: 8px 0px;
+    }
+
+    .property-validation>* {
+      flex: 1;
+    }
+
+    .check {
+      width: 40px;
+    }
+
+    .validation-holder {
+      right: 30px;
+      position: fixed;
+      top: 24px;
+      display: block;
+      background: #fff;
+      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    }
+
+     :host.inline-validate .validation-holder {
+      position: absolute;
+      top: 0;
+      right: 0px;
+    }
+
+    #propertyform {
+      position: relative;
+    }
+
+    iron-icon.has-validation-false {
+      opacity: 0.3;
+    }
+  </style>
+  <template>
+    <form is="iron-form" id="propertyform">
+      <template is="dom-if" if="{{!showProperties}}">
+        <div class="add-property empty-state">
+          <paper-button class="custom" on-tap="showProperty" id="addPropertyButton" hidden$="{{hideAddBtn}}">
+            ADD PROPERTY</paper-button>
+          <div class="text">
+            The properties key defines one or more properties, each of which is an object
+          </div>
+        </div>
+      </template>
+      <template is="dom-if" if="{{showProperties}}">
+        <div class="add-property-container layout horizontal center justified" hidden$="{{hideAddBtn}}">
+          <label>Property List</label>
+          <div on-tap="_deleteMultipleProperties" id="deleteMultipleProperties" class="pull-right" hidden$="{{!deleteMultiple}}">
+            <iron-icon icon="delete"></iron-icon>
+          </div>
+        </div>
+        <div class="table">
+          <div class="table-header center layout flex horizontal justified">
+            <div class="check" hidden="{{readOnly}}">
+              <paper-checkbox noink on-change="_checkAll" checked="{{allChecked}}" id="checkAll">
+              </paper-checkbox>
+            </div>
+            <div class="gridCol prop-name">
+              Property Name
+            </div>
+            <div class="gridCol prop-type">Property type</div>
+            <div class="gridCol prop-required">Required</div>
+            <div class="gridCol prop-index">Index</div>
+            <div class="gridCol prop-validation">Validations</div>
+            <div class="gridCol options" hidden="{{readOnly}}"></div>
+          </div>
+          <div class="table-body">
+            <template is="dom-repeat" items={{propertyList}} as="property">
+              <template is="dom-if" if="{{!property.editable}}">
+                <div class=" read-only table-row layout flex horizontal justified" index={{index}} on-tap="_editProperty">
+                  <div class="check" hidden="{{readOnly}}">
+                    <paper-checkbox noink on-change="_check" checked="{{property.checked}}">
+                    </paper-checkbox>
+                  </div>
+                  <div class="gridCol prop-name">
+                    {{property.__name__}}
+                  </div>
+                  <div class="gridCol prop-type">{{property.type}}</div>
+                  <div class="gridCol prop-required horizontal layout justified center">
+                    {{getBooleanValue(property.required)}}
+                  </div>
+                  <div class="gridCol prop-index horizontal layout justified center">
+                    {{getBooleanValue(property.index)}}
+                  </div>
+                  <div class="gridCol prop-validation">
+                    <iron-icon icon="icons:done-all" class$="has-validation-[[hasValidation(property)]]" on-tap="_showPropValidation"></iron-icon>
+                    <paper-button on-tap="_showPropValidation" id="property-grid-view-validation">View Validation</paper-button>
+                  </div>
+                  <div class="gridCol options around-justified center horizontal layout" hidden="{{readOnly}}">
+                    <iron-icon id="delete" icon="delete" on-tap="_deleteProperty"></iron-icon>
+                    <paper-tooltip for="delete">Delete</paper-tooltip>
+                  </div>
+                </div>
+              </template>
+              <template is="dom-if" if="{{property.editable}}" on-dom-change="setFocus">
+                <div class="table-row edit-state layout flex horizontal center justified" index={{index}}>
+                  <div class="check">
+                    <paper-checkbox noink on-change="_check" checked="{{property.checked}}">
+                    </paper-checkbox>
+                  </div>
+                  <div class="gridCol prop-name">
+                    <paper-input required label="Property name" error-message="Please enter the property name" no-label-float value="{{property.__name__}}"></paper-input>
+                  </div>
+                  <div class="gridCol prop-type">
+                    <paper-dropdown-menu required error-message="Please choose the type" label="Property type" no-label-float>
+                      <paper-menu class="dropdown-content" attr-for-selected="datavalue" selected="{{property.type}}">
+                        <template is="dom-repeat" items="[[propertyTypes]]" as="model">
+                          <paper-item datavalue="[[model]]">[[model]]</paper-item>
+                        </template>
+                      </paper-menu>
+                    </paper-dropdown-menu>
+                  </div>
+                  <div class="gridCol prop-required">
+                    <paper-checkbox noink checked="{{property.required}}">
+                    </paper-checkbox>
+                  </div>
+                  <div class="gridCol prop-index">
+                    <paper-checkbox noink checked="{{property.index}}">
+                    </paper-checkbox>
+                  </div>
+                  <div class="gridCol prop-validation">
+                    <paper-button on-tap="_validateProperty" id="property-grid-validate-property">[[validateBtnText(property)]]</paper-button>
+                  </div>
+                  <div class="gridCol options around-justified center horizontal layout">
+                    <iron-icon id="delete" icon="delete" on-tap="_deleteProperty"></iron-icon>
+                    <paper-tooltip for="delete">Delete</paper-tooltip>
+                    <iron-icon id="restore" icon="icons:restore" on-tap="resetProperty"></iron-icon>
+                    <paper-tooltip for="restore">Restore</paper-tooltip>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
+        </div>
+        <div class="validation-holder">
+          <iron-collapse opened="{{showValidation}}" horizontal>
+            <property-validation-form id="validationForm" read-only="{{readOnly}}" on-update-validation="updateValidation" on-close-validation="cancelValidation"></property-validation-form>
+          </iron-collapse>
+        </div>
+      </template>
+    </form>
+    <property-dialog id="propDialog" read-only></property-dialog>
+  </template>
+  <script>
+    Polymer({
+      is: 'property-grid',
+      properties: {
+        propertyList: {
+          type: Array,
+          value: function () {
+            return [];
+          },
+          notify: true
+        },
+        propertyTypes: {
+          type: Array,
+          value: function () {
+            return [];
+          }
+        },
+        deleteMultiple: {
+          type: Boolean,
+          value: false
+        },
+        propertyObj: {
+          type: Object,
+          value: function () {
+            return {}
+          }
+        },
+        showProperties: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+        hideAddBtn: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+        readOnly: {
+          type: Boolean,
+          value: false,
+          notify: true
+        }
+      },
+      setFocus: function () {
+        var form = this.querySelector('form');
+        if (form && form.elements) {
+          var currInput = _.find(form.elements, function (ele) {
+            var style = $(ele).closest('.table-row')[0].style.display;
+            return (style == '')
+          })
+          if (currInput) {
+            currInput.focus();
+          }
+        }
+      },
+      listeners: {
+        'read-only': '_setReadOnly'
+      },
+      _setReadOnly: function () {
+        if (this.showValidation && !this.readOnly) {
+          var validationForm = this.querySelector('#validationForm');
+          validationForm.setValidation();
+        }
+        this.propertyList.forEach(function (d, i) {
+          var obj = JSON.parse(JSON.stringify(d));
+          delete obj.editable;
+          this.set('propertyList.' + i, obj);
+        }.bind(this));
+      },
+      observers: ['propertyListChanged(propertyList.*)'],
+      _editProperty: function (e) {
+        if (this.readOnly) {
+          return;
+        }
+
+        if (this.showValidation) {
+          this.fire('ev-show-warning', 'Please close the validation panel');
+          return;
+        }
+
+        var index = e.model.index;
+        var valid = true
+
+        var editable = _.find(this.propertyList, function (prop) {
+          return prop.editable;
+        });
+        var editableIndex = _.findIndex(this.propertyList, function (prop) {
+          return prop.editable;
+        });
+
+        if (editable) {
+          if ((!editable.__name__ || editable.__name__.trim().length == 0) && !editable.type) {
+            this.splice('propertyList', editableIndex, 1);
+            index -= 1;
+            valid = true;
+          } else {
+            //checking for duplicate property name
+            this.propertyList.forEach(function (d, i) {
+              if (i != editableIndex && d.__name__ == editable.__name__) {
+                this.fire('ev-show-error', 'Property name already exists');
+                valid = false;
+              }
+            }.bind(this));
+          }
+        }
+        if (!valid) {
+          return;
+        }
+        valid = this.$.propertyform.validate();
+        if (valid) {
+          this.propertyList.forEach(function (d, i) {
+            var obj = JSON.parse(JSON.stringify(d));
+            delete obj.editable;
+            delete obj.newProp;
+            this.set('propertyList.' + i, obj);
+          }.bind(this));
+          this.set('propertyList.' + index + '.editable', true);
+          this.set('propertyList.' + index + '.newProp', false);
+          this.set('propertyObj', JSON.parse(JSON.stringify(this.propertyList[index])));
+        }
+      },
+      _addProperty: function () {
+        if (!this.$.propertyform.validate()) {
+          return;
+        }
+        var valid = true;
+        var editable = _.find(this.propertyList, function (prop) {
+          return prop.editable;
+        });
+        var editableIndex = _.findIndex(this.propertyList, function (prop) {
+          return prop.editable;
+        });
+
+        if (editable) {
+          this.propertyList.forEach(function (d, i) {
+            if (i != editableIndex && d.__name__ == editable.__name__) {
+              this.fire('ev-show-error', 'Property name already exists');
+              valid = false;
+            }
+          }.bind(this));
+        }
+        if (!valid) {
+          return;
+        }
+        this.propertyList.forEach(function (d, i) {
+          var obj = JSON.parse(JSON.stringify(d));
+          delete obj.editable;
+          this.set('propertyList.' + i, obj);
+        }.bind(this));
+        var obj = {
+          'editable': true,
+          'newProp': true,
+          'type': 'string'
+        };
+        this.set('propertyObj', JSON.parse(JSON.stringify(obj)));
+        this.push('propertyList', obj);
+      },
+      resetProperty: function (e) {
+        var index = e.model.index;
+        var obj = JSON.parse(JSON.stringify(this.propertyObj));
+        delete obj.editable;
+        if (obj.newProp) {
+          delete obj.newProp;
+          this.splice('propertyList', e.model.index, 1);
+        } else {
+          delete obj.newProp;
+          this.set('propertyList.' + index, obj);
+        }
+      },
+      customValidation: function () {
+        var valid = true;
+        var isEmpty = this.isEditableEmpty();
+        var editable = _.find(this.propertyList, function (prop) {
+          return prop.editable;
+        });
+        var editableIndex = _.findIndex(this.propertyList, function (prop) {
+          return prop.editable;
+        });
+        if (isEmpty) {
+          if (editableIndex != -1) {
+            this.splice('propertyList', editableIndex, 1);
+          }
+          valid = true;
+        } else {
+          if (editable) {
+            this.propertyList.forEach(function (d, i) {
+              if (i != editableIndex && d.__name__ == editable.__name__) {
+                this.fire('ev-show-error', 'Property name already exists');
+                valid = false;
+              }
+            }.bind(this));
+          }
+        }
+        if (!valid) {
+          return false;
+        }
+        valid = this.$.propertyform.validate();
+        return valid;
+      },
+      hasValidation: function (prop) {
+        var validationList = ['min', 'max', 'is', 'format', 'absence', 'unique', 'in', 'notin'];
+        for (var i = 0, len = validationList.length; i < len; i++) {
+          var k = validationList[i]
+          if (prop[k] != undefined &&
+            ((typeof prop[k] == 'boolean') ? true : ((typeof prop[k] == 'number') ? true : (prop[k].length > 0)))
+          ) {
+            return true
+          }
+        }
+        return false;
+      },
+      validateBtnText: function (prop) {
+        return (this.hasValidation(prop) ? 'Update Validation' : 'Add validation');
+      },
+      _showPropValidation: function (e) {
+        e.stopPropagation();
+        var index = e.model.index;
+        var prop = this.propertyList[index]
+        if (this.readOnly) {
+          this.$.propDialog.set('propertyObj', prop);
+          this.$.propDialog.set('readOnly', true);
+          this.$.propDialog.openDialog();
+          return;
+        }
+        var validationForm = this.querySelector('#validationForm');
+        validationForm.gotoSelect();
+        validationForm.currIndex = index;
+        validationForm.getValidation(prop);
+        this.showValidation = true;
+      },
+      _validateProperty: function (e) {
+        e.stopPropagation();
+        var index = e.model.index;
+        if (!this.$.propertyform.validate()) {
+          return
+        }
+        var validationForm = this.querySelector('#validationForm');
+        validationForm.gotoCreate();
+        validationForm.currIndex = index;
+        this.set('propertyList.' + index + '.editable', false);
+        validationForm.getValidation(this.propertyList[index]);
+        this.showValidation = true;
+      },
+      updateValidation: function (e) {
+        var property = e.detail;
+        var validationForm = this.querySelector('#validationForm');
+        var index = validationForm.currIndex;
+        this.set(('propertyList.' + index), property);
+        this.set(('propertyList.' + index + '.required'), property.required);
+        this.showValidation = false;
+      },
+      cancelValidation: function () {
+        this.showValidation = false;
+      },
+      propertyListChanged: function () {
+        if (Array.isArray(this.propertyList) && this.propertyList.length != 0) {
+          this.showProperties = true;
+        } else {
+          this.showProperties = false;
+        }
+      },
+      showProperty: function () {
+        this.showProperties = true;
+        var obj = {
+          'editable': true,
+          'newProp': true,
+          'type': 'string'
+        };
+        this.set('propertyObj', JSON.parse(JSON.stringify(obj)));
+        this.splice('propertyList', 0, 0, obj);
+      },
+      _deleteProperty: function (e) {
+        e.stopPropagation();
+        if (this.isEditableEmpty()) {
+          this.splice('propertyList', e.model.index, 1);
+        } else {
+          var data = {
+            message: 'Do you want to delete the property?',
+            ok: function () {
+              this.splice('propertyList', e.model.index, 1);
+            }.bind(this),
+            cancel: function () {
+              return;
+            }
+          }
+          this.fire('ev-show-confirm', data);
+        }
+      },
+      isEditableEmpty: function () {
+        var editable = _.find(this.propertyList, function (prop) {
+          return prop.editable;
+        });
+        if (!editable) {
+          return true
+        }
+        var ignoreFields = ['editable', 'newProp', 'type', 'checked'];
+        var extraField = Object.keys(editable).find(function (k) {
+          return ignoreFields.indexOf(k) == -1
+        });
+        if (extraField) {
+          return false;
+        } else {
+          return editable.type == 'string'
+        }
+      },
+      _deleteMultipleProperties: function () {
+        var data = {
+          message: 'Do you want to delete ?',
+          ok: function () {
+            var propList = this.propertyList.filter(function (d) {
+              return d.checked !== true;
+            });
+            this.set('propertyList', propList);
+          }.bind(this),
+          cancel: function () {
+            return;
+          }
+        }
+        this.fire('ev-show-confirm', data);
+      },
+      _checkAll: function () {
+        this.setAll(this.allChecked);
+        this.set('deleteMultiple', !!this.getCount());
+      },
+      _check: function (e) {
+        if (e) {
+          e.stopPropagation()
+        }
+        var count = this.getCount();
+        if (count === this.propertyList.length && this.propertyList.length > 0) {
+          this.set('allChecked', true);
+        } else {
+          this.set('allChecked', false);
+        }
+        this.set('deleteMultiple', !!count);
+      },
+      getCount: function () {
+        var count = 0;
+        this.propertyList.forEach(function (d) {
+          if (d.checked) {
+            count++;
+          }
+        });
+        return count;
+      },
+      setAll: function (flag) {
+        this.propertyList.forEach(function (d, i) {
+          this.set('propertyList.' + i + '.checked', flag);
+        }.bind(this));
+        this._check();
+      },
+      getBooleanValue: function (value) {
+        return value === true;
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,192 @@
+<dom-module id="ui-clone-page">
+  <template>
+		<style>
+			:host {
+				background: var(--default-primary-color);
+				width: 350px;
+				height: 400px;
+				position: relative;
+				display: block;
+			}
+
+			.container {
+				padding: 16px;
+				height: calc(100% - 40px);
+				box-sizing: border-box;
+				overflow: auto;
+			}
+
+			ev-json-input,
+			ev-input {
+				--paper-input-container-focus-color: #ffffff;
+				--paper-input-container-input-color: rgba(255, 255, 255, 0.6);
+				--paper-input-container-color: rgba(255, 255, 255, 0.6);
+			}
+
+			paper-radio-button {
+				display: block;
+				padding: 8px 0px;
+				--paper-radio-button-unchecked-color: rgba(255, 255, 255, 0.6);
+				--paper-radio-button-checked-color: rgba(255, 255, 255, 0.6);
+				--paper-radio-button-label-color: rgba(255, 255, 255, 0.6);
+			}
+
+			.template-chooser {
+				margin-top: 16px 0px;
+			}
+
+			.buttons {
+				background: var(--dark-primary-color);
+				height: 40px;
+				padding: 0px 16px;
+			}
+
+			.primary-btn {
+				color: var(--default-text-color);
+				background: transparent;
+			}
+			.primary-btn[disabled] {
+				color: var(--disabled-text-color);
+				background: transparent;
+			}
+			.secondary-btn {
+				color: var(--default-text-color);
+				opacity: 0.6;
+				background: transparent;
+			}
+		</style>
+		<div class="container">
+			<ev-input label="Page Name" value="{{pageName}}" invalid="{{pageNameFlag}}" pattern="{{pattern}}" id="pageNameInput" auto-validate
+			  prevent-invalid-input></ev-input>
+			<ev-json-input label="Scope" value="{{scope}}"></ev-json-input>
+			<div class="template-chooser" hidden$="{{!activePage.isPolymerElement}}">
+				<div class="step-title">Change template</div>
+				<div class="step-content">
+					<paper-radio-group selected="{{templateSelected}}">
+						<template is="dom-repeat" items="[[_filterTemplates(templateList,activePage)]]">
+							<paper-radio-button name="{{item}}">
+								<label>[[item.file]]</label>
+								<div class="template-desc" hidden$="[[!_getDescription(item.content)]]">[[_getDescription(item.content)]]</div>
+							</paper-radio-button>
+						</template>
+  </paper-radio-group>
+  </div>
+  </div>
+  </div>
+  <div class="buttons layout horizontal end-justified center">
+    <paper-button class="secondary-btn" on-tap="closePanel">CANCEL</paper-button>
+    <paper-button class="primary-btn" on-tap="clonePage" id="clonePageBtn">{{setBtnContext(pageName,pageNameFlag,templateSelected,scope)}}</paper-button>
+  </div>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'ui-clone-page',
+    behaviors: [CommonBehavior.EVAjaxBehavior],
+    properties: {
+      activePage: {
+        type: Object,
+        observer: '_activePageChanged'
+      },
+      pattern: {
+        type: String,
+        value: '^([a-zA-Z0-9]+)((-[a-zA-Z0-9]+)+)$'
+      }
+    },
+    setBtnContext: function(pageName, pageNameFlag, templateSelected, scope) {
+      this.$.clonePageBtn.disabled = false;
+      if (pageName && !this.$.pageNameInput.validate()) {
+        this.$.clonePageBtn.disabled = true;
+      }
+      if ((!scope || Object.keys(scope).length == 0) && !pageName && templateSelected.file == this.activePage.templateName) {
+        this.$.clonePageBtn.disabled = true;
+      }
+      if ((!scope || Object.keys(scope).length == 0) && pageName == this.activePage.name && this.templateSelected.file ==
+        this.activePage.templateName) {
+        this.$.clonePageBtn.disabled = true;
+      }
+      if (!scope && (!pageName || pageName == this.activePage.name)) {
+        return 'CHANGE TEMPLATE';
+      }
+      return 'CLONE NODE';
+    },
+    _activePageChanged: function() {
+      this.set('scope', '');
+      this.set('pageName', this.activePage.name);
+      var tmpl = this.templateList.find(function(obj) {
+        if (obj.file == this.activePage.templateName) {
+          return true;
+        }
+      }.bind(this));
+      if (tmpl) {
+        this.set('templateSelected', tmpl);
+      }
+      if (this.activePage.isPolymerElement) {
+        this.set('pattern', '^([a-zA-Z0-9]+)((-[a-zA-Z0-9]+)+)$');
+      } else {
+        this.set('pattern', '^[a-zA-Z0-9\-_]+$');
+      }
+    },
+    closePanel: function() {
+      this.fire('close-panel');
+    },
+    clonePage: function() {
+      var data = {};
+      if (this.scope && Object.keys(this.scope).length != 0) {
+        data.scope = this.scope;
+      }
+      if (this.templateSelected) {
+        data.template = this.templateSelected;
+      }
+      if (this.pageName) {
+        data.pageName = this.pageName;
+      }
+      data.method = 'POST';
+      if (!this.scope && (!this.pageName || this.pageName == this.activePage.name)) {
+        data.method = 'PUT'
+      }
+      this.fire('clone-page', data);
+      this.closePanel();
+    },
+    _getDescription: function(content) {
+      var elem = document.createElement('div');
+      elem.innerHTML = content;
+      var templateInfoNode = [].find.call(elem.childNodes, function(node) {
+        if (node.nodeType == 8) {
+          if (node.textContent.match('@description')) {
+            return true;
+          }
+        }
+      });
+      if (templateInfoNode) {
+        return this._getTemplateInfoObject(templateInfoNode.textContent.trim());
+      } else {
+        return;
+      }
+    },
+    _getTemplateInfoObject: function(text) {
+      var lines = text.split('\n');
+      var description = lines.find(function(line) {
+        return !!(line.match('@description'));
+      });
+      return description.trim().substring('@description'.length, description.length).trim();
+    },
+    _filterTemplates: function(list, activePage) {
+      if (!activePage.isPolymerElement) {
+        return false;
+      }
+      if (activePage.isPolymerElement) {
+        if (activePage.modelName) {
+          return list.filter(function(obj) {
+            return obj.type == 'component' || obj.type == 'form'
+          });
+        } else {
+          return list.filter(function(obj) {
+            return obj.type == 'component'
+          });
+        }
+      }
+    }
+  })
+
+</script>

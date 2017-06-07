@@ -1,0 +1,138 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<dom-module id="module-switcher">
+  <template>
+    <style>
+      :host {
+        display: block;
+        width: 285px;
+        background: var(--light-primary-color);
+        border-left: 1px solid var(--secondary-divider-color);
+        border-right: 1px solid var(--secondary-divider-color);
+      }
+
+      iron-icon {
+        --iron-icon-width: 20px;
+        --iron-icon-height: 20px;
+      }
+
+      paper-tabs {
+        --paper-tabs-selection-bar-color: var(--accent-color);
+        --paper-tabs-selection-bar: {
+          border-width: 3px;
+        }
+        ;
+        --paper-tabs: {
+          height: 40px;
+          overflow: visible;
+        }
+        ;
+        --paper-tabs-content: {
+          overflow: visible;
+        }
+        ;
+      }
+
+      paper-tab {
+        --paper-tab: {
+          overflow: visible;
+        }
+      }
+
+      paper-tab.iron-selected {
+        background: var(--accent-color);
+      }
+
+      paper-tabs ::content #tabsContainer {
+        overflow: visible;
+      }
+
+      .tooltip {
+        position: fixed;
+        visibility: hidden;
+        background: #696969;
+        padding: 6px;
+        z-index: 100;
+        margin-top: -40px;
+        border-radius: 2px;
+        opacity: 0;
+        font-size: 11px;
+        color: #fff;
+      }
+
+      .tooltip:before {
+        content: '';
+        border-top: 5px solid #696969;
+        border-bottom: 5px solid transparent;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        width: 0;
+        height: 0;
+        position: absolute;
+        bottom: -10px;
+        right: 50%;
+      }
+
+      paper-tab:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0.5s ease-in;
+      }
+
+      .module-icon {
+        --iron-icon-width: 16px;
+        --iron-icon-height: 16px;
+      }
+    </style>
+    <app-location route="{{selectedRoute}}" use-hash-as-path></app-location>
+    <paper-tabs align-bottom selected="{{selectedRoute.path}}" attr-for-selected="datavalue">
+      <template is="dom-repeat" items="{{moduleList}}">
+        <paper-tab datavalue="{{item.routePath}}">
+          <iron-icon icon="[[item.icon]]" class="module-icon"></iron-icon>
+          <div class="tooltip">
+            [[item.name]]
+          </div>
+        </paper-tab>
+      </template>
+    </paper-tabs>
+  </template>
+  <script>
+    Polymer({
+      is: 'module-switcher',
+      properties: {
+        moduleList: {
+          type: Array,
+          value: [{
+            name: 'Model Defintion',
+            icon: 'ev-designer-icons:model',
+            routePath: ''
+          }, {
+            name: 'UI Designer',
+            icon: 'ev-designer-icons:ui-designer',
+            routePath: 'uidesigner'
+          }, {
+            name: 'Workflow',
+            icon: 'ev-designer-icons:workflow',
+            routePath: 'workflow'
+          }, {
+            name: 'Route Flow Designer',
+            icon: 'ev-designer-icons:route-manager',
+            routePath: 'routeflow'
+          }, {
+            name: 'Rule Manager',
+            icon: 'ev-designer-icons:rules-manager',
+            routePath: 'rulemanager'
+          }, {
+            name: 'Resource Manager',
+            icon: 'ev-designer-icons:resource-manager',
+            routePath: 'resourcemanager'
+          }]
+        }
+      }
+    });
+  </script>
+</dom-module>

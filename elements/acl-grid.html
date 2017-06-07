@@ -1,0 +1,674 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../behaviours/designer-wrapper-behaviors.html">
+<dom-module id="acl-grid">
+  <style>
+    :host {
+      display: block;
+    }
+
+    .table {
+      font-size: 14px;
+    }
+
+    .table-header {
+      border-bottom: 1px solid var(--divider-color);
+      border-top: 1px solid var(--divider-color);
+      font-weight: bold;
+      padding: 0 16px;
+      color: var(--secondary-text-color);
+    }
+
+    .table-row {
+      padding: 0 16px;
+      border-bottom: 1px solid var(--divider-color);
+      position: relative;
+    }
+
+    .table-row.edit-state {
+      height: auto;
+    }
+
+    .table-header .gridCol,
+    .table-row .gridCol {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: calc(100% / 5);
+      box-sizing: border-box;
+      white-space: nowrap;
+      display: inline-block;
+      padding: 10px 5px;
+      position: relative;
+    }
+
+    .table-header .gridCol {
+      padding: 12px 5px;
+    }
+
+    .table-header .checkrow,
+    .table-row .checkrow {
+      width: 40px !important;
+    }
+
+    .gridCol.acl-property {
+      width: 400px !important;
+    }
+
+    iron-icon + span {
+      margin-left: 5px;
+    }
+
+    iron-icon.small {
+      width: 16px;
+      height: 16px;
+    }
+
+    .options {
+      visibility: hidden;
+      display: flex !important;
+      height: 100%;
+      width: 100px !important;
+    }
+
+    .table-row:hover {
+      background: #f6f6f6;
+    }
+
+    .table-row:hover .options {
+      visibility: visible;
+    }
+
+    .edit,
+    .delete {
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    iron-icon.small {
+      width: 16px;
+      height: 16px;
+    }
+
+    .add-acl-container {
+      padding: 16px 0;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    .text {
+      color: var(--secondary-text-color);
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    .table .gridCol.check {
+      width: 40px !important;
+    }
+
+    .add-acl {
+      padding: 30px;
+      text-align: center;
+    }
+    
+    /* Validation Container Styles */
+    .validations-container {
+      padding: 16px 16px 0;
+      box-sizing: border-box;
+      min-width: 200px;
+    }
+
+    .validations-container .title {
+      font-size: 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      margin-bottom: 8px;
+    }
+
+    .custom-buttons,
+    .toggle-btn-container {
+      padding: 8px 0;
+    }
+
+    .acl-property-container > * {
+      flex: 1;
+      padding-right: 8px;
+    }
+  </style>
+  <template>
+    <form is="iron-form" id="aclform">
+      <template is="dom-if" if="{{!showAddacl}}">
+        <div class="add-acl">
+          <paper-button id="empty-add-button" class="custom" on-tap="showacl" hidden$="{{hideAddBtn}}">ADD ACCESS CONTROL</paper-button>
+          <div class="text">
+            Based on the control given to the role, access will be granted to the user.
+          </div>
+        </div>
+      </template>
+      <template is="dom-if" if="{{showAddacl}}">
+        <div class="add-acl-container layout horizontal center justified" hidden$="{{hideAddBtn}}">
+          <!--<div class="flex layout horizontal end-justified">
+                        <paper-button id="non-empty-add-button" class="custom" on-tap="_addacl">ADD ACL</paper-button>
+                    </div>-->
+          <label>ACL List</label>
+          <div on-tap="_deleteMultipleacls" id="multi-delete" class="pull-right" hidden$="{{!deleteMultiple}}">
+            <iron-icon icon="delete"></iron-icon>
+          </div>
+        </div>
+        <div class="table">
+          <div class="table-header layout flex horizontal justified">
+            <div class="gridCol check" hidden="{{readOnly}}">
+              <paper-checkbox id="checkAllbtn" noink on-change="_checkAll" checked="{{allChecked}}">
+              </paper-checkbox>
+            </div>
+            <div class="gridCol">Principal Type</div>
+            <div class="gridCol">Principal Id</div>
+            <div class="gridCol">Permission</div>
+            <div class="gridCol acl-property">Property</div>
+            <div class="gridCol">Access Type</div>
+            <div class="gridCol options" hidden="{{readOnly}}"></div>
+          </div>
+          <div class="table-body">
+            <template is="dom-repeat" items={{acls}} as="acl" id="acls">
+              <template is="dom-if" if="{{!acl.editable}}">
+                <div class="table-row read-only-state center layout flex horizontal justified" on-tap="_editacl">
+                  <div class="gridCol check" hidden="{{readOnly}}">
+                    <paper-checkbox noink on-change="_check" checked="{{acl.checked}}">
+                    </paper-checkbox>
+                  </div>
+                  <div class="gridCol">[[acl.principalType]]</div>
+                  <div class="gridCol">[[acl.principalId]]</div>
+                  <div class="gridCol">[[acl.permission]]</div>
+                  <div class="gridCol acl-property">[[calculateProperty(acl)]]</div>
+                  <div class="gridCol">[[acl.accessType]]</div>
+                  <div class="gridCol options around-justified center horizontal layout">
+                    <iron-icon id="delete" icon="delete" on-tap="_deleteACL" hidden="{{readOnly}}"></iron-icon>
+                    <paper-tooltip for="delete">Delete</paper-tooltip>
+                  </div>
+                </div>
+              </template>
+              <template is="dom-if" if="{{acl.editable}}" on-dom-change="setFocus">
+                <div class="table-row edit-state layout flex horizontal center justified" index={{index}}>
+                  <div class="gridCol check">
+                    <paper-checkbox noink on-change="_check" checked="{{acl.checked}}">
+                    </paper-checkbox>
+                  </div>
+                  <div class="gridCol">
+                    <paper-dropdown-menu label="Principal type" no-label-float required error-message="Please select the principal type">
+                      <paper-menu class="dropdown-content" attr-for-selected="datavalue" selected="{{acl.principalType}}">
+                        <template is="dom-repeat" items="[[accessPrincipals]]" as="principal">
+                          <paper-item datavalue="{{principal.value}}">[[principal.display]]</paper-item>
+                        </template>
+                      </paper-menu>
+                    </paper-dropdown-menu>
+                  </div>
+                  <div class="gridCol">
+                    <paper-dropdown-menu label="Principal Id" no-label-float required error-message="Please select the principal Id">
+                      <paper-menu class="dropdown-content" attr-for-selected="datavalue" selected="{{acl.principalId}}">
+                        <template is="dom-repeat" items="[[accessRole]]" as="role">
+                          <paper-item datavalue="{{role.value}}">[[role.display]]</paper-item>
+                        </template>
+                      </paper-menu>
+                    </paper-dropdown-menu>
+                  </div>
+                  <div class="gridCol">
+                    <paper-dropdown-menu label="Permission" no-label-float required error-message="Please select the permission">
+                      <paper-menu class="dropdown-content" attr-for-selected="datavalue" selected="{{acl.permission}}">
+                        <template is="dom-repeat" items="[[accessPermission]]" as="permission">
+                          <paper-item datavalue="{{permission.value}}">[[permission.display]]</paper-item>
+                        </template>
+                      </paper-menu>
+                    </paper-dropdown-menu>
+                  </div>
+                  <div class="gridCol acl-property">
+                    <div class="acl-property-container layout horizontal center ">
+                      <paper-dropdown-menu label="Property" no-label-float error-message="Please select the acl type">
+                        <paper-menu class="dropdown-content" attr-for-selected="datavalue" selected="{{acl.propertyValue}}">
+                          <template is="dom-repeat" items="[[accessProperty]]" as="property">
+                            <paper-item datavalue="{{property.value}}">[[property.display]]</paper-item>
+                          </template>
+                        </paper-menu>
+                      </paper-dropdown-menu>
+                      <paper-input label="Function name" no-label-float value="{{acl.customFunction}}" hidden={{_isCustomFunction(acl.propertyValue)}}></paper-input>
+                    </div>
+                  </div>
+                  <div class="gridCol">
+                    <paper-dropdown-menu label="acl model" no-label-float error-message="Please select the model">
+                      <paper-menu class="dropdown-content" attr-for-selected="datavalue" selected="{{acl.accessType}}">
+                        <template is="dom-repeat" items="[[accessType]]" as="type">
+                          <paper-item datavalue="[[type.value]]">[[type.display]]</paper-item>
+                        </template>
+                      </paper-menu>
+                    </paper-dropdown-menu>
+                  </div>
+                  <div class="gridCol options around-justified center horizontal layout">
+                    <iron-icon id="delete" icon="delete" on-tap="_deleteACL"></iron-icon>
+                    <paper-tooltip for="delete">Delete</paper-tooltip>
+                    <iron-icon id="restore" icon="icons:restore" on-tap="resetacl"></iron-icon>
+                    <paper-tooltip for="restore">Restore</paper-tooltip>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
+        </div>
+      </template>
+    </form>
+  </template>
+  <script>
+    Polymer({
+      is: 'acl-grid',
+      properties: {
+        acls: {
+          type: Array,
+          value: function () {
+            return [];
+          },
+          notify: true
+        },
+        aclObj: {
+          type: Object,
+          value: function () {
+            return {}
+          },
+          notify: true
+        },
+        showAddacl: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+        hideAddBtn: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+        readOnly: {
+          type: Boolean,
+          value: false,
+          notify: true
+        }
+      },
+      observers: ['aclsChanged(acls.*)'],
+      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior],
+      listeners: {
+        'read-only': '_setReadOnly'
+      },
+      _setReadOnly: function () {
+        if (this.acls && this.acls.length > 0) {
+          this.acls.forEach(function (d, i) {
+            var obj = JSON.parse(JSON.stringify(d));
+            if (obj.propertyValue === 'customfunction') {
+              obj.property = obj.customFunction;
+            } else {
+              obj.property = obj.propertyValue;
+            }
+            delete obj.editable;
+            delete obj.newacl;
+            delete obj.checked;
+            this.set('acls.' + i, obj);
+          }.bind(this));
+        }
+      },
+      calculateProperty: function (acl) {
+        if (acl.propertyValue === 'customfunction') {
+          return 'fn(' + acl.customFunction + ')'
+        } else {
+          var prop = _.find(this.accessProperty, {
+            value: acl.propertyValue
+          });
+          if (prop) {
+            return prop.display
+          } else {
+            return acl.property
+          }
+
+        }
+      },
+      setFocus: function () {
+        var form = this.querySelector('form');
+        if (form && form.elements) {
+          var currInput = _.find(form.elements, function (ele) {
+            var style = $(ele).closest('.table-row')[0].style.display;
+            return (style === '')
+          })
+          if (currInput) {
+            currInput.focus();
+          }
+        }
+      },
+      customValidation: function () {
+        var valid = true;
+        var isEmpty = this.isEditableEmpty();
+
+        if (isEmpty) {
+          var editableIndex = _.findIndex(this.acls, function (prop) {
+            return prop.editable;
+          });
+          if (editableIndex != -1) {
+            this.splice('acls', editableIndex, 1);
+          }
+          valid = true;
+        } else {
+          valid = this.$.aclform.validate()
+        }
+        return valid;
+      },
+      isEditableEmpty: function () {
+        var isEmpty = true;
+        var editable = _.find(this.acls, function (prop) {
+          return prop.editable;
+        });
+        var reqFields = ['principalType', 'principalId', 'permission']
+
+        if (editable) {
+          reqFields.forEach(function (field) {
+            if (editable[field] && (editable[field].trim().length > 0)) {
+              isEmpty = false;
+            }
+          });
+        }
+        return isEmpty;
+      },
+      _fetchRoles: function () {
+        var self = this;
+        var roleUrl = 'api/BaseRoles?filter[fields][name]=true';
+        this.makeAjaxCall(roleUrl, 'GET', null, null, null, function (err, response) {
+          var baseRoles = [{
+            display: 'Owner',
+            value: '$owner'
+          }, {
+            display: 'Authenticated',
+            value: '$authenticated'
+          }, {
+            display: 'Unauthenticated',
+            value: '$unauthenticated'
+          }, {
+            display: 'Everyone',
+            value: '$everyone'
+          }];
+          if (response) {
+            response.forEach(function (role) {
+              baseRoles.push({
+                display: role.name,
+                value: role.name
+              })
+            })
+          }
+          self.set('accessRole', baseRoles);
+          self.fire('roles-fetched-successfully')
+        })
+      },
+      aclsChanged: function () {
+        var self = this;
+
+        this.accessProperty = [{
+          display: 'All',
+          value: '*'
+        }, {
+          display: 'Exist',
+          value: 'exist'
+        }, {
+          display: 'Find All',
+          value: 'find'
+        }, {
+          display: 'Find by Id',
+          value: 'findById'
+        }, {
+          display: 'Find one',
+          value: 'findOne'
+        }, {
+          display: 'Count',
+          value: 'count'
+        }, {
+          display: 'Create only',
+          value: 'create'
+        }, {
+          display: 'Update',
+          value: 'updateAttributes'
+        }, {
+          display: 'Create/Update',
+          value: 'upsert'
+        }, {
+          display: 'Delete by Id',
+          value: 'destroyById'
+        }, {
+          display: 'Custom function',
+          value: 'customfunction'
+        }]
+        if (!this.acls) {
+          this.set('acls', []);
+        }
+        this.acls.forEach(function (acl) {
+          if (acl.property && !acl.propertyValue) {
+            var propIndex = _.findIndex(self.accessProperty, {
+              value: acl.property
+            });
+
+            if (propIndex != -1) {
+              acl.propertyValue = acl.property
+            } else {
+              acl.propertyValue = 'customfunction'
+              acl.customFunction = acl.property
+            }
+          }
+        });
+        this.set('showAddacl', (this.acls && this.acls.length != 0));
+      },
+      attached: function () {
+        this.clearValues();
+        this._check();
+        this.allChecked = false;
+      },
+      clearValues: function () {
+        this.aclObj = {};
+        this.accessPrincipals = [{
+          display: 'Role',
+          value: 'ROLE'
+        }]
+        this.accessPermission = [{
+          display: 'Allow',
+          value: 'ALLOW'
+        }, {
+          display: 'Deny',
+          value: 'DENY'
+        }]
+        this.accessType = [{
+          display: 'Execute',
+          value: 'Execute'
+        }, {
+          display: 'All',
+          value: '*'
+        }];
+
+        this.accessProperty = [{
+          display: 'All',
+          value: '*'
+        }, {
+          display: 'Exist',
+          value: 'exist'
+        }, {
+          display: 'Find All',
+          value: 'find'
+        }, {
+          display: 'Find by Id',
+          value: 'findById'
+        }, {
+          display: 'Find one',
+          value: 'findOne'
+        }, {
+          display: 'Count',
+          value: 'count'
+        }, {
+          display: 'Create only',
+          value: 'create'
+        }, {
+          display: 'Update',
+          value: 'updateAttributes'
+        }, {
+          display: 'Create/Update',
+          value: 'upsert'
+        }, {
+          display: 'Delete by Id',
+          value: 'destroyById'
+        }, {
+          display: 'Custom function',
+          value: 'customfunction'
+        }]
+
+      },
+      _isCustomFunction: function (funcType) {
+        return (funcType != 'customfunction')
+      },
+      _deleteACL: function (e) {
+        var index = _.findIndex(this.acls, e.model.__data__.acl);
+        e.stopPropagation();
+        if (e.model.acl.editable && this.isEditableEmpty()) {
+          this.splice('acls', index, 1);
+        } else {
+          var data = {
+            message: 'Do you want to delete the acl?',
+            ok: function () {
+              this.splice('acls', index, 1);
+            }.bind(this),
+            cancel: function () {
+              return;
+            }
+          }
+          this.fire('ev-show-confirm', data);
+        }
+      },
+      _editacl: function (e) {
+        if (this.readOnly) {
+          return;
+        }
+        var index = _.findIndex(this.acls, e.model.__data__.acl);
+        var valid = true;
+        var editable = _.find(this.acls, function (prop) {
+          return prop.editable;
+        });
+        var editableIndex = _.findIndex(this.acls, function (prop) {
+          return prop.editable;
+        });
+        var reqFields = ['principalType', 'principalId', 'permission']
+        if (editable) {
+          var hasData = false;
+          reqFields.forEach(function (field) {
+            if (editable[field]) {
+              hasData = hasData || (editable[field].trim().length > 0)
+            }
+          })
+          if (!hasData) {
+            this.splice('acls', editableIndex, 1);
+            index -= 1;
+            valid = true;
+          } else {
+            valid = this.$.aclform.validate();
+          }
+        }
+        if (valid) {
+          this.acls.forEach(function (d, i) {
+            var obj = JSON.parse(JSON.stringify(d));
+            delete obj.editable;
+            this.set('acls.' + i, obj);
+          }.bind(this));
+
+          this.set('acls.' + index + '.editable', true);
+          this.set('acls.' + index + '.newacl', false);
+          this.set('aclObj', JSON.parse(JSON.stringify(this.acls[index])));
+        }
+      },
+      _addacl: function () {
+        var isEditableState = _.find(this.acls, {
+          editable: true
+        });
+
+        if (isEditableState ? this.$.aclform.validate() : true) {
+          this.acls.forEach(function (d, i) {
+            var obj = JSON.parse(JSON.stringify(d));
+            delete obj.editable;
+            this.set('acls.' + i, obj);
+          }.bind(this));
+          var obj = {
+            editable: true,
+            newacl: true,
+            propertyValue: '*',
+            accessType: '*'
+          };
+          this.set('aclObj', JSON.parse(JSON.stringify(obj)));
+          //this.splice("acls", 0, 0, obj);
+          this.push('acls', obj);
+        }
+      },
+      resetacl: function (e) {
+        var index = e.model.index;
+        var obj = JSON.parse(JSON.stringify(this.aclObj));
+        delete obj.editable;
+        if (obj.newacl) {
+          delete obj.newacl;
+          this.splice('acls', e.model.index, 1);
+        } else {
+          delete obj.newacl;
+          this.set('acls.' + index, obj);
+        }
+      },
+      showacl: function () {
+        this.set('showAddacl', true);
+        var obj = {
+          editable: true,
+          newacl: true,
+          propertyValue: '*',
+          accessType: '*',
+          checked: false
+        };
+        this.set('aclObj', JSON.parse(JSON.stringify(obj)));
+        this.splice('acls', 0, 0, obj);
+      },
+      _deleteMultipleacls: function () {
+        var data = {
+          message: 'Do you want to delete ?',
+          ok: function () {
+            var relList = this.acls.filter(function (d) {
+              return d.checked !== true;
+            });
+            this.set('acls', relList);
+          }.bind(this),
+          cancel: function () {
+            return;
+          }
+        }
+        this.fire('ev-show-confirm', data);
+      },
+      _checkAll: function () {
+        this.setAll(this.allChecked);
+        this.set('deleteMultiple', !!this.getCount());
+      },
+      _check: function (e) {
+        if (e) {
+          e.stopPropagation()
+        }
+        var count = this.getCount();
+        this.set('allChecked', (count === this.acls.length))
+        this.set('deleteMultiple', !!count);
+      },
+      getCount: function () {
+        var count = 0;
+        this.acls.forEach(function (d) {
+          if (d.checked) {
+            count++;
+          }
+        });
+        return count;
+      },
+      setAll: function (flag) {
+        this.acls.forEach(function (d, i) {
+          this.set('acls.' + i + '.checked', flag);
+        }.bind(this));
+        this._check();
+      }
+    });
+  </script>
+</dom-module>

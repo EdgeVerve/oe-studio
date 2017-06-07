@@ -1,0 +1,61 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<dom-module id="route-element">
+  <template>
+    <style>
+      :host {
+        position: absolute;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        transition: box-shadow 300ms ease-out;
+        padding: 20px;
+        min-height: 60px;
+        box-sizing: border-box;
+        font-family: 'Roboto-Medium';
+        background: #595959;
+        color: #fff;
+      }
+
+       :host:hover {
+        box-shadow: 0 0 6px rgba(0, 0, 0, .16), 0 6px 12px rgba(0, 0, 0, .32)
+      }
+
+      .close-icon {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        height: 14px;
+        width: 14px;
+        cursor: pointer;
+        visibility: hidden;
+        opacity: 0;
+      }
+
+       :host:hover .close-icon {
+        visibility: visible;
+        opacity: 1;
+      }
+    </style>
+    <div class="route-container">
+      <span>{{routeObj.path}}</span>
+      <iron-icon icon="close" class="close-icon" on-tap="removeElem"></iron-icon>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'route-element',
+      properties: {
+        routeObj: {
+          type: Array,
+          notify: true
+        }
+      },
+      removeElem: function () {
+        this.fire('remove-route-element', this.routeObj)
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,182 @@
+<link rel="import" href="settings-pane-elements/ui-style-editor.html">
+<link rel="import" href="settings-pane-elements/ui-style-manager.html">
+<link rel="import" href="ui-attribute-editor.html">
+<link rel="import" href="ui-element-layers-panel.html">
+<link rel="import" href="ui-theme-designer.html">
+<link rel="import" href="../redux-store.html">
+<dom-module id="ui-right-panel">
+  <style>
+     :host {
+      background: #222;
+      color: #fff;
+      z-index: 10;
+      position: relative;
+    }
+    
+    .container {
+      height: calc(100vh - 40px);
+      width: 240px;
+    }
+    
+    paper-tabs {
+      background: #263238;
+      height: 40px;
+    }
+    
+    paper-tab iron-icon {
+      color: #9ba0a3;
+      --iron-icon-width: 20px;
+      --iron-icon-height: 20px;
+    }
+    
+    paper-tab.iron-selected {
+      background: #0c1013;
+    }
+    
+    paper-tab.iron-selected iron-icon {
+      color: #ffffff;
+    }
+    
+    iron-pages {
+      display: block;
+      background: #0c1013;
+      height: calc(100% - 40px);
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    
+    .collapse-control {
+      width: 30px;
+      height: 40px;
+      padding: 8px 3px;
+      box-sizing: border-box;
+      background: #263238;
+      display: inline-block;
+      position: absolute;
+      top: 0px;
+      left: -30px;
+      box-shadow: -2px 2px 1px rgba(0, 0, 0, 0.2);
+    }
+    
+    .collapse-control.panel-opened-true iron-icon {
+      transition: all 300ms ease;
+      transform: rotateY(180deg);
+    }
+
+  </style>
+  <template>
+        <div class$="collapse-control panel-opened-[[rightPanelState.opened]]" on-tap="togglePanel">
+            <iron-icon icon="chevron-left"></iron-icon>
+        </div>
+        <iron-collapse horizontal opened="[[rightPanelState.opened]]">
+            <div class="container">
+                <paper-tabs selected="{{selectedTab}}" no-bar>
+                    <paper-tab>
+                        <iron-icon icon="icons:settings-ethernet"></iron-icon>
+                    </paper-tab>
+                    <paper-tab>
+                        <iron-icon icon="image:brush"></iron-icon>
+                    </paper-tab>
+                    <paper-tab>
+                        <iron-icon icon="image:color-lens"></iron-icon>
+                    </paper-tab>
+                    <!-- <paper-tab>
+                        <iron-icon icon="image:color-lens"></iron-icon>
+                    </paper-tab>-->
+                    <paper-tab>
+                        <iron-icon icon="maps:layers"></iron-icon>
+                    </paper-tab>
+                    <paper-tab>
+                        <iron-icon icon="icons:unfold-less"></iron-icon>
+                    </paper-tab>
+                    <paper-tab>
+                        <iron-icon icon="image:photo-library"></iron-icon>
+                    </paper-tab>
+                </paper-tabs>
+                <iron-pages selected="{{selectedTab}}">
+                    <div class="page-container">
+                        <ui-attribute-editor id="attribEditor"></ui-attribute-editor>
+                    </div>
+                    <div class="page-container">
+                        <ui-style-editor selected-width="{{selectedWidth}}" selected-device="{{selectedDevice}}" style-sheet={{styleSheet}} assets={{assets}}
+                            on-edit-style-rule="_editStyleRule"></ui-style-editor>
+                    </div>
+                    <div class="page-container">
+                        <ui-style-manager selected-width="{{selectedWidth}}" selected-device="{{selectedDevice}}" id="style-manager" style-sheet={{styleSheet}}
+                            predefined-styles={{predefinedStyles}} assets={{assets}}></ui-style-manager>
+                    </div>
+                    <div class="page-container">
+                        <ui-element-layers-panel></ui-element-layers-panel>
+                    </div>
+                    <div class="page-container">
+                        <ui-model-manager element="{{element}}"></ui-model-manager>
+                    </div>
+                    <div class="page-container">
+                        <ui-asset-manager assets={{assets}}></ui-asset-manager>
+                    </div>
+                </iron-pages>
+            </div>
+        </iron-collapse>
+    </template>
+  <script>
+    Polymer({
+      is: 'ui-right-panel',
+      properties: {
+        rightPanelState: {
+          type: Object,
+          statePath: 'rightPanelState'
+        },
+        styleSheet: {
+          tyle: Object,
+          notify: true
+        },
+        predefinedStyles: {
+          type: Object,
+          notify: true
+        },
+        assets: {
+          type: Object,
+          notify: true
+        },
+        element: {
+          type: Object,
+          notify: true,
+          observer: 'elementChanged'
+        }
+      },
+      behaviors: [
+        ReduxBehavior
+      ],
+      togglePanel: function() {
+        this.dispatch('toggle');
+      },
+      actions: {
+        toggle: function() {
+          return {
+            type: 'TOGGLE_RIGHT_PANEL'
+          }
+        }
+      },
+      attached: function() {
+        this.set('selectedTab', 0);
+        document.addEventListener('device-changed', function(event) {
+          this.set('selectedDevice', event.detail);
+        }.bind(this))
+        document.addEventListener('size-updated', function(event) {
+          this.async(function() {
+            this.set('selectedWidth', event.detail);
+          }, 1000);
+        }.bind(this))
+      },
+      elementChanged: function() {
+        this.querySelector('ui-style-manager').set('selected', 0);
+      },
+      _editStyleRule: function(event) {
+        var cssRule = event.detail;
+        cssRule._isGlobalSetting = false;
+        this.set('selectedTab', 2);
+        this.$['style-manager'].editRule(event.detail);
+      }
+    })
+  </script>
+</dom-module>

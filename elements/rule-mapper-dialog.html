@@ -1,0 +1,360 @@
+<link rel="import" href="../styles/shared-styles.html">
+<dom-module id="rule-mapper-dialog">
+  <style>
+    paper-dialog {
+      width: calc(100% - 346px);
+      height: calc(100% - 168px);
+    }
+    
+    iron-icon {
+      --iron-icon-width: 20px;
+      --iron-icon-height: 20px;
+    }
+    
+    .custom-icon {
+      margin-right: 16px;
+    }
+    
+    .dialog-content {
+      overflow: auto;
+    }
+
+    /* Top panel styles */
+    .model-rule-container {
+      height: 100%;
+    }
+    
+    .rule-application {
+      padding-bottom: 16px;
+      box-sizing: border-box;
+    }
+    
+    .rule-application>label {
+      margin-right: 16px;
+      font-family: Roboto-Regular;
+      font-size: 12px;
+      color: #ffffff;
+    }
+    
+    .rule-application paper-toggle-button {
+      transform: scale(0.75);
+    }
+    
+    .rule-application .helper-text {
+      opacity: 0.54;
+      margin-left: 16px;
+      font-family: Roboto;
+      font-style: italic;
+      font-size: 12px;
+      color: #ffffff;
+    }
+    
+    .rule-listing {
+      border-radius: 2px;
+      background: var(--light-primary-color);
+      margin-right: 23px;
+      overflow: hidden;
+    }
+    
+    .all-rule-list {
+      border-radius: 4px;
+      background: #d8d8d8;
+    }
+    
+    .section-header {
+      height: 56px;
+      box-sizing: border-box;
+      padding: 0px 12px;
+      color: #fff;
+    }
+    
+    .section-title {
+      box-sizing: border-box;
+      font-family: Roboto-Medium;
+      font-size: 12px;
+    }
+    
+    .section-listing {
+      height: calc(100% - 56px);
+      overflow: hidden;
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    .section-listing.empty-true:before {
+      content: attr(emptytext);
+      opacity: 0.54;
+      border: 2px dashed #ffffff;
+      border-radius: 2px;
+      margin: 0px 16px;
+      height: 175px;
+      box-sizing: border-box;
+      padding: 20% 16px;
+      font-size: 12px;
+      position: absolute;
+      text-align: center;
+      display: block;
+    }
+    
+    .rule-item {
+      height: 48px;
+      padding: 16px 12px;
+      letter-spacing: 0.7px;
+      margin-bottom: 1px;
+      background: #fff;
+      box-sizing: border-box;
+      font-family: Roboto-Regular;
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.54);
+      cursor: move;
+    }
+    
+    .rule-item iron-icon {
+      opacity: 0;
+    }
+    
+    .rule-item .rule-name {
+      font-family: Roboto-Regular;
+      font-size: 14px;
+      color: #000000;
+    }
+    
+    .rule-item:hover {
+      background: #ECEFF1;
+    }
+    
+    .rule-item:hover iron-icon {
+      opacity: 1;
+    }
+    
+    .rule-item .drag-holder {
+      margin-right: 8px;
+    }
+    
+    .all-rule-list .section-title {
+      opacity: 0.54;
+      color: #000000;
+    }
+    
+    .all-rule-list .section-header {
+      background: #fff;
+      margin-bottom: 1px;
+    }
+
+  </style>
+  <template>
+		<style include="shared-styles"></style>
+		<paper-dialog id="dialog" modal class="dark-theme-dialog layout vertical">
+			<div class="dialog-header">
+				<span>Attach Model Rule for [[modelName]]</span>
+			</div>
+			<div class="dialog-content flex">
+				<div class="model-rule-container layout vertical">
+					<div class="rule-application layout horizontal center">
+						<label>Disable Rules</label>
+						<paper-toggle-button checked="{{modelRule.disabled}}"></paper-toggle-button>
+						<label class="helper-text">[[modelRule.disabled]]</label>
+					</div>
+					<div class="rule-classification layout horizontal flex">
+						<div class="rule-listing all-rule-list flex">
+							<div class="section-header layout horizontal center">
+								<label class="section-title">Rules List</label>
+							</div>
+							<div class="section-listing" id="ruleList">
+								<template is="dom-repeat" items="[[allRules]]">
+									<div class="rule-item layout horizontal center justified" rule="[[item]]">
+										<label class="rule-name">[[item]]</label>
+										<iron-icon icon="swap-horiz" class="drag-holder"></iron-icon>
+									</div>
+								</template>
+  </div>
+  </div>
+  <div class="rule-listing flex">
+    <div class="section-header layout horizontal center justified">
+      <label class="section-title">Default Rules</label>
+      <paper-button secondary list-name="defaultRules" on-tap="clearRules" hidden$=[[isEmpty(defaultRules.length)]]>Clear All</paper-button>
+    </div>
+    <div class$="section-listing empty-[[isEmpty(defaultRules.length)]]" id="defaultRuleList" emptytext="Drag the Rule name here to apply it as a default rule to this model.">
+      <template is="dom-repeat" items="[[defaultRules]]">
+									<div class="rule-item layout horizontal center justified" list-name="defaultRules" rule="[[item]]">
+										<iron-icon icon="swap-vert" class="drag-holder"></iron-icon>
+										<label class="rule-name flex">[[item]]</label>
+										<iron-icon icon="clear" on-tap="removeFromList"></iron-icon>
+									</div>
+								</template>
+    </div>
+  </div>
+  <div class="rule-listing flex">
+    <div class="section-header layout horizontal center justified">
+      <label class="section-title">Validation Rules</label>
+      <paper-button secondary list-name="validationRules" on-tap="clearRules" hidden$=[[isEmpty(validationRules.length)]]>Clear All</paper-button>
+    </div>
+    <div class$="section-listing empty-[[isEmpty(validationRules.length)]]" id="validationRuleList" emptytext="Drag the Rule name here to apply it as a validation rule to this model.">
+      <template is="dom-repeat" items="[[validationRules]]">
+									<div class="rule-item layout horizontal center justified" list-name="validationRules" rule="[[item]]">
+										<iron-icon icon="swap-vert" class="drag-holder"></iron-icon>
+										<label class="rule-name flex">[[item]]</label>
+										<iron-icon icon="clear" on-tap="removeFromList"></iron-icon>
+									</div>
+								</template>
+    </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  <div class="dialog-footer">
+    <div class="layout horizontal center end-justified">
+      <paper-button id="cancelbtn" on-tap="closeDialog">Cancel</paper-button>
+      <paper-button id="savebtn" secondary on-tap="saveRuleMap">Save Rule</paper-button>
+    </div>
+  </div>
+  </paper-dialog>
+  </template>
+  <script>
+    Polymer({
+      is: 'rule-mapper-dialog',
+      behaviors: [CommonBehavior.EVAjaxBehavior],
+      fetchModelRules: function(modelName) {
+        async.parallel({
+          decisionTables: function(callback) {
+            this.makeAjaxCall('api/DecisionTables', 'GET', null, null, null, function(err, resp) {
+              if (err) {
+                this.fire('ev-show-error', 'Error fetching DecisionTables');
+                callback(err, null)
+              } else {
+                callback(null, resp)
+              }
+            }.bind(this));
+          }.bind(this),
+          modelRule: function(callback) {
+            var url = 'api/ModelRules?filter[where][modelName]=' + modelName;
+            this.makeAjaxCall(url, 'get', null, null, null, function(err, res) {
+              if (err) {
+                this.fire('ev-show-error', 'Error fetching ModelRule');
+                callback(err, null)
+              } else {
+                callback(null, res[0])
+              }
+            }.bind(this))
+          }.bind(this)
+        }, function(err, result) {
+          if (!err) {
+            this.set('allRules', []);
+            this.set('defaultRules', []);
+            this.set('validationRules', []);
+            var ruleNameList = result.decisionTables.map(function nameExtractor(rule) {
+              return rule.name
+            })
+            if (result.modelRule) {
+              var appliedRules = result.modelRule.defaultRules.concat(result.modelRule.validationRules);
+              ruleNameList = ruleNameList.filter(function(rule) {
+                return appliedRules.indexOf(rule) == -1
+              });
+              this.set('modelRule', result.modelRule);
+              this.set('defaultRules', result.modelRule.defaultRules);
+              this.set('validationRules', result.modelRule.validationRules);
+            } else {
+              this.set('modelRule', {
+                modelName: this.modelName,
+                disabled: false
+              })
+            }
+            this.set('allRules', ruleNameList);
+            this.configureSortable();
+          }
+        }.bind(this));
+      },
+      configureSortable: function() {
+        Polymer.dom.flush();
+        var containers = this.querySelectorAll('.section-listing');
+        [].forEach.call(containers, function attachSortable(el) {
+          Sortable.create(el, {
+            group: 'rules',
+            animation: 150,
+            draggable: '.rule-item',
+            onAdd: function() {
+              this.extractRules();
+              this.configureSortable();
+            }.bind(this)
+          });
+        }.bind(this))
+      },
+      saveRuleMap: function() {
+        this.extractRules();
+        var method = this.modelRule.id ? 'PUT' : 'POST';
+        var payload = EV.clone(this.modelRule);
+        payload.modelName = this.modelName;
+        payload.defaultRules = this.defaultRules;
+        payload.validationRules = this.validationRules;
+        this.makeAjaxCall('api/ModelRules', method, payload, null, null, function(err, resp) {
+          if (resp) {
+            this.fire('ev-show-success', 'Rules Mapped Successfully');
+            this.closeDialog();
+          } else {
+            this.resolveError(err);
+          }
+        }.bind(this));
+      },
+      extractRules: function() {
+
+        var allList = this.$.ruleList.querySelectorAll('.rule-item');
+        var defaultList = this.$.defaultRuleList.querySelectorAll('.rule-item');
+        var validationList = this.$.validationRuleList.querySelectorAll('.rule-item');
+        var allRules = [].map.call(allList, function ruleNameExtractor(el) {
+          return el.rule
+        })
+        var defaultRules = [].map.call(defaultList, function ruleNameExtractor(el) {
+          return el.rule
+        })
+        var validationRules = [].map.call(validationList, function ruleNameExtractor(el) {
+          return el.rule
+        })
+        this.set('allRules', []);
+        this.set('defaultRules', []);
+        this.set('validationRules', []);
+        Polymer.dom.flush();
+        this.set('allRules', allRules);
+        this.set('defaultRules', defaultRules);
+        this.set('validationRules', validationRules);
+      },
+      openDialog: function(modelName) {
+        this.set('modelName', modelName);
+        this.fetchModelRules(modelName);
+        this.$.dialog.open();
+      },
+      closeDialog: function() {
+        this.$.dialog.close();
+      },
+      removeFromList: function(e) {
+        var targetList = e.currentTarget.parentElement.getAttribute('list-name');
+        var rule = e.model.__data__.item;
+        var index = this[targetList].indexOf(rule);
+        var removed = this.splice(targetList, index, 1);
+        this.push('allRules', removed[0]);
+        Polymer.dom.flush();
+        this.configureSortable();
+      },
+      isEmpty: function(length) {
+        return length == 0
+      },
+      clearRules: function(e) {
+        var targetList = e.currentTarget.getAttribute('list-name');
+        var data = {
+          message: 'Do you want to delete the ' + targetList + ' for the model?',
+          ok: function() {
+            this[targetList].forEach(function(r) {
+              this.push('allRules', r);
+            }.bind(this));
+            this.set(targetList, []);
+            Polymer.dom.flush();
+            this.configureSortable();
+          }.bind(this),
+          cancel: function() {}
+        }
+        this.fire('ev-show-confirm', data);
+      }
+    })
+
+  </script>
+
+</dom-module>

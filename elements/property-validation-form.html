@@ -1,0 +1,458 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<link rel="import" href="../../polymer/polymer.html">
+<dom-module id="property-validation-form">
+  <style>
+    :host {
+      display: block;
+      position: relative;
+      width: 350px;
+      height: calc(100vh - 100px);
+    }
+
+    .heading-panel {
+      background: #ddd;
+      padding: 8px 16px;
+      letter-spacing: 1px;
+    }
+
+    .content-panel {
+      overflow: auto;
+      height: calc(100vh - 192px);
+    }
+
+    .prop-name {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .prop-type {
+      font-size: 12px;
+      padding-bottom: 16px;
+    }
+
+    .validation-help-text {
+      font-size: 10px;
+      opacity: 0.7;
+      margin: 8px 0px;
+    }
+
+    .validation-help-text iron-icon {
+      --iron-icon-width: 16px;
+      --iron-icon-height: 16px;
+    }
+
+    .seperator hr {
+      margin: 0px;
+    }
+
+    .seperator span {
+      text-align: center;
+    }
+
+    .validation-block {
+      padding: 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .validation-block:nth-of-type(even) {
+      background: #fafafa;
+    }
+
+    .validation-block>label {
+      margin-bottom: 8px;
+    }
+
+    .button-holder {
+      padding: 16px;
+      text-align: right;
+    }
+
+    .scope-key-value-list {
+      margin: 8px 0px;
+    }
+
+    .scope-key {
+      border-right: 2px solid rgba(0, 0, 0, 0.1);
+      padding-top: 4px;
+      text-transform: capitalize;
+    }
+
+    .scope-value-list {
+      padding-left: 12px;
+    }
+
+    .scope-value {
+      padding: 2px 6px;
+      background: var(--default-primary-color);
+      border-radius: 14px;
+      min-width: 50px;
+      margin: 4px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .back-icon {
+      margin-right: 8px;
+    }
+  </style>
+  <template>
+    <div class="layout vertical justified heading-panel">
+      <div class="layout vertical">
+        <label class="prop-name layout horizontal justified">[[validation.__name__]]
+                    <div>
+					   <paper-icon-button icon="icons:create" id="editIcon"
+							   on-tap="gotoCreate" hidden=[[selectedView]]></paper-icon-button>
+					   <paper-icon-button icon="icons:check" id="okIcon"
+							   on-tap="setValidation" hidden=[[!selectedView]]></paper-icon-button>
+					   <paper-icon-button icon="icons:clear" id="closeIcon"
+							   on-tap="closeValidation"></paper-icon-button>
+				    </div>
+				</label>
+        <label class="prop-type">[[validation.type]]</label>
+      </div>
+    </div>
+    <neon-animated-pages class="content-panel" id="pages" selected="[[selectedView]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
+      <neon-animatable>
+        <div is="iron-form" id="validationform" class="layout vertical justified">
+          <div class="layout horizontal justified center validation-block">
+            <label>Required</label>
+            <paper-toggle-button checked="[[validation.required]]" disabled></paper-toggle-button>
+          </div>
+          <template is="dom-if" if="{{stringSelected(validation.type)}}">
+            <div class="layout vertical justified validation-block">
+              <label>Property length</label>
+              <div class="layout horizontal justified center">
+                <div>Min length : [[validation.min]]</div>
+                <div>Max length : [[validation.max]]</div>
+                <div>Length : [[validation.is]]</div>
+              </div>
+            </div>
+          </template>
+          <template is="dom-if" if="{{numberSelected(validation.type)}}">
+            <div class="layout vertical justified validation-block">
+              <label>Property value</label>
+              <div class="layout horizontal justified center">
+                <div>Min value : [[validation.min]]</div>
+                <div>Max value : [[validation.max]]</div>
+                <div>Value : [[validation.is]]</div>
+              </div>
+            </div>
+          </template>
+          <template is="dom-if" if="{{stringSelected(validation.type)}}">
+            <div class="layout vertical justified validation-block">
+              <label>String Format</label>
+              <div>Format : [[validation.format]]</div>
+              <div class="validation-help-text">Format for valid string input</div>
+            </div>
+          </template>
+          <div class="layout vertical justified validation-block">
+            <label>Property Validation</label>
+            <paper-checkbox checked="[[validation.absence]]" disabled>Absence</paper-checkbox>
+            <div class="validation-help-text">Property should not contain a value</div>
+            <template is="dom-if" if="{{!booleanSelected(validation.type)}}">
+              <paper-checkbox checked="[[validation.unique]]" disabled>Unique</paper-checkbox>
+              <template is="dom-if" if="[[validation.unique]]">
+                <div class="layout horizontal scope-key-value-list">
+                  <label class="flex-1 scope-key">ScopedTo </label>
+                  <div class="flex-2 layout horizontal center scope-value-list wrap">
+                    <template is="dom-repeat" items="{{validation.scopedTo}}">
+                      <div class="scope-value">[[item]]</div>
+                    </template>
+                  </div>
+                </div>
+              </template>
+              <div class="validation-help-text">Property values are unique</div>
+            </template>
+            <template is="dom-if" if="[[numberSelected(validation.type)]]">
+              <paper-checkbox checked="{{ifNumericalityChecked(validation.numericality)}}" disabled>Integer Only</paper-checkbox>
+              <div class="validation-help-text">If property values are Integer (<i>default type is number</i>)</div>
+            </template>
+          </div>
+          <template is="dom-if" if="{{stringSelected(validation.type)}}">
+            <div class="layout vertical justified validation-block">
+              <label>Inclusion/Exclusion Validation</label>
+              <div class="layout horizontal scope-key-value-list">
+                <label class="flex-1 scope-key">In </label>
+                <div class="flex-2 layout horizontal center scope-value-list wrap">
+                  <template is="dom-repeat" items="{{validation.in}}" as="inVal">
+                    <div class="scope-value">[[inVal]]</div>
+                  </template>
+                </div>
+              </div>
+              <div class="layout horizontal scope-key-value-list">
+                <label class="flex-1 scope-key">Not In </label>
+                <div class="flex-2 layout horizontal center scope-value-list wrap">
+                  <template is="dom-repeat" items="{{validation.notin}}" as="notinVal">
+                    <div class="scope-value">[[notinVal]]</div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template is="dom-if" if="{{numberSelected(validation.type)}}">
+            <div class="layout vertical justified validation-block">
+              <label>Inclusion/Exclusion Validation</label>
+              <div class="layout horizontal scope-key-value-list">
+                <label class="flex-1 scope-key">In </label>
+                <div class="flex-2 layout horizontal center scope-value-list wrap">
+                  <template is="dom-repeat" items="{{validation.in}}" as="inVal">
+                    <div class="scope-value">[[inVal]]</div>
+                  </template>
+                </div>
+              </div>
+              <div class="layout horizontal scope-key-value-list">
+                <label class="flex-1 scope-key">Not In </label>
+                <div class="flex-2 layout horizontal center scope-value-list wrap">
+                  <template is="dom-repeat" items="{{validation.notin}}" as="notinVal">
+                    <div class="scope-value">[[notinVal]]</div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </neon-animatable>
+      <neon-animatable>
+        <form is="iron-form" id="validationform" class="layout vertical justified">
+          <div class="layout horizontal justified center validation-block">
+            <label>Required</label>
+            <paper-toggle-button checked="{{validation.required}}"></paper-toggle-button>
+          </div>
+          <template is="dom-if" if="{{stringSelected(validation.type)}}">
+            <div class="layout vertical justified validation-block">
+              <label>Property Length</label>
+              <div class="layout horizontal justified center">
+                <ev-decimal precision="0" value="{{validation.min}}" label="Min" type="number" on-change="validateEntry" disabled="{{disableMinMax}}"
+                  min="0"></ev-decimal>
+                <ev-decimal precision="0" value="{{validation.max}}" label="Max" type="number" on-change="validateEntry" disabled="{{disableMinMax}}"
+                  min="0"></ev-decimal>
+              </div>
+              <div class="validation-help-text">Set Property Min and Max Length</div>
+              <div class="seperator layout horizontal justified center">
+                <hr class="flex-3">
+                <span class="flex-2">or</span>
+                <hr class="flex-3">
+              </div>
+              <ev-decimal precision="0" value="{{validation.is}}" label="Length" min="0" on-change="validateEntry" disabled="{{disableIsField}}"></ev-decimal>
+              <div class="validation-help-text">Set Specific Property Length</div>
+            </div>
+          </template>
+          <template is="dom-if" if="{{numberSelected(validation.type)}}">
+            <div class="layout vertical justified validation-block">
+              <label>Property Value</label>
+              <div class="layout horizontal justified center">
+                <ev-decimal value="{{validation.min}}" label="Min" on-change="validateEntry" disabled="{{disableMinMax}}"></ev-decimal>
+                <ev-decimal value="{{validation.max}}" label="Max" on-change="validateEntry" disabled="{{disableMinMax}}"></ev-decimal>
+              </div>
+              <div class="validation-help-text">Set Property Min and Max Value</div>
+              <div class="seperator layout horizontal justified center">
+                <hr class="flex-3">
+                <span class="flex-2">or</span>
+                <hr class="flex-3">
+              </div>
+              <ev-decimal value="{{validation.is}}" label="Value" type="number" on-change="validateEntry" disabled="{{disableIsField}}"></ev-decimal>
+              <div class="validation-help-text">Set Specific Property Value</div>
+            </div>
+          </template>
+          <template is="dom-if" if="{{stringSelected(validation.type)}}">
+            <div class="layout vertical justified validation-block">
+              <label>String Format</label>
+              <paper-input no-label-float value="{{validation.format}}" label="Value format"></paper-input>
+              <div class="validation-help-text">Format for valid string input</div>
+            </div>
+          </template>
+          <div class="layout vertical justified validation-block">
+            <label>Property Validation</label>
+            <paper-checkbox checked="{{validation.absence}}">Absence</paper-checkbox>
+            <div class="validation-help-text">Property should not contain a value</div>
+            <template is="dom-if" if="{{!booleanSelected(validation.type)}}">
+              <paper-checkbox checked="{{validation.unique}}" on-change="setScopedTo">Unique</paper-checkbox>
+              <template is="dom-if" if="{{validation.unique}}">
+                <ev-paper-chip label="Scoped To" title="Use Enter , Space or ',' Key to seperate the values" value="{{validation.scopedTo}}"></ev-paper-chip>
+              </template>
+              <div class="validation-help-text">Property values are unique</div>
+            </template>
+            <template is="dom-if" if="{{numberSelected(validation.type)}}">
+              <paper-checkbox checked="{{ifNumericalityChecked(validation.numericality)}}" on-change="setNumericality">Integer Only</paper-checkbox>
+              <div class="validation-help-text">If property values are Integer (<i>default type is number</i>)</div>
+            </template>
+          </div>
+          <template is="dom-if" if="{{stringSelected(validation.type)}}">
+            <div class="layout vertical justified validation-block">
+              <label>Inclusion/Exclusion Validation</label>
+              <ev-paper-chip label="In" title="Use Enter , Space or ',' Key to seperate the values" value="{{validation.in}}"></ev-paper-chip>
+              <div class="validation-help-text">
+                Value for property to be in the specified array
+                <iron-icon icon="info" id="help"></iron-icon>
+                <paper-tooltip>Use Comma, Space or Enter Key to seperate the values</paper-tooltip>
+              </div>
+              <ev-paper-chip label="Not In" title="Use Enter , Space or ',' Key to seperate the values" value="{{validation.notin}}"></ev-paper-chip>
+              <div class="validation-help-text">Value for property not to be in the specified array
+                <iron-icon icon="info" id="help"></iron-icon>
+                <paper-tooltip>Use Comma, Space or Enter Key to seperate the values</paper-tooltip>
+              </div>
+            </div>
+          </template>
+          <template is="dom-if" if="{{numberSelected(validation.type)}}">
+            <div class="layout vertical justified validation-block">
+              <label>Inclusion/Exclusion Validation</label>
+              <ev-paper-chip label="In" title="Use Comma, Space or Enter Key to seperate the values" value="{{validation.in}}"></ev-paper-chip>
+              <div class="validation-help-text">Value for property to be in the specified array
+                <iron-icon icon="info" id="help"></iron-icon>
+                <paper-tooltip>Use Comma, Space or Enter Key to seperate the values</paper-tooltip>
+              </div>
+              <ev-paper-chip label="Not In" title="Use Comma, Space or Enter Key to seperate the values" value="{{validation.notin}}"></ev-paper-chip>
+              <div class="validation-help-text">Value for property not to be in the specified array
+                <iron-icon icon="info" id="help"></iron-icon>
+                <paper-tooltip>Use Comma, Space or Enter Key to seperate the values</paper-tooltip>
+              </div>
+            </div>
+          </template>
+        </form>
+      </neon-animatable>
+    </neon-animated-pages>
+  </template>
+  <script>
+    Polymer({
+      is: 'property-validation-form',
+      properties: {
+        property: {
+          type: Object,
+          notify: true
+        },
+        readOnly: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+        numericality: {
+          type: Array,
+          value: function () {
+            return ['number', 'integer'];
+          }
+        }
+      },
+      getValidation: function (property) {
+        if (property.unique && typeof property.unique === 'object' && property.unique.scopedTo) {
+          property.scopedTo = property.unique.scopedTo;
+          property.unique = true;
+        }
+        this.set('validation', JSON.parse(JSON.stringify(property)));
+        this.validateEntry();
+        this.set('originalValidation', JSON.parse(JSON.stringify(property)));
+      },
+      setValidation: function () {
+        var self = this;
+        var prop = {};
+        Object.keys(self.validation).forEach(function (key) {
+          var val = self.validation[key]
+          if (self.checkValue(val)) {
+            prop[key] = val;
+          }
+          if (self.validation.type == 'number') {
+            if (key == 'in' || key == 'notin') {
+              prop[key].forEach(function (v, idx) {
+                if (!isNaN(v)) {
+                  prop[key][idx] = parseFloat(v);
+                }
+              })
+            }
+          }
+        });
+
+        if (prop.min != undefined && prop.max != undefined && (prop.max) < (prop.min)) {
+          this.fire('ev-show-error', 'Property minimum maximum validation failed');
+          return;
+        }
+        if (prop.scopedTo && Array.isArray(prop.scopedTo)) {
+          prop.unique = {
+            'scopedTo': prop.scopedTo
+          }
+          delete prop.scopedTo;
+        }
+        this.fire('update-validation', prop);
+      },
+      validateEntry: function () {
+        this.set('disableMinMax', false);
+        this.set('disableIsField', false);
+
+        if (this.checkValue(this.validation.is)) {
+          this.set('disableMinMax', true);
+        }
+
+        if (this.checkValue(this.validation.min)) {
+          this.set('disableIsField', true);
+        }
+
+        if (this.checkValue(this.validation.max)) {
+          this.set('disableIsField', true);
+        }
+      },
+      checkValue: function (val) {
+        if (val === null || val === undefined) {
+          return false;
+        }
+
+        if (typeof (val) == 'string' && val.length == 0) {
+          return false;
+        }
+
+        if (typeof (val) == 'number' && val < 0) {
+          return false;
+        }
+
+        return true;
+      },
+      cancelValidation: function () {
+        this.set('validation', JSON.parse(JSON.stringify(this.originalValidation)));
+        this.gotoSelect();
+      },
+      closeValidation: function () {
+        this.set('validation', JSON.parse(JSON.stringify(this.originalValidation)));
+        this.fire('close-validation');
+      },
+      numberSelected: function (type) {
+        return type == 'number';
+      },
+      stringSelected: function (type) {
+        return type == 'string';
+      },
+      booleanSelected: function (type) {
+        return type == 'boolean';
+      },
+      gotoCreate: function () {
+        this.entryAnimation = 'slide-from-right-animation';
+        this.exitAnimation = 'slide-left-animation';
+        this.selectedView = 1;
+      },
+      gotoSelect: function () {
+        this.entryAnimation = 'slide-from-left-animation';
+        this.exitAnimation = 'slide-right-animation';
+        this.selectedView = 0;
+      },
+      setNumericality: function (e) {
+        var checked = e.currentTarget.__data__.checked;
+        if (checked) {
+          this.validation.numericality = 'integer';
+        } else {
+          delete this.validation.numericality;
+        }
+      },
+      ifNumericalityChecked: function (value) {
+        return value === 'integer';
+      },
+      setScopedTo: function (e) {
+        var checked = e.currentTarget.__data__.checked;
+        if (!checked) {
+          delete this.validation.scopedTo;
+          this.set('validation.scopedTo', null);
+        }
+      }
+    });
+  </script>
+</dom-module>

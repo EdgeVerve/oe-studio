@@ -1,0 +1,390 @@
+<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../iron-collapse/iron-collapse.html" />
+<link rel="import" href="../../iron-icon/iron-icon.html" />
+<link rel="import" href="../../iron-icons/iron-icons.html" />
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html" />
+<dom-module is="ui-element-tree">
+  <style include="iron-flex iron-flex-alignment"></style>
+  <style>
+     :host {
+      position: relative;
+      cursor: pointer;
+      display: block;
+    }
+    
+    ev-info {
+      --ev-info-label: {
+        font-size: 10px;
+        color: var(--secondary-text-color);
+      }
+      ;
+      --ev-info-value: {
+        font-size: 12px;
+        color: var(--primary-text-color);
+        white-space: nowrap;
+      }
+    }
+    
+    .node-name {
+      font-size: 12px;
+      line-height: 29px;
+      opacity: 0.54;
+    }
+    
+    .node-icon {
+      margin: 0px 3px;
+      width: 18px;
+      height: 18px;
+      opacity: 0.54;
+    }
+    
+    .node-name-icon {
+      margin: 0px 3px;
+      width: 18px;
+      text-align: center;
+      font-size: 14px;
+      font-family: 'Roboto-Medium';
+      opacity: 0.54;
+    }
+    
+    .node-collapse-icon {
+      transition: all 300ms ease;
+      --iron-icon-width: 20px;
+      --iron-icon-height: 20px;
+      transform: rotate(0deg);
+      margin-left: 8px;
+      opacity: 0.54;
+    }
+    
+    .node-collapse-icon.hide-true {
+      visibility: hidden;
+    }
+    
+    .node-collapse-icon.rotate-true {
+      transform: rotate(-90deg);
+    }
+    
+    .row {
+      background: var(--default-primary-color);
+      box-sizing: border-box;
+      height: 30px;
+      white-space: nowrap;
+      padding-right: 8px;
+      position: relative;
+      border-bottom: 1px solid var(--secondary-divider-color);
+    }
+    
+    .row.selected {
+      background: var(--dark-primary-color);
+    }
+    
+    .row>* {
+      flex-shrink: 0;
+    }
+    
+    ev-info+ev-info {
+      margin-top: 8px;
+      display: block;
+    }
+    
+    .tooltip {
+      position: absolute;
+      visibility: hidden;
+      background: #fff;
+      padding: 6px;
+      z-index: 100;
+      bottom: 36px;
+      min-width: 90px;
+      align-self: flex-start;
+      border-radius: 2px;
+      opacity: 0;
+    }
+    
+    .tooltip:before {
+      content: '';
+      border-top: 5px solid #fff;
+      border-bottom: 5px solid transparent;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      width: 0;
+      height: 0;
+      position: absolute;
+      bottom: -10px;
+      right: 50%;
+    }
+    
+    .row .iron-icon~.tooltip,
+    .row .node-name:hover~.tooltip {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 1s ease-in;
+    }
+
+  </style>
+  <template>
+        <div class="row layout horizontal center" id="el_[[node.evId]]" on-tap="_handleFocus" ev-id$="[[node.evId]]" style$="padding-left:[[_calcPadding(level)]]">
+            <iron-icon icon="arrow-drop-down" class$="node-collapse-icon rotate-[[node.isCollapsed]] hide-[[!node.hasChild]]" on-tap="expandPanel"></iron-icon>
+            <template is="dom-if" if="[[node.icon]]">
+                <iron-icon class="node-icon" icon="[[node.icon]]"></iron-icon>
+            </template>
+  <template is="dom-if" if="[[!node.icon]]">
+                <span class="node-name-icon">[[_generateNodeIcon(node.name)]]</span>
+            </template>
+  <span class="node-name">[[node.name]]</span>
+  <template is="dom-if" if="[[node.nodeInfo.length]]">
+                <div class="tooltip">
+                    <template is="dom-repeat" items="[[node.nodeInfo]]">
+                        <ev-info label="[[item.name]]" value="[[item.value]]"></ev-info>
+                    </template>
+  </div>
+  </template>
+  </div>
+  <template is="dom-if" if="[[node.hasChild]]">
+            <iron-collapse id="collapse" opened="[[!node.isCollapsed]]">
+                <div id="childList">
+                    <template is="dom-repeat" items="{{node.children}}">
+                        <ui-element-tree draggable="true" on-dragstart="_handleDragStart" dom-being-dragged={{domBeingDragged}} on-dragleave="_handleDragLeave"
+                            on-dragover="_handleDragOver" on-drop="_handleDrop" dom="{{item}}" level="[[_calcLevel(level)]]"></ui-element-tree>
+                    </template>
+  </div>
+  </iron-collapse>
+  </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'ui-element-tree',
+      properties: {
+        dom: {
+          type: Object,
+          observer: 'domChanged'
+        },
+        expandedView: {
+          type: Boolean
+        },
+        opened: {
+          type: Boolean,
+          notify: true
+        },
+        node: {
+          type: Object,
+          notify: true
+        },
+        domBeingDragged: {
+          type: Object,
+          notify: true
+        },
+        level: {
+          type: Number
+        },
+        evId: {
+          type: String,
+          reflecToAttribute: true
+        }
+      },
+      listeners: {
+        'dragend': '_handleDragEnd'
+      },
+      domChanged: function() {
+        if (this.dom) {
+          this.buildNode();
+        }
+      },
+      _calcLevel: function(level) {
+        return level + 1;
+      },
+      _calcPadding: function(level) {
+        return (level * 16) + 'px';
+      },
+      _generateNodeIcon: function(name) {
+        return name.charAt(0).toUpperCase();
+      },
+      buildNode: function() {
+        var dom = this.dom;
+        var node = {};
+        var collapseState = false;
+        collapseState = dom.hasAttribute('desg-tree-collapse');
+        this.classList.add('non-text-node')
+        node.name = dom.nodeName.toLowerCase();
+        var children = [];
+        var childNode ,i ,len;
+        if (dom.nodeName.toLowerCase() == 'template') {
+          for (i = 0, len = dom.content.children.length; i < len; i++) {
+            childNode = dom.content.children[i];
+            children.push(childNode);
+          }
+        } else {
+          for (i = 0, len = dom.children.length; i < len; i++) {
+            childNode = dom.children[i];
+            children.push(childNode);
+          }
+        }
+        node.hasChild = (children.length > 0);
+        if (node.hasChild) {
+          node.isCollapsed = collapseState || !node.hasChild;
+        }
+        var elem = EV.designerData.elementList.find(function(obj) {
+          return obj.tag == node.name;
+        })
+        node.icon = elem ? elem.icon : null;
+        node.evId = dom.getAttribute('ev-id');
+        node.type = dom.getAttribute('ev-ele-type');
+        this._getElementInfo(node, dom);
+        this.set('node', node);
+        this.set('node.children', children);
+      },
+      _getElementInfo: function(node, dom) {
+        node.nodeInfo = [];
+        if (node.type == 'text') {
+          node.nodeInfo.push({
+            'name': 'textContent',
+            'value': dom.textContent
+          });
+        }
+        var attrList = ['field-id', 'label', 'class'];
+        attrList.forEach(function(attr) {
+          if (dom.hasAttribute(attr)) {
+            node.nodeInfo.push({
+              'name': attr,
+              'value': dom.getAttribute(attr)
+            });
+          }
+        })
+      },
+      expandPanel: function(e) {
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        this.set('node.isCollapsed', !this.node.isCollapsed);
+        if (this.node.isCollapsed) {
+          this.dom.setAttribute('desg-tree-collapse', true);
+        } else {
+          this.dom.removeAttribute('desg-tree-collapse');
+        }
+      },
+      _handleFocus: function() {
+        if (!this.dom.hasAttribute('template-item')) {
+          document.querySelector('ui-dom-manager').fire('element-selected', this.dom);
+        }
+      },
+      _handleDragStart: function(event) {
+        var element = event.currentTarget;
+        event.stopPropagation();
+        if (element.dom.hasAttribute('template-item')) {
+          return false;
+        } else {
+          var x = event.target.querySelector('.row');
+          if (x.querySelector('.tooltip')) {
+            x.querySelector('.tooltip').style.display = 'none';
+          }
+          event.dataTransfer.setDragImage(x, 0, 0);
+          event.dataTransfer.effectAllowed = 'move';
+          element = event.currentTarget;
+          this.set('domBeingDragged', element.dom);
+        }
+      },
+      _handleDrop: function(event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+        var element = event.currentTarget;
+        this._clearStyle(element);
+        var node = element.node;
+        var dropBelow = false;
+        var targetElement = element.domHost;
+        if (targetElement.dom == this.domBeingDragged) {
+          return;
+        }
+        var boundingClientRect = element.getBoundingClientRect();
+        var midPoint = boundingClientRect.top + 15;
+        if (element.dom.getAttribute('ev-ele-type') == 'droppable') {
+          if (event.clientY > (midPoint + 5)) {
+            dropBelow = true;
+          } else if (event.clientY < (midPoint - 5)) {
+            dropBelow = false;
+          } else {
+            if (node.children.length == 0) {
+              targetElement = element;
+            }
+          }
+        } else {
+          if (event.clientY > midPoint) {
+            dropBelow = true;
+          } else if (event.clientY < (midPoint)) {
+            dropBelow = false;
+          }
+        }
+        var index = targetElement.node.children.indexOf(element.dom);
+        this.fire('reposition-node', {
+          target: targetElement.dom,
+          index: dropBelow ? index + 1 : index
+        });
+      },
+      _handleDragEnd: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.async(function() {
+          this.set('domBeingDragged', null);
+          this.set('dragOrigin', null);
+        }, 500);
+      },
+      _handleDragOver: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.dataTransfer.dropEffect = 'move';
+        var element = event.currentTarget;
+        var node = element.node;
+        var boundingClientRect = element.getBoundingClientRect();
+        var midPoint = boundingClientRect.top + 15;
+        element.style.borderStyle = 'solid';
+        element.style.borderColor = 'green';
+        //var dropBelow;
+        if (!node.isCollapsed) {
+          if (element.dom.getAttribute('ev-ele-type') == 'droppable') {
+            if (event.clientY > (midPoint + 5)) {
+             // dropBelow = true;
+              element.style.borderWidth = '0px 0px 6px 0px';
+            } else if (event.clientY < (midPoint - 5)) {
+            //  dropBelow = false;
+              element.style.borderWidth = '6px 0px 0px 0px';
+            } else {
+              if (node.children.length == 0) {
+                element.style.borderWidth = '6px';
+              }
+            }
+          } else {
+            if (event.clientY > midPoint) {
+             // dropBelow = true;
+              element.style.borderWidth = '0px 0px 6px 0px';
+            } else if (event.clientY < (midPoint)) {
+             // dropBelow = false;
+              element.style.borderWidth = '6px 0px 0px 0px';
+            }
+          }
+        } else {
+          if (!this._openCollapseAsyncTask) {
+            this._openCollapseAsyncTask = this.async(function() {
+              element.set('node.isCollapsed', false);
+            }, 300);
+          }
+        }
+      },
+      _handleDragLeave: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this._clearStyle(event.currentTarget);
+        this.cancelAsync(this._openCollapseAsyncTask);
+        this.set('_openCollapseAsyncTask', null);
+      },
+      _clearStyle: function(element) {
+        element.style.borderBottom = '';
+        element.style.border = '';
+        element.style.borderTop = '';
+      },
+      _setdragOrigin: function(event) {
+        if (!this.domHost || this.domHost.nodeName !== 'ui-element-tree') {
+          this.set('dragOrigin', event.detail);
+        }
+      }
+    });
+
+  </script>
+</dom-module>

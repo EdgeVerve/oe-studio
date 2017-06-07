@@ -1,0 +1,391 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<link rel="import" href="../../polymer/polymer.html">
+<dom-module id="model-detail-dialog">
+  <style>
+    :host {
+      color: var(--secondary-text-color);
+      letter-spacing: 0.75px;
+    }
+
+    #modelDetailDialog {
+      width: 90%;
+      height: 90%;
+    }
+
+    .custom-icon {
+      height: 24px;
+      width: 24px;
+    }
+
+    .dialog-content {
+      height: calc(100% - 120px);
+      overflow: auto;
+    }
+
+    .icon {
+      margin-right: 10px;
+    }
+
+    .sub-header {
+      padding: 16px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .basic-info {
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .sub-header:hover {
+      background: rgba(0, 0, 0, 0.01);
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .sub-content {
+      padding: 16px;
+    }
+
+    .basic-info .sub-content > div {
+      display: flex;
+      flex-direction: row;
+      padding: 8px 0;
+    }
+
+    .main-text {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .sub-content iron-icon {
+      height: 20px;
+      width: 20px;
+    }
+
+    .sub-text {
+      font-size: 14px;
+      padding: 6px 0;
+      font-style: italic;
+    }
+
+    .table {
+      font-size: 14px;
+    }
+
+    .table-header {
+      border: 1px solid var(--divider-color);
+      font-weight: bold;
+      padding: 0 16px;
+      color: var(--secondary-text-color);
+    }
+
+    .table-row {
+      border-bottom: 1px solid var(--divider-color);
+      padding: 0 16px;
+      position: relative;
+      height: 39px;
+    }
+
+    .table-header .gridCol,
+    .table-row .gridCol {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: calc(100% / 4);
+      white-space: nowrap;
+      display: inline-block;
+      padding: 10px 0;
+      position: relative;
+    }
+
+    iron-icon.small {
+      width: 16px;
+      height: 16px;
+    }
+
+    .table-body {
+      max-height: 200px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border-left: 1px solid var(--divider-color);
+      border-right: 1px solid var(--divider-color);
+    }
+
+    .table-row:hover {
+      background: #f6f6f6;
+    }
+
+    paper-button iron-icon.small {
+      width: 16px;
+      height: 16px;
+    }
+
+    .dropShadow {
+      height: 6px;
+      box-shadow: inset 0 5px 6px -3px rgba(0, 0, 0, 0.4);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      pointer-events: none;
+    }
+
+    .model-info .sub-header iron-icon:not(.expand-icon) {
+      transition: 0.3s all ease-out;
+      padding-right: 8px;
+    }
+
+    .sub-header.open iron-icon.expand-icon {
+      transform: rotate(0deg);
+      transition: 300ms all ease-in;
+    }
+
+    .sub-header.open iron-icon.expand-icon {
+      transform: rotate(180deg);
+    }
+
+    .base-properties-container {
+      padding: 2px 0 !important;
+    }
+
+    .base-properties {
+      border-left: 3px solid var(--divider-color);
+      padding: 3px 5px;
+      box-sizing: border-box;
+      max-height: 85px;
+      overflow-y: auto;
+    }
+
+    .base-properties-list > div {
+      display: inline-block;
+      background: #d8d8d8;
+      font-size: 12px;
+      padding: 2px 10px;
+      border-radius: 16px;
+      margin: 2px 0;
+      box-sizing: border-box;
+    }
+  </style>
+  <template>
+    <paper-dialog id="modelDetailDialog" modal>
+      <div class="dialog-header layout horizontal center">
+        <iron-icon icon="ev-icons:model"></iron-icon>
+        <span>[[modelObj.name]]</span>
+      </div>
+      <div class="dialog-content model-info">
+        <div class="basic-info">
+          <div class="sub-header" on-tap="toggle" id="model-detail-dialog-toggle">
+            <iron-icon icon="icons:info-outline"></iron-icon> Basic Information
+            <iron-icon icon="icons:expand-more" class="pull-right expand-icon"></iron-icon>
+          </div>
+          <iron-collapse opened>
+            <div class="sub-content">
+              <div>
+                <div class="icon">
+                  <iron-icon icon="communication:vpn-key"></iron-icon>
+                </div>
+                <div class="detail">
+                  <div class="main-text">Plural</div>
+                  <div class="sub-text">{{modelObj.plural}}</div>
+                </div>
+              </div>
+              <div>
+                <div class="icon">
+                  <iron-icon icon="hardware:device-hub"></iron-icon>
+                </div>
+                <div class="detail">
+                  <div class="main-text">Base Entity</div>
+                  <div class="sub-text">{{modelObj.base}}</div>
+                  <div class="base-properties">
+                    <template is="dom-if" if={{baseProperties.length}}>
+                      <span class="sub-text">Properties of the selected model listed below</span>
+                      <div class="base-properties-list">
+                        <template is="dom-repeat" items="[[baseProperties]]">
+                          <div>[[item.__name__]]</div>
+                        </template>
+                      </div>
+                    </template>
+                    <template is="dom-if" if={{!baseProperties.length}}>
+                      <span class="sub-text">No Properties</span>
+                    </template>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="icon">
+                  <iron-icon icon="icons:speaker-notes"></iron-icon>
+                </div>
+                <div class="detail">
+                  <div class="main-text">Description</div>
+                  <div class="sub-text">{{modelObj.description}}</div>
+                </div>
+              </div>
+            </div>
+          </iron-collapse>
+        </div>
+        <div class="properties">
+          <div class="sub-header" on-tap="toggle">
+            <iron-icon icon="icons:view-carousel"></iron-icon> Properties
+            <iron-icon icon="icons:expand-more" class="pull-right expand-icon"></iron-icon>
+          </div>
+          <iron-collapse opened>
+            <div class="table sub-content">
+              <div class="table-header layout flex horizontal justified">
+                <div class="gridCol">Property</div>
+                <div class="gridCol">Type</div>
+                <div class="gridCol">Required/Optional</div>
+              </div>
+              <div class="table-body">
+                <template is="dom-repeat" items={{modelObj.properties}} as="property">
+                  <div class="table-row layout flex horizontal justified">
+                    <div class="gridCol">{{property.__name__}}</div>
+                    <div class="gridCol">{{property.type}}</div>
+                    <div class="gridCol">{{property.required}}</div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </iron-collapse>
+        </div>
+        <div class="relations">
+          <div class="sub-header" on-tap="toggle">
+            <iron-icon icon="icons:link"></iron-icon> Relations
+            <iron-icon icon="icons:expand-more" class="pull-right expand-icon"></iron-icon>
+          </div>
+          <iron-collapse opened>
+            <div class="table sub-content">
+              <div class="table-header layout flex horizontal justified">
+                <div class="gridCol">Relation</div>
+                <div class="gridCol">Type</div>
+                <div class="gridCol">Model</div>
+              </div>
+              <div class="table-body">
+                <template is="dom-repeat" items={{modelObj.relations}} as="relation">
+                  <div class="table-row layout flex horizontal justified">
+                    <div class="gridCol">{{relation.__name__}}</div>
+                    <div class="gridCol">{{relation.type}}</div>
+                    <div class="gridCol">{{relation.model}}</div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </iron-collapse>
+        </div>
+        <div class="acls">
+          <div class="sub-header" on-tap="toggle">
+            <iron-icon icon="icons:link"></iron-icon> ACL
+            <iron-icon icon="icons:expand-more" class="pull-right expand-icon"></iron-icon>
+          </div>
+          <iron-collapse opened>
+            <div class="table sub-content">
+              <div class="table-header layout flex horizontal justified">
+                <div class="gridCol">Principal Type</div>
+                <div class="gridCol">Principal Id</div>
+                <div class="gridCol">Permission</div>
+                <div class="gridCol acl-property">Property</div>
+                <div class="gridCol">Access Type</div>
+              </div>
+              <div class="table-body">
+                <template is="dom-repeat" items={{modelObj.acls}} as="acl">
+                  <div class="table-row layout flex horizontal justified">
+                    <div class="gridCol">[[acl.principalType]]</div>
+                    <div class="gridCol">[[acl.principalId]]</div>
+                    <div class="gridCol">[[acl.permission]]</div>
+                    <div class="gridCol acl-property">[[calculateProperty(acl)]]</div>
+                    <div class="gridCol">[[acl.accessType]]</div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </iron-collapse>
+        </div>
+      </div>
+      <div class="dialog-footer layout horizontal end-justified">
+        <paper-button secondary on-tap="hideDialog">Close</paper-button>
+        <paper-button secondary id="model-detail-dialog-edit" on-tap="editModel">Edit Model</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    Polymer({
+      is: 'model-detail-dialog',
+      properties: {
+        modelObj: {
+          type: Object
+        }
+      },
+      openDialog: function () {
+        this.$.modelDetailDialog.open();
+        this.accessProperty = [{
+          display: 'All',
+          value: '*'
+        }, {
+          display: 'Exist',
+          value: 'exist'
+        }, {
+          display: 'Find All',
+          value: 'find'
+        }, {
+          display: 'Find by Id',
+          value: 'findById'
+        }, {
+          display: 'Find one',
+          value: 'findOne'
+        }, {
+          display: 'Count',
+          value: 'count'
+        }, {
+          display: 'Create only',
+          value: 'create'
+        }, {
+          display: 'Update',
+          value: 'updateAttributes'
+        }, {
+          display: 'Create/Update',
+          value: 'upsert'
+        }, {
+          display: 'Delete by Id',
+          value: 'destroyById'
+        }, {
+          display: 'Custom function',
+          value: 'customfunction'
+        }]
+
+      },
+      hideDialog: function () {
+        this.$.modelDetailDialog.close();
+      },
+      editModel: function () {
+        this.fire('edit-model', this.modelObj);
+        this.hideDialog();
+      },
+      calculateProperty: function (acl) {
+        if (acl.propertyValue == 'customfunction') {
+          return 'fn(' + acl.customFunction + ')'
+        } else {
+          var prop = _.find(this.accessProperty, {
+            value: acl.propertyValue
+          });
+          if (prop) {
+            return prop.display
+          } else {
+            return acl.property
+          }
+
+        }
+      },
+      toggle: function (e) {
+        var currentPanel = e.currentTarget.nextElementSibling;
+        currentPanel.opened = !currentPanel.opened;
+        if (currentPanel.opened) {
+          e.currentTarget.classList.add('open');
+        } else {
+          e.currentTarget.classList.remove('open');
+        }
+      }
+    })
+  </script>
+</dom-module>

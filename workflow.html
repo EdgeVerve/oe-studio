@@ -1,0 +1,141 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Polymer Starter Kit">
+  <title>EV Designer</title>
+
+
+  <!--Imports for workflow start-->
+
+  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="stylesheet" href="../roboto-fontface/css/roboto-fontface.css">
+  <!--JS dependencies-->
+  <script src="../jquery/dist/jquery.js"></script>
+  <link rel="import" href="workflow-imports.html">
+  <!-- Add element for repository in all-imports.html-->
+
+  <!-- Place favicon.ico in the `app/` directory -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <!-- Chrome for Android theme color -->
+  <meta name="theme-color" content="#2E3AA1">
+  <!-- Web Application Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <!-- Tile color for Win8 -->
+  <meta name="msapplication-TileColor" content="#3372DF">
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="PSK">
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="EV Designer">
+  <script src="scripts/appcommon.js"></script>
+  <!-- endbuild -->
+  <!-- Because this project uses vulcanize this should be your only html import
+       in this file. All other imports should go in elements.html -->
+  <style is="custom-style" include="shared-styles"></style>
+  <link rel="stylesheet" type="text/css" href="../evf-designer/workflow/css/diagram-js.css">
+  <link rel="stylesheet" type="text/css" href="../evf-designer/workflow/vendor/bpmn-font/css/bpmn-embedded.css">
+  <link rel="stylesheet" type="text/css" href="../evf-designer/workflow/css/app.css">
+  <link rel="stylesheet" type="text/css" href="../materialize/dist/css/materialize.css" />
+  <script src="../materialize/dist/js/materialize.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+      if ($('.modal-trigger').leanModal && $('.modal-trigger').leanModal) {
+        $('.modal-trigger').leanModal();
+      }
+    });
+
+  </script>
+</head>
+
+<body>
+  <span id="browser-sync-binding"></span>
+  <style>
+    .djs-palette::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      background-color: #F5F5F5;
+    }
+    
+    .djs-palette::-webkit-scrollbar {
+      width: 6px;
+      background-color: #F5F5F5;
+    }
+    
+    .djs-palette::-webkit-scrollbar-thumb {
+      background-color: #A9A9A9;
+      border: 1px solid #D4D4D4;
+    }
+    
+    .djs-properties-tab::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      background-color: #F5F5F5;
+    }
+    
+    .djs-properties-tab::-webkit-scrollbar {
+      width: 4px;
+      background-color: #F5F5F5;
+    }
+    
+    .djs-properties-tab::-webkit-scrollbar-thumb {
+      background-color: #A9A9A9;
+      border: 1px solid #D4D4D4;
+    }
+    
+    #js-open-diagram .iron-icon-0 {
+      height: 37px !important;
+    }
+    
+    #js-download-diagram .iron-icon-0 {
+      height: 37px !important;
+    }
+
+  </style>
+  <script>
+    /*   function submitFile() {
+    		                alert("test");
+    		                var debug = {
+    		                    hello: "world"
+    		                };
+    		                var blob = new Blob([JSON.stringify(debug, null, 2)], {
+    		                    type: 'application/text'
+    		                });
+    		                var fd = new FormData();
+    		                fd.append('fname', 'test.xml');
+    		                fd.append('data', blob);
+    		                $.ajax({
+    		                    type: 'POST',
+    		                    url: './api/documents/test/upload',
+    		                    data: fd,
+    		                    processData: false,
+    		                    contentType: false
+    		                }).done(function(data) {
+    		                    console.log(data);
+    		                }).fail(function(xhr, status, errorThrown) {
+    		                    alert("Sorry, there was a problem!");
+    		                    console.log("Error: " + errorThrown);
+    		                    console.log("Status: " + status);
+    		                    console.dir(xhr);
+    		                });
+    		            }*/
+
+  </script>
+  <div class="content">
+    <work-flow></work-flow>
+  </div>
+  <script src="workflow/index.min.js"></script>
+  <script src="workflow/main.js"></script>
+  <!--<button onclick="submitFile()">Submit</button>-->
+</body>
+
+</html>

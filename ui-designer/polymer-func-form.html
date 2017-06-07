@@ -1,0 +1,52 @@
+<dom-module id="polymer-func-form">
+  <style>
+     :host {
+      padding: 16px;
+      display: block;
+    }
+    
+    .panel {
+      margin-bottom: 16px;
+    }
+
+  </style>
+  <template>
+		<div class="layout vertical panel">
+			<ev-input required field-id="fnName" label="Name" value="{{vm.fnName}}"></ev-input>
+			<ev-textarea required field-id="fnDef" label="Definition" value="{{vm.fnDef}}"
+						 validation-function="{{funcValidator}}"></ev-textarea>
+		</div>
+		<div class="layout horizontal center justified">
+			<paper-button raised primary on-tap="doSave">Save</paper-button>
+			<paper-button raised on-tap="doClear">Clear</paper-button>
+		</div>
+	</template>
+  <script>
+    Polymer({
+      is: 'polymer-func-form',
+      properties: {
+        vm: {
+          type: Object
+        },
+        funcValidator: {
+          type: Object,
+          value: function() {
+            return function(str) {
+              if (!str) {
+                return false;
+              }
+              try {
+                new Function('return ' + str)();
+                return true;
+              } catch (e) {
+                return false;
+              }
+            }
+          }
+        }
+      },
+      behaviors: [EV.FormValidationBehavior, EV.ModelHandler]
+    })
+
+  </script>
+</dom-module>

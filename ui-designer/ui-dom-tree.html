@@ -1,0 +1,365 @@
+<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../iron-collapse/iron-collapse.html" />
+<link rel="import" href="../../iron-icon/iron-icon.html" />
+<link rel="import" href="../../iron-icons/iron-icons.html" />
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html" />
+<dom-module is="ui-dom-tree">
+  <style include="iron-flex iron-flex-alignment"></style>
+  <style>
+     :host {
+      display: block;
+      position: relative;
+      cursor: pointer;
+      font-family: 'Consolas';
+    }
+    
+    .parent-container[selected] {
+      background: var(--accent-color);
+    }
+    
+    .node-collapse-icon {
+      transition: all 300ms ease;
+      --iron-icon-width: 16px;
+      --iron-icon-height: 16px;
+      transform: rotate(-90deg);
+    }
+    
+    .node-collapse-icon.rotate-icon {
+      transform: rotate(0deg);
+    }
+    
+    .node-name {
+      color: #902188;
+      text-transform: lowercase;
+    }
+    
+    .attr-key {
+      color: #a3571a;
+    }
+    
+    .attr-value {
+      color: #2323a9;
+    }
+    
+    .selected .attr-value {
+      color: white;
+    }
+    
+    .selected .node-name {
+      color: white;
+    }
+    
+    .node-start-tag,
+    .node-end-tag {
+      font-size: 12px;
+    }
+    
+    .node-start-tag {
+      white-space: nowrap;
+    }
+    
+    .node-end-tag {
+      padding-bottom: 2px;
+      padding-left: 3px;
+    }
+    
+    .node-start-bracket,
+    .node-end-bracket {
+      color: #AAA;
+    }
+    
+    .equal-to-sign,
+    .node-start-tag .node-end-bracket {
+      margin-left: -6px;
+      display: inline-block;
+    }
+    
+    .text-node-content {
+      color: #222;
+      font-size: 12px;
+    }
+    
+    iron-icon+span.node-start-bracket {
+      margin: 0px !important;
+    }
+    
+    #childList {
+      margin-left: 8px;
+      padding-left: 16px;
+      border-left: 1px dotted #fff;
+    }
+    
+    .node-start-tag:hover+#collapse>#childList {
+      border-color: #AAA;
+    }
+    
+    .parent-container.vertical>.node-end-tag {
+      margin-left: 20px;
+    }
+    
+    .parent-container.horizontal>.node-end-tag.has-child-true:before {
+      content: "...";
+      padding-right: 3px;
+    }
+    
+    .parent-container.horizontal>#collapse {
+      display: none;
+    }
+    
+    #childList.has-child-false {
+      height: 20px;
+    }
+    
+    .node-start-tag span,
+    .node-end-tag span {
+      white-space: nowrap;
+    }
+
+  </style>
+  <template>
+        <div class$="layout [[computeClass(node.isCollapsed)]] parent-container" ev-id$="[[node.evId]]">
+            <div class="node-start-tag layout horizontal center" on-tap="_handleFocus">
+                <template is="dom-if" if="{{node.isTextNode}}">
+                    <span class="text-node-content">[[node.value]]</span>
+                </template>
+  <template is="dom-if" if="{{!node.isTextNode}}">
+                    <div>
+                        <iron-icon icon="arrow-drop-down" class$="node-collapse-icon [[_handleCollapseClass(node.isCollapsed)]]" on-tap="expandPanel"></iron-icon>
+                        <span class="node-start-bracket">&lt;</span><span class="node-name">[[node.name]]</span>
+                        <template is="dom-repeat" items="[[node.attributes]]" as="attr"><span class="attr-key">[[attr.name]]</span>
+                            <template is="dom-if" if="[[attr.hasValue]]"><span class="equal-to-sign">="</span><span class="attr-value">[[attr.value]]</span><span>"</span></template>
+  </template>
+  <span class="node-end-bracket">&gt;</span>
+  </div>
+  </template>
+  </div>
+  <iron-collapse id="collapse" opened="[[!node.isCollapsed]]" hidden="{{node.isCollapsed}}">
+    <div class$="children layout vertical start has-child-[[node.hasChild]]" id="childList">
+      <template is="dom-repeat" items="{{node.children}}">
+                        <ui-dom-tree draggable="true" on-dragstart="_handleDragStart" dom-being-dragged={{domBeingDragged}} on-dragleave="_handleDragLeave"
+                            on-dragover="_handleDragOver" on-drop="_handleDrop" dom="{{item}}"></ui-dom-tree>
+                    </template>
+    </div>
+  </iron-collapse>
+  <template is="dom-if" if="{{!node.isTextNode}}">
+                <div class$="node-end-tag layout horizontal center has-child-[[node.hasChild]]" on-tap="_handleFocus">
+                    <span class="node-start-bracket">&lt;</span>
+                    <span class="node-name">/[[node.name]]</span>
+                    <span class="node-end-bracket">&gt;</span>
+                </div>
+            </template>
+  </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'ui-dom-tree',
+      properties: {
+        dom: {
+          type: Object,
+          observer: 'domChanged'
+        },
+        expandedView: {
+          type: Boolean
+        },
+        opened: {
+          type: Boolean,
+          notify: true
+        },
+        node: {
+          type: Object,
+          notify: true
+        },
+        domBeingDragged: {
+          type: Object,
+          notify: true
+        }
+      },
+      listeners: {
+        'dragend': '_handleDragEnd'
+      },
+      domChanged: function() {
+        if (this.dom) {
+          this.buildNode();
+        }
+      },
+      buildNode: function() {
+        var dom = this.dom;
+        var node = {};
+        var collapseState = false;
+        var childNode,i,len;
+        if (dom.nodeType === HTMLElement.TEXT_NODE) {
+          node.isTextNode = true;
+          node.value = dom.textContent;
+        } else if (dom.nodeType === HTMLElement.ELEMENT_NODE) {
+          node.isTextNode = false;
+          node.evId = dom.getAttribute('ev-id');
+          collapseState = dom.hasAttribute('desg-tree-collapse');
+          this.classList.add('non-text-node')
+          node.name = dom.nodeName;
+          node.attributes = [];
+          var ignoreAttrList = ['template-item', 'desg-content', 'designer-id', 'desg-index',
+            'desg-tree-collapse', 'ev-ui-type', 'ev-ele-type', 'ev-id'
+          ];
+          for (i = 0, len = dom.attributes.length; i < len; i++) {
+            var attr = dom.attributes[i];
+            var hasValue = (attr.nodeValue && attr.nodeValue.length > 0);
+            if (ignoreAttrList.indexOf(attr.name) == -1) {
+              node.attributes.push({
+                name: attr.name,
+                hasValue: hasValue,
+                value: attr.nodeValue
+              });
+            }
+          }
+          var children = [];
+          if (dom.nodeName.toLowerCase() == 'template') {
+            for ( i = 0, len = dom.content.childNodes.length; i < len; i++) {
+              childNode = dom.content.childNodes[i];
+              if (childNode.nodeName === '#text' && childNode.textContent.trim().length == 0) {
+                continue;
+              }
+              children.push(childNode);
+            }
+          } else {
+            for (i = 0, len = dom.childNodes.length; i < len; i++) {
+              childNode = dom.childNodes[i];
+              if (childNode.nodeName === '#text' && childNode.textContent.trim().length == 0) {
+                continue;
+              }
+              children.push(childNode);
+            }
+          }
+
+          node.hasChild = (children.length > 0);
+        }
+        node.isCollapsed = collapseState || !node.hasChild;
+        this.set('node', node);
+        this.set('node.children', children);
+
+      },
+      computeClass: function(isCollapsed) {
+        return (isCollapsed) ? 'horizontal' : 'vertical'
+      },
+      _handleCollapseClass: function(isCollapsed) {
+        return !isCollapsed ? 'rotate-icon' : '';
+      },
+      expandPanel: function(e) {
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        this.set('node.isCollapsed', !this.node.isCollapsed);
+        if (this.node.isCollapsed) {
+          this.dom.setAttribute('desg-tree-collapse', true);
+        } else {
+          this.dom.removeAttribute('desg-tree-collapse');
+        }
+      },
+      _handleFocus: function() {
+        if (!this.dom.hasAttribute('template-item')) {
+          this.fire('element-selected', this.dom);
+        }
+      },
+      _handleDragStart: function(event) {
+        var element = event.currentTarget;
+        event.stopPropagation();
+        if (element.dom.hasAttribute('template-item')) {
+          return false;
+        } else {
+          event.dataTransfer.effectAllowed = 'move';
+          element = event.currentTarget;
+          //var parentElement = element.domHost;
+          this.set('domBeingDragged', element.dom);
+        }
+      },
+      _handleDrop: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var element = event.currentTarget;
+        this._clearStyle(element);
+        var node = element.node;
+        var dropBelow = false;
+        var targetElement = element.domHost;
+        if (targetElement.dom == this.domBeingDragged) {
+          return;
+        }
+        if (!element.node.isTextNode) {
+          var boundingClientRect = element.getBoundingClientRect();
+          var midPoint = boundingClientRect.top + (boundingClientRect.height / 2);
+          if (event.clientY > (midPoint + 10)) {
+            dropBelow = true;
+          } else if (event.clientY < (midPoint - 10)) {
+            dropBelow = false;
+          } else {
+            if (element.dom.getAttribute('ev-ele-type') !== 'droppable') {
+              return;
+            }
+            if (node.children.length == 0) {
+              targetElement = element;
+            }
+          }
+        }
+        var index = targetElement.node.children.indexOf(element.dom);
+        this.fire('reposition-node', {
+          target: targetElement.dom,
+          index: dropBelow ? index + 1 : index
+        });
+      },
+      _handleDragEnd: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.async(function() {
+          this.set('domBeingDragged', null);
+          this.set('dragOrigin', null);
+        }, 500);
+      },
+      _handleDragOver: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.dataTransfer.dropEffect = 'move';
+        var element = event.currentTarget;
+        var node = element.node;
+        if (!element.node.isTextNode) {
+          if (!node.isCollapsed) {
+            var boundingClientRect = element.getBoundingClientRect();
+            var midPoint = boundingClientRect.top + (boundingClientRect.height / 2);
+            if (event.clientY > (midPoint + 10)) {
+              element.style.borderBottom = '1px dashed red';
+            } else if (event.clientY < (midPoint - 10)) {
+              element.style.borderTop = '1px dashed red';
+            } else {
+              if (element.dom.getAttribute('ev-ele-type') !== 'droppable') {
+                return;
+              }
+              if (node.children.length == 0) {
+                element.style.border = '1px dashed red';
+              }
+            }
+          } else {
+            if (!this._openCollapseAsyncTask) {
+              this._openCollapseAsyncTask = this.async(function() {
+                element.set('node.isCollapsed', false);
+              }, 300);
+            }
+          }
+        }
+      },
+      _handleDragLeave: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this._clearStyle(event.currentTarget);
+        this.cancelAsync(this._openCollapseAsyncTask);
+        this.set('_openCollapseAsyncTask', null);
+      },
+      _clearStyle: function(element) {
+        element.style.borderBottom = '';
+        element.style.border = '';
+        element.style.borderTop = '';
+      },
+      _setdragOrigin: function(event) {
+        if (!this.domHost || this.domHost.nodeName !== 'ui-dom-tree') {
+          this.set('dragOrigin', event.detail);
+        }
+      }
+    });
+
+  </script>
+</dom-module>

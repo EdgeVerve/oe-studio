@@ -1,0 +1,191 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<dom-module id="attach-workflow-dialog">
+  <style>
+    :host {
+      letter-spacing: 0.75px;
+    }
+
+    paper-dialog {
+      width: calc(100% - 48px);
+      height: calc(100% - 48px);
+      margin: 24px !important;
+      background: var(--paper-dialog-background-color);
+    }
+
+    iron-icon {
+
+      --iron-icon-width: 20px;
+      --iron-icon-height: 20px;
+    }
+
+    .dialog-content {
+      height: calc(100vh);
+      overflow: auto;
+      border-bottom: 1px solid var(--divider-color);
+    }
+
+    /* Top panel styles */
+    .dialog-header {
+      border-bottom: 1px solid var(--divider-color);
+    }
+
+    .top-panel {
+      font-size: 14px;
+      padding: 16px 0 20px;
+    }
+
+    .step-item {
+      margin-right: 16px;
+    }
+
+    .step-item:not(.line-line) {
+      cursor: pointer;
+    }
+
+    .line-line {
+      width: 100px;
+      height: 2px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .step-number {
+      height: 24px;
+      width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ccc;
+      border-radius: 50%;
+      color: #fff;
+      margin-right: 8px;
+    }
+
+    .step-item iron-icon {
+      
+      --iron-icon-width: 24px;
+      --iron-icon-height: 24px;
+      background: var(--default-primary-color);
+      color: #fff;
+      border-radius: 50%;
+      padding: 4px;
+      box-sizing: border-box;
+      margin-right: 8px;
+    }
+
+    .fieldsbox > * {
+      width: calc(100% - 16px);
+      box-sizing: border-box;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    /* Bottom panel styles */
+    .customize-rule-page > * {
+      margin: 0;
+    }
+  </style>
+  <template>
+    <paper-dialog id="dlgBox" with-backdrop no-cancel-on-outside-click no-cancel-on-esc-key>
+      <div class="dialog-header">
+        <div class="flex horizontal layout justified">
+          <div class="layout horizontal center">
+            <iron-icon icon="av:playlist-add" class="custom-icon"></iron-icon>
+            <span>
+                            [[workflowDef.modelName]] - Workflows
+                        </span>
+          </div>
+          <iron-icon id="close-dialog" icon="icons:close" on-click="hideDialog"></iron-icon>
+        </div>
+      </div>
+
+      <div class="dialog-content">
+        <div class="vertical flex layout">
+
+          <ev-ajax auto last-response={{workflowMappings}} url={{_getFetchUrl(workflowType,workflowDef.modelName)}} on-response="_onDataFetched"></ev-ajax>
+          <div class="customize-rule-page">
+            <ev-data-table id="maintable" items={{workflowMappings}} columns='[{"key": "operation","label": "Operation","readOnly": true},{"key":"workflowDefinitionName","valueGetter": "(row.workflowBody.workflowDefinitionName||row.workflowBody.processDefinitionKey)","label": "Workflow Definition","readOnly": true}]'
+              editor-form-url="evf-designer/elements/attach-workflow-{{workflowType}}.html" default-record={{workflowDef}}>
+              <div header-title class="layout horizontal center">
+                <ev-radio-group value={{workflowType}} displayproperty="display" valueproperty="value" listdata='[{"display":"Activiti","value":"activiti"},{"display":"Symphony","value":"ev-workflow"} ]'></ev-radio-group>
+              </div>
+            </ev-data-table>
+          </div>
+        </div>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    Polymer({
+      is: 'attach-workflow-dialog',
+      behaviors: [CommonBehavior.EVAjaxBehavior],
+      properties: {
+        currentPage: {
+          type: Number,
+          value: 0
+        },
+        modelObj: {
+          type: Object,
+          observer: '_modelObjChanged'
+        },
+        workflowType: {
+          type: String,
+          value: 'activiti'
+        },
+        workflowDef: {
+          type: Object,
+          value: function () {
+            return {
+              wfDependent: false,
+              operation: 'create',
+              workflowBody: {
+                variables: []
+              }
+            }
+          }
+        }
+      },
+      _getFetchUrl: function (workflowType, modelName) {
+        var url = workflowType === 'activiti' ? '/api/Activiti_Managers/workflows' :
+          '/api/WorkflowManagers/workflows';
+        url += '?filter={"where":{"modelName":"' + modelName + '"},"scope":{}}';
+        return url;
+      },
+      _modelObjChanged: function (newModel) {
+        this.set('workflowDef.modelName', newModel.name);
+      },
+      hideDialog: function () {
+        this.$.dlgBox.close();
+        this.workflowDef = undefined;
+      },
+      openDialog: function () {
+        if (!this.workflowDef) {
+          this.set('workflowDef', {
+            wfDependent: false,
+            operation: 'create',
+            workflowBody: {
+              variables: []
+            }
+          });
+        }
+        if (this.modelObj) {
+          this.set('workflowDef.modelName', this.modelObj.name);
+        }
+        this.currentPage = 0;
+
+        this.$.dlgBox.open();
+      },
+      _onDataFetched: function () {
+        //                if(e.detail.response && e.detail.response.length > 0){
+        //                    this.$.maintable._goBack();
+        //                } else {
+        //                    this.$.maintable._showAddForm();
+        //                }
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,585 @@
+<script>
+  var CommonBehavior = CommonBehavior || {};
+  CommonBehavior.DefaultElementListBehavior = {
+    defaultElementList: [{
+      name: 'Title-H1',
+      icon: 'ev-designer-icons:h1',
+      tag: 'h1',
+      description: 'HTML H1 tag used for page headers',
+      content: '<h1>H1 text element</h1>',
+      category: 'textElement',
+      config: {
+        domType: 'HTML',
+        attributes: [],
+        importUrl: '',
+        type: 'text'
+      },
+      previewImg: ''
+    }, {
+      name: 'Title-H2',
+      tag: 'h2',
+      icon: 'ev-designer-icons:h2',
+      description: 'HTML H2 tag used for page sub headers',
+      content: '<h2>H2 text element</h2>',
+      category: 'textElement',
+      config: {
+        domType: 'HTML',
+        attributes: [],
+        importUrl: '',
+        type: 'text'
+      },
+      previewImg: ''
+    }, {
+      name: 'Title-H3',
+      tag: 'h3',
+      icon: 'ev-designer-icons:h3',
+      description: 'HTML H3 tag used for Block headers',
+      content: '<h3>H3 text element</h3>',
+      category: 'textElement',
+      config: {
+        domType: 'HTML',
+        attributes: [],
+        importUrl: '',
+        type: 'text'
+      },
+      previewImg: ''
+    }, {
+      name: 'Title-H4',
+      tag: 'h4',
+      icon: 'ev-designer-icons:h4',
+      description: 'HTML H4 tag used for List headers',
+      content: '<h4>H4 text element</h4>',
+      category: 'textElement',
+      config: {
+        domType: 'HTML',
+        attributes: [],
+        importUrl: '',
+        type: 'text'
+      },
+      previewImg: ''
+    }, {
+      name: 'Title-H5',
+      tag: 'h5',
+      icon: 'ev-designer-icons:h5',
+      description: 'HTML H5 tag used for paragraph headers',
+      content: '<h5>H5 text element</h5>',
+      category: 'textElement',
+      config: {
+        domType: 'HTML',
+        attributes: [],
+        importUrl: '',
+        type: 'text'
+      },
+      previewImg: ''
+    }, {
+      name: 'Para',
+      tag: 'p',
+      icon: 'ev-designer-icons:para',
+      description: 'HTML paragraph element used for entering long text',
+      content: '<p>This is a pragraph text.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>',
+      category: 'textElement',
+      config: {
+        domType: 'HTML',
+        attributes: [],
+        importUrl: '',
+        type: 'text'
+      },
+      previewImg: ''
+    }, {
+      name: 'Anchor',
+      icon: 'ev-designer-icons:image',
+      description: 'HTML Anchor element to display supported Images',
+      content: '<a href="/images/sample.jpg"><label>This is a Link</label></a>',
+      tag: 'a',
+      category: 'container',
+      config: {
+        domType: 'HTML',
+        attributes: ['href', 'target', 'title'],
+        importUrl: '',
+        type: 'droppable'
+      },
+      previewImg: ''
+    }, {
+      name: 'Label',
+      tag: 'label',
+      icon: 'ev-designer-icons:label-text',
+      description: 'HTML Label element to display text',
+      content: '<label>This is label Text</label>',
+      category: 'textElement',
+      config: {
+        domType: 'HTML',
+        attributes: [],
+        importUrl: '',
+        type: 'text'
+      },
+      previewImg: ''
+    }, {
+      name: 'i18n',
+      tag: 'i18n-msg',
+      icon: 'ev-designer-icons:label-text',
+      description: 'Polymer element to display internationalized',
+      content: '<i18n-msg msgid="literal-code">I18N text</i18n-msg>',
+      category: 'textElement',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/ev-i18n-msg/i18n-msg.html',
+        type: 'text'
+      },
+      previewImg: ''
+    }, {
+      name: 'Container',
+      icon: 'ev-designer-icons:container',
+      description: 'Basic HTML div tag that supports other elements to be dropped inside it.By default aligns the children component vertically inside it.',
+      tag: 'div',
+      content: '<div></div>',
+      category: 'container',
+      config: {
+        domType: 'HTML',
+        attributes: [],
+        importUrl: '',
+        type: 'droppable'
+      },
+      previewImg: ''
+    }, {
+      name: 'HBox',
+      icon: 'ev-designer-icons:h-box',
+      tag: 'ev-hbox',
+      description: 'Basic HTML div tag with predefined class that aligns the child elements horizontally inside it.',
+      content: '<ev-hbox></ev-hbox>',
+      category: 'container',
+      config: {
+        domType: 'HTML',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/containers/ev-hbox.html',
+        type: 'droppable'
+      },
+      previewImg: ''
+    }, {
+      name: 'VBox',
+      tag: 'ev-vbox',
+      icon: 'ev-designer-icons:v-box',
+      description: 'Basic HTML div tag with predefined class that aligns the child elements vertically inside it.',
+      content: '<ev-vbox></ev-vbox>',
+      category: 'container',
+      config: {
+        domType: 'HTML',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/containers/ev-vbox.html',
+        type: 'droppable'
+      },
+      previewImg: ''
+    }, {
+      name: 'Widget Container',
+      icon: 'ev-designer-icons:v-box',
+      tag: 'widget-container',
+      description: 'Widget container',
+      content: '<widget-container columns=4 widget-margin=6><div data-sizex=3 data-sizey=1 data-col=1 data-row=1></div><div data-sizex=1 data-sizey=2 data-col=4 data-row=1></div><div data-sizex=1 data-sizey=1></div><div data-sizex=1 data-sizey=1></div><div data-sizex=1 data-sizey=1></div></widget-container>',
+      category: 'widgets',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/elements/widget-container.html',
+        type: 'droppable'
+      },
+      previewImg: ''
+    }, {
+      name: 'Horizontal Line',
+      tag: 'hr',
+      icon: 'ev-designer-icons:label-text',
+      description: 'HTML hr element to insert a horizontal line',
+      content: '<hr></hr>',
+      category: 'htmlComponents',
+      config: {
+        domType: 'HTML',
+        attributes: [],
+        importUrl: '',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'Video',
+      description: 'HTML5 Video Control',
+      tag: 'video',
+      category: 'media',
+      content: '<video><source src="...">Your browser does not support the video tag.</video>',
+      icon: 'av:movie',
+      config: {
+        domType: 'HTML',
+        attributes: [{
+          name: 'autoplay',
+          type: 'boolean'
+        }, {
+          name: 'controls',
+          type: 'boolean'
+        }, 'crossorigin', {
+          name: 'loop',
+          type: 'boolean'
+        }, {
+          name: 'muted',
+          type: 'boolean'
+        }],
+        importUrl: '',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'iron-icon',
+      description: 'An element that supports displaying an icon',
+      tag: 'iron-icon',
+      category: 'polymerElements',
+      content: '<iron-icon icon="save"></iron-icon>',
+      icon: 'ev-designer-icons:iron-icon',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/iron-icon/iron-icon.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'iron-image',
+      description: 'An image-displaying element with lots of convenient features',
+      tag: 'iron-image',
+      category: 'media',
+      content: '<iron-image sizing="contain" alt="images" src="/images/sample.jpg" style="width:100px;height:100px;"></iron-image>',
+      icon: 'ev-designer-icons:image',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/iron-image/iron-image.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'paper-button',
+      description: 'Material design button',
+      tag: 'paper-button',
+      category: 'polymerElements',
+      content: '<paper-button>Button</paper-button>',
+      icon: 'ev-designer-icons:paper-button',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/paper-button/paper-button.html',
+        type: 'text'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-input',
+      tag: 'ev-input',
+      icon: 'ev-designer-icons:input-field',
+      description: 'ev-input element provided by evf-ui to be used as a form field.',
+      content: '<ev-input label="Label"></ev-input>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/primitives/ev-input.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-decimal',
+      tag: 'ev-decimal',
+      icon: 'ev-designer-icons:decimal-input',
+      description: 'ev-decimal element provided by evf-ui to be used as a form field.',
+      content: '<ev-decimal label="Label"></ev-decimal>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/primitives/ev-decimal.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-combo',
+      tag: 'ev-combo',
+      icon: 'ev-designer-icons:combo-box',
+      description: 'ev-combo element provided by evf-ui to be used as a form field.',
+      content: '<ev-combo label="Label"></ev-combo>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/primitives/ev-combo.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-date',
+      tag: 'ev-date',
+      icon: 'ev-designer-icons:date',
+      description: 'ev-date element provided by evf-ui to be used as a form field.',
+      content: '<ev-date label="Label"></ev-date>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/primitives/ev-date.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-checkbox',
+      tag: 'ev-checkbox',
+      icon: 'ev-designer-icons:check-box',
+      description: 'ev-checkbox element provided by evf-ui to be used as a form field.',
+      content: '<ev-checkbox></ev-checkbox>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/primitives/ev-checkbox.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-info',
+      tag: 'ev-info',
+      icon: 'ev-designer-icons:info',
+      description: 'ev-info element provided by evf-ui to be used as a form field.',
+      content: '<ev-info></ev-info>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/primitives/ev-info.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-json-input',
+      tag: 'ev-json-input',
+      icon: 'ev-designer-icons:json-input',
+      description: 'ev-json-input element provided by evf-ui to be used as a form field.',
+      content: '<ev-json-input label="Label"></ev-json-input>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/primitives/ev-json-input.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-datetime',
+      tag: 'ev-datetime',
+      icon: 'ev-designer-icons:date-time',
+      description: 'ev-time element provided by evf-ui to be used as a form field.',
+      content: '<ev-datetime label="Label"></ev-datetime>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/primitives/ev-datetime.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-typeahead',
+      tag: 'ev-typeahead',
+      icon: 'ev-designer-icons:type-ahead',
+      description: 'ev-typeahead element provided by evf-ui to be used as a form field.',
+      content: '<ev-typeahead label="Label"></ev-typeahead>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/primitives/ev-typeahead.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-textarea',
+      tag: 'ev-textarea',
+      icon: 'ev-designer-icons:text-area',
+      description: 'ev-textarea element provided by evf-ui to be used as a form field.',
+      content: '<ev-textarea label="Label"></ev-textarea>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/primitives/ev-textarea.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-paper-chip',
+      tag: 'ev-paper-chip',
+      icon: 'ev-designer-icons:paper-chip',
+      description: 'ev-paper-chip element provided by evf-ui to be used as a form field.',
+      content: '<ev-paper-chip label="Label"></ev-paper-chip>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/primitives/ev-paper-chip.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-radio-group',
+      tag: 'ev-radio-group',
+      icon: 'ev-designer-icons:radio-button-checked',
+      description: 'ev-radio-group element provided by evf-ui to be used as a form field to select one item among multiple options.',
+      content: '<ev-radio-group class="layout-radio-button" listdata="[&quot;A&quot;,&quot;B&quot;]"></ev-radio-group>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/primitives/ev-radio-group.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-ajax',
+      description: 'Makes it easy to make ajax calls and parse the response',
+      tag: 'ev-ajax',
+      category: 'polymerElements',
+      content: '<ev-ajax handle-as="json"></ev-ajax>',
+      icon: 'ev-designer-icons:ev-ajax',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/primitives/ev-ajax.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'Carousel',
+      tag: 'ev-carousel',
+      icon: 'icons:perm-media',
+      description: 'Carousel control',
+      content: '<ev-carousel show-arrows show-dots timeout=5000></ev-carousel>',
+      category: 'widgets',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/widgets/ev-carousel.html',
+        type: 'droppable'
+      },
+      previewImg: ''
+    }, {
+      name: 'Chatbot',
+      tag: 'chat-bot',
+      icon: 'icons:perm-media',
+      description: 'Chatbot',
+      content: '<chat-bot></chat-bot>',
+      category: 'widgets',
+      config: {
+        domType: 'Polymer',
+        importUrl: '/bower_components/evf-ui/widgets/chat-bot.html'
+      },
+      previewImg: ''
+    }, {
+      name: 'Data Table',
+      tag: 'ev-data-table',
+      icon: 'image:grid-on',
+      description: 'Data Table',
+      content: '<ev-data-table></ev-data-table>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        importUrl: '/bower_components/evf-ui/ev-data-table/ev-data-table.html'
+      },
+      previewImg: ''
+    }, {
+      name: 'paper-material',
+      description: 'An element that supports displaying an icon',
+      tag: 'paper-material',
+      category: 'container',
+      content: '<paper-material></paper-material>',
+      icon: 'icons:aspect-ratio',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/paper-material/paper-material.html',
+        type: 'droppable'
+      },
+      previewImg: ''
+    }, {
+      name: 'paper-dialog',
+      description: 'An element that supports creating dialog boxes',
+      tag: 'paper-dialog',
+      category: 'container',
+      content: '<paper-dialog></paper-dialog>',
+      icon: 'icons:aspect-ratio',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/paper-dialog/paper-dialog.html',
+        type: 'droppable'
+      },
+      previewImg: ''
+    }, {
+      name: 'ev-file-input',
+      tag: 'ev-file-input',
+      icon: 'ev-designer-icons:input-field',
+      description: 'ev-file-input element provided by evf-ui to be used as a form field.',
+      content: '<ev-file-input></ev-file-input>',
+      category: 'polymerElements',
+      config: {
+        domType: 'Polymer',
+        attributes: [],
+        importUrl: '/bower_components/evf-ui/elements/ev-file-input.html',
+        type: 'uneditable'
+      },
+      previewImg: ''
+    }, {
+      name: 'Dom If',
+      tag: 'dom-if-element',
+      icon: 'image:grid-on',
+      description: 'DOM consditional element',
+      content: '<dom-if-element></dom-if-element>',
+      category: 'container',
+      config: {
+        domType: 'Polymer',
+        importUrl: '/bower_components/evf-designer/designer-elements/dom-if-element.html',
+        type: 'droppable'
+      },
+      previewImg: ''
+    }, {
+      name: 'Dom Repeat',
+      tag: 'dom-repeat-element',
+      icon: 'image:grid-on',
+      description: 'DOM looping element',
+      content: '<dom-repeat-element></dom-repeat-element>',
+      category: 'container',
+      config: {
+        domType: 'Polymer',
+        importUrl: '/bower_components/evf-designer/designer-elements/dom-repeat-element.html',
+        type: 'droppable'
+      },
+      previewImg: ''
+    }, {
+      name: 'Dom Bind',
+      tag: 'dom-bind-element',
+      icon: 'image:grid-on',
+      description: 'DOM bind element',
+      content: '<dom-bind-element></dom-bind-element>',
+      category: 'container',
+      config: {
+        domType: 'Polymer',
+        importUrl: '/bower_components/evf-designer/designer-elements/dom-bind-element.html',
+        type: 'droppable'
+      },
+      previewImg: ''
+    }, {
+      name: 'Page Selector',
+      tag: 'page-selector-element',
+      icon: 'image:grid-on',
+      description: 'Page Selector Element',
+      content: '<page-selector-element></page-selector-element>',
+      category: 'container',
+      config: {
+        domType: 'Polymer',
+        importUrl: '/bower_components/evf-designer/elements/page-selector-element.html',
+        type: 'droppable'
+      },
+      previewImg: ''
+    }]
+  }
+
+</script>

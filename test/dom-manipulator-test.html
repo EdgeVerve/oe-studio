@@ -1,0 +1,180 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to
+remain with the applicable third party licensors or the open source community as the case may be and nothing
+here transfers the rights to the third party and open source components, except as expressly permitted.
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<!--
+@author : Gowtham_D02
+@title	: Test cases for acl-grid polymer element
+-->
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <!-- importing dependent elements -->
+  <link rel="import" href="../all-imports.html">
+  <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
+  <!-- importing element to be tested -->
+  <link rel="import" href="../designer-elements/dom-manipulator.html">
+</head>
+
+<body>
+  <!-- You can use the document as a place to set up your fixtures. -->
+  <test-fixture id="dom-manipulator">
+    <template>
+			<dom-manipulator></dom-manipulator>
+		</template>
+  </test-fixture>
+  <script>
+    suite('<dom-manipulator>', function() {
+
+      var emptyStateEle;
+      var elementData
+      setup(function() {
+        emptyStateEle = fixture('dom-manipulator');
+        EV = EV || {};
+        EV.designerData = EV.designerData || {}
+        EV.designerData.elementList = EV.designerData.elementList || [{
+          'name': 'Title-H1',
+          'icon': 'ev-designer-icons:h1',
+          'tag': 'h1',
+          'description': 'HTML H1 tag used for page headers',
+          'content': '<h1>H1 text element</h1>',
+          'category': {
+            'main': 'Basic Web components',
+            'sub': 'Content Element'
+          },
+          'config': {
+            'domType': 'HTML',
+            'attributes': [],
+            'importUrl': '',
+            'type': 'text'
+          },
+          'previewImg': ''
+        }, {
+          'name': 'Title-H2',
+          'tag': 'h2',
+          'icon': 'ev-designer-icons:h2',
+          'description': 'HTML H2 tag used for page sub headers',
+          'content': '<h2>H2 text element</h2>',
+          'category': {
+            'main': 'Basic Web components',
+            'sub': 'Content Element'
+          },
+          'config': {
+            'domType': 'HTML',
+            'attributes': [],
+            'importUrl': '',
+            'type': 'text'
+          },
+          'previewImg': ''
+        }, {
+          'name': 'Container',
+          'icon': 'ev-designer-icons:container',
+          'description': 'Basic HTML div tag that supports other elements to be dropped inside it.By default aligns the children component vertically inside it.',
+          'tag': 'div',
+          'content': '<div></div>',
+          'category': {
+            'main': 'Basic Web components',
+            'sub': 'Structure'
+          },
+          'config': {
+            'domType': 'HTML',
+            'attributes': [],
+            'importUrl': '',
+            'type': 'droppable'
+          },
+          'previewImg': ''
+        }]
+
+
+        var dom = document.createElement('div');
+        dom.setAttribute('id', 'content');
+        dom.setAttribute('template-item', '');
+        dom.setAttribute('designer-id', 'lh4tq');
+        dom.setAttribute('class', 'content layout vertical');
+
+        elementData = {
+          'uiComponent': {
+            'name': 'new-test-element',
+            'templateName': 'default-element.html',
+            'autoInjectFields': true,
+            'id': '585ba63af560f0600798cdbf',
+
+            'polymerConfig': {
+              'is': 'new-test-element'
+            }
+          },
+          'dom': dom,
+          'uimeta': {
+            'componentName': 'new-test-element',
+            'elements': {},
+            'modelName': '',
+            'modelAlias': '',
+            'metadata': {},
+            'autoInjectFields': false
+          },
+          'polyConfig': {
+            'is': 'new-test-element'
+          },
+          'bindedObject': {
+            'condition': true
+          }
+        }
+      });
+
+
+      test('Element Initialization', function(done) {
+        expect(emptyStateEle.originalDom).to.equal(null);
+        done();
+      })
+
+
+      test('New Component Loading', function(done) {
+        emptyStateEle.set('element', elementData);
+        emptyStateEle.set('resolution', 'desktop');
+        flush(function() {
+          expect(elementData.dom.isEqualNode(emptyStateEle.originalDom)).to.equal(true);
+          done();
+        })
+      })
+
+
+
+      /*test("Drag new Element into the loaded page", function(done) {
+      		emptyStateEle.set('element', elementData);
+      		emptyStateEle.set('resolution', "desktop");
+      		emptyStateEle.renderTree();
+      		flush(function() {
+      			var dropNode = document.createElement('div');
+      			dropNode.textContent = "H2"
+      			dropNode.setAttribute('draggable', true);
+      			dropNode.config = EV.designerData.elementList.find(function(c) {
+      				return c.tag == "h2"
+      			})
+      			dropNode.style.position = "absolute";
+      			dropNode.style.top = "0px";
+      			dropNode.style.left = "0px";
+      			emptyStateEle.appendChild(dropNode);
+      			var target = emptyStateEle.querySelector('#content');
+      			var targetRect = target.getBoundingClientRect();
+      			var dropRect = dropNode.getBoundingClientRect();
+      			var diff = {
+      				h: dropRect.left - targetRect.left,
+      				v: dropRect.top - targetRect.top
+      			}
+      			MockInteractions.track(dropNode, diff.h, diff.v);
+      			done();
+      		})
+      })*/
+    });
+
+  </script>
+</body>
+
+</html>

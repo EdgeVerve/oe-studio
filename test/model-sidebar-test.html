@@ -1,0 +1,215 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/test-helpers.js"></script>
+  <link rel="import" href="../../promise-polyfill/promise-polyfill.html">
+  <!-- importing dependent elements -->
+  <link rel="import" href="../all-imports.html">
+  <!-- importing element to be tested -->
+  <link rel="import" href="../elements/model-sidebar.html">
+</head>
+
+<body>
+  <!-- You can use the document as a place to set up your fixtures. -->
+  <test-fixture id="model-sidebar-fixture">
+    <template>
+            <model-sidebar>
+            </model-sidebar>
+        </template>
+  </test-fixture>
+  <script>
+    suite('<model-sidebar>', function() {
+
+      var testElement;
+      var ModelTest = {
+        'properties': [{
+          'type': 'number',
+          'required': true,
+          'min': '5',
+          'max': '90',
+          '__name__': 'Age'
+        }, {
+          'type': 'string',
+          'required': true,
+          'unique': true,
+          '__name__': 'Email'
+        }, {
+          'type': 'string',
+          'required': true,
+          'min': '5',
+          'max': '20',
+          '__name__': 'Name'
+        }],
+        'readonly': false,
+        'name': 'ModelTest',
+        'description': '',
+        'plural': 'ModelTests',
+        'base': 'TestModel',
+        'strict': true,
+        'public': true,
+        'idInjection': false,
+        'validateUpsert': false,
+        'validations': [],
+        'relations': [],
+        'acls': [{
+          'principalType': 'ROLE',
+          'principalId': 'admin',
+          'permission': 'ALLOW',
+          'propertyValue': '*',
+          'accessType': '*'
+        }, {
+          'principalType': 'ROLE',
+          'principalId': 'admin',
+          'permission': 'ALLOW',
+          'propertyValue': 'customfunction',
+          'accessType': '*'
+        }, {
+          'principalType': 'ROLE',
+          'principalId': 'admin',
+          'permission': 'ALLOW',
+          'property': '*',
+          'accessType': '*'
+        }],
+        'methods': [],
+        'dataSourceName': '',
+        'id': '576d13490ee97924335a8826',
+        '_type': 'ModelDefinition',
+        '_createdBy': 'sourav',
+        '_modifiedBy': 'sourav',
+        '_createdOn': '2016-06-24T11:02:33.635Z',
+        '_modifiedOn': '2016-06-24T11:02:33.635Z',
+        '_version': 'b7887713-1b87-4b59-b96e-431f1f130ed8',
+        '_isDeleted': false,
+        'evValidations': [],
+        'autoscope': [],
+        'scope': {},
+        'mongodb': {
+          'collection': 'ModelTest'
+        },
+        'checked': true
+      }
+      var TestModel = {
+        'properties': [{
+          'type': 'number',
+          '__name__': 'age'
+        }, {
+          'type': 'string',
+          '__name__': 'name'
+        }],
+        'readonly': false,
+        'name': 'TestModel',
+        'plural': 'TestModels',
+        'base': 'AppBaseModel',
+        'strict': false,
+        'public': true,
+        'idInjection': false,
+        'validateUpsert': true,
+        'validations': [],
+        'relations': [],
+        'acls': [],
+        'methods': {},
+        'dataSourceName': 'refappdb',
+        'id': '576b6f94e2ccc15c10203351',
+        '_type': 'ModelDefinition',
+        '_modifiedBy': 'sourav',
+        '_createdOn': '2016-06-23T05:11:48.060Z',
+        '_modifiedOn': '2016-06-24T11:21:32.575Z',
+        '_version': '0d9f4ea4-70a1-4ec8-9106-66071317c19e',
+        '_isDeleted': false
+      }
+      var ModelList = [ModelTest, TestModel];
+
+      setup(function() {
+        testElement = fixture('model-sidebar-fixture');
+        testElement.set('modelList', ModelList);
+        testElement.domHost = {
+          _selectedTab: {
+
+          }
+        }
+      });
+
+      test('Test if count is returned properly', function(done) {
+        assert.equal(testElement.modelCount, 2);
+        assert.equal(testElement.modelList.length, 2);
+        done();
+      });
+
+      test('Test if filter functionality is working', function(done) {
+        testElement.modelList[0].isFrameworkModel = false;
+        testElement.modelList[1].isFrameworkModel = false;
+        testElement.calcCount();
+        var filter = testElement._filter('TestModel');
+        var i ;
+        for (i = 0; i < testElement.modelList.length; ++i) {
+          filter(testElement.modelList[i])
+        }
+        testElement.modelList[0].designerHiddenModel = true;
+        for (i = 0; i < testElement.modelList.length; ++i) {
+          filter(testElement.modelList[i])
+        }
+        done();
+      });
+
+      test('Test if sort function is working', function(done) {
+
+        var x = testElement._sort({
+          name: 'a'
+        }, {
+          name: 'b'
+        });
+        assert.equal(x, -1);
+
+        x = testElement._sort({
+          name: 'b'
+        }, {
+          name: 'a'
+        });
+        assert.equal(x, 1);
+
+        x = testElement._sort({
+          name: 'a'
+        }, {
+          name: 'a'
+        });
+        assert.equal(x, 0);
+
+
+        done();
+      });
+
+
+      test('Test if computeClass function is working', function(done) {
+        assert.equal(testElement.computeClass('1', '2'), 'show-both');
+        assert.equal(testElement.computeClass('1', null), 'show-single');
+        done();
+      });
+
+      test('select a model in Model Definition view', function(done) {
+        //[icon="icons:expand-less"]
+        flush(function() {
+          var modelDiv = Polymer.dom(testElement.root).querySelectorAll('[type="model"]');
+          modelDiv[0].click();
+          flush(function() {
+            done();
+          });
+        })
+      });
+
+    });
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,486 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<!--
+@author : Gowtham_D02
+@title	: Test cases for model-container polymer element
+-->
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <!-- importing dependent elements -->
+  <link rel="import" href="../all-imports.html">
+
+  <!-- importing element to be tested -->
+  <link rel="import" href="../elements/model-container.html">
+</head>
+
+<body>
+
+  <!-- You can use the document as a place to set up your fixtures. -->
+  <test-fixture id="model-container-fixture">
+    <template>
+			<model-container></model-container>
+		</template>
+  </test-fixture>
+
+
+  <test-fixture id="model-container-emptyprop-fixture">
+    <template>
+			<model-container></model-container>
+		</template>
+  </test-fixture>
+
+  <script>
+    suite('<model-container>', function() {
+
+      var modelContainer , emptyModelContainer;
+
+      setup(function() {
+        modelContainer = fixture('model-container-fixture');
+        modelContainer.modelObj = {
+          'properties': [{
+            'length': 50,
+            'type': 'string',
+            '__name__': '_createdBy'
+          }, {
+            'type': 'string',
+            'format': 'date',
+            '__name__': '_createdOn'
+          }, {
+            'type': 'boolean',
+            '__name__': '_isDeleted'
+          }, {
+            'length': 50,
+            'type': 'string',
+            '__name__': '_modifiedBy'
+          }, {
+            'type': 'string',
+            'format': 'date',
+            '__name__': '_modifiedOn'
+          }, {
+            'length': 50,
+            'type': 'string',
+            '__name__': '_type'
+          }, {
+            'type': 'string',
+            '__name__': '_version'
+          }, {
+            'type': 'string',
+            '__name__': 'accountNumber'
+          }, {
+            'type': 'string',
+            '__name__': 'AccountType'
+          }, {
+            'type': 'string',
+            '__name__': 'BaseCurrency'
+          }, {
+            'type': 'objectid',
+            '__name__': 'customerId',
+            'id': true
+          }, {
+            'type': 'objectid',
+            '__name__': 'id'
+          }, {
+            'type': 'number',
+            'format': 'double',
+            '__name__': 'MinBalance'
+          }, {
+            'type': 'string',
+            'format': 'date',
+            '__name__': 'OpenDate'
+          }, {
+            'type': 'string',
+            '__name__': 'Status'
+          }],
+          'readonly': false,
+          'name': 'Account',
+          'plural': 'Accounts',
+          'base': 'AppBaseModel',
+          'strict': false,
+          'public': true,
+          'idInjection': true,
+          'validateUpsert': true,
+          'validations': [],
+          'relations': [{
+            'type': 'hasOne',
+            'model': 'AccountBalance',
+            '__name__': 'balance'
+          }, {
+            'type': 'belongsTo',
+            'model': 'Person',
+            '__name__': 'customer'
+          }, {
+            'type': 'hasMany',
+            'model': 'CashEntry',
+            '__name__': 'entry'
+          }],
+          'acls': [],
+          'methods': {},
+          'dataSourceName': 'refappdb',
+          'id': '576a681523d3b6282283625e',
+          '_type': 'ModelDefinition',
+          '_createdOn': '2016-06-22T10:27:32.816Z',
+          '_modifiedOn': '2016-06-22T10:27:32.816Z',
+          '_version': '0856da69-c953-468b-b0ec-dad51aceff8e',
+          '_isDeleted': false,
+          'evEnableBulkUpload': true,
+          'evTrackHistory': true,
+          'trackChanges': false,
+          'autoscope': ['tenantId'],
+          'mixins': {
+            'ObserverMixin': true,
+            'HistoryMixin': true,
+            'EvCacheMixin': true,
+            'ModelValidations': true,
+            'ExpressionAstPopulatorMixin': true,
+            'EvAuditFieldsMixin': true,
+            'EvDatasourceJuggler': true,
+            'DataPersonalizationMixin': true,
+            'ServicePersonalizationMixin': true,
+            'SwitchDatasourceMixin': true,
+            'EvVersionMixin': true,
+            'EvRemoteMethodMixin': true,
+            'BusinessRuleMixin': true,
+            'DataAclMixin': false,
+            'SoftDeleteMixin': true,
+            'FinacleMixin': true
+          },
+          'hidden': ['_tenantId', '_scope', '_autoScope', 'score', 'weight', 'tenantId'],
+          'scope': {},
+          'mongodb': {
+            'collection': 'Account'
+          },
+          'checked': true,
+          'evValidations': []
+        };
+        emptyModelContainer = fixture('model-container-emptyprop-fixture');
+        var msgHandler = document.createElement('ev-message-handler');
+        msgHandler.id = 'toast';
+        msgHandler.fitBottom = true;
+        msgHandler.duration = 5000;
+        emptyModelContainer.appendChild(msgHandler);
+        Polymer.dom(emptyModelContainer.root).flush();
+        emptyModelContainer.modelObj = {
+          'properties': [],
+          'readonly': false,
+          'name': 'Myaccount',
+          'plural': 'Myaccounts',
+          'base': 'AppBaseModel',
+          'strict': false,
+          'public': true,
+          'idInjection': true,
+          'validateUpsert': true,
+          'validations': [],
+          'relations': [{
+            'type': 'hasOne',
+            'model': 'AccountBalance',
+            '__name__': 'balance'
+          }, {
+            'type': 'belongsTo',
+            'model': 'Person',
+            '__name__': 'customer'
+          }, {
+            'type': 'hasMany',
+            'model': 'CashEntry',
+            '__name__': 'entry'
+          }],
+          'acls': [],
+          'methods': {},
+          'dataSourceName': 'refappdb',
+          'id': '576a681523d3b6282283625e',
+          '_type': 'ModelDefinition',
+          '_createdOn': '2016-06-22T10:27:32.816Z',
+          '_modifiedOn': '2016-06-22T10:27:32.816Z',
+          '_version': '0856da69-c953-468b-b0ec-dad51aceff8e',
+          '_isDeleted': false,
+          'evEnableBulkUpload': true,
+          'evTrackHistory': true,
+          'trackChanges': false,
+          'autoscope': ['tenantId'],
+          'mixins': {
+            'ObserverMixin': true,
+            'HistoryMixin': true,
+            'EvCacheMixin': true,
+            'ModelValidations': true,
+            'ExpressionAstPopulatorMixin': true,
+            'EvAuditFieldsMixin': true,
+            'EvDatasourceJuggler': true,
+            'DataPersonalizationMixin': true,
+            'ServicePersonalizationMixin': true,
+            'SwitchDatasourceMixin': true,
+            'EvVersionMixin': true,
+            'EvRemoteMethodMixin': true,
+            'BusinessRuleMixin': true,
+            'DataAclMixin': false,
+            'SoftDeleteMixin': true,
+            'FinacleMixin': true
+          },
+          'hidden': ['_tenantId', '_scope', '_autoScope', 'score', 'weight', 'tenantId'],
+          'scope': {},
+          'mongodb': {
+            'collection': 'Myaccount'
+          },
+          'checked': true,
+          'evValidations': []
+        }
+      });
+
+      test('Menu Options popup action - add rule', function(done) {
+        var menuBtn = Polymer.dom(modelContainer.root).querySelector('#optionsMenu');
+        var addRuleBtn = Polymer.dom(modelContainer.root).querySelector('#personalization-rule-starter');
+        menuBtn.click();
+        modelContainer.addEventListener('add-rule', function(e) {
+          assert.equal(e.detail.name, modelContainer.modelObj.name);
+          done();
+        })
+        flush(function() {
+          addRuleBtn.click();
+        })
+      })
+
+      test('Menu Options popup action - edit model', function(done) {
+        var menuBtn = Polymer.dom(modelContainer.root).querySelector('#optionsMenu');
+        var editModelBtn = Polymer.dom(modelContainer.root).querySelector('#edit-model-starter');
+
+        menuBtn.click();
+
+        modelContainer.addEventListener('edit-model', function(e) {
+          assert.equal(e.detail.name, modelContainer.modelObj.name);
+          done();
+        })
+        flush(function() {
+          editModelBtn.click();
+        })
+      })
+
+      test('Menu Options popup action - clone model', function(done) {
+        var menuBtn = Polymer.dom(modelContainer.root).querySelector('#optionsMenu');
+        var editModelBtn = Polymer.dom(modelContainer.root).querySelector('#clone-model-starter');
+        menuBtn.click();
+        modelContainer.addEventListener('clone-model', function(e) {
+          assert.equal(e.detail.name, modelContainer.modelObj.name);
+          done();
+        })
+        flush(function() {
+          editModelBtn.click();
+        })
+      })
+
+      test('Menu Options popup action - delete model', function(done) {
+        var menuBtn = Polymer.dom(modelContainer.root).querySelector('#optionsMenu');
+        var deleteModelBtn = Polymer.dom(modelContainer.root).querySelector('#delete-model-starter');
+        menuBtn.click();
+
+        modelContainer.addEventListener('delete-model', function(e) {
+          assert.equal(e.detail.name, modelContainer.modelObj.name);
+          done();
+        })
+        flush(function() {
+          deleteModelBtn.click();
+        })
+      })
+
+      test('Close the model-container', function(done) {
+        var menuBtn = Polymer.dom(modelContainer.root).querySelector('#close-container');
+        modelContainer.addEventListener('close-model-container', function(e) {
+          assert.equal(e.detail.id, modelContainer.modelObj.id);
+          done();
+        })
+        menuBtn.click();
+      })
+
+      test('Add new property and edit property', function(done) {
+        flush(function() {
+
+          modelContainer.calculatePrimaryKey();
+          assert.equal(modelContainer.primaryKey, 'customerId');
+
+          var addPanelBtn = Polymer.dom(modelContainer.root).querySelector('#add-prop-panel');
+          var addPropBtn = Polymer.dom(modelContainer.root).querySelector('#add-prop-btn');
+          var cancelPropBtn = Polymer.dom(modelContainer.root).querySelector('#cancel-add-prop');
+          var addValidationBtn = Polymer.dom(modelContainer.root).querySelector('#validate-prop-btn');
+
+
+          var modelProperties = modelContainer.modelObj.properties;
+
+          //Click on add prop to toggle panel
+          addPanelBtn.click();
+          var property = {
+            '__name__': 'test_name',
+            'type': 'string'
+          }
+
+          var isPropertyPresent = modelProperties.find(function(prop) {
+            return prop.__name__ == property.__name__;
+          });
+          //Property not present
+          assert.equal(isPropertyPresent, undefined);
+
+          //Set value and click cancel
+          modelContainer.set('propertyObj', property);
+          isPropertyPresent = modelProperties.find(function(prop) {
+            return prop.__name__ == property.__name__;
+          });
+          cancelPropBtn.click();
+          assert.equal(isPropertyPresent, undefined);
+
+
+          //Click on add prop to toggle panel
+          addPanelBtn.click();
+
+          //Set value and click add
+          modelContainer.set('propertyObj', property);
+
+          addPropBtn.click();
+
+          isPropertyPresent = modelProperties.find(function(prop) {
+            return prop.__name__ == property.__name__;
+          });
+          assert.notEqual(isPropertyPresent, undefined);
+
+          flush(function() {
+            //Click on the last property edit icon
+            var editIconList = Polymer.dom(modelContainer.root).querySelectorAll('.listing .list-item #edit-icon');
+            editIconList[editIconList.length - 1].click();
+
+
+            modelContainer.set('propertyObj.type', 'date');
+            addPropBtn.click();
+            assert.equal(modelProperties[modelProperties.length - 1].type, 'date');
+
+            editIconList[editIconList.length - 1].click();
+            modelContainer.addEventListener('edit-property', function(e) {
+              var evtDetail = e.detail;
+              assert.notEqual(evtDetail.property, modelProperties[evtDetail.index]);
+              done();
+            })
+            addValidationBtn.click();
+          })
+        })
+      })
+
+      test('Save modified property', function(done) {
+        flush(function() {
+          var addPanelBtn = Polymer.dom(modelContainer.root).querySelector('#add-prop-panel');
+          var addPropBtn = Polymer.dom(modelContainer.root).querySelector('#add-prop-btn');
+
+          var modelProperties = modelContainer.modelObj.properties;
+
+          //Click on add prop to toggle panel
+          addPanelBtn.click();
+          var property = {
+            '__name__': 'test_name',
+            'type': 'string'
+          }
+          modelContainer.set('propertyObj', property);
+          addPropBtn.click();
+
+          property.min = 2;
+          property.max = 20;
+          modelContainer.fire('save-property', {
+            'modelObj': modelContainer.modelObj,
+            'propertyObj': property,
+            'index': (modelProperties.length - 1)
+          })
+
+          flush(function() {
+            var finalProp = modelProperties[modelProperties.length - 1];
+            assert.equal(finalProp.min, 2);
+            assert.equal(finalProp.max, 20);
+
+            property.__name__ = 'test_var_2';
+
+            modelContainer.fire('save-property', {
+              'modelObj': modelContainer.modelObj,
+              'propertyObj': property,
+              'index': -1
+            })
+            done();
+          })
+        })
+      })
+
+      test('Initial case for model without properties Add and Delete property', function(done) {
+        flush(function() {
+
+          assert.equal(emptyModelContainer.showProperties, false);
+          var addNewPropBtn = Polymer.dom(emptyModelContainer.root).querySelector('.empty-property-panel .main-text');
+          addNewPropBtn.click();
+
+          flush(function() {
+            var property = {
+              '__name__': 'test_name',
+              'type': 'string'
+            }
+            emptyModelContainer.set('propertyObj', property);
+
+            var addPropBtn = Polymer.dom(emptyModelContainer.root).querySelector('#add-prop-btn');
+            addPropBtn.click();
+
+            flush(function() {
+              var deleteIcon = Polymer.dom(emptyModelContainer.root).querySelector('.listing .list-item #delete-icon');
+              var validateIcon = Polymer.dom(emptyModelContainer.root).querySelector('.listing .list-item #validate-icon');
+
+
+              validateIcon.click()
+              deleteIcon.click();
+
+              var msgHandler = emptyModelContainer.childNodes[emptyModelContainer.childNodes.length - 1];
+              var confirmToast = Polymer.dom(msgHandler.root).querySelector('paper-toast#confirm');
+              var okBtn = confirmToast.querySelector('paper-button#ok');
+              var cancelBtn = confirmToast.querySelector('paper-button#cancel');
+
+              cancelBtn.click();
+              assert.equal(emptyModelContainer.modelObj.properties.length, 1);
+
+              deleteIcon.click();
+              okBtn.click();
+              assert.equal(emptyModelContainer.modelObj.properties.length, 0);
+
+
+              done();
+
+            })
+          })
+        })
+      })
+
+      test('View model details', function(done) {
+        flush(function() {
+          var toggleBtn = Polymer.dom(emptyModelContainer.root).querySelector('#toggle-detail-view');
+          var viewDetailBtn = Polymer.dom(emptyModelContainer.root).querySelector('#view-detail-view');
+
+          assert.equal(emptyModelContainer.showDetail, false);
+          assert.equal(emptyModelContainer.modelDetailStatus, 'show more');
+          assert.equal(emptyModelContainer.modelDetailIcon, 'expand-more');
+          toggleBtn.click();
+          assert.equal(emptyModelContainer.showDetail, true);
+          assert.equal(emptyModelContainer.modelDetailStatus, 'show less');
+          assert.equal(emptyModelContainer.modelDetailIcon, 'expand-less');
+
+          emptyModelContainer.addEventListener('view-model-detail', function(e) {
+            assert.equal(e.detail.name, emptyModelContainer.modelObj.name);
+            toggleBtn.click();
+            done();
+          })
+          viewDetailBtn.click();
+        })
+      })
+    });
+
+  </script>
+
+</body>
+
+</html>

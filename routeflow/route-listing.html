@@ -1,0 +1,115 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../behaviours/designer-wrapper-behaviors.html">
+<dom-module id="route-listing">
+  <template>
+    <style>
+      :host {
+        position: relative;
+        display: block;
+        background: var(--dark-primary-color);
+        min-width: 250px;
+        color: var(--light-text-color);
+      }
+
+      search-header {
+        background: var(--light-primary-color);
+      }
+
+      ul,
+      li {
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+      }
+
+      .list {
+        padding: 0px 16px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        width: 100%;
+        box-sizing: border-box;
+        color: var(--light-text-color);
+        height: calc(100vh - 88px);
+      }
+
+      .list-item {
+        height: 40px;
+        cursor: pointer;
+      }
+
+      .route-path {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        max-width: 250px;
+      }
+
+      li iron-icon {
+        --iron-icon-width: 18px;
+        --iron-icon-height: 18px;
+      }
+
+      iron-icon.small {
+        width: 18px;
+        height: 18px;
+        margin-right: 5px;
+      }
+    </style>
+    <search-header filter-val="{{filterVal}}">
+      <iron-icon class="small" icon="ev-designer-icons:route-manager"></iron-icon><span class="flex">Routes</span>
+    </search-header>
+    <div class="list">
+      <ul role="menu" class="vertical layout">
+        <template is="dom-repeat" items={{routeList}} initial-count=10 filter="{{_filter(filterVal)}}" as="route">
+          <li on-tap="showSelected" class$="{{route.checked}} list-item center layout horizontal justified">
+            <div class="route-path">{{route.path}}</div>
+            <iron-icon icon="icons:visibility" hidden$="{{!route.checked}}"></iron-icon>
+          </li>
+        </template>
+      </ul>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'route-listing',
+      properties: {
+        routeList: {
+          type: Array,
+          notify: true
+        },
+        filterVal: {
+          type: String,
+          value: ''
+        }
+      },
+      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior],
+      _filter: function (val) {
+        return function (model) {
+          if (!val) {
+            return true;
+          }
+          if (!model) {
+            return false;
+          }
+          return (model.name.toLowerCase().indexOf(val.toLowerCase()) != -1);
+        }
+      },
+      showSelected: function (e) {
+        var route = e.model.route;
+        route.checked = !route.checked;
+        var index = this.routeList.findIndex(function (obj) {
+          return obj.id == route.id;
+        })
+        this.set('routeList.' + index + '.checked', route.checked);
+        this.fire('render-route', route);
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,177 @@
+<link rel="import" href="../styles/shared-styles.html">
+<dom-module id="data-acl-dialog">
+  <style>
+    paper-dialog {
+      width: calc(100% - 100px);
+      height: calc(100% - 80px);
+    }
+    
+    iron-icon {
+      --iron-icon-width: 20px;
+      --iron-icon-height: 20px;
+    }
+    
+    .custom-icon {
+      margin-right: 16px;
+    }
+    
+    .dialog-content {
+      overflow: auto;
+    }
+
+  </style>
+  <template>
+		<style include="shared-styles"></style>
+		<paper-dialog id="dialog" modal class="layout vertical">
+			<div class="dialog-header">
+				<span>Define Data Acls for [[modelObj.name]]</span>
+			</div>
+			<div class="dialog-content flex">
+				<ev-data-table label="Data Acls" items={{dataAcls}} record-handling="remote" editor-form-url="evf-designer/elements/data-acl-form.html" columns=[[dataAclColumnDef]]></ev-data-table>
+			</div>
+			<div class="dialog-footer">
+				<div class="layout horizontal center end-justified">
+					<paper-button id="cancelbtn" on-tap="closeDialog">Cancel</paper-button>
+					<!--<paper-button id="savebtn" secondary on-tap="saveDataAcls">Save</paper-button>-->
+				</div>
+			</div>
+		</paper-dialog>
+	</template>
+  <script>
+    Polymer({
+      is: 'data-acl-dialog',
+      attached: function() {
+        this.set('dataAclColumnDef', [{
+          key: 'accessType',
+          label: 'Access Type',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'principalType',
+          label: 'Principal Type',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'property',
+          label: 'Property',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'principalId',
+          label: 'Principal Id',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'filter',
+          label: 'Filter',
+          type: 'object',
+          formatter: function(value) {
+            return JSON.stringify(value);
+          },
+          readOnly: true
+        }, {
+          key: 'group',
+          label: 'Group',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'errorCode',
+          label: 'Error Code',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'scope',
+          label: 'Scope',
+          type: 'object',
+          formatter: function(value) {
+            if (value) {
+              return JSON.stringify(value);
+            }
+            return 'NA'
+          },
+          readOnly: true
+        }]);
+      },
+      behaviors: [CommonBehavior.EVAjaxBehavior],
+      fetchData: function(formElement) {
+        async.parallel({
+          dataAcl: function(callback) {
+            var params = {
+              filter: {
+                where: {
+                  model: this.modelObj.name
+                }
+              }
+            }
+            this.makeAjaxCall('api/DataACLs', 'GET', null, null, params, null, function(err, resp) {
+              if (err) {
+                this.fire('ev-show-error', 'Error fetching Data ACLs');
+                callback(err, null)
+              } else {
+                callback(null, resp)
+              }
+            }.bind(this));
+          }.bind(this),
+          usersList: function(callback) {
+            this.makeAjaxCall('api/Users', 'get', null, null, null, function(err, res) {
+              if (err) {
+                this.fire('ev-show-error', 'Error fetching UserData');
+                callback(err, null)
+              } else {
+                callback(null, res)
+              }
+            }.bind(this))
+          }.bind(this),
+          roleList: function(callback) {
+            this.makeAjaxCall('api/BaseRoles', 'get', null, null, null, function(err, res) {
+              if (err) {
+                this.fire('ev-show-error', 'Error fetching BaseRoles');
+                callback(err, null)
+              } else {
+                callback(null, res)
+              }
+            }.bind(this))
+          }.bind(this)
+        }, function(err, result) {
+          if (!err) {
+            this.set('dataAcls', result.dataAcl);
+            var predefRoles = ['$everyone', '$owner', '$related', '$authenticated', '$unauthenticated'].map(function(r) {
+              return {
+                disp: r,
+                value: r
+              }
+            })
+            formElement.set('modelNameToSave', this.modelObj.name);
+            formElement.set('principalList.user', result.usersList.map(function(u) {
+              return {
+                disp: u.username,
+                value: u.id
+              }
+            }));
+            var roles = predefRoles.concat(result.roleList.map(function(r) {
+              return {
+                disp: r.name,
+                value: r.id
+              }
+            }))
+            formElement.set('principalList.role', roles);
+          }
+        }.bind(this));
+        this.set('dataAcls', []);
+      },
+      openDialog: function(modelObj) {
+        this.set('modelObj', modelObj);
+        var table = this.querySelector('ev-data-table');
+        var formElement = table.$['form-component'].element;
+        if (formElement) {
+          this.fetchData(formElement);
+        }
+        this.$.dialog.open();
+      },
+      closeDialog: function() {
+        this.$.dialog.close();
+      }
+    })
+
+  </script>
+</dom-module>

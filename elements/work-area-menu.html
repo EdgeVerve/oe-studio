@@ -1,0 +1,214 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<link rel="import" href="../../polymer/polymer.html">
+<dom-module id="work-area-menu">
+  <style>
+    .main paper-fab {
+      background-color: var(--default-primary-color);
+    }
+
+    .main.dynamic-ico paper-fab {
+      position: absolute;
+      top: 0px;
+      animation-duration: 500ms;
+      transition: all 500ms ease-in;
+    }
+
+    .sub {
+      margin-bottom: 5px;
+    }
+
+    .sub>paper-fab {
+      background-color: #fff;
+      color: #727272;
+      margin: 0px 0px 5px 0px;
+      position: relative;
+    }
+
+    .sub>paper-fab:hover {
+      background-color: var(--default-primary-color);
+      color: #fff;
+    }
+
+    #menuContainer {
+      position: relative;
+    }
+
+    #menuContainer .sub {
+      transition: all .4s cubic-bezier(.55, 0, .55, .2);
+      visibility: hidden;
+      opacity: 0;
+      height: 0px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #menuContainer.expand-menu .sub {
+      transition: all .4s cubic-bezier(.55, 0, .55, .2);
+      height: auto;
+      visibility: visible;
+      opacity: 1;
+      transition-delay: 0s;
+    }
+
+    @keyframes rotate-fade-in {
+      from {
+        transform: rotate(180deg);
+        opacity: 0;
+      }
+      to {
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes rotate-fade-out {
+      from {
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+      to {
+        transform: rotate(-180deg);
+        opacity: 0;
+      }
+    }
+
+    #menuContainer .main.dynamic-ico {
+      position: relative;
+      width: 56px;
+      height: 56px;
+    }
+
+    #menuContainer .main.dynamic-ico #create-model {
+      animation-name: rotate-fade-out;
+      opacity: 0;
+    }
+
+    #menuContainer .main.dynamic-ico #create {
+      animation-name: rotate-fade-in;
+      opacity: 1;
+    }
+
+    #menuContainer.expand-menu .main.dynamic-ico #create-model {
+      animation-name: rotate-fade-in;
+      opacity: 1;
+    }
+
+    #menuContainer.expand-menu .main.dynamic-ico #create {
+      animation-name: rotate-fade-out;
+      opacity: 0;
+    }
+  </style>
+  <template>
+    <div on-tap="toggleSubMenu" id="menuContainer">
+      <template is="dom-if" if="{{viewFlags.basic}}">
+        <div class="sub flex vertical center layout">
+          <paper-fab mini id="uploadmodels" icon="file-upload" on-tap="uploadModels"></paper-fab>
+          <paper-fab mini id="relation" icon="ev-icons:relation" on-tap="createRelation"></paper-fab>
+          <paper-fab mini id="create-model" icon="create" on-tap="createModel"></paper-fab>
+        </div>
+        <div class="main dynamic-ico">
+          <paper-fab id="menu" icon="menu"></paper-fab>
+        </div>
+        <paper-tooltip position="left" for="create-model" animation-delay="0">Create Model</paper-tooltip>
+        <!--<paper-tooltip position="left" for="create" animation-delay="0">Create Model</paper-tooltip>-->
+        <paper-tooltip position="left" for="relation" animation-delay="0">Create Relation</paper-tooltip>
+        <paper-tooltip position="left" for="uploadmodels" animation-delay="0">Upload Models</paper-tooltip>
+      </template>
+      <template is="dom-if" if="{{viewFlags.model}}">
+        <div class="main">
+          <paper-fab id="create" icon="create" on-tap="addModel"></paper-fab>
+        </div>
+        <paper-tooltip position="left" for="create">Create Model</paper-tooltip>
+      </template>
+      <template is="dom-if" if="{{viewFlags.personalization}}">
+        <div class="main">
+          <paper-fab id="create-rule" icon="create" on-tap="createRule"></paper-fab>
+        </div>
+        <paper-tooltip position="left" for="create-rule" animation-delay="0">Create Personalization Rule</paper-tooltip>
+      </template>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'work-area-menu',
+      properties: {
+        subMenu: {
+          type: Boolean,
+          value: true
+        },
+        viewType: {
+          type: String,
+          observer: '_viewChanged'
+        },
+        mainIcon: {
+          type: String,
+          value: 'add'
+        },
+        modelObj: {
+          type: Object
+        },
+        modelList: {
+          type: Array
+        },
+        relationType: {
+          type: Object,
+          value: {
+            'type': 'hasMany',
+            'icon': 'ev-icons:has-many'
+          }
+        },
+        viewFlags: {
+          type: Object,
+          value: {
+            'basic': true,
+            'model': false,
+            'personalization': false
+          }
+        }
+      },
+      _viewChanged: function (type) {
+        for (var prop in this.viewFlags) {
+          if (prop == type) {
+            this.set('viewFlags.' + prop, true);
+          } else {
+            this.set('viewFlags.' + prop, false);
+          }
+        }
+      },
+      uploadModels: function () {
+        var modelDefinition = this.modelList.find(function (d) {
+          return d.name === 'ModelDefinition'
+        });
+        if (!modelDefinition) {
+          this.fire('ev-show-error', "ModelDefinition model doesn't exist.");
+        } else {
+          this.fire('upload-data', modelDefinition);
+        }
+      },
+      createRelation: function () {
+        this.fire('create-relation');
+      },
+      createModel: function () {
+        this.fire('create-model', {
+          'renderInWorkArea': true
+        });
+      },
+      createRule: function () {
+        this.fire('add-rule', this.modelObj);
+      },
+      addModel: function () {
+        this.fire('create-model', {
+          'renderInWorkArea': false
+        });
+      },
+      toggleSubMenu: function () {
+        this.$.menuContainer.classList.toggle('expand-menu');
+      }
+    });
+  </script>
+</dom-module>

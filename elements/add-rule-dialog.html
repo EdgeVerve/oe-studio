@@ -1,0 +1,292 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<dom-module id="add-rule-dialog">
+  <style>
+    :host {
+      letter-spacing: 0.75px;
+    }
+
+    paper-dialog {
+      width: calc(100% - 48px);
+      height: calc(100% - 48px);
+      margin: 24px !important;
+      background: var(--paper-dialog-background-color);
+    }
+
+    iron-icon {
+
+      --iron-icon-width: 20px;
+      --iron-icon-height: 20px;
+    }
+
+    .dialog-content {
+      height: calc(100vh - 228px);
+      overflow: auto;
+      border-bottom: 1px solid var(--divider-color);
+    }
+
+    /* Top panel styles */
+    .dialog-header {
+      border-bottom: 1px solid var(--divider-color);
+    }
+
+    .top-panel {
+      font-size: 14px;
+      padding: 16px 0 20px;
+    }
+
+    .step-item {
+      margin-right: 16px;
+    }
+
+    .step-item:not(.line-line) {
+      cursor: pointer;
+    }
+
+    .line-line {
+      width: 100px;
+      height: 2px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .step-number {
+      height: 24px;
+      width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ccc;
+      border-radius: 50%;
+      color: #fff;
+      margin-right: 8px;
+    }
+
+    .step-item iron-icon {
+      
+      --iron-icon-width: 24px;
+      --iron-icon-height: 24px;
+      background: var(--default-primary-color);
+      color: #fff;
+      border-radius: 50%;
+      padding: 4px;
+      box-sizing: border-box;
+      margin-right: 8px;
+    }
+
+    /* Bottom panel styles */
+    .customize-rule-page > * {
+      margin: 0;
+    }
+  </style>
+  <template>
+    <paper-dialog id="addRuleDialog" with-backdrop no-cancel-on-outside-click no-cancel-on-esc-key>
+      <div class="dialog-header">
+        <div class="flex horizontal layout justified">
+          <div class="layout horizontal center">
+            <iron-icon icon="av:playlist-add" class="custom-icon"></iron-icon>
+            <span>
+					<template is="dom-if" if="[[isEditMode]]">
+						Edit Rule ([[selectedRule.name]]) for - [[modelObj.name]]
+					</template>
+  <template is="dom-if" if="[[!isEditMode]]">
+						Create Personalization Rule for - [[modelObj.name]]
+					</template>
+  </span>
+          </div>
+          <iron-icon id="close-dialog" icon="icons:close" on-click="hideDialog"></iron-icon>
+        </div>
+        <div class="top-panel layout horizontal center">
+          <div class="step-item layout horizontal center" on-tap="prevStep">
+            <template is="dom-if" if="[[_selectedStep(selectedMenu,0)]]">
+              <iron-icon icon="create"></iron-icon>
+            </template>
+            <template is="dom-if" if="[[!_selectedStep(selectedMenu,0)]]">
+              <div class="step-number">1</div>
+            </template>
+            <label id="setrule">Set rule name &amp; scope</label>
+          </div>
+          <div class="step-item line-line"></div>
+          <div class="step-item layout horizontal center" on-tap="nextStep">
+            <template is="dom-if" if="[[_selectedStep(selectedMenu,1)]]">
+              <iron-icon icon="create"></iron-icon>
+            </template>
+            <template is="dom-if" if="[[!_selectedStep(selectedMenu,1)]]">
+              <div class="step-number">2</div>
+            </template>
+            <label id="definescope">Define Transformation rules</label>
+          </div>
+        </div>
+      </div>
+      <div class="dialog-content">
+        <div class="vertical flex layout">
+          <iron-pages selected="{{selectedMenu}}" class="flex">
+            <div class="create-rule-page">
+              <service-personalization-rule rule="{{selectedRule}}"></service-personalization-rule>
+            </div>
+            <div class="customize-rule-page">
+              <service-personalization-filter filter="{{selectedRule.personalizationRule.filter}}" rule-definition property-list="{{modelProperties}}"></service-personalization-filter>
+              <service-personalization-field-replace property-list="{{modelProperties}}" rule-definition field-replace="{{selectedRule.personalizationRule.fieldReplace}}"></service-personalization-field-replace>
+              <service-personalization-field-value-replace property-list="{{modelProperties}}" rule-definition field-value-replace="{{selectedRule.personalizationRule.fieldValueReplace}}"></service-personalization-field-value-replace>
+              <service-personalization-sort property-list="{{modelProperties}}" rule-definition sort="{{selectedRule.personalizationRule.sort}}"></service-personalization-sort>
+              <service-personalization-mask property-list="{{modelProperties}}" rule-definition mask="{{selectedRule.personalizationRule.mask}}"></service-personalization-mask>
+            </div>
+          </iron-pages>
+        </div>
+      </div>
+      <div class="dialog-footer flex horizontal layout end-justified">
+        <div class="layout horizontal center justified">
+          <paper-button id="nextbtn" secondary on-tap="nextStep" hidden={{!isFirstStep(selectedMenu)}}>Next</paper-button>
+          <paper-button id="savebtn" secondary on-tap="saveRule" hidden={{isFirstStep(selectedMenu)}}>Save</paper-button>
+        </div>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    Polymer({
+      is: 'add-rule-dialog',
+      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior],
+      properties: {
+        modelObj: {
+          type: Object
+        },
+        modelProperties: {
+          type: Array,
+          value: []
+        },
+        selectedMenu: {
+          type: Number,
+          notify: true
+        },
+        selectedRule: {
+          type: Object,
+          notify: true
+        }
+      },
+      attached: function () {
+        this.selectedRule = {};
+        this.isEditMode = false;
+      },
+      hideDialog: function () {
+        var ruledef = this.querySelector('service-personalization-rule');
+        ruledef.$['rule-name'].reset();
+        this.$.addRuleDialog.close();
+      },
+      openDialog: function () {
+        this.querySelector('service-personalization-rule').editIndex = -1;
+        this.$.addRuleDialog.open();
+        if (!this.isEditMode) {
+          var tempObj = {
+            modelName: this.modelObj.name,
+            name: '',
+            personalizationRule: {
+              filter: {},
+              sort: [],
+              mask: {},
+              fieldReplace: {},
+              fieldValueReplace: {}
+            },
+            scope: {}
+          };
+          this.set('selectedRule', tempObj);
+        }
+        this.setProperties();
+        this.setRuleDefinitions();
+        this.set('selectedMenu', 0)
+      },
+      setProperties: function () {
+        var modelProperties = this.modelObj.properties.map(function (d) {
+          return d.__name__;
+        }).filter(function (d) {
+          return typeof d !== 'undefined';
+        });
+        this.set('modelProperties', modelProperties);
+      },
+      saveRule: function () {
+        if (this._validityCheck()) {
+          this.getRuleDefinitions();
+          var url = 'api/DesignerRules';
+          var body = this.selectedRule;
+          body.customScope = body.scope;
+          delete body.scope;
+          var method = this.selectedRule.id ? 'PUT' : 'POST';
+          this.makeAjaxCall(url, method, body, null, null, function (err, response) {
+            if (err) {
+              this.resolveError(err);
+            } else if (response) {
+              this.fire('ev-show-success', 'Successfully saved !');
+              this.hideDialog();
+            }
+          }.bind(this));
+        } else {
+          this.fire('ev-show-error', 'Enter valid Rule and scope')
+        }
+      },
+      prevStep: function () {
+        if (this.selectedMenu == 1) {
+          this.set('selectedMenu', 0)
+        }
+      },
+      nextStep: function () {
+        if (this.selectedMenu == 0) {
+          this.set('selectedMenu', 1)
+        }
+      },
+      _selectedStep: function (selected, curr) {
+        return selected == curr
+      },
+      isFirstStep: function (selected) {
+        return selected == 0;
+      },
+      _validityCheck: function () {
+        var isValid = true;
+        var scope = {};
+        var ruledef = this.querySelector('service-personalization-rule');
+        ruledef.customValidate();
+        ruledef.scopeList.forEach(function (k) {
+          if (!k.value) {
+            return;
+          }
+          if (k.value.length == 0) {
+            return;
+          }
+          if (scope[k.name]) {
+            scope[k.name] = _.union(scope[k.name], k.value)
+          } else {
+            scope[k.name] = k.value
+          }
+        })
+        this.selectedRule.scope = scope;
+        ruledef.$['rule-name'].validate();
+        isValid = isValid && this.selectedRule.name && (this.selectedRule.name.trim().length > 0) && (Object.keys(
+            scope)
+          .length > 0);
+        return isValid
+      },
+      setRuleDefinitions: function () {
+        var rule = {
+          filter: this.selectedRule.personalizationRule.filter || {},
+          sort: this.selectedRule.personalizationRule.sort || [],
+          mask: this.selectedRule.personalizationRule.mask || {},
+          fieldReplace: this.selectedRule.personalizationRule.fieldReplace || {},
+          fieldValueReplace: this.selectedRule.personalizationRule.fieldValueReplace || {}
+        }
+        this.set('selectedRule.personalizationRule', rule);
+        var defEle = this.querySelectorAll('[rule-definition]');
+        _.forEach(defEle, function (ele) {
+          ele.setData();
+        })
+      },
+      getRuleDefinitions: function () {
+
+        var defEle = this.querySelectorAll('[rule-definition]');
+        _.forEach(defEle, function (ele) {
+          ele.getData();
+        })
+      }
+    });
+  </script>
+</dom-module>

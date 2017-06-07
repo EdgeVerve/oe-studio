@@ -1,0 +1,437 @@
+<link rel="import" href="icon-picker.html">
+<dom-module id="ui-navigation-settings">
+  <template>
+		<style>
+			:host {
+				width: 300px;
+				display: block;
+				height: 500px;
+				position: relative;
+				box-sizing: border-box;
+				font-size: 14px;
+				background: var(--default-primary-color);
+			}
+
+			ev-input.light-input {
+				--paper-input-container-focus-color: #ffffff;
+				--paper-input-container-input-color: rgba(255, 255, 255, 0.6);
+				--paper-input-container-color: rgba(255, 255, 255, 0.6);
+			}
+
+			ev-typeahead {
+				--paper-input-container-focus-color: #ffffff;
+				--paper-input-container-input-color: rgba(255, 255, 255, 0.6);
+				--paper-input-container-color: rgba(255, 255, 255, 0.6);
+			}
+
+			.heading-pane {
+				padding: 0px 16px;
+				height: 48px;
+				background: var(--light-primary-color);
+			}
+
+			.main-panel {
+				height: 100%;
+			}
+
+			form {
+				padding: 16px;
+				height: calc(100% - 88px);
+				overflow: auto;
+				display: block;
+				box-sizing: border-box;
+			}
+
+			.delete-btn {
+				color: var(--error-color);
+				margin-right: 8px;
+			}
+
+			.delete-btn[disabled] {
+				opacity: 0.5;
+			}
+
+			.main-panel .buttons {
+				background: var(--dark-primary-color);
+				height: 40px;
+				padding: 0px 16px;
+			}
+
+			.helper-text {
+				margin-top: 8px;
+				margin-bottom: 16px;
+				display: block;
+				opacity: 0.6;
+				font-size: 12px;
+			}
+
+			.primary-btn {
+				color: var(--default-text-color);
+				background: transparent;
+			}
+
+			.secondary-btn {
+				color: var(--default-text-color);
+				opacity: 0.6;
+				background: transparent;
+			}
+
+			.delete-element-name {
+				font-size: 15px;
+				padding: 2px 8px;
+				line-height: 30px;
+				border-radius: 35px;
+				height: 35px;
+				margin: 0px 8px;
+				background: var(--error-color);
+				color: #fff;
+			}
+
+			#deleteDialog {
+				min-width: 300px;
+			}
+
+			.dialog-header {
+				font-size: 18px;
+			}
+
+			iron-icon {
+				--iron-icon-width: 18px;
+				--iron-icon-height: 18px;
+			}
+
+			.delete-page-panel {
+				padding: 16px;
+			}
+
+			.delete-page-dialog {
+				height: 150px;
+			}
+
+		</style>
+		<div class="main-panel">
+			<div class="heading-pane layout horizontal center justified">
+				<label>[[activePage.name]]</label>
+				<div>
+					<iron-icon icon="delete" id="deleteBtn" class="delete-btn" on-tap="deleteactiveRoute"></iron-icon>
+					<paper-tooltip for="deleteBtn">Delete Route and Navigation data</paper-tooltip>
+					<iron-icon icon="file-download" id="downloadIcon" on-tap="downloadRouteDetails"></iron-icon>
+					<paper-tooltip for="downloadIcon">Download Route and Navigation data</paper-tooltip>
+				</div>
+			</div>
+			<form is="iron-form" id="navForm">
+				<ev-input class="light-input" label="Set URL" value="{{config.url}}" required error-message="URL is Mandatory for Navigation" pattern="(\/[A-Za-z0-9-_&?=]+)+" auto-validate id="urlInput"></ev-input>
+				<span class="helper-text">Path to Navigate to the element</span>
+				<ev-input class="light-input" label="Navigation Label" id="navLabel" value="{{config.navigationLabel}}"></ev-input>
+				<span class="helper-text">appears on the navigation link</span>
+				<ev-typeahead strict label="Navigation Parent" displayproperty="name" valueproperty="name" searchurl="{{generateSearchUrl(linking.navLink.name)}}" dataurl="/api/NavigationLinks/findOne?filter[where][name][regexp]=/^VALUE_STRING/i" value="{{config.parent}}" id="navParent"></ev-typeahead>
+				<span class="helper-text">Name of the parent link</span>
+				<ev-input class="light-input" label="Navigation Group" value="{{config.group}}" id="navGroup"></ev-input>
+				<span class="helper-text">Navigation link group</span>
+				<icon-picker selected-icon="{{config.navigationIcon}}"></icon-picker>
+				<span class="helper-text">Navigation link icon</span>
+			</form>
+			<div class="buttons layout horizontal end-justified center">
+				<paper-button class="secondary-btn" on-tap="closePanel">CANCEL</paper-button>
+				<paper-button class="primary-btn" on-tap="saveRouteDetails" id="saveBtn">SAVE</paper-button>
+			</div>
+		</div>
+	</template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'ui-navigation-settings',
+    behaviors: [CommonBehavior.EVAjaxBehavior],
+    properties: {
+      activePage: {
+        type: Object,
+        notify: true,
+        observer: '_routeDataChanged'
+      }
+    },
+    observers: [
+      '_routeDataChanged(activePage.routeData)'
+    ],
+    _routeDataChanged: function(oldVal, newVal) {
+      if (oldVal != newVal && newVal) {
+        var config = {
+          navigationIcon: null
+        };
+        if (!this.activePage) {
+          this.routeData = {};
+          return;
+        }
+        this.set('routeData', this.activePage.routeData);
+
+        if (this.routeData.uiRoute) {
+          config.url = this.routeData.uiRoute.path
+          if (this.routeData.navigationLink) {
+            config.navigationLabel = this.routeData.navigationLink.label;
+            config.navigationIcon = this.routeData.navigationLink.icon || null;
+            config.group = this.routeData.navigationLink.group;
+            config.parent = this.routeData.navigationLink.parent;
+          }
+        }
+        this.set('config', config);
+      }
+    },
+    generateSearchUrl: function(name) {
+      if (name) {
+        var filter = {
+          where: {
+            name: {
+              nin: [name],
+              regexp: '/^SEARCH_STRING/i'
+            }
+          }
+        }
+        return '/api/NavigationLinks?filter=' + JSON.stringify(filter);
+      } else {
+        return '/api/NavigationLinks?filter[where][name][regexp]=/^SEARCH_STRING/i';
+      }
+    },
+
+    getRouteDetails: function(pageData, cb) {
+      var self = this;
+      var routeData = {
+        uiRoute: null,
+        navigationLink: null
+      };
+      var routeQuery = '/api/UIRoutes?filter[where][type]=elem&&filter[where][name]=' + pageData.name;
+      //Get UIRoute for the UIComponent
+      self.makeAjaxCall(routeQuery, 'get', null, null, null, function(err, uiResp) {
+        if (!err) {
+          if (uiResp[0]) {
+            routeData.uiRoute = uiResp[0];
+            //Get NavLink for the obtained UIRoute
+            var navQuery = '/api/NavigationLinks?filter[where][url]=' + routeData.uiRoute.path;
+            self.makeAjaxCall(navQuery, 'get', null, null, null, function(err, navResp) {
+              if (!err) {
+                if (navResp[0]) {
+                  routeData.navigationLink = navResp[0];
+                }
+                cb(routeData);
+              } else {
+                self.resolveError(err);
+                cb(routeData);
+              }
+            });
+          } else {
+            cb(routeData);
+          }
+        } else {
+          self.resolveError(err);
+          cb(routeData);
+        }
+      })
+    },
+    deleteRouteDetails: function(routeData, cb) {
+      var deleteInfo = {
+        routeDeleted: !!(routeData.uiRoute && routeData.uiRoute.id),
+        navDeleted: !!(routeData.navigationLink && routeData.navigationLink.id)
+      };
+      if (!deleteInfo.routeDeleted) {
+        var routeDeleteUrl = '/api/UIRoutes/' + routeData.uiRoute.id
+        self.makeAjaxCall(routeDeleteUrl, 'delete', {}, null, null, null, function(err1) {
+          if (!err1) {
+            routeData.uiRoute = null;
+            deleteInfo.routeDeleted = true;
+            if (!deleteInfo.navDeleted) {
+              var navDeleteUrl = '/api/NavigationLinks/' + routeData.navigationLink.id
+              self.makeAjaxCall(navDeleteUrl, 'delete', {}, null,
+                function(err2) {
+                  if (!err2) {
+                    routeData.navigationLink = null;
+                    deleteInfo.navDeleted = true;
+                    cb(deleteInfo)
+                  } else {
+                    self.resolveError(err2);
+                    cb(deleteInfo)
+                  }
+                })
+            } else {
+              cb(deleteInfo)
+            }
+          } else {
+            self.resolveError(err1);
+            cb(deleteInfo)
+          }
+        })
+      } else {
+        cb(deleteInfo)
+      }
+    },
+    downloadRouteDetails: function() {
+      var self = this
+      if (this.$.navForm.validate()) {
+        var uiRoutePayload = self.routeData.uiRoute || {};
+        if (!this.isEmpty(uiRoutePayload)) {
+          uiRoutePayload.path = self.config.url;
+        } else {
+          uiRoutePayload = {
+            'type': 'elem',
+            'name': self.activePage.name,
+            'path': self.config.url,
+            'import': '/api/UIComponents/component/' + self.activePage.name
+          }
+        }
+        var navPayload = self.routeData.navigationLink || {};
+        if (!self.isEmpty(navPayload)) {
+          navPayload.url = uiRoutePayload.path;
+          navPayload.label = self.config.navigationLabel;
+          navPayload.topLevel = true;
+          if (self.config.group && self.config.group != '') {
+            navPayload.group = self.config.group;
+          } else {
+            navPayload.group = null;
+          }
+          if (self.config.parent && self.config.parent != '') {
+            navPayload.parent = self.config.parent;
+            navPayload.topLevel = false;
+          } else {
+            navPayload.parent = null;
+          }
+          if (self.config.navigationIcon && self.config.navigationIcon != '') {
+            navPayload.icon = self.config.navigationIcon;
+          } else {
+            navPayload.icon = null;
+          }
+        } else {
+          navPayload = {
+            'name': self.activePage.name,
+            'url': uiRoutePayload.path,
+            'label': self.config.navigationLabel,
+            'topLevel': true
+          }
+          if (self.config.group && self.config.group != '') {
+            navPayload.group = self.config.group;
+          }
+          if (self.config.parent && self.config.parent != '') {
+            navPayload.parent = self.config.parent;
+            navPayload.topLevel = false;
+          }
+          if (self.config.navigationIcon && self.config.navigationIcon != '') {
+            navPayload.icon = self.config.navigationIcon;
+          }
+        }
+
+        var dl = document.createElement('a');
+        dl.setAttribute('href', 'data:application/json;charset=utf-8,' + JSON.stringify(
+          uiRoutePayload, null, 2));
+        dl.setAttribute('download', 'ui-route.json');
+        dl.click();
+        dl.setAttribute('href', 'data:application/json;charset=utf-8,' + JSON.stringify(navPayload,
+          null, 2));
+        dl.setAttribute('download', 'navigation-link.json');
+        dl.click();
+      }
+    },
+    saveRouteDetails: function() {
+      var self = this
+      if (this.$.navForm.validate()) {
+        var uiRoutePayload = self.routeData.uiRoute || {};
+        var routeMethod = 'post';
+        if (!this.isEmpty(uiRoutePayload)) {
+          routeMethod = 'put';
+          uiRoutePayload.path = self.config.url;
+        } else {
+          uiRoutePayload = {
+            'type': 'elem',
+            'name': self.activePage.name,
+            'path': self.config.url,
+            'import': '/api/UIComponents/component/' + self.activePage.name
+          }
+        }
+        this.makeAjaxCall('/api/UIRoutes', routeMethod, uiRoutePayload, null, null, function(err, uires) {
+          if (!err) {
+            var navPayload = self.routeData.navigationLink || {};
+            var navMethod = 'post';
+            if (self.config.navigationLabel) {
+              if (!self.isEmpty(navPayload)) {
+                navMethod = 'put';
+                navPayload.name = self.activePage.name;
+                navPayload.url = uires.path;
+                navPayload.label = self.config.navigationLabel;
+                navPayload.topLevel = true;
+                if (self.config.group && self.config.group != '') {
+                  navPayload.group = self.config.group;
+                } else {
+                  navPayload.group = null;
+                }
+                if (self.config.parent && self.config.parent != '') {
+                  navPayload.parent = self.config.parent;
+                  navPayload.topLevel = false;
+                } else {
+                  navPayload.parent = null;
+                }
+                if (self.config.navigationIcon && self.config.navigationIcon != '') {
+                  navPayload.icon = self.config.navigationIcon;
+                } else {
+                  navPayload.icon = null;
+                }
+              } else {
+                navPayload = {
+                  'name': self.activePage.name,
+                  'url': uires.path,
+                  'label': self.config.navigationLabel,
+                  'topLevel': true
+                }
+                if (self.config.group && self.config.group != '') {
+                  navPayload.group = self.config.group;
+                }
+                if (self.config.parent && self.config.parent != '') {
+                  navPayload.parent = self.config.parent;
+                  navPayload.topLevel = false;
+                }
+                if (self.config.navigationIcon && self.config.navigationIcon != '') {
+                  navPayload.icon = self.config.navigationIcon;
+                }
+              }
+              self.makeAjaxCall('/api/NavigationLinks', navMethod, navPayload, null, null,
+                function(err, navres) {
+                  if (!err) {
+                    var rtData = {
+                      uiRoute: uires,
+                      navigationLink: navres
+                    }
+                    self.set('routeData', rtData);
+                    self.fire('ev-show-success', 'UIRoute and Navigation Link saved successfully');
+                    self.closePanel();
+                  } else {
+                    self.fire('ev-show-error',
+                      'Error in saving Navigation Link');
+                  }
+                })
+            } else {
+              self.set('routeData.uiRoute', uires);
+              self.fire('ev-show-success', 'UIRoute saved successfully');
+              self.closePanel();
+            }
+          } else {
+            self.fire('ev-show-error', 'Error in saving UIRoute');
+          }
+        })
+      } else {
+        self.fire('ev-show-error', 'Please enter valid Routing Data');
+      }
+    },
+    deleteactiveRoute: function() {
+      this.deleteRouteDetails(this.activePage.routeData, function() {
+        this.set('activePage.routeData', {});
+        this.fire('ev-show-success', 'Route and Navigation Setting deleted successfully')
+      }.bind(this));
+    },
+    closePanel: function() {
+      this.fire('close-panel');
+      this.set('activePage.routeData', this.routeData);
+    },
+    isEmpty: function(obj) {
+      if (Object.keys(obj).length === 0) {
+        return true
+      } else {
+        return false;
+      }
+    }
+  })
+
+</script>

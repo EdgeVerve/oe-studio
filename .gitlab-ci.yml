@@ -1,0 +1,15 @@
+buildwindows:
+  script:
+    #- call npm cache clean
+    #- call bower cache clean
+    #- set GIT_CURL_VERBOSE=1
+    #- set GIT_TRACE_PACKET=2
+    - call bower install
+    - call wct --skip-selenium-install
+    - IF %ERRORLEVEL% NEQ 0 (exit 1)
+  only:
+    - master
+  tags:
+    - windows
+    - ev
+    - evf-designer

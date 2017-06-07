@@ -1,0 +1,102 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <script src="../../iron-test-helpers/test-helpers.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="../../promise-polyfill/promise-polyfill.html">
+
+  <!-- importing dependent elements -->
+  <link rel="import" href="../all-imports.html">
+
+  <!-- importing element to be tested -->
+  <link rel="import" href="../elements/search-header.html">
+</head>
+
+<body>
+
+  <!-- You can use the document as a place to set up your fixtures. -->
+  <test-fixture id="search-header-fixture">
+    <template>
+            <search-header>
+				<div>My Heading</div>
+			</search-header>
+        </template>
+  </test-fixture>
+
+  <script>
+    suite('<search-header>', function() {
+      var myEl;
+
+      setup(function() {
+        myEl = fixture('search-header-fixture');
+      });
+
+      test('show active state for search icon on blur when input is not empty', function(done) {
+        myEl.$.searchableHeader.classList.add('search-active');
+        myEl.$.input.value = 'test';
+        myEl.$.input.addEventListener('blur', function() {
+          assert.equal(myEl.$.searchIcon.classList.contains('active-icon'), true);
+          done();
+        });
+        MockInteractions.blur(myEl.$.input);
+      });
+
+      test('clear search on click of close button', function(done) {
+        var element = Polymer.dom(myEl.root).querySelector('.close-icon');
+        MockInteractions.tap(element);
+        flush(function() {
+          assert.equal(myEl.$.input.bindValue, '');
+          done();
+        });
+      });
+
+      test('hide search on tap of search icon', function() {
+        var element = myEl.$.searchIcon;
+        myEl.$.searchableHeader.classList.add('search-active');
+        myEl.$.input.value = '';
+        MockInteractions.tap(element);
+        assert.equal(myEl.$.searchableHeader.classList.contains('search-active'), false);
+      });
+
+      test('show search on tap of search icon', function(done) {
+        var element = myEl.$.searchIcon;
+        myEl.$.searchableHeader.classList.remove('search-active');
+        MockInteractions.tap(element);
+        assert.equal(myEl.$.searchableHeader.classList.contains('search-active'), true);
+        myEl.$.input.addEventListener('focus', function() {
+          assert.equal(myEl.$.input.focused, true);
+          done();
+        });
+        done();
+      });
+
+      test('hide input and remove active state for search icon on blur', function(done) {
+        myEl.$.searchableHeader.classList.add('search-active');
+        myEl.$.input.value = '';
+        myEl.$.input.addEventListener('blur', function() {
+          assert.equal(myEl.$.searchIcon.classList.contains('active-icon'), false);
+          assert.equal(myEl.$.searchableHeader.classList.contains('search-active'), false);
+          done();
+        });
+        MockInteractions.blur(myEl.$.input);
+      });
+    });
+
+  </script>
+</body>
+
+</html>

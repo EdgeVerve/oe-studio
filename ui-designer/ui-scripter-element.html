@@ -1,0 +1,337 @@
+<dom-module id="ui-scripter-element">
+  <style>
+     :host {
+      display: block;
+      position: relative;
+      border-right: 1px solid rgba(0, 0, 0, 0.2);
+      border-left: 1px solid rgba(0, 0, 0, 0.2);
+      font-family: Roboto;
+      background: #eceff1;
+      height: 100%;
+    }
+    
+    .section-selector {
+      background: #eceff1;
+      width: 180px;
+      border-right: 1px solid rgba(0, 0, 0, 0.2);
+    }
+    
+    .section-title {
+      display: flex;
+      align-items: center;
+      padding: 0px 16px;
+      height: 40px;
+      font-size: 14px;
+      letter-spacing: 0.7px;
+      cursor: pointer;
+    }
+    
+    .section-title.iron-selected {
+      background: #dfe2e4;
+      color: black;
+      font-weight: 500;
+    }
+    
+    .section-display {
+      background: #fff;
+    }
+    
+    .behavior-item {
+      height: 40px;
+      margin-right: 8px;
+      margin-bottom: 8px;
+      padding: 0px 8px;
+      display: flex;
+      align-items: center;
+      background: #cfd8dc;
+      border-radius: 4px;
+      font-size: 14px;
+      letter-spacing: 0.7px;
+      cursor: pointer;
+      transition: all 300ms ease-in;
+    }
+    
+    .behavior-item.selected-true {
+      background: var(--accent-color);
+      color: #fff;
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+    }
+    
+    .list-menu {
+      background: #cfd8dc;
+      padding: 0px 8px;
+    }
+    
+    .list-menu paper-button iron-icon+label {
+      margin-left: 8px;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+    
+    .list-item {
+      display: flex;
+      height: 39px;
+      align-items: center;
+      padding: 0px 8px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow-x: hidden;
+      font-size: 14px;
+    }
+    
+    .column {
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    
+    .checkbox-column {
+      margin-left: 12px;
+      width: 60px;
+    }
+    
+    .list-item-action {
+      position: absolute;
+      right: 0px;
+      box-shadow: 1px 0px 3px 0px rgba(0, 0, 0, 0.5) inset;
+      opacity: 0;
+      height: 100%;
+      display: flex;
+      width: 60px;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.02);
+      justify-content: space-between;
+      padding: 0px 16px;
+      transition: all 300ms ease-in;
+    }
+    
+    .list-item:hover .list-item-action {
+      opacity: 1;
+    }
+    
+    .list-item-action iron-icon {
+      --iron-icon-width: 20px;
+      --iron-icon-height: 20px;
+    }
+    
+    .list-item:not(.edit-mode) .list-item-action iron-icon[icon="save"] {
+      display: none;
+    }
+    
+    .list-item.edit-mode .list-item-action iron-icon[icon="create"] {
+      display: none;
+    }
+    
+    .list-item.edit-mode {
+      background: #dfe2e4;
+    }
+    
+    .list-item-edit-panel {
+      width: 400px;
+      padding: 16px;
+      box-sizing: border-box;
+      box-shadow: 0px 0px 5px inset;
+      height: 100%;
+    }
+    
+    .polymer-config-handler {
+      height: 100%;
+    }
+    
+    .display-section-panel,
+    .display-section-panel>div,
+    .display-section-panel>div>div,
+    {
+      height: 100%;
+    }
+
+  </style>
+  <template>
+        <div class="polymer-config-handler layout horizontal">
+            <div class="section-selector">
+                <iron-selector selected="{{selectedSection}}">
+                    <div class="section-title">Behaviors ([[elementConfig.behaviors.length]])</div>
+                    <div class="section-title">Properties ([[elementConfig.properties.length]])</div>
+                    <div class="section-title">Functions ([[elementConfig.functions.length]])</div>
+                    <div class="section-title">Listeners ([[elementConfig.listeners.length]])</div>
+                </iron-selector>
+            </div>
+            <div class="section-display flex">
+                <iron-pages selected="[[selectedSection]]" class="display-section-panel">
+                    <div class="behaviors-section layout vertical">
+                        <div class="behaviour-list padding-16 layout horizontal wrap">
+                            <template is="dom-repeat" items="{{behaviorList}}" as="behavior">
+                                <div class$="behavior-item selected-[[behavior.selected]]" on-tap="toggleBehavior">
+                                    <label>[[behavior.name]]</label>
+                                </div>
+                            </template>
+  </div>
+  </div>
+  <div class="properties-section layout vertical">
+    <ev-data-table label="Properties" disabled={{readOnly}} items={{elementConfig.properties}} record-handling="local" editor-form-url="evf-designer/ui-designer/polymer-prop-form.html" columns=[[propColumnDef]]></ev-data-table>
+  </div>
+  <div class="functions-section layout vertical">
+    <ev-data-table label="Functions" disabled={{readOnly}} items={{elementConfig.functions}} record-handling="local" editor-form-url="evf-designer/ui-designer/polymer-func-form.html" columns=[[funcColumnDef]]></ev-data-table>
+  </div>
+  <div class="listener-section layout vertical">
+    <ev-data-table label="Listeners" disabled={{readOnly}} items={{elementConfig.listeners}} record-handling="local" editor-form-url="evf-designer/ui-designer/polymer-listener-form.html" columns=[[listenerColumnDef]]></ev-data-table>
+  </div>
+  </iron-pages>
+  </div>
+  </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'ui-scripter-element',
+      properties: {
+        polyConfig: {
+          type: Object,
+          notify: true,
+          observer: '_elementObserver'
+        },
+        readOnly: {
+          type: Boolean
+        }
+      },
+      _elementObserver: function(newVal, oldVal) {
+        if (newVal != oldVal && newVal) {
+          var config = newVal;
+          var polyObject = {
+            is: config.is,
+            behaviors: config.behaviors || [],
+            properties: [],
+            functions: [],
+            listeners: []
+          }
+          var behaviors = Object.keys(EV).filter(function(k) {
+            return k.match(/behavior\b/i)
+          });
+          behaviors.push('ModelHandler');
+          var appliedbehaviors = [];
+          if (config.behaviors) {
+            appliedbehaviors = config.behaviors;
+          }
+          behaviors = behaviors.map(function(beh) {
+            var b = {
+              name: 'EV.' + beh
+            }
+            b.selected = (appliedbehaviors.indexOf(b.name) != -1)
+            return b
+          });
+          this.set('behaviorList', behaviors);
+
+
+          if (config.properties) {
+            Object.keys(config.properties).forEach(function(k) {
+              polyObject.properties.push({
+                propName: k,
+                propDef: config.properties[k],
+                selected: false
+              })
+            });
+          }
+          if (config.listeners) {
+            Object.keys(config.listeners).forEach(function(k) {
+              polyObject.listeners.push({
+                eventName: k,
+                fnName: config.listeners[k],
+                selected: false
+              })
+            })
+          }
+          if (config.functions) {
+            Object.keys(config.functions).forEach(function(k) {
+              polyObject.functions.push({
+                fnName: k,
+                fnDef: config.functions[k],
+                selected: false
+              })
+            });
+          }
+
+          this.set('elementConfig', polyObject)
+          this.set('selectedSection', 0);
+          this.set('propColumnDef', [{
+            key: 'propName',
+            label: 'Name',
+            type: 'string',
+            readOnly: true
+          }, {
+            key: 'propDef',
+            label: 'Definition',
+            type: 'object',
+            formatter: function(value) {
+              return JSON.stringify(value);
+            },
+            readOnly: true
+          }]);
+          this.set('funcColumnDef', [{
+            key: 'fnName',
+            label: 'Function Name',
+            type: 'string',
+            readOnly: true
+          }, {
+            key: 'fnDef',
+            label: 'Function Definition',
+            type: 'string',
+            readOnly: true
+          }]);
+
+
+          this.set('listenerColumnDef', [{
+            key: 'eventName',
+            label: 'Event',
+            type: 'string',
+            readOnly: true
+          }, {
+            key: 'fnName',
+            label: 'Listener',
+            type: 'string',
+            readOnly: true
+          }]);
+        } else {
+          this.set('elementConfig', null)
+        }
+      },
+
+      toggleBehavior: function(e) {
+        if (this.readOnly) {
+          return;
+        }
+        var index = e.model.__data__.index;
+        this.set('behaviorList.' + index + '.selected', !this.behaviorList[index].selected);
+        var newBeh = this.behaviorList.filter(function(m) {
+          return m.selected
+        }).map(function(m) {
+          return m.name
+        })
+        this.set('elementConfig.behaviors', newBeh);
+      },
+
+      SaveElementConfig: function() {
+        var PolymerObj = {
+          is: this.elementConfig.is,
+          properties: {},
+          behaviors: this.elementConfig.behaviors,
+          listeners: {},
+          functions: {}
+        }
+
+        this.elementConfig.properties.forEach(function(prop) {
+          PolymerObj.properties[prop.propName] = prop.propDef;
+        })
+
+        this.elementConfig.listeners.forEach(function(prop) {
+          PolymerObj.listeners[prop.eventName] = prop.fnName;
+        })
+
+        this.elementConfig.functions.forEach(function(prop) {
+          PolymerObj.functions[prop.fnName] = prop.fnDef;
+        })
+        this.set('polyConfig', PolymerObj);
+      }
+
+    });
+
+  </script>
+</dom-module>

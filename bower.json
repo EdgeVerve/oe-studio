@@ -1,0 +1,41 @@
+{
+  "name": "oe-studio",
+  "version": "1.1.0",
+  "description": "EVF Designer",
+  "main": "evf-designer.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.0",
+    "jquery": "^2.2.0",
+    "lodash": "^4.3.0",
+    "jquery-ui": "^1.11.4",
+    "evf-ui": "http://10.73.53.167/evf/evf-ui.git#master",
+    "roboto-fontface": "^0.4.5",
+    "inflection": "^1.10.0",
+    "materialize": "#0.97.7",
+    "resize-aware": "^1.0.1",
+    "app-layout": "PolymerElements/app-layout#^0.10.0",
+    "app-localize-behavior": "PolymerElements/app-localize-behavior#^0.10.0",
+    "app-route": "PolymerElements/app-route#^0.9.0",
+    "app-storage": "PolymerElements/app-storage#^0.9.0",
+    "google-web-components": "^1.1.1",
+    "iron-elements": "PolymerElements/iron-elements#^1.0.0",
+    "neon-elements": "PolymerElements/neon-elements#^1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.1",
+    "marked-element": "PolymerElements/marked-element#^1.0.0",
+    "polymer-redux": "^0.4.0",
+    "jsPlumb": "https://github.com/jsplumb/jsPlumb.git"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
+    "fakerest": "~1.1.4"
+  },
+  "resolutions": {
+    "lodash": "^4.3.0",
+    "ev-i18n-msg": "^1.1.5",
+    "evf-ui": "master",
+    "firebase": "^2.3.1",
+    "paper-styles": "^1.1.4",
+    "web-animations-js": "^2.2.0"
+  }
+}

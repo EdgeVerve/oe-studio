@@ -1,0 +1,197 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<dom-module id="model-designer">
+  <template>
+    <style>
+      app-toolbar {
+        color: var(--default-text-color);
+      }
+
+      paper-menu-button {
+        box-sizing: border-box;
+        height: 40px;
+        padding: 0;
+      }
+
+      paper-menu-button paper-button.dropdown-trigger {
+        font-size: 12px;
+      }
+
+      paper-menu-button .dropdown-content {
+        color: var(--primary-text-color);
+      }
+
+      .list-item {
+        padding: 8px 16px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .border-top {
+        border-top: 1px solid var(--secondary-text-color);
+      }
+
+      span + iron-icon {
+        margin-left: 8px;
+      }
+
+      iron-icon + span {
+        margin-left: 8px;
+      }
+
+      iron-icon.icon-active-false {
+        visibility: hidden;
+      }
+
+      .application-logo {
+        padding: 6px 9px;
+        cursor: pointer;
+        background: var(--dark-primary-color);
+        height: 40px;
+        width: 48px;
+        box-sizing: border-box;
+      }
+    </style>
+    <div class="module-container">
+      <model-work-area id="createmodel" view-list="{{viewList}}" model-list="{{workAreaModels}}"></model-work-area>
+    </div>
+    <app-toolbar>
+      <iron-icon src="../images/Logo.png" class="application-logo" on-tap="toggleLeftDrawer"></iron-icon>
+      <module-switcher></module-switcher>
+      <div class="flex layout horizontal center">
+        <paper-menu-button no-overlap vertical-align="bottom">
+          <paper-button class="dropdown-trigger">
+            <iron-icon icon="ev-icons:sidebar"></iron-icon>
+            <iron-icon icon="icons:arrow-drop-down"></iron-icon>
+          </paper-button>
+          <div class="dropdown-content">
+            <div class="list-item" id="show-hide-models-tool" on-tap="toggleModels">
+              <span>Show Models </span>
+              <iron-icon icon="icons:check" class$="icon-active-[[toolBar.showModels]]"></iron-icon>
+            </div>
+            <div class="list-item" id="show-hide-views-tool" on-tap="toggleViews">
+              <span>Show Clusters</span>
+              <iron-icon icon="icons:check" class$="icon-active-[[toolBar.showViews]]"></iron-icon>
+            </div>
+            <div class="list-item" id="show-hide-gridbg-tool" on-tap="toggleBackgroundGrid">
+              <span>Show Grid Background</span>
+              <iron-icon icon="icons:check" class$="icon-active-[[toolBar.showGridBg]]"></iron-icon>
+            </div>
+            <div class="list-item border-top" id="show-hide-menu-tool" on-tap="toggleSideMenu">
+              <span>Show SideMenu</span>
+              <iron-icon icon="icons:check" class$="icon-active-[[toolBar.showSideMenu]]"></iron-icon>
+            </div>
+          </div>
+        </paper-menu-button>
+        <paper-tooltip for="panel-settings">Panel Settings</paper-tooltip>
+        <paper-menu-button class="custom-menu" no-overlap vertical-align="bottom">
+          <paper-button class="dropdown-trigger">
+            Sync
+          </paper-button>
+          <paper-menu class="dropdown-content">
+            <paper-item on-tap="uploadModelMetadata">Upload</paper-item>
+            <paper-item on-tap="downloadModelMetadata">Download</paper-item>
+          </paper-menu>
+        </paper-menu-button>
+      </div>
+      <tenant-info></tenant-info>
+    </app-toolbar>
+  </template>
+  <script>
+    Polymer({
+      is: 'model-designer',
+      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior],
+      properties: {
+        toolBar: {
+          type: Object,
+          value: {
+            showModels: true,
+            showViews: false,
+            showSideMenu: true,
+            showGridBg: false
+          }
+        }
+      },
+      attached: function () {
+        this.getModelList();
+        this.fetchViews();
+      },
+      listeners: {
+        'refresh-model-list': 'getModelList'
+      },
+      toggleLeftDrawer: function () {
+        this.fire('toggle-left-drawer');
+      },
+      fetchViews: function () {
+        this.makeAjaxCall('api/ModelViews', 'GET', null, null, null, function (err, response) {
+          if (err) {
+            this.resolveError(err);
+          } else if (response) {
+            this.set('viewList', response);
+          }
+          this.set('selectedTenant', localStorage.getItem('tenantId'));
+        }.bind(this))
+      },
+      getModelList: function () {
+        var self = this;
+        this.fetchModels(function () {
+          self.set('workAreaModels', JSON.parse(JSON.stringify(self.modelList)));
+        });
+      },
+      uploadModelMetadata: function () {
+        this.makeAjaxCall('/api/admin/upload', 'POST', {}, null, null, function (err, response) {
+          if (response) {
+            this.fire('ev-show-success', 'Successfully uploaded.');
+          } else {
+            this.fire('ev-show-error', 'Error while uploading files.');
+          }
+        }.bind(this))
+      },
+      downloadModelMetadata: function () {
+        var self = this;
+        var ajax = document.createElement('ev-ajax');
+        ajax.contentType = 'application/json';
+        // very important for file to download
+        ajax.handleAs = 'blob';
+        ajax.url = '/api/admin/download';
+        ajax.addEventListener('response', function (event) {
+          if (event.detail && event.detail.response) {
+            var url = URL.createObjectURL(event.detail.response);
+            var downloadFile = document.createElement('a');
+            downloadFile.download = 'metadata.zip';
+            downloadFile.href = url;
+            downloadFile.click();
+          }
+        });
+        ajax.addEventListener('error', function () {
+          self.fire('ev-show-error', 'Error while downloading files.');
+        });
+        ajax.generateRequest();
+      },
+      toggleSideMenu: function () {
+        this.set('toolBar.showSideMenu', !this.toolBar.showSideMenu);
+        this.fire('toggle-grid-sidemenu', !this.toolBar.showSideMenu);
+      },
+      toggleModels: function () {
+        this.set('toolBar.showModels', !this.toolBar.showModels);
+        this.set('toolBar.showSideMenu', (this.toolBar.showModels || this.toolBar.showViews));
+        this.fire('toggle-grid-sidemenu', !this.toolBar.showSideMenu);
+        this.fire('toggle-models', this.toolBar.showModels);
+      },
+      toggleViews: function () {
+        this.set('toolBar.showViews', !this.toolBar.showViews);
+        this.set('toolBar.showSideMenu', (this.toolBar.showModels || this.toolBar.showViews));
+        this.fire('toggle-grid-sidemenu', !this.toolBar.showSideMenu);
+        this.fire('toggle-views', this.toolBar.showViews);
+      },
+      toggleBackgroundGrid: function () {
+        this.set('toolBar.showGridBg', !this.toolBar.showGridBg);
+        this.fire('toggle-bg', this.toolBar.showGridBg);
+      }
+    });
+  </script>
+</dom-module>

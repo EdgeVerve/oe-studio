@@ -1,0 +1,341 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<link rel="import" href="../../polymer/polymer.html">
+<dom-module id="model-detail">
+  <style>
+    :host {
+      color: var(--secondary-text-color);
+      letter-spacing: 0.75px;
+      display: block;
+    }
+
+    .custom-icon {
+      height: 24px;
+      width: 24px;
+    }
+
+    .header {
+      padding: 6px 16px 0px 16px;
+      box-sizing: border-box;
+      background: var(--default-background-color);
+    }
+
+    .model-info>div {
+      margin: 8px;
+      box-sizing: border-box;
+      box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.15);
+      border-radius: 2px;
+      background: var(--default-background-color);
+    }
+
+    .icon {
+      margin-right: 10px;
+    }
+
+    .sub-header {
+      padding: 10px 16px;
+      height: 56px;
+      box-sizing: border-box;
+    }
+
+    .sub-content {
+      padding: 0px 45px 16px;
+    }
+
+    .basic-info .sub-content>div {
+      display: flex;
+      flex-direction: row;
+      padding: 8px 0px;
+    }
+
+    .main-text {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .sub-content iron-icon {
+      height: 20px;
+      width: 20px;
+    }
+
+    .sub-text {
+      font-size: 14px;
+      padding: 6px 0px;
+      font-style: italic;
+    }
+
+    paper-button iron-icon.small {
+      width: 16px;
+      height: 16px;
+    }
+
+    iron-pages {
+      height: calc(100vh - 180px);
+      overflow-y: auto;
+    }
+
+    .container {
+      position: relative;
+    }
+
+    .dropShadow {
+      height: 6px;
+      box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .pull-right {
+      float: right;
+    }
+
+    iron-icon {
+      transition: 0.3s all ease-out;
+    }
+
+    iron-icon.close {
+      transform: rotate(180deg);
+      transition: 0.3s all ease-out;
+    }
+
+    .model-name {
+      cursor: pointer;
+    }
+
+    .data-grid {
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    .property-grid-container {
+      overflow: auto;
+      height: calc(100vh - 100px);
+    }
+  </style>
+  <template>
+    <div class="header flex">
+      <div class="title layout horizontal center justified">
+        <div>
+          <iron-icon icon="ev-icons:model" class="custom-icon"></iron-icon> <span on-tap="showModelDetail" class="model-name" id="model-detail-show-model-detail">{{modelObj.name}}</span>
+          <span hidden$="{{!showSubTitle}}">&nbsp;
+            <iron-icon icon="icons:chevron-right"></iron-icon>&nbsp;{{subTitle}}</span>
+        </div>
+        <div>
+          <paper-button secondary raised on-tap="_editModel" id="model-detail-edit-model">
+            <iron-icon icon="icons:create"></iron-icon><span>EDIT MODEL</span></paper-button>
+        </div>
+      </div>
+      <paper-tabs selected="{{selectedPage}}" scrollable hide-scroll-buttons id="model-detail-tabs">
+        <paper-tab>Model Info</paper-tab>
+        <paper-tab>Personalization</paper-tab>
+      </paper-tabs>
+    </div>
+    <div class="container">
+      <div class="dropShadow"></div>
+      <iron-pages selected="{{selectedPage}}">
+        <div class="model-info">
+          <div class="basic-info" hidden$="{{!viewType.model}}">
+            <div class="sub-header horizontal flex layout center justified">
+              <div>
+                <iron-icon icon="icons:info-outline"></iron-icon> Basic Information</div>
+              <div>
+                <iron-icon icon="icons:expand-less" on-tap="toggle"></iron-icon>
+              </div>
+            </div>
+            <iron-collapse opened class="sub-content">
+              <div>
+                <div class="icon">
+                  <iron-icon icon="communication:vpn-key"></iron-icon>
+                </div>
+                <div class="detail">
+                  <div class="main-text">Plural</div>
+                  <div class="sub-text">{{modelObj.plural}}</div>
+                </div>
+              </div>
+              <div>
+                <div class="icon">
+                  <iron-icon icon="hardware:device-hub"></iron-icon>
+                </div>
+                <div class="detail">
+                  <div class="main-text">Base</div>
+                  <div class="sub-text">{{modelObj.base}}</div>
+                </div>
+              </div>
+              <div>
+                <div class="icon">
+                  <iron-icon icon="icons:speaker-notes"></iron-icon>
+                </div>
+                <div class="detail">
+                  <div class="main-text">Description</div>
+                  <div class="sub-text">{{modelObj.description}}</div>
+                </div>
+              </div>
+            </iron-collapse>
+          </div>
+          <div class="properties" id="properties" hidden$="{{!viewType.Properties}}">
+            <div class="sub-header horizontal flex layout center justified">
+              <div>
+                <iron-icon icon="icons:view-carousel"></iron-icon> Properties</div>
+              <div>
+                <paper-button secondary on-tap="_addProperty" id="model-detail-add-property">ADD PROPERTY</paper-button>
+                <iron-icon icon="icons:expand-less" on-tap="toggle"></iron-icon>
+              </div>
+            </div>
+            <iron-collapse opened class="sub-content">
+              <div class="property-grid-container">
+                <property-grid id="propertyGrid" read-only property-list="{{modelObj.properties}}" class="inline-validate" hide-add-btn="true"></property-grid>
+              </div>
+            </iron-collapse>
+          </div>
+          <div class="validations" hidden$="{{!viewType.Validations}}">
+            <div class="sub-header horizontal flex layout center justified">
+              <div>
+                <iron-icon icon="av:playlist-add-check"></iron-icon> Validations</div>
+              <div>
+                <paper-button secondary on-tap="_addValidation" id="model-detail-add-validation">ADD VALIDATION</paper-button>
+                <iron-icon icon="icons:expand-less" on-tap="toggle"></iron-icon>
+              </div>
+            </div>
+            <iron-collapse opened class="sub-content">
+              <validation-grid id="validationGrid" ev-validations="{{modelObj.evValidations}}" model-list="{{modelList}}" hide-add-btn="true"></validation-grid>
+            </iron-collapse>
+          </div>
+          <div class="relations" id="relations" hidden$="{{!viewType.Relations}}">
+            <div class="sub-header horizontal flex layout center justified">
+              <div>
+                <iron-icon icon="icons:link"></iron-icon> Relations</div>
+              <div>
+                <paper-button secondary on-tap="_addRelation" id="model-detail-add-relation">ADD RELATION</paper-button>
+                <iron-icon icon="icons:expand-less" on-tap="toggle"></iron-icon>
+              </div>
+            </div>
+            <iron-collapse opened class="sub-content">
+              <relation-grid id="relationGrid" relations="{{modelObj.relations}}" hide-add-btn="true"></relation-grid>
+            </iron-collapse>
+          </div>
+          <div class="acls" id="acls" hidden$="{{!viewType.ACLs}}">
+            <div class="sub-header horizontal flex layout center justified">
+              <div>
+                <iron-icon icon="icons:lock-outline"></iron-icon> ACLs</div>
+              <div>
+                <paper-button secondary on-tap="_addACL" id="model-detail-add-acls">ADD ACL</paper-button>
+                <iron-icon icon="icons:expand-less" on-tap="toggle"></iron-icon>
+              </div>
+            </div>
+            <iron-collapse opened class="sub-content">
+              <acl-grid id="aclGrid" read-only acls="{{modelObj.acls}}" hide-add-btn="true"></acl-grid>
+            </iron-collapse>
+          </div>
+        </div>
+        <div>
+          <service-personalization model-obj="{{modelObj}}"></service-personalization>
+        </div>
+      </iron-pages>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'model-detail',
+      properties: {
+        modelObj: {
+          type: Object,
+          observer: 'modelObjChanged'
+        },
+        modelList: {
+          type: Array,
+          notify: true
+        },
+        viewType: {
+          type: Object,
+          value: {
+            model: false,
+            Properties: false,
+            Relations: false,
+            Validations: false,
+            ACLs: false
+          }
+        },
+        selectedPage: {
+          type: Number,
+          value: 0
+        }
+      },
+      listeners: {
+        'data-upload-done': 'modelObjChanged'
+      },
+      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior],
+      attached: function () {
+        document.addEventListener('show-detail', function (e) {
+          this.set('modelObj', e.detail.model);
+          this._setFlag(e.detail.type);
+        }.bind(this));
+        document.addEventListener('model-saved', function (e) {
+          if (this.modelObj && this.modelObj.id == e.detail.model.id) {
+            this.set('modelObj', JSON.parse(JSON.stringify(e.detail.model)));
+          }
+        }.bind(this));
+      },
+      showModelDetail: function () {
+        this._setFlag('model');
+      },
+      _setFlag: function (type) {
+        if (type == 'model') {
+          this.set('viewType', {
+            model: true,
+            Properties: true,
+            Relations: true,
+            Validations: true,
+            ACLs: true
+          });
+          this.set('showSubTitle', false);
+        } else {
+          this.set('showSubTitle', true);
+          for (var prop in this.viewType) {
+            if (prop == type) {
+              this.set('subTitle', prop);
+              this.set('viewType.' + prop, true);
+            } else {
+              this.set('viewType.' + prop, false);
+            }
+          }
+        }
+      },
+      _editModel: function () {
+        this.fire('edit-model', this.modelObj);
+      },
+      _addProperty: function () {
+        this.fire('add-property-in-dialog', this.modelObj)
+      },
+      _addRelation: function () {
+        this.fire('add-relation-in-dialog', this.modelObj)
+      },
+      _addACL: function () {
+        this.fire('add-acl-in-dialog', this.modelObj)
+      },
+      _addValidation: function () {
+        this.fire('add-validation-in-dialog', this.modelObj)
+      },
+      modelObjChanged: function () {
+        this.set('selectedPage', 0);
+      },
+      toggle: function (e) {
+        var elem = e.currentTarget.parentElement.parentElement.nextElementSibling;
+        if (elem.opened) {
+          e.currentTarget.classList.add('close');
+          elem.opened = false;
+        } else {
+          e.currentTarget.classList.remove('close');
+          elem.opened = true;
+        }
+      }
+    });
+  </script>
+</dom-module>

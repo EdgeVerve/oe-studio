@@ -1,0 +1,200 @@
+<link rel="import" href="../styles/shared-styles.html">
+<dom-module id="dynamic-acl-dialog">
+  <style>
+    paper-dialog {
+      width: calc(100% - 100px);
+      height: calc(100% - 80px);
+    }
+    
+    iron-icon {
+      --iron-icon-width: 20px;
+      --iron-icon-height: 20px;
+    }
+    
+    .custom-icon {
+      margin-right: 16px;
+    }
+    
+    .dialog-content {
+      overflow: auto;
+    }
+
+  </style>
+  <template>
+		<style include="shared-styles"></style>
+		<paper-dialog id="dialog" modal class="layout vertical">
+			<div class="dialog-header">
+				<span>Define Acls for [[modelObj.name]]</span>
+			</div>
+			<div class="dialog-content flex">
+				<ev-data-table label="Static Acls" disabled items={{modelObj.acls}}
+							  	toolbar-actions="[[staticTableActions]]"
+							   columns=[[staticAclColumnDef]]></ev-data-table>
+				<br>
+				<ev-data-table id="dynamicACLTable" label="Data Acls" items={{dynamicAcls}} record-handling="remote" editor-form-url="evf-designer/elements/dynamic-acl-form.html" columns=[[dynamicAclColumnDef]]></ev-data-table>
+			</div>
+			<div class="dialog-footer">
+				<div class="layout horizontal center end-justified">
+					<paper-button id="cancelbtn" on-tap="closeDialog">Cancel</paper-button>
+				</div>
+			</div>
+		</paper-dialog>
+	</template>
+  <script>
+    Polymer({
+      is: 'dynamic-acl-dialog',
+      attached: function() {
+        this.set('staticTableActions', [{
+          icon: 'icons:create',
+          title: 'change/delete',
+          action: 'edit-static'
+        }])
+        this.set('dynamicAclColumnDef', [{
+          key: 'accessType',
+          label: 'Access Type',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'principalType',
+          label: 'Principal Type',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'property',
+          label: 'Property',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'principalId',
+          label: 'Principal Id',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'permission',
+          label: 'permission',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'scope',
+          label: 'Scope',
+          type: 'object',
+          formatter: function(value) {
+            if (value) {
+              return JSON.stringify(value);
+            }
+            return 'NA'
+          },
+          readOnly: true
+        }]);
+
+
+        this.set('staticAclColumnDef', [{
+          key: 'accessType',
+          label: 'Access Type',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'principalType',
+          label: 'Principal Type',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'property',
+          label: 'Property',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'principalId',
+          label: 'Principal Id',
+          type: 'string',
+          readOnly: true
+        }, {
+          key: 'permission',
+          label: 'permission',
+          type: 'string',
+          readOnly: true
+        }]);
+      },
+      listeners: {
+        'ev-data-table-action-edit-static': 'handleStaticEditor'
+      },
+      behaviors: [CommonBehavior.EVAjaxBehavior],
+      handleStaticEditor: function() {
+        if (!this.$.dynamicACLTable._hideGrid) {
+          this.fire('ev-show-error', 'Close editing dynamic ACLs and try again')
+          return;
+        }
+        this.fire('edit-model', this.modelObj);
+        this.closeDialog();
+      },
+      fetchData: function(formElement) {
+        async.parallel({
+          dynamicAcl: function(callback) {
+            var params = {
+              filter: {
+                where: {
+                  model: this.modelObj.name
+                }
+              }
+            }
+            this.makeAjaxCall('api/BaseACLs', 'GET', null, null, params, null, function(err, resp) {
+              if (err) {
+                this.fire('ev-show-error', 'Error fetching ACLs');
+                callback(err, null)
+              } else {
+                callback(null, resp)
+              }
+            }.bind(this));
+          }.bind(this),
+          usersList: function(callback) {
+            this.makeAjaxCall('api/Users', 'get', null, null, null, function(err, res) {
+              if (err) {
+                this.fire('ev-show-error', 'Error fetching UserData');
+                callback(err, null)
+              } else {
+                callback(null, res)
+              }
+            }.bind(this))
+          }.bind(this),
+          roleList: function(callback) {
+            this.makeAjaxCall('api/BaseRoles', 'get', null, null, null, function(err, res) {
+              if (err) {
+                this.fire('ev-show-error', 'Error fetching BaseRoles');
+                callback(err, null)
+              } else {
+                callback(null, res)
+              }
+            }.bind(this))
+          }.bind(this)
+        }, function(err, result) {
+          if (!err) {
+            this.set('dynamicAcls', result.dynamicAcl);
+            var predefRoles = ['$everyone', '$owner', '$related', '$authenticated', '$unauthenticated']
+            formElement.set('modelNameToSave', this.modelObj.name);
+            formElement.set('principalList.user', result.usersList.map(function(u) {
+              return u.id
+            }));
+            var roles = predefRoles.concat(result.roleList.map(function(r) {
+              return r.id
+            }))
+            formElement.set('principalList.role', roles);
+          }
+        }.bind(this));
+        this.set('dataAcls', []);
+      },
+      openDialog: function(modelObj) {
+        this.set('modelObj', modelObj);
+        var table = this.querySelector('ev-data-table');
+        var formElement = table.$['form-component'].element;
+        if (formElement) {
+          this.fetchData(formElement);
+        }
+        this.$.dialog.open();
+      },
+      closeDialog: function() {
+        this.$.dialog.close();
+      }
+    })
+
+  </script>
+</dom-module>

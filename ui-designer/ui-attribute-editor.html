@@ -1,0 +1,610 @@
+<link rel="import" href="attribute-element.html">
+<dom-module id="ui-attribute-editor">
+  <template>
+        <style>
+             :host {
+                display: block;
+                position: relative;
+            }
+
+            ev-input,
+            ev-json-input,
+            ev-decimal,
+            ev-combo {
+                --paper-input-container: {
+                    background: #263238;
+                    padding: 2px 8px;
+                    border-radius: 2px;
+                    box-sizing: border-box;
+                }
+                --paper-input-container-input: {
+                    font-size: 12px;
+                    color: #ffffff;
+                    opacity: 0.87;
+                }
+                --paper-input-container-underline: {
+                    display: none;
+                }
+                --paper-input-container-underline-focus: {
+                    display: none;
+                }
+            }
+
+            ev-input.light-control,
+            ev-combo.light-control,
+            ev-json-input.light-control,
+            ev-decimal.light-control {
+                --paper-input-container: {
+                    background: rgba(38, 49, 56, 0.12);
+                    padding: 2px 8px;
+                    border-radius: 2px;
+                    box-sizing: border-box;
+                }
+                --paper-input-container-input: {
+                    font-size: 12px;
+                    color: var(--secondary-text-color);
+                }
+                --paper-input-container-underline: {
+                    display: none;
+                }
+                --paper-input-container-underline-focus: {
+                    display: none;
+                }
+            }
+
+            .element-name {
+                font-family: Roboto-Medium;
+                font-size: 12px;
+                color: #fff;
+                height: 40px;
+                padding: 12px;
+                box-sizing: border-box;
+            }
+
+            .section-header {
+                font-family: Roboto-Bold;
+                font-size: 10px;
+                color: #fff;
+                background: var(--light-primary-color);
+                height: 32px;
+                padding: 10px 12px;
+                box-sizing: border-box;
+                cursor: pointer;
+            }
+
+            .info-box {
+                padding: 12px 0px;
+                position: relative;
+            }
+
+            .info-box .row-actions {
+                visibility: hidden;
+                position: absolute;
+                right: 0px;
+            }
+
+            .info-box:hover .row-actions {
+                visibility: visible;
+            }
+
+            .info-label {
+                font-size: 12px;
+                padding: 6px 0px;
+                min-width: 60px;
+                color: #fff;
+                opacity: 0.54;
+            }
+
+            .info-label .attr-name {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+
+            .info-box:hover .info-label .attr-name {
+                max-width: 90px;
+            }
+
+            attribute-element+attribute-element {
+                border-top: 1px solid var(--default-primary-color);
+            }
+
+            .add-attribute-container {
+                color: var(--secondary-text-color);
+                background: #CFD8DC;
+                padding: 0px 12px;
+            }
+
+            .attribute-list {
+                padding: 0px 12px;
+            }
+
+            .add-attribute-container .info-label {
+                color: var(--primary-text-color);
+            }
+
+            ev-checkbox {
+                --paper-checkbox-unchecked-color: rgba(255, 255, 255, 0.6);
+            }
+
+            paper-toggle-button {
+                --paper-toggle-button-unchecked-bar-color: rgba(255, 255, 255, 0.6);
+            }
+
+            .attribute-container {
+                height: calc(100vh - 229px);
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            .helper-text {
+                min-width: 60px;
+                font-size: 12px;
+            }
+            .more-attr-header {
+                height: 36px;
+                font-size: 12px;
+                color: var(--accent-color);
+                cursor: pointer;
+                padding: 0px 12px;
+                border-bottom: 1px solid var(--default-primary-color);
+            }
+
+            .action-icon {
+                color: var(--accent-color);
+                width: 20px;
+                height: 20px;
+            }
+
+            .empty-state {
+                font-style: italic;
+                opacity: 0.54;
+                font-size: 12px;
+                margin: 12px;
+                padding: 16px;
+                border-radius: 4px;
+                background: var(--default-primary-color);
+            }
+        </style>
+        <template is="dom-if" if="[[selectedElement]]">
+            <div>
+                <div class="element-name">[[_getElementName(selectedElement)]]</div>
+                <div class="section-header layout horizontal center justified" collapse-target="attribute-layout" on-tap="_toggleCollaspe">
+                    <span>ATTRIBUTES</span>
+                    <iron-icon icon="icons:add-box" class="action-icon" on-tap="showAttribute" id="addAttributeIcon"></iron-icon>
+                    <paper-tooltip for="addAttributeIcon">Add Attribute</paper-tooltip>
+                </div>
+                <iron-collapse id="attribute-layout" opened="[[showAttributes]]">
+                    <div class="section-content">
+                        <search-input value="{{searchKey}}" placeholder="Search Attributes"></search-input>
+                        <template is="dom-if" if="[[propertyList.length]]">
+                            <div class="more-attr-header layout horizontal center end-justified" collapse-target="attribute-list" on-tap="_toggleCollaspe">
+                                <span>[[generateText(showMore)]]</span>
+                                <iron-icon icon="icons:add" class="action-icon" hidden="[[showMore]]"></iron-icon>
+                                <iron-icon icon="icons:remove" class="action-icon" hidden="[[!showMore]]"></iron-icon>
+                            </div>
+                        </template>
+  <div class="attribute-container">
+    <iron-collapse opened="[[showAddAttribute]]">
+      <div class="add-attribute-container" id="addAttrContainer">
+        <div class="actions-panel layout end-justified horizontal center">
+          <paper-button on-tap="cancelAction">CANCEL</paper-button>
+          <paper-button secondary on-tap="addAttribute">ADD</paper-button>
+        </div>
+        <div class="attribute-info">
+          <form is="iron-form" id="addAttributeForm">
+            <div class="info-box layout horizontal center">
+              <div class="info-label">Attribute: </div>
+              <div class="info-value">
+                <ev-combo allow-free-text class="light-control" listdata="{{listdata}}" displayproperty="name" pattern="^[a-z][0-9a-z-]+[0-9a-z]$" required no-label-float value="{{attributeObj}}"></ev-combo>
+              </div>
+            </div>
+            <template is="dom-if" if="{{!isString(attributeObj.type)}}">
+                                                <div class="info-box layout horizontal center">
+                                                    <paper-toggle-button checked="{{attributeObj.isBindedValue}}"></paper-toggle-button>
+                                                    <span class="helper-text">{{_generateLabel(attributeObj.isBindedValue)}}</span>
+                                                </div>
+                                            </template>
+            <div class="info-box layout horizontal center">
+              <div class="info-label">Value: </div>
+              <div class="info-value flex">
+                <template is="dom-if" restamp if="{{attributeObj.isBindedValue}}">
+                                                        <ev-input class="light-control" no-label-float value="{{attributeObj.value}}" pattern="^(\{\{[0-9a-zA-Z\.]+\}\}|\[\[[0-9a-zA-Z\.]+\]\])$"></ev-input>
+                                                    </template>
+                <template is="dom-if" restamp if="{{!attributeObj.isBindedValue}}">
+                                                        <template is="dom-if" restamp if="{{_showControl('String',attributeObj.name)}}">
+                                                            <ev-input class="light-control" no-label-float value="{{attributeObj.value}}"></ev-input>
+                                                        </template>
+                <template is="dom-if" restamp if="{{_showControl('Boolean',attributeObj.name)}}">
+                                                            <ev-checkbox class="light-control" value="{{attributeObj.value}}"></ev-checkbox>
+                                                        </template>
+                <template is="dom-if" restamp if="{{_showControl('Object',attributeObj.name)}}">
+                                                            <ev-json-input class="light-control" no-label-float value="{{attributeObj.value}}"></ev-json-input>
+                                                        </template>
+                <template is="dom-if" restamp if="{{_showControl('Array',attributeObj.name)}}">
+                                                            <ev-json-input class="light-control" no-label-float value="{{attributeObj.value}}"></ev-json-input>
+                                                        </template>
+                <template is="dom-if" restamp if="{{_showControl('Number',attributeObj.name)}}">
+                                                            <ev-decimal class="light-control" precision="0" no-label-float value="{{attributeObj.value}}"></ev-decimal>
+                                                        </template>
+                </template>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </iron-collapse>
+    <div class="attribute-list">
+      <template is="dom-repeat" items="{{attributeList}}" sort="_sort" filter="{{_filterAttribute(searchKey)}}">
+                                    <attribute-element attr-obj="{{item}}" on-delete-attribute="deleteAttribute" on-save-attribute="saveAttrConfiguration"></attribute-element>
+                                </template>
+      <iron-collapse id="attribute-list" opened="{{showMore}}">
+        <template is="dom-repeat" items="{{propertyList}}" sort="_sort" filter="{{_filterAttribute(searchKey)}}">
+                                        <attribute-element attr-obj="{{item}}" on-delete-attribute="deleteAttribute" on-save-attribute="saveAttrConfiguration"></attribute-element>
+                                    </template>
+      </iron-collapse>
+    </div>
+  </div>
+  </div>
+  </iron-collapse>
+  </div>
+  </template>
+  <template is="dom-if" if="[[!selectedElement]]">
+            <div class="empty-state">
+                Please select an element to manage its attributes.
+            </div>
+        </template>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'ui-attribute-editor',
+    properties: {
+      selectedElement: {
+        type: Object,
+        statePath: 'selectedElement'
+      },
+      selectedPolymerElement: {
+        type: Object,
+        statePath: 'selectedPolymerElement'
+      },
+      attributeList: {
+        type: Array,
+        value: function() {
+          return [];
+        }
+      },
+      tempAttributeList: {
+        type: Array,
+        value: function() {
+          return [];
+        }
+      },
+      searchKey: {
+        type: String,
+        value: ''
+      }
+    },
+    observers: ['elementSelected(selectedElement,selectedPolymerElement)'],
+    behaviors: [
+      ReduxBehavior
+    ],
+    attached: function() {
+      this.initialize();
+    },
+    actions: {
+      update: function(element) {
+        return {
+          type: 'UPDATE_ELEMENT',
+          element: element
+        }
+      }
+    },
+    isString: function(type) {
+      return (!type || type == 'String' || type == 'string');
+    },
+    generateText: function(flag) {
+      return (flag ? 'Collapse All' : 'Expand All');
+    },
+    _getElementName: function(elem) {
+      return elem && elem.tagName.toUpperCase();
+    },
+    _generateLabel: function(flag) {
+      return (flag ? 'Bind value' : 'Custom');
+    },
+    _filterAttribute: function(val) {
+      if (!val) {
+        this.set('showMore', false);
+      } else {
+        this.set('showMore', true);
+      }
+      return function(model) {
+        if (!val) {
+          return true;
+        }
+        if (!model) {
+          return false;
+        }
+        return (model.name.toLowerCase().indexOf(val.toLowerCase()) != -1);
+      }
+    },
+    initialize: function() {
+      this.set('searchKey', '');
+      this.set('showAddAttribute', false);
+      this.set('isCustom', true);
+      this.set('showAttributes', true);
+      this.set('showMore', false);
+      this.set('attributeObj', {});
+      this.set('attributeObj.isBindedValue', false);
+      this.set('attributeObj.type', 'String');
+      this.set('listdata', []);
+      this.set('attributeList', []);
+      this.set('propertyList', []);
+      this.set('tempAttributeList', []);
+    },
+    showAttribute: function(event) {
+      event.stopPropagation();
+      this.set('attributeObj', {});
+      this.set('attributeObj.isBindedValue', false);
+      this.set('attributeObj.type', 'String');
+      this.set('showAddAttribute', true);
+      this.set('showAttributes', true);
+      this.async(function() {
+        this.$$('#addAttrContainer').scrollIntoView({
+          block: 'start',
+          behavior: 'smooth'
+        });
+      }, 300)
+
+    },
+    cancelAction: function() {
+      this.set('showAddAttribute', false);
+    },
+    deleteAttribute: function(event) {
+      var index = event.model.index;
+      this.splice('attributeList', index, 1);
+      this.selectedElement.removeAttribute(event.model.item.name);
+      this.dispatch('update', this.selectedElement);
+    },
+    addAttribute: function() {
+      if (!this.$$('#addAttributeForm').validate()) {
+        return;
+      }
+      var obj = this.attributeObj;
+      var regexp = new RegExp('^(\{\{[0-9a-zA-Z\.]+\}\}|\[\[[0-9a-zA-Z\.]+\]\])$');
+      if (regexp.test(obj.value)) {
+        obj.isBindedValue = true;
+      } else {
+        obj.isBindedValue = false;
+      }
+      var index = this.attributeList.findIndex(function(attr) {
+        return attr.name == obj.name;
+      })
+      if (index >= 0) {
+        this.set('attributeList.' + index, obj);
+      } else {
+        var found = this.propertyList.findIndex(function(attr) {
+          return attr.name == obj.name;
+        })
+        if (found >= 0) {
+          this.splice('propertyList', found, 1);
+        }
+        this.push('attributeList', obj);
+      }
+      this.set('attributeObj', {});
+      this.set('attributeObj.isBindedValue', false);
+      this.set('attributeObj.type', String);
+      this.saveAttrConfiguration();
+    },
+    _showControl: function(type, attrName) {
+      var attribute = this.listdata.find(function(attr) {
+        return attr.name == attrName
+      })
+      if (!attribute) {
+        return type == 'String';
+      }
+      if (attribute.type == type) {
+        return true;
+      }
+      return false;
+    },
+    _toggleCollaspe: function(event) {
+      var target = event.currentTarget.getAttribute('collapse-target');
+      var collapseTarget = this.querySelector('#' + target);
+      collapseTarget.toggle();
+      Polymer.dom.flush();
+      this.async(function() {
+        if (target == 'attribute-list' && collapseTarget.opened) {
+          collapseTarget.scrollIntoView({
+            block: 'start',
+            behavior: 'smooth'
+          });
+        }
+      }, 300);
+    },
+    _generateAttributeList: function(props, type) {
+      var self = this;
+      if (!type) {
+        type = 'property';
+      }
+      var regexp = new RegExp('^(\{\{[0-9a-zA-Z\.]+\}\}|\[\[[0-9a-zA-Z\.]+\]\])$')
+      if (!props) {
+        return;
+      }
+      Object.keys(props).forEach(function(key) {
+        var obj = {
+          value: props[key].value || null,
+          type: props[key].type ? (props[key].type.name || props[key].type) : 'String'
+        }
+        obj.isBindedValue = false;
+        var index;
+        if (obj.value && (typeof(obj.value) == 'string')) {
+          obj.isBindedValue = regexp.test(obj.value);
+        }
+        if (type == 'property') {
+          obj.value = null;
+          if (obj.type == 'Date') {
+            obj.type = 'String';
+          }
+          obj.name = self._convertToKebabCase(key);
+          if (obj.name.startsWith('_')) {
+            return;
+          }
+          if (obj.type != 'Function' && typeof obj.value != 'function') {
+            index = self.propertyList.findIndex(function(attr) {
+              return attr.name == obj.name;
+            })
+            if (index >= 0) {
+              self.set('propertyList.' + index, obj);
+            } else {
+              self.push('propertyList', obj);
+            }
+          }
+        } else {
+          obj.name = props[key].name;
+          if (obj.name == 'ev-id' || obj.name == 'ev-ele-type') {
+            return;
+          }
+          index = self.propertyList.findIndex(function(attr) {
+            return attr.name == obj.name;
+          })
+          if (index >= 0) {
+            obj.type = self.propertyList[index].type;
+            self.splice('propertyList', index, 1);
+          }
+          if (obj.value && (typeof(obj.value) == 'string')) {
+            obj.isBindedValue = regexp.test(obj.value);
+          }
+          if (obj.type == 'Boolean' && !obj.isBindedValue) {
+            obj.value = true;
+          }
+          if (obj.type != 'Function' && typeof obj.value != 'function') {
+            index = self.attributeList.findIndex(function(attr) {
+              return attr.name == obj.name;
+            })
+            if (index >= 0) {
+              self.set('attributeList.' + index, obj);
+            } else {
+              self.push('attributeList', obj);
+            }
+          }
+        }
+      })
+    },
+    elementSelected: function(el, polyEl) {
+      if (!el || !polyEl || el.tagName != polyEl.tagName) {
+        return;
+      }
+      var self = this;
+      this.initialize();
+      Polymer.dom.flush();
+      if (this.selectedElement) {
+        var props;
+        if (this.selectedPolymerElement.set) {
+          props = this.selectedPolymerElement.properties;
+          this._generateAttributeList(props, 'property');
+          this.selectedPolymerElement.behaviors.forEach(function(behavior) {
+            var props = behavior.properties;
+            self._generateAttributeList(props, 'property');
+          });
+          props = this.selectedElement.attributes;
+          this._generateAttributeList(props, 'attribute');
+        } else {
+          props = this.selectedElement.attributes;
+          this._generateAttributeList(props, 'attribute');
+          var config = EV.designerData.elementList.find(function(obj) {
+            return obj.tag == self.selectedElement.tagName.toLowerCase();
+          });
+
+          /*
+           * fetch attr config from designer elem list
+           * then iterate over the actual selected element atributes property so that the type in attr config will not be overwritten
+           */
+          if (config) {
+            config.config.attributes.forEach(function(attr) {
+              var obj = {};
+              if (typeof attr === 'string') {
+                obj = {
+                  name: attr,
+                  value: self.selectedElement.getAttribute(attr),
+                  isBindedValue: false,
+                  type: 'String'
+                }
+              } else {
+                obj = {
+                  name: attr.name,
+                  value: self.selectedElement.getAttribute(attr),
+                  type: attr.type ? self._convertToPascalCase(attr.type) : 'String',
+                  isBindedValue: false
+                }
+              }
+              var index = self.attributeList.findIndex(function(attr) {
+                return attr.name == obj.name;
+              })
+              if (index >= 0) {
+                obj.value = self.attributeList[index].value;
+                obj.isBindedValue = self.attributeList[index].isBindedValue;
+                self.set('attributeList.' + index, obj);
+              } else {
+                self.push('attributeList', obj);
+              }
+            })
+          }
+        }
+        if (this.attributeList.length == 0) {
+          this.set('showMore', true);
+        }
+        this.set('tempAttributeList', _.cloneDeep(this.attributeList));
+        this.set('listdata', _.concat(this.attributeList, this.propertyList))
+      }
+      var c1 = this.querySelector('.attribute-container');
+      c1 && (c1.scrollTop = 0);
+    },
+    _convertToPascalCase: function(str) {
+      return str.replace(/\w\S*/g, function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      });
+    },
+    _convertToCamelCase: function(myString) {
+      return myString.replace(/-([a-z])/g, function(g) {
+        return g[1].toUpperCase();
+      });
+    },
+    _convertToKebabCase: function(myString) {
+      return myString.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+    },
+    _sort: function(a, b) {
+      if (a.name.toLowerCase() === b.name.toLowerCase()) {
+        return 0;
+      }
+      return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+    },
+    saveAttrConfiguration: function(event) {
+      if (event) {
+        var obj = event.model.item;
+        var index = this.attributeList.findIndex(function(attr) {
+          return attr.name == obj.name
+        })
+        if (index != -1) {
+          this.set('attributeList.' + index, obj);
+        } else {
+          this.push('attributeList', obj);
+        }
+      }
+      var self = this;
+      var changedAttributeList = _.differenceWith(this.attributeList, this.tempAttributeList, _.isEqual);
+      changedAttributeList.forEach(function(attr) {
+        if (attr.type == 'Boolean' && !attr.value) {
+          self.selectedElement.removeAttribute(attr.name);
+        } else if (!attr.isBindedValue && (attr.type == 'Object' || attr.type == 'Array')) {
+          self.selectedElement.setAttribute(attr.name, JSON.stringify(attr.value));
+        } else {
+          self.selectedElement.setAttribute(attr.name, attr.value);
+        }
+      });
+      this.dispatch('update', this.selectedElement);
+
+    }
+  })
+
+</script>

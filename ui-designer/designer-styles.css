@@ -1,0 +1,58 @@
+html{
+	height: 100%;
+	overflow: auto;
+}
+
+.ev-drop-placeholder {
+  display: inline-block;
+}
+
+.currently-dragging {
+  opacity: 0.5;
+  outline: 1px dashed red;
+  outline-offset: -1px;
+}
+
+.added-element {
+  min-height: 40px;
+}
+
+[draggable] {
+  transition: all 0.2s ease-out;
+  box-sizing: border-box;
+}
+
+.current-drop-target,
+.current-drop-parent {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.ev-empty-container:not([ev-dom-handle="unclassified"]) {
+  position: relative;
+  outline: 1px dotted #00ebff;
+  outline-offset: -1px;
+  padding: 8px 0px;
+  min-height: 40px;
+  min-width: 200px;
+  box-shadow: inset 0px 0px 0px 8px rgba(0, 0, 0, 0.2);
+  display: inline-block;
+}
+
+.ev-empty-container:not([ev-dom-handle="unclassified"]):before {
+  content: "Drag components inside";
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  opacity: 0.38;
+  margin: auto;
+  font-family: Roboto;
+  font-size: 12px;
+  color: #000000;
+  box-sizing: border-box;
+}
+
+
+/*[ev-id]:not([ev-ele-type="droppable"]):not([ev-ele-type="text"]) >*{
+	pointer-events: none;
+}*/

@@ -1,0 +1,2420 @@
+
+> oe-studio@0.0.1 lint:css D:\ev\evf-designer
+> stylelint **/*.html
+
+
+elements/add-rule-dialog.html
+ 31:3  ×  Unexpected empty line before custom property   custom-property-empty-line-before
+ 78:2  ×  Unexpected whitespace at end of line           no-eol-whitespace                
+ 81:3  ×  Expected empty line before declaration         declaration-empty-line-before    
+
+elements/attach-workflow-dialog.html
+ 31:3  ×  Unexpected empty line before custom property   custom-property-empty-line-before
+ 78:2  ×  Unexpected whitespace at end of line           no-eol-whitespace                
+ 81:3  ×  Expected empty line before declaration         declaration-empty-line-before    
+
+elements/attach-workflow-ev-workflow.html
+ 23:7  ×  Expected single space after ">"    selector-combinator-space-after 
+ 23:7  ×  Expected single space before ">"   selector-combinator-space-before
+
+elements/cross-field-validation.html
+ 28:9  ×  Unexpected empty block   block-no-empty
+
+elements/data-acl-form.html
+ 71:3  ×  Unexpected empty line before custom property   custom-property-empty-line-before
+ 73:3  ×  Expected empty line before declaration         declaration-empty-line-before    
+
+elements/dynamic-acl-form.html
+ 72:3  ×  Expected empty line before declaration   declaration-empty-line-before
+
+elements/model-container.html
+  22:3   ×  Expected empty line before custom property   custom-property-empty-line-before
+  28:37  ×  Expected a leading zero                      number-leading-zero              
+  28:68  ×  Expected a leading zero                      number-leading-zero              
+ 237:24  ×  Expected single space after "+"              selector-combinator-space-after  
+ 237:24  ×  Expected single space before "+"             selector-combinator-space-before 
+
+elements/model-definition-dialog.html
+ 155:37  ×  Expected double colon pseudo-element notation   selector-pseudo-element-colon-notation
+
+elements/model-detail.html
+ 30:3   ×  Unexpected longhand value '6px 16px 0px 16px' instead of '6px 16px 0px'   shorthand-property-no-redundant-values
+ 30:22  ×  Unexpected unit                                                           length-zero-no-unit                   
+ 35:12  ×  Expected single space after ">"                                           selector-combinator-space-after       
+ 35:12  ×  Expected single space before ">"                                          selector-combinator-space-before      
+ 54:13  ×  Unexpected unit                                                           length-zero-no-unit                   
+ 57:25  ×  Expected single space after ">"                                           selector-combinator-space-after       
+ 57:25  ×  Expected single space before ">"                                          selector-combinator-space-before      
+ 60:17  ×  Unexpected unit                                                           length-zero-no-unit                   
+ 75:17  ×  Unexpected unit                                                           length-zero-no-unit                   
+ 95:22  ×  Unexpected unit                                                           length-zero-no-unit                   
+
+elements/model-sidebar.html
+  33:13  ×  Unexpected unit                      length-zero-no-unit                 
+  34:12  ×  Unexpected unit                      length-zero-no-unit                 
+  38:13  ×  Unexpected unit                      length-zero-no-unit                 
+  74:6   ×  Expected single space after ">"      selector-combinator-space-after     
+  74:6   ×  Expected single space before ">"     selector-combinator-space-before    
+  74:9   ×  Expected single space after ">"      selector-combinator-space-after     
+  74:9   ×  Expected single space before ">"     selector-combinator-space-before    
+  79:18  ×  Expected single space after ">"      selector-combinator-space-after     
+  79:18  ×  Expected single space before ">"     selector-combinator-space-before    
+  80:17  ×  Unexpected unit                      length-zero-no-unit                 
+ 112:11  ×  Unexpected unit                      length-zero-no-unit                 
+ 130:27  ×  Unexpected unit                      length-zero-no-unit                 
+ 146:39  ×  Expected single space after ">"      selector-combinator-space-after     
+ 146:39  ×  Expected single space before ">"     selector-combinator-space-before    
+ 154:10  ×  Expected "#DB8800" to be "#db8800"   color-hex-case                      
+ 158:10  ×  Expected "#00B0BF" to be "#00b0bf"   color-hex-case                      
+ 162:36  ×  Expected a trailing semicolon        declaration-block-trailing-semicolon
+ 166:13  ×  Unexpected unit                      length-zero-no-unit                 
+
+elements/model-work-area.html
+  20:3   ×  Expected empty line before custom property   custom-property-empty-line-before        
+  25:21  ×  Expected a trailing semicolon                declaration-block-trailing-semicolon     
+  29:21  ×  Expected a trailing semicolon                declaration-block-trailing-semicolon     
+  41:13  ×  Unexpected unit                              length-zero-no-unit                      
+  42:12  ×  Unexpected unit                              length-zero-no-unit                      
+  44:1   ×  Expected empty line before comment           comment-empty-line-before                
+  44:3   ×  Expected whitespace after "/*"               comment-whitespace-inside                
+  44:27  ×  Expected whitespace before "*/"              comment-whitespace-inside                
+  57:3   ×  Unexpected duplicate "transform-origin"      declaration-block-no-duplicate-properties
+  74:15  ×  Expected "#DADADA" to be "#dadada"           color-hex-case                           
+  81:15  ×  Expected "#ffffff" to be "#fff"              color-hex-length                         
+  92:3   ×  Expected empty line before declaration       declaration-empty-line-before            
+  94:1   ×  Expected empty line before comment           comment-empty-line-before                
+  94:3   ×  Expected whitespace after "/*"               comment-whitespace-inside                
+  94:13  ×  Expected whitespace before "*/"              comment-whitespace-inside                
+  97:10  ×  Expected "#DB8800" to be "#db8800"           color-hex-case                           
+ 101:10  ×  Expected "#00B0BF" to be "#00b0bf"           color-hex-case                           
+ 134:20  ×  Expected single space after "+"              selector-combinator-space-after          
+ 134:20  ×  Expected single space before "+"             selector-combinator-space-before         
+ 134:24  ×  Expected single space after "+"              selector-combinator-space-after          
+ 134:24  ×  Expected single space before "+"             selector-combinator-space-before         
+ 141:3   ×  Expected empty line before declaration       declaration-empty-line-before            
+ 146:15  ×  Expected "#8E8E8E" to be "#8e8e8e"           color-hex-case                           
+ 147:12  ×  Unexpected unit                              length-zero-no-unit                      
+ 167:17  ×  Unexpected unit                              length-zero-no-unit                      
+ 168:12  ×  Unexpected unit                              length-zero-no-unit                      
+ 172:13  ×  Unexpected unit                              length-zero-no-unit                      
+ 183:13  ×  Unexpected unit                              length-zero-no-unit                      
+ 195:15  ×  Expected "#EEEEEE" to be "#eeeeee"           color-hex-case                           
+ 195:15  ×  Expected "#EEEEEE" to be "#EEE"              color-hex-length                         
+ 209:15  ×  Expected "#EFEFEF" to be "#efefef"           color-hex-case                           
+ 224:1   ×  Expected empty line before comment           comment-empty-line-before                
+ 224:3   ×  Expected whitespace after "/*"               comment-whitespace-inside                
+ 224:27  ×  Expected whitespace before "*/"              comment-whitespace-inside                
+ 243:15  ×  Expected "#F1F1F1" to be "#f1f1f1"           color-hex-case                           
+ 246:23  ×  Expected single space after "+"              selector-combinator-space-after          
+ 246:23  ×  Expected single space before "+"             selector-combinator-space-before         
+ 254:15  ×  Expected "#F1F1F1" to be "#f1f1f1"           color-hex-case                           
+ 266:39  ×  Expected single space after "+"              selector-combinator-space-after          
+ 266:39  ×  Expected single space before "+"             selector-combinator-space-before         
+ 270:13  ×  Expected single space after ">"              selector-combinator-space-after          
+ 270:13  ×  Expected single space before ">"             selector-combinator-space-before         
+ 271:12  ×  Unexpected unit                              length-zero-no-unit                      
+
+elements/module-switcher.html
+ 75:9  ×  Expected double colon pseudo-element notation   selector-pseudo-element-colon-notation
+
+elements/property-dialog.html
+  51:6   ×  Expected single space after ">"      selector-combinator-space-after 
+  51:6   ×  Expected single space before ">"     selector-combinator-space-before
+  52:15  ×  Expected "#EFEFEF" to be "#efefef"   color-hex-case                  
+  55:6   ×  Expected single space after ">"      selector-combinator-space-after 
+  55:6   ×  Expected single space before ">"     selector-combinator-space-before
+  59:1   ×  Expected empty line before comment   comment-empty-line-before       
+  59:3   ×  Expected whitespace after "/*"       comment-whitespace-inside       
+  59:12  ×  Expected whitespace before "*/"      comment-whitespace-inside       
+  64:16  ×  Unexpected unit                      length-zero-no-unit             
+  73:12  ×  Unexpected unit                      length-zero-no-unit             
+  81:18  ×  Unexpected unit                      length-zero-no-unit             
+  89:18  ×  Expected single space after ">"      selector-combinator-space-after 
+  89:18  ×  Expected single space before ">"     selector-combinator-space-before
+  99:18  ×  Unexpected unit                      length-zero-no-unit             
+ 117:16  ×  Unexpected unit                      length-zero-no-unit             
+ 126:12  ×  Unexpected unit                      length-zero-no-unit             
+
+elements/property-grid.html
+  21:1   ×  Expected empty line before comment                                          comment-empty-line-before             
+  21:3   ×  Expected whitespace after "/*"                                              comment-whitespace-inside             
+  21:22  ×  Expected whitespace before "*/"                                             comment-whitespace-inside             
+  31:13  ×  Unexpected unit                                                             length-zero-no-unit                   
+  36:13  ×  Unexpected unit                                                             length-zero-no-unit                   
+  52:13  ×  Unexpected unit                                                             length-zero-no-unit                   
+  67:10  ×  Expected single space after "+"                                             selector-combinator-space-after       
+  67:10  ×  Expected single space before "+"                                            selector-combinator-space-before      
+  77:13  ×  Unexpected unit                                                             length-zero-no-unit                   
+  91:17  ×  Expected a trailing semicolon                                               declaration-block-trailing-semicolon  
+ 105:18  ×  Unexpected unit                                                             length-zero-no-unit                   
+ 160:1   ×  Expected empty line before comment                                          comment-empty-line-before             
+ 160:3   ×  Expected whitespace after "/*"                                              comment-whitespace-inside             
+ 160:29  ×  Expected whitespace before "*/"                                             comment-whitespace-inside             
+ 162:15  ×  Expected single space after ">"                                             selector-combinator-space-after       
+ 162:15  ×  Expected single space before ">"                                            selector-combinator-space-before      
+ 168:3   ×  Unexpected longhand value '16px 16px 0px 16px' instead of '16px 16px 0px'   shorthand-property-no-redundant-values
+ 168:23  ×  Unexpected unit                                                             length-zero-no-unit                   
+ 181:17  ×  Unexpected unit                                                             length-zero-no-unit                   
+ 184:21  ×  Expected single space after ">"                                             selector-combinator-space-after       
+ 184:21  ×  Expected single space before ">"                                            selector-combinator-space-before      
+ 201:2   ×  Expected indentation of 0 spaces                                            indentation                           
+ 204:11  ×  Unexpected unit                                                             length-zero-no-unit                   
+
+elements/property-validation-form.html
+ 49:16  ×  Unexpected unit                    length-zero-no-unit             
+ 58:12  ×  Unexpected unit                    length-zero-no-unit             
+ 74:18  ×  Expected single space after ">"    selector-combinator-space-after 
+ 74:18  ×  Expected single space before ">"   selector-combinator-space-before
+ 84:16  ×  Unexpected unit                    length-zero-no-unit             
+
+elements/relation-grid.html
+  30:13  ×  Unexpected unit                    length-zero-no-unit                 
+  35:13  ×  Unexpected unit                    length-zero-no-unit                 
+  65:10  ×  Expected single space after "+"    selector-combinator-space-after     
+  65:10  ×  Expected single space before "+"   selector-combinator-space-before    
+  92:17  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+ 101:18  ×  Unexpected unit                    length-zero-no-unit                 
+
+elements/rule-mapper-dialog.html
+  46:18  ×  Expected single space after ">"                 selector-combinator-space-after       
+  46:18  ×  Expected single space before ">"                selector-combinator-space-before      
+  50:10  ×  Expected "#ffffff" to be "#fff"                 color-hex-length                      
+  63:10  ×  Expected "#ffffff" to be "#fff"                 color-hex-length                      
+  81:13  ×  Unexpected unit                                 length-zero-no-unit                   
+  98:28  ×  Expected double colon pseudo-element notation   selector-pseudo-element-colon-notation
+ 101:22  ×  Expected "#ffffff" to be "#fff"                 color-hex-length                      
+ 103:12  ×  Unexpected unit                                 length-zero-no-unit                   
+ 133:10  ×  Expected "#000000" to be "#000"                 color-hex-length                      
+ 137:15  ×  Expected "#ECEFF1" to be "#eceff1"              color-hex-case                        
+ 150:10  ×  Expected "#000000" to be "#000"                 color-hex-length                      
+
+elements/search-header.html
+ 22:1   ×  Expected empty line before comment   comment-empty-line-before
+ 22:3   ×  Expected whitespace after "/*"       comment-whitespace-inside
+ 26:13  ×  Unexpected unit                      length-zero-no-unit      
+ 50:11  ×  Unexpected unit                      length-zero-no-unit      
+ 52:17  ×  Unexpected unit                      length-zero-no-unit      
+ 53:12  ×  Unexpected unit                      length-zero-no-unit      
+ 64:22  ×  Unexpected trailing zero(s)          number-no-trailing-zeros 
+ 79:1   ×  Expected empty line before comment   comment-empty-line-before
+ 79:3   ×  Expected whitespace after "/*"       comment-whitespace-inside
+ 79:26  ×  Expected whitespace before "*/"      comment-whitespace-inside
+
+elements/service-personalization-field-value-replace.html
+ 19:4  ×  Expected indentation of 2 spaces   indentation
+ 20:4  ×  Expected indentation of 2 spaces   indentation
+ 21:4  ×  Expected indentation of 2 spaces   indentation
+ 22:2  ×  Expected indentation of 0 spaces   indentation
+ 24:2  ×  Expected indentation of 0 spaces   indentation
+ 25:4  ×  Expected indentation of 2 spaces   indentation
+ 26:4  ×  Expected indentation of 2 spaces   indentation
+ 27:2  ×  Expected indentation of 0 spaces   indentation
+ 29:2  ×  Expected indentation of 0 spaces   indentation
+ 30:4  ×  Expected indentation of 2 spaces   indentation
+ 31:2  ×  Expected indentation of 0 spaces   indentation
+ 33:2  ×  Expected indentation of 0 spaces   indentation
+ 34:4  ×  Expected indentation of 2 spaces   indentation
+ 35:4  ×  Expected indentation of 2 spaces   indentation
+ 36:2  ×  Expected indentation of 0 spaces   indentation
+ 38:2  ×  Expected indentation of 0 spaces   indentation
+ 39:4  ×  Expected indentation of 2 spaces   indentation
+ 40:2  ×  Expected indentation of 0 spaces   indentation
+
+elements/service-personalization-rule-name.html
+ 36:3   ×  Expected empty line before custom property   custom-property-empty-line-before
+ 48:12  ×  Expected single space after ">"              selector-combinator-space-after  
+ 48:12  ×  Expected single space before ">"             selector-combinator-space-before 
+ 53:17  ×  Unexpected unit                              length-zero-no-unit              
+ 73:13  ×  Unexpected unit                              length-zero-no-unit              
+ 77:13  ×  Unexpected unit                              length-zero-no-unit              
+
+elements/service-personalization.html
+  44:13  ×  Unexpected unit                          length-zero-no-unit             
+  70:18  ×  Unexpected unit                          length-zero-no-unit             
+  81:13  ×  Unexpected unit                          length-zero-no-unit             
+  86:13  ×  Unexpected unit                          length-zero-no-unit             
+ 109:21  ×  Expected "#F7F7F7" to be "#f7f7f7"       color-hex-case                  
+ 113:17  ×  Unexpected unit                          length-zero-no-unit             
+ 133:13  ×  Unexpected unit                          length-zero-no-unit             
+ 137:13  ×  Unexpected unit                          length-zero-no-unit             
+ 141:17  ×  Expected single space after ">"          selector-combinator-space-after 
+ 141:17  ×  Expected single space before ">"         selector-combinator-space-before
+ 143:18  ×  Unexpected unit                          length-zero-no-unit             
+ 154:3   ×  Expected empty line before declaration   declaration-empty-line-before   
+ 160:24  ×  Unexpected unit                          length-zero-no-unit             
+
+elements/tenant-info.html
+ 19:13  ×  Unexpected unit   length-zero-no-unit
+
+elements/upload-data.html
+ 57:18  ×  Unexpected unit                      length-zero-no-unit
+ 62:21  ×  Expected "#EBEBEB" to be "#ebebeb"   color-hex-case     
+ 66:34  ×  Expected "#D0D0D0" to be "#d0d0d0"   color-hex-case     
+
+elements/validation-grid.html
+  35:13  ×  Unexpected unit                                                     length-zero-no-unit                   
+  40:13  ×  Unexpected unit                                                     length-zero-no-unit                   
+  47:13  ×  Unexpected unit                                                     length-zero-no-unit                   
+  71:10  ×  Expected single space after "+"                                     selector-combinator-space-after       
+  71:10  ×  Expected single space before "+"                                    selector-combinator-space-before      
+ 100:17  ×  Expected a trailing semicolon                                       declaration-block-trailing-semicolon  
+ 139:1   ×  Expected empty line before comment                                  comment-empty-line-before             
+ 139:3   ×  Expected whitespace after "/*"                                      comment-whitespace-inside             
+ 139:29  ×  Expected whitespace before "*/"                                     comment-whitespace-inside             
+ 142:3   ×  Unexpected longhand value '16px 16px 16px 16px' instead of '16px'   shorthand-property-no-redundant-values
+ 155:17  ×  Unexpected unit                                                     length-zero-no-unit                   
+
+elements/work-area-menu.html
+ 24:9   ×  Unexpected unit                                                        length-zero-no-unit                   
+ 33:5   ×  Expected single space after ">"                                        selector-combinator-space-after       
+ 33:5   ×  Expected single space before ">"                                       selector-combinator-space-before      
+ 36:3   ×  Unexpected longhand value '0px 0px 5px 0px' instead of '0px 0px 5px'   shorthand-property-no-redundant-values
+ 36:12  ×  Unexpected unit                                                        length-zero-no-unit                   
+ 36:16  ×  Unexpected unit                                                        length-zero-no-unit                   
+ 36:24  ×  Unexpected unit                                                        length-zero-no-unit                   
+ 40:5   ×  Expected single space after ">"                                        selector-combinator-space-after       
+ 40:5   ×  Expected single space before ">"                                       selector-combinator-space-before      
+ 50:19  ×  Expected a leading zero                                                number-leading-zero                   
+ 50:36  ×  Expected a leading zero                                                number-leading-zero                   
+ 50:44  ×  Expected a leading zero                                                number-leading-zero                   
+ 50:49  ×  Expected a leading zero                                                number-leading-zero                   
+ 53:12  ×  Unexpected unit                                                        length-zero-no-unit                   
+ 59:19  ×  Expected a leading zero                                                number-leading-zero                   
+ 59:36  ×  Expected a leading zero                                                number-leading-zero                   
+ 59:44  ×  Expected a leading zero                                                number-leading-zero                   
+ 59:49  ×  Expected a leading zero                                                number-leading-zero                   
+ 71:3   ×  Expected empty line before rule                                        rule-empty-line-before                
+ 82:3   ×  Expected empty line before rule                                        rule-empty-line-before                
+
+elements/work-flow.html
+ 19:2   ×  Expected indentation of 2 spaces     indentation     
+ 20:2   ×  Expected indentation of 2 spaces     indentation     
+ 20:20  ×  Expected "#F5F5F5" to be "#f5f5f5"   color-hex-case  
+ 24:2   ×  Expected indentation of 2 spaces     indentation     
+ 25:2   ×  Expected indentation of 2 spaces     indentation     
+ 25:20  ×  Expected "#F5F5F5" to be "#f5f5f5"   color-hex-case  
+ 29:2   ×  Expected indentation of 2 spaces     indentation     
+ 29:20  ×  Expected "#000000" to be "#000"      color-hex-length
+ 30:2   ×  Expected indentation of 2 spaces     indentation     
+ 30:20  ×  Expected "#555555" to be "#555"      color-hex-length
+ 34:2   ×  Expected indentation of 2 spaces     indentation     
+ 35:2   ×  Expected indentation of 2 spaces     indentation     
+ 39:2   ×  Expected indentation of 2 spaces     indentation     
+ 40:2   ×  Expected indentation of 2 spaces     indentation     
+ 44:2   ×  Expected indentation of 2 spaces     indentation     
+ 45:2   ×  Expected indentation of 2 spaces     indentation     
+
+elements/workflow-designer.html
+ 25:3   ×  Unexpected duplicate "box-sizing"   declaration-block-no-duplicate-properties
+ 26:13  ×  Unexpected unit                     length-zero-no-unit                      
+
+evf-designer.html
+ 13:35  ×  Expected single space after "+"    selector-combinator-space-after     
+ 13:35  ×  Expected single space before "+"   selector-combinator-space-before    
+ 26:14  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+ 37:9   ×  Unexpected unit                    length-zero-no-unit                 
+ 38:10  ×  Unexpected unit                    length-zero-no-unit                 
+
+resource-manager/resource-detail.html
+  21:13  ×  Unexpected unit                          length-zero-no-unit             
+  34:10  ×  Expected "#000000" to be "#000"          color-hex-length                
+  42:16  ×  Expected single space after ">"          selector-combinator-space-after 
+  42:16  ×  Expected single space before ">"         selector-combinator-space-before
+  47:10  ×  Expected "#000000" to be "#000"          color-hex-length                
+  59:10  ×  Expected "#000000" to be "#000"          color-hex-length                
+  73:3   ×  Expected empty line before declaration   declaration-empty-line-before   
+  90:10  ×  Expected "#000000" to be "#000"          color-hex-length                
+ 158:17  ×  Unexpected unit                          length-zero-no-unit             
+
+resource-manager/resource-dialog.html
+ 29:17  ×  Unexpected unit                    length-zero-no-unit             
+ 39:12  ×  Unexpected unit                    length-zero-no-unit             
+ 54:16  ×  Unexpected unit                    length-zero-no-unit             
+ 63:17  ×  Unexpected unit                    length-zero-no-unit             
+ 70:10  ×  Expected single space after "+"    selector-combinator-space-after 
+ 70:10  ×  Expected single space before "+"   selector-combinator-space-before
+
+resource-manager/resource-listing.html
+ 33:13  ×  Unexpected unit                      length-zero-no-unit             
+ 43:13  ×  Unexpected unit                      length-zero-no-unit             
+ 45:16  ×  Unexpected unit                      length-zero-no-unit             
+ 71:12  ×  Unexpected unit                      length-zero-no-unit             
+ 84:13  ×  Unexpected unit                      length-zero-no-unit             
+ 85:15  ×  Expected "#1B2024" to be "#1b2024"   color-hex-case                  
+ 96:10  ×  Expected single space after "+"      selector-combinator-space-after 
+ 96:10  ×  Expected single space before "+"     selector-combinator-space-before
+
+routeflow/route-element.html
+ 30:2   ×  Expected indentation of 0 spaces   indentation                         
+ 31:37  ×  Expected a leading zero            number-leading-zero                 
+ 31:68  ×  Expected a leading zero            number-leading-zero                 
+ 31:71  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+ 45:2   ×  Expected indentation of 0 spaces   indentation                         
+
+routeflow/route-listing.html
+ 33:13  ×  Unexpected unit   length-zero-no-unit
+ 34:12  ×  Unexpected unit   length-zero-no-unit
+ 38:13  ×  Unexpected unit   length-zero-no-unit
+
+routeflow/routeflow-workarea.html
+ 20:3   ×  Expected empty line before custom property   custom-property-empty-line-before        
+ 26:13  ×  Unexpected unit                              length-zero-no-unit                      
+ 27:12  ×  Unexpected unit                              length-zero-no-unit                      
+ 29:1   ×  Expected empty line before comment           comment-empty-line-before                
+ 29:3   ×  Expected whitespace after "/*"               comment-whitespace-inside                
+ 29:27  ×  Expected whitespace before "*/"              comment-whitespace-inside                
+ 41:3   ×  Unexpected duplicate "transform-origin"      declaration-block-no-duplicate-properties
+ 58:15  ×  Expected "#DADADA" to be "#dadada"           color-hex-case                           
+ 65:15  ×  Expected "#ffffff" to be "#fff"              color-hex-length                         
+ 75:15  ×  Expected "#F1F1F1" to be "#f1f1f1"           color-hex-case                           
+ 78:23  ×  Expected single space after "+"              selector-combinator-space-after          
+ 78:23  ×  Expected single space before "+"             selector-combinator-space-before         
+ 86:15  ×  Expected "#F1F1F1" to be "#f1f1f1"           color-hex-case                           
+ 98:39  ×  Expected single space after "+"              selector-combinator-space-after          
+ 98:39  ×  Expected single space before "+"             selector-combinator-space-before         
+
+routeflow/transition-dialog.html
+ 31:17  ×  Unexpected unit   length-zero-no-unit
+ 41:12  ×  Unexpected unit   length-zero-no-unit
+
+rule-manager/rule-detail.html
+  21:13  ×  Unexpected unit                          length-zero-no-unit             
+  34:10  ×  Expected "#000000" to be "#000"          color-hex-length                
+  42:16  ×  Expected single space after ">"          selector-combinator-space-after 
+  42:16  ×  Expected single space before ">"         selector-combinator-space-before
+  47:10  ×  Expected "#000000" to be "#000"          color-hex-length                
+  59:10  ×  Expected "#000000" to be "#000"          color-hex-length                
+  73:3   ×  Expected empty line before declaration   declaration-empty-line-before   
+  90:10  ×  Expected "#000000" to be "#000"          color-hex-length                
+ 158:17  ×  Unexpected unit                          length-zero-no-unit             
+
+rule-manager/rule-dialog.html
+ 29:17  ×  Unexpected unit                    length-zero-no-unit             
+ 39:12  ×  Unexpected unit                    length-zero-no-unit             
+ 54:16  ×  Unexpected unit                    length-zero-no-unit             
+ 63:17  ×  Unexpected unit                    length-zero-no-unit             
+ 70:10  ×  Expected single space after "+"    selector-combinator-space-after 
+ 70:10  ×  Expected single space before "+"   selector-combinator-space-before
+
+rule-manager/rule-listing.html
+ 33:13  ×  Unexpected unit                      length-zero-no-unit             
+ 43:13  ×  Unexpected unit                      length-zero-no-unit             
+ 45:16  ×  Unexpected unit                      length-zero-no-unit             
+ 71:12  ×  Unexpected unit                      length-zero-no-unit             
+ 84:13  ×  Unexpected unit                      length-zero-no-unit             
+ 85:15  ×  Expected "#1B2024" to be "#1b2024"   color-hex-case                  
+ 96:10  ×  Expected single space after "+"      selector-combinator-space-after 
+ 96:10  ×  Expected single space before "+"     selector-combinator-space-before
+
+styles/app-theme.html
+ 19:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 19:26  ×  Expected "#0C1013" to be "#0c1013"                        color-hex-case               
+ 20:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 20:21  ×  Expected "#37474F" to be "#37474f"                        color-hex-case               
+ 21:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 21:29  ×  Expected "#37474F" to be "#37474f"                        color-hex-case               
+ 22:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 22:27  ×  Expected "#455A64" to be "#455a64"                        color-hex-case               
+ 23:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 23:26  ×  Expected "#ffffff" to be "#fff"                           color-hex-length             
+ 24:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 24:19  ×  Expected "#FF4D63" to be "#ff4d63"                        color-hex-case               
+ 25:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 25:20  ×  Expected "#00ACFF" to be "#00acff"                        color-hex-case               
+ 26:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 26:32  ×  Expected "#37474F" to be "#37474f"                        color-hex-case               
+ 27:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 28:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 29:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 29:27  ×  Expected "#9B9B9B" to be "#9b9b9b"                        color-hex-case               
+ 30:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 30:21  ×  Expected "#E0E0E0" to be "#e0e0e0"                        color-hex-case               
+ 31:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 32:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 32:26  ×  Expected "#ffffff" to be "#fff"                           color-hex-length             
+ 33:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 34:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 35:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 35:26  ×  Expected "#7ED321" to be "#7ed321"                        color-hex-case               
+ 36:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 37:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 37:23  ×  Expected "#C1C1C1" to be "#c1c1c1"                        color-hex-case               
+ 38:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 39:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 39:45  ×  Expected "#00ACFF" to be "#00acff"                        color-hex-case               
+ 40:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 40:48  ×  Expected "#00ACFF" to be "#00acff"                        color-hex-case               
+ 41:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 41:45  ×  Expected "#00ACFF" to be "#00acff"                        color-hex-case               
+ 42:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 42:45  ×  Expected "#ffffff" to be "#fff"                           color-hex-length             
+ 43:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 43:38  ×  Expected "#00ACFF" to be "#00acff"                        color-hex-case               
+ 44:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 45:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 45:35  ×  Expected "#ffffff" to be "#fff"                           color-hex-length             
+ 46:4   ×  Expected empty line before comment                        comment-empty-line-before    
+ 46:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 47:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 48:4   ×  Expected empty line before comment                        comment-empty-line-before    
+ 48:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 49:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 50:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 51:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 52:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 53:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 54:8   ×  Expected indentation of 4 spaces                          indentation                  
+ 55:8   ×  Expected indentation of 4 spaces                          indentation                  
+ 56:8   ×  Expected indentation of 4 spaces                          indentation                  
+ 57:8   ×  Expected indentation of 4 spaces                          indentation                  
+ 58:8   ×  Expected indentation of 4 spaces                          indentation                  
+ 59:8   ×  Expected indentation of 4 spaces                          indentation                  
+ 59:17  ×  Unexpected unit                                           length-zero-no-unit          
+ 60:8   ×  Expected indentation of 4 spaces                          indentation                  
+ 61:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 62:4   ×  Unexpected extra semicolon                                no-extra-semicolons          
+ 63:4   ×  Unexpected unknown type selector "--paper-dialog-title"   selector-type-no-unknown     
+ 63:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 63:4   ×  Expected empty line before rule                           rule-empty-line-before       
+ 64:8   ×  Expected indentation of 4 spaces                          indentation                  
+ 65:8   ×  Expected indentation of 4 spaces                          indentation                  
+ 66:8   ×  Expected indentation of 4 spaces                          indentation                  
+ 66:15  ×  Expected "#000000" to be "#000"                           color-hex-length             
+ 67:8   ×  Expected indentation of 4 spaces                          indentation                  
+ 68:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 72:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 73:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 74:4   ×  Expected empty line before declaration                    declaration-empty-line-before
+ 74:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 75:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 76:4   ×  Expected indentation of 2 spaces                          indentation                  
+ 77:4   ×  Expected indentation of 2 spaces                          indentation                  
+
+styles/evf-styles.html
+ 1863:38  ×  Missed semicolon   CssSyntaxError
+
+styles/shared-styles.html
+  18:6   ×  Unexpected unknown type selector "/deep/"                                selector-type-no-unknown
+  21:13  ×  Unexpected unit                                                          length-zero-no-unit     
+  37:17  ×  Unexpected unit                                                          length-zero-no-unit     
+  42:11  ×  Unexpected unit                                                          length-zero-no-unit     
+  43:12  ×  Unexpected unit                                                          length-zero-no-unit     
+  62:6   ×  Unexpected unknown type selector "/deep/"                                selector-type-no-unknown
+  67:6   ×  Unexpected unknown type selector "/deep/"                                selector-type-no-unknown
+  72:6   ×  Unexpected unknown type selector "/deep/"                                selector-type-no-unknown
+  77:6   ×  Unexpected unknown type selector "/deep/"                                selector-type-no-unknown
+  82:6   ×  Unexpected unknown type selector "/deep/"                                selector-type-no-unknown
+  88:6   ×  Unexpected unknown type selector "/deep/"                                selector-type-no-unknown
+  93:6   ×  Unexpected unknown type selector "/deep/"                                selector-type-no-unknown
+  99:6   ×  Unexpected unknown type selector "/deep/"                                selector-type-no-unknown
+ 104:6   ×  Unexpected unknown type selector "/deep/"                                selector-type-no-unknown
+ 105:13  ×  Unexpected unit                                                          length-zero-no-unit     
+ 108:6   ×  Unexpected unknown type selector "/deep/"                                selector-type-no-unknown
+ 112:6   ×  Unexpected unknown type selector "/deep/"                                selector-type-no-unknown
+ 119:78  ×  Unexpected trailing zero(s)                                              number-no-trailing-zeros
+ 141:3   ×  Unexpected unknown type selector "--paper-input-container-input-focus"   selector-type-no-unknown
+ 141:3   ×  Expected empty line before rule                                          rule-empty-line-before  
+ 179:15  ×  Unexpected unknown type selector "/deep/"                                selector-type-no-unknown
+
+templates/blank-template.html
+ 19:2  ×  Expected indentation of 2 spaces   indentation
+ 20:2  ×  Expected indentation of 2 spaces   indentation
+ 24:2  ×  Expected indentation of 2 spaces   indentation
+
+templates/campaign-page.html
+ 19:5  ×  Expected indentation of 2 spaces   indentation
+ 20:5  ×  Expected indentation of 2 spaces   indentation
+
+templates/dashboard-page.html
+ 19:5  ×  Expected indentation of 2 spaces   indentation
+ 20:5  ×  Expected indentation of 2 spaces   indentation
+
+templates/default-scopeform.html
+ 18:8   ×  Expected single space after ">"    selector-combinator-space-after 
+ 18:8   ×  Expected single space before ">"   selector-combinator-space-before
+ 20:12  ×  Unexpected unit                    length-zero-no-unit             
+
+templates/sample-page.html
+ 18:5  ×  Expected single space before "{"                                 block-opening-brace-space-before
+ 19:2  ×  Expected indentation of 2 spaces                                 indentation                     
+ 19:8  ×  Expected single space after ":" with a single-line declaration   declaration-colon-space-after   
+
+templates/widgets-page.html
+ 19:5  ×  Expected indentation of 2 spaces       indentation      
+ 20:5  ×  Expected indentation of 2 spaces       indentation      
+ 21:9  ×  Unexpected whitespace at end of line   no-eol-whitespace
+
+test/evf-css-parser-test.html
+ 19:12  ×  Unexpected unit                          length-zero-no-unit     
+ 22:1   ×  Unexpected unknown type selector "tag"   selector-type-no-unknown
+
+ui-designer/attribute-element.html
+ 19:4   ×  Expected indentation of 2 spaces   indentation        
+ 20:4   ×  Expected indentation of 2 spaces   indentation        
+ 27:4   ×  Expected indentation of 2 spaces   indentation        
+ 28:8   ×  Expected indentation of 4 spaces   indentation        
+ 29:8   ×  Expected indentation of 4 spaces   indentation        
+ 30:8   ×  Expected indentation of 4 spaces   indentation        
+ 31:8   ×  Expected indentation of 4 spaces   indentation        
+ 32:4   ×  Expected indentation of 2 spaces   indentation        
+ 33:4   ×  Expected indentation of 2 spaces   indentation        
+ 34:8   ×  Expected indentation of 4 spaces   indentation        
+ 35:8   ×  Expected indentation of 4 spaces   indentation        
+ 35:15  ×  Expected "#ffffff" to be "#fff"    color-hex-length   
+ 36:8   ×  Expected indentation of 4 spaces   indentation        
+ 37:4   ×  Expected indentation of 2 spaces   indentation        
+ 38:4   ×  Expected indentation of 2 spaces   indentation        
+ 39:8   ×  Expected indentation of 4 spaces   indentation        
+ 40:4   ×  Expected indentation of 2 spaces   indentation        
+ 41:4   ×  Expected indentation of 2 spaces   indentation        
+ 42:8   ×  Expected indentation of 4 spaces   indentation        
+ 43:4   ×  Expected indentation of 2 spaces   indentation        
+ 47:4   ×  Expected indentation of 2 spaces   indentation        
+ 47:19  ×  Unexpected unit                    length-zero-no-unit
+ 48:4   ×  Expected indentation of 2 spaces   indentation        
+ 52:4   ×  Expected indentation of 2 spaces   indentation        
+ 53:4   ×  Expected indentation of 2 spaces   indentation        
+ 54:4   ×  Expected indentation of 2 spaces   indentation        
+ 54:12  ×  Unexpected unit                    length-zero-no-unit
+ 58:4   ×  Expected indentation of 2 spaces   indentation        
+ 62:4   ×  Expected indentation of 2 spaces   indentation        
+ 63:4   ×  Expected indentation of 2 spaces   indentation        
+ 63:18  ×  Unexpected unit                    length-zero-no-unit
+ 64:4   ×  Expected indentation of 2 spaces   indentation        
+ 65:4   ×  Expected indentation of 2 spaces   indentation        
+ 66:4   ×  Expected indentation of 2 spaces   indentation        
+ 70:4   ×  Expected indentation of 2 spaces   indentation        
+ 71:4   ×  Expected indentation of 2 spaces   indentation        
+ 72:4   ×  Expected indentation of 2 spaces   indentation        
+ 76:4   ×  Expected indentation of 2 spaces   indentation        
+ 80:4   ×  Expected indentation of 2 spaces   indentation        
+ 84:4   ×  Expected indentation of 2 spaces   indentation        
+ 88:4   ×  Expected indentation of 2 spaces   indentation        
+ 89:4   ×  Expected indentation of 2 spaces   indentation        
+
+ui-designer/context-box.html
+  19:2   ×  Expected indentation of 2 spaces     indentation             
+  20:2   ×  Expected indentation of 2 spaces     indentation             
+  21:2   ×  Expected indentation of 2 spaces     indentation             
+  22:2   ×  Expected indentation of 2 spaces     indentation             
+  22:10  ×  Unexpected unit                      length-zero-no-unit     
+  23:2   ×  Expected indentation of 2 spaces     indentation             
+  23:11  ×  Unexpected unit                      length-zero-no-unit     
+  24:2   ×  Expected indentation of 2 spaces     indentation             
+  25:2   ×  Expected indentation of 2 spaces     indentation             
+  26:2   ×  Expected indentation of 2 spaces     indentation             
+  27:2   ×  Expected indentation of 2 spaces     indentation             
+  31:2   ×  Expected indentation of 2 spaces     indentation             
+  31:17  ×  Expected "#222222" to be "#222"      color-hex-length        
+  35:2   ×  Expected indentation of 2 spaces     indentation             
+  36:2   ×  Expected indentation of 2 spaces     indentation             
+  40:2   ×  Expected indentation of 2 spaces     indentation             
+  40:17  ×  Expected "#FF9800" to be "#ff9800"   color-hex-case          
+  44:2   ×  Expected indentation of 2 spaces     indentation             
+  45:2   ×  Expected indentation of 2 spaces     indentation             
+  46:2   ×  Expected indentation of 2 spaces     indentation             
+  46:9   ×  Unexpected unit                      length-zero-no-unit     
+  50:2   ×  Expected indentation of 2 spaces     indentation             
+  50:14  ×  Expected "#222222" to be "#222"      color-hex-length        
+  54:2   ×  Expected indentation of 2 spaces     indentation             
+  58:2   ×  Expected indentation of 2 spaces     indentation             
+  58:14  ×  Expected "#FF9800" to be "#ff9800"   color-hex-case          
+  62:2   ×  Expected indentation of 2 spaces     indentation             
+  63:2   ×  Expected indentation of 2 spaces     indentation             
+  64:2   ×  Expected indentation of 2 spaces     indentation             
+  65:2   ×  Expected indentation of 2 spaces     indentation             
+  66:2   ×  Expected indentation of 2 spaces     indentation             
+  67:2   ×  Expected indentation of 2 spaces     indentation             
+  68:2   ×  Expected indentation of 2 spaces     indentation             
+  69:2   ×  Expected indentation of 2 spaces     indentation             
+  70:2   ×  Expected indentation of 2 spaces     indentation             
+  74:2   ×  Expected indentation of 2 spaces     indentation             
+  75:2   ×  Expected indentation of 2 spaces     indentation             
+  76:2   ×  Expected indentation of 2 spaces     indentation             
+  80:2   ×  Expected indentation of 2 spaces     indentation             
+  81:2   ×  Expected indentation of 2 spaces     indentation             
+  82:2   ×  Expected indentation of 2 spaces     indentation             
+  83:2   ×  Expected indentation of 2 spaces     indentation             
+  84:2   ×  Expected indentation of 2 spaces     indentation             
+  85:2   ×  Expected indentation of 2 spaces     indentation             
+  86:2   ×  Expected indentation of 2 spaces     indentation             
+  90:2   ×  Expected indentation of 2 spaces     indentation             
+  91:2   ×  Expected indentation of 2 spaces     indentation             
+  92:2   ×  Expected indentation of 2 spaces     indentation             
+  96:2   ×  Expected indentation of 2 spaces     indentation             
+  96:12  ×  Unexpected unit                      length-zero-no-unit     
+ 100:2   ×  Expected indentation of 2 spaces     indentation             
+ 101:2   ×  Expected indentation of 2 spaces     indentation             
+ 102:2   ×  Expected indentation of 2 spaces     indentation             
+ 103:2   ×  Expected indentation of 2 spaces     indentation             
+ 103:9   ×  Expected "#000000" to be "#000"      color-hex-length        
+ 104:2   ×  Expected indentation of 2 spaces     indentation             
+ 105:2   ×  Expected indentation of 2 spaces     indentation             
+ 106:2   ×  Expected indentation of 2 spaces     indentation             
+ 110:2   ×  Expected indentation of 2 spaces     indentation             
+ 110:31  ×  Unexpected trailing zero(s)          number-no-trailing-zeros
+ 114:2   ×  Expected indentation of 2 spaces     indentation             
+
+ui-designer/device-view.html
+  19:2   ×  Expected indentation of 2 spaces   indentation                         
+  20:2   ×  Expected indentation of 2 spaces   indentation                         
+  21:2   ×  Expected indentation of 2 spaces   indentation                         
+  22:2   ×  Expected indentation of 2 spaces   indentation                         
+  23:2   ×  Expected indentation of 2 spaces   indentation                         
+  24:2   ×  Expected indentation of 2 spaces   indentation                         
+  25:2   ×  Expected indentation of 2 spaces   indentation                         
+  26:2   ×  Expected indentation of 2 spaces   indentation                         
+  27:2   ×  Expected indentation of 2 spaces   indentation                         
+  28:2   ×  Expected indentation of 2 spaces   indentation                         
+  32:2   ×  Expected indentation of 2 spaces   indentation                         
+  33:2   ×  Expected indentation of 2 spaces   indentation                         
+  34:2   ×  Expected indentation of 2 spaces   indentation                         
+  35:2   ×  Expected indentation of 2 spaces   indentation                         
+  39:2   ×  Expected indentation of 2 spaces   indentation                         
+  40:2   ×  Expected indentation of 2 spaces   indentation                         
+  41:2   ×  Expected indentation of 2 spaces   indentation                         
+  42:2   ×  Expected indentation of 2 spaces   indentation                         
+  43:2   ×  Expected indentation of 2 spaces   indentation                         
+  44:2   ×  Expected indentation of 2 spaces   indentation                         
+  45:2   ×  Expected indentation of 2 spaces   indentation                         
+  46:2   ×  Expected indentation of 2 spaces   indentation                         
+  47:2   ×  Expected indentation of 2 spaces   indentation                         
+  48:2   ×  Expected indentation of 2 spaces   indentation                         
+  48:15  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+  52:2   ×  Expected indentation of 2 spaces   indentation                         
+  52:26  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+  56:2   ×  Expected indentation of 2 spaces   indentation                         
+  57:2   ×  Expected indentation of 2 spaces   indentation                         
+  58:2   ×  Expected indentation of 2 spaces   indentation                         
+  59:2   ×  Expected indentation of 2 spaces   indentation                         
+  60:2   ×  Expected indentation of 2 spaces   indentation                         
+  61:2   ×  Expected indentation of 2 spaces   indentation                         
+  62:2   ×  Expected indentation of 2 spaces   indentation                         
+  63:2   ×  Expected indentation of 2 spaces   indentation                         
+  63:19  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+  67:2   ×  Expected indentation of 2 spaces   indentation                         
+  68:2   ×  Expected indentation of 2 spaces   indentation                         
+  69:2   ×  Expected indentation of 2 spaces   indentation                         
+  69:14  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+  73:2   ×  Expected indentation of 2 spaces   indentation                         
+  74:2   ×  Expected indentation of 2 spaces   indentation                         
+  75:2   ×  Expected indentation of 2 spaces   indentation                         
+  76:2   ×  Expected indentation of 2 spaces   indentation                         
+  77:2   ×  Expected indentation of 2 spaces   indentation                         
+  78:2   ×  Expected indentation of 2 spaces   indentation                         
+  79:2   ×  Expected indentation of 2 spaces   indentation                         
+  80:2   ×  Expected indentation of 2 spaces   indentation                         
+  81:2   ×  Expected indentation of 2 spaces   indentation                         
+  82:2   ×  Expected indentation of 2 spaces   indentation                         
+  83:2   ×  Expected indentation of 2 spaces   indentation                         
+  84:2   ×  Expected indentation of 2 spaces   indentation                         
+  85:2   ×  Expected indentation of 2 spaces   indentation                         
+  86:2   ×  Expected indentation of 2 spaces   indentation                         
+  86:9   ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+  90:2   ×  Expected indentation of 2 spaces   indentation                         
+  90:28  ×  Expected a leading zero            number-leading-zero                 
+  90:30  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+  94:2   ×  Expected indentation of 2 spaces   indentation                         
+  94:17  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+  98:2   ×  Expected indentation of 2 spaces   indentation                         
+  98:15  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+ 102:2   ×  Expected indentation of 2 spaces   indentation                         
+ 103:2   ×  Expected indentation of 2 spaces   indentation                         
+ 104:2   ×  Expected indentation of 2 spaces   indentation                         
+ 104:23  ×  Expected a leading zero            number-leading-zero                 
+ 104:26  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+ 108:2   ×  Expected indentation of 2 spaces   indentation                         
+ 108:13  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+ 112:2   ×  Expected indentation of 2 spaces   indentation                         
+ 112:12  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+ 116:2   ×  Expected indentation of 2 spaces   indentation                         
+ 116:16  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
+ 120:2   ×  Expected indentation of 2 spaces   indentation                         
+ 121:2   ×  Expected indentation of 2 spaces   indentation                         
+ 122:2   ×  Expected indentation of 2 spaces   indentation                         
+ 126:2   ×  Expected indentation of 2 spaces   indentation                         
+ 127:2   ×  Expected indentation of 2 spaces   indentation                         
+ 127:11  ×  Unexpected unit                    length-zero-no-unit                 
+ 131:2   ×  Expected indentation of 2 spaces   indentation                         
+ 132:2   ×  Expected indentation of 2 spaces   indentation                         
+ 133:2   ×  Expected indentation of 2 spaces   indentation                         
+ 137:2   ×  Expected indentation of 2 spaces   indentation                         
+ 138:2   ×  Expected indentation of 2 spaces   indentation                         
+ 139:2   ×  Expected indentation of 2 spaces   indentation                         
+ 140:2   ×  Expected indentation of 2 spaces   indentation                         
+ 141:2   ×  Expected indentation of 2 spaces   indentation                         
+ 142:2   ×  Expected indentation of 2 spaces   indentation                         
+ 143:2   ×  Expected indentation of 2 spaces   indentation                         
+ 144:2   ×  Expected indentation of 2 spaces   indentation                         
+ 148:2   ×  Expected indentation of 2 spaces   indentation                         
+ 149:2   ×  Expected indentation of 2 spaces   indentation                         
+ 150:2   ×  Expected indentation of 2 spaces   indentation                         
+ 151:2   ×  Expected indentation of 2 spaces   indentation                         
+ 155:2   ×  Expected indentation of 2 spaces   indentation                         
+
+ui-designer/dom-bind-element.html
+ 19:2  ×  Expected indentation of 2 spaces   indentation
+
+ui-designer/dom-if-element.html
+ 19:2  ×  Expected indentation of 2 spaces   indentation
+
+ui-designer/dom-repeat-element.html
+ 19:2  ×  Expected indentation of 2 spaces   indentation
+
+ui-designer/icon-picker.html
+ 29:13  ×  Unexpected unit                          length-zero-no-unit          
+ 68:3   ×  Expected empty line before declaration   declaration-empty-line-before
+ 77:16  ×  Unexpected unit                          length-zero-no-unit          
+
+ui-designer/iframe-content.html
+ 20:1  ×  Expected no more than 1 empty line(s)   max-empty-lines
+ 21:1  ×  Expected no more than 1 empty line(s)   max-empty-lines
+ 22:1  ×  Expected no more than 1 empty line(s)   max-empty-lines
+ 23:1  ×  Expected no more than 1 empty line(s)   max-empty-lines
+ 24:1  ×  Expected no more than 1 empty line(s)   max-empty-lines
+
+ui-designer/page-selector-element.html
+ 19:2  ×  Expected indentation of 2 spaces   indentation
+
+ui-designer/polymer-func-form.html
+ 19:2  ×  Expected indentation of 2 spaces   indentation
+ 20:2  ×  Expected indentation of 2 spaces   indentation
+ 24:2  ×  Expected indentation of 2 spaces   indentation
+
+ui-designer/polymer-listener-form.html
+ 19:2  ×  Expected indentation of 2 spaces   indentation
+ 20:2  ×  Expected indentation of 2 spaces   indentation
+ 24:2  ×  Expected indentation of 2 spaces   indentation
+
+ui-designer/polymer-prop-form.html
+ 19:2  ×  Expected indentation of 2 spaces   indentation
+ 20:2  ×  Expected indentation of 2 spaces   indentation
+ 24:2  ×  Expected indentation of 2 spaces   indentation
+
+ui-designer/search-input.html
+ 18:5  ×  Expected single space before "{"   block-opening-brace-space-before
+ 19:5  ×  Expected indentation of 2 spaces   indentation                     
+ 20:5  ×  Expected indentation of 2 spaces   indentation                     
+ 22:1  ×  Expected empty line before rule    rule-empty-line-before          
+ 23:5  ×  Expected indentation of 2 spaces   indentation                     
+
+ui-designer/settings-pane-elements/ui-alignment-chooser.html
+  19:2   ×  Expected indentation of 2 spaces         indentation                     
+  20:2   ×  Expected indentation of 2 spaces         indentation                     
+  24:2   ×  Expected indentation of 2 spaces         indentation                     
+  28:2   ×  Expected indentation of 2 spaces         indentation                     
+  28:12  ×  Unexpected unit                          length-zero-no-unit             
+  29:2   ×  Expected indentation of 2 spaces         indentation                     
+  30:2   ×  Expected indentation of 2 spaces         indentation                     
+  31:2   ×  Expected indentation of 2 spaces         indentation                     
+  32:2   ×  Expected indentation of 2 spaces         indentation                     
+  33:2   ×  Expected indentation of 2 spaces         indentation                     
+  33:19  ×  Unexpected unit                          length-zero-no-unit             
+  34:2   ×  Expected indentation of 2 spaces         indentation                     
+  35:2   ×  Expected indentation of 2 spaces         indentation                     
+  36:2   ×  Expected indentation of 2 spaces         indentation                     
+  37:2   ×  Expected indentation of 2 spaces         indentation                     
+  41:2   ×  Expected indentation of 2 spaces         indentation                     
+  41:12  ×  Unexpected unit                          length-zero-no-unit             
+  44:9   ×  Expected single space after ">"          selector-combinator-space-after 
+  44:9   ×  Expected single space before ">"         selector-combinator-space-before
+  45:2   ×  Expected indentation of 2 spaces         indentation                     
+  46:2   ×  Expected indentation of 2 spaces         indentation                     
+  50:2   ×  Expected indentation of 2 spaces         indentation                     
+  54:2   ×  Expected indentation of 2 spaces         indentation                     
+  55:2   ×  Expected indentation of 2 spaces         indentation                     
+  56:2   ×  Expected empty line before declaration   declaration-empty-line-before   
+  56:2   ×  Expected indentation of 2 spaces         indentation                     
+  57:2   ×  Expected indentation of 2 spaces         indentation                     
+  58:2   ×  Expected indentation of 2 spaces         indentation                     
+  59:2   ×  Expected indentation of 2 spaces         indentation                     
+  60:2   ×  Expected indentation of 2 spaces         indentation                     
+  64:2   ×  Expected indentation of 2 spaces         indentation                     
+  64:16  ×  Unexpected unit                          length-zero-no-unit             
+  68:2   ×  Expected indentation of 2 spaces         indentation                     
+  69:2   ×  Expected indentation of 2 spaces         indentation                     
+  70:2   ×  Expected indentation of 2 spaces         indentation                     
+  71:2   ×  Expected indentation of 2 spaces         indentation                     
+  72:2   ×  Expected indentation of 2 spaces         indentation                     
+  73:2   ×  Expected indentation of 2 spaces         indentation                     
+  74:2   ×  Expected indentation of 2 spaces         indentation                     
+  78:2   ×  Expected indentation of 2 spaces         indentation                     
+  82:2   ×  Expected indentation of 2 spaces         indentation                     
+  83:2   ×  Expected indentation of 2 spaces         indentation                     
+  84:2   ×  Expected indentation of 2 spaces         indentation                     
+  85:2   ×  Expected indentation of 2 spaces         indentation                     
+  88:23  ×  Expected single space after ">"          selector-combinator-space-after 
+  88:23  ×  Expected single space before ">"         selector-combinator-space-before
+  89:2   ×  Expected indentation of 2 spaces         indentation                     
+  90:2   ×  Expected indentation of 2 spaces         indentation                     
+  91:2   ×  Expected indentation of 2 spaces         indentation                     
+  92:2   ×  Expected indentation of 2 spaces         indentation                     
+  93:2   ×  Expected indentation of 2 spaces         indentation                     
+  93:12  ×  Unexpected unit                          length-zero-no-unit             
+  94:2   ×  Expected indentation of 2 spaces         indentation                     
+  95:2   ×  Expected indentation of 2 spaces         indentation                     
+  96:2   ×  Expected indentation of 2 spaces         indentation                     
+  97:2   ×  Expected indentation of 2 spaces         indentation                     
+ 100:23  ×  Expected single space after ">"          selector-combinator-space-after 
+ 100:23  ×  Expected single space before ">"         selector-combinator-space-before
+ 101:2   ×  Expected indentation of 2 spaces         indentation                     
+ 102:2   ×  Expected indentation of 2 spaces         indentation                     
+ 105:23  ×  Expected single space after ">"          selector-combinator-space-after 
+ 105:23  ×  Expected single space before ">"         selector-combinator-space-before
+ 105:27  ×  Expected single space after ">"          selector-combinator-space-after 
+ 105:27  ×  Expected single space before ">"         selector-combinator-space-before
+ 106:2   ×  Expected indentation of 2 spaces         indentation                     
+ 107:2   ×  Expected indentation of 2 spaces         indentation                     
+ 108:2   ×  Expected indentation of 2 spaces         indentation                     
+ 109:2   ×  Expected indentation of 2 spaces         indentation                     
+ 113:2   ×  Expected indentation of 2 spaces         indentation                     
+ 114:2   ×  Expected indentation of 2 spaces         indentation                     
+ 114:15  ×  Unexpected unit                          length-zero-no-unit             
+ 115:2   ×  Expected indentation of 2 spaces         indentation                     
+ 116:2   ×  Expected indentation of 2 spaces         indentation                     
+ 120:2   ×  Expected indentation of 2 spaces         indentation                     
+ 120:10  ×  Unexpected unit                          length-zero-no-unit             
+ 121:2   ×  Expected indentation of 2 spaces         indentation                     
+ 121:11  ×  Unexpected unit                          length-zero-no-unit             
+ 122:2   ×  Expected indentation of 2 spaces         indentation                     
+ 123:2   ×  Expected indentation of 2 spaces         indentation                     
+ 124:2   ×  Expected indentation of 2 spaces         indentation                     
+ 125:2   ×  Expected indentation of 2 spaces         indentation                     
+ 126:2   ×  Expected indentation of 2 spaces         indentation                     
+ 127:2   ×  Expected indentation of 2 spaces         indentation                     
+ 128:2   ×  Expected indentation of 2 spaces         indentation                     
+ 132:2   ×  Expected indentation of 2 spaces         indentation                     
+ 133:2   ×  Expected indentation of 2 spaces         indentation                     
+ 134:2   ×  Expected indentation of 2 spaces         indentation                     
+ 135:2   ×  Expected indentation of 2 spaces         indentation                     
+ 136:2   ×  Expected indentation of 2 spaces         indentation                     
+ 137:2   ×  Expected indentation of 2 spaces         indentation                     
+ 141:2   ×  Expected indentation of 2 spaces         indentation                     
+ 142:2   ×  Expected indentation of 2 spaces         indentation                     
+ 143:2   ×  Expected indentation of 2 spaces         indentation                     
+ 144:2   ×  Expected indentation of 2 spaces         indentation                     
+ 145:2   ×  Expected indentation of 2 spaces         indentation                     
+ 149:2   ×  Expected indentation of 2 spaces         indentation                     
+ 150:2   ×  Expected indentation of 2 spaces         indentation                     
+ 154:2   ×  Expected indentation of 2 spaces         indentation                     
+ 155:2   ×  Expected indentation of 2 spaces         indentation                     
+ 159:2   ×  Expected indentation of 2 spaces         indentation                     
+ 163:2   ×  Expected indentation of 2 spaces         indentation                     
+ 164:2   ×  Expected indentation of 2 spaces         indentation                     
+ 168:2   ×  Expected indentation of 2 spaces         indentation                     
+ 169:2   ×  Expected indentation of 2 spaces         indentation                     
+ 170:2   ×  Expected indentation of 2 spaces         indentation                     
+ 174:2   ×  Expected indentation of 2 spaces         indentation                     
+ 175:2   ×  Expected indentation of 2 spaces         indentation                     
+ 176:2   ×  Expected indentation of 2 spaces         indentation                     
+ 180:2   ×  Expected indentation of 2 spaces         indentation                     
+ 181:2   ×  Expected indentation of 2 spaces         indentation                     
+ 182:2   ×  Expected indentation of 2 spaces         indentation                     
+ 186:2   ×  Expected indentation of 2 spaces         indentation                     
+ 187:2   ×  Expected indentation of 2 spaces         indentation                     
+ 188:2   ×  Expected indentation of 2 spaces         indentation                     
+ 192:2   ×  Expected indentation of 2 spaces         indentation                     
+ 193:2   ×  Expected indentation of 2 spaces         indentation                     
+ 194:2   ×  Expected indentation of 2 spaces         indentation                     
+ 198:2   ×  Expected indentation of 2 spaces         indentation                     
+ 199:2   ×  Expected indentation of 2 spaces         indentation                     
+ 200:2   ×  Expected indentation of 2 spaces         indentation                     
+ 204:2   ×  Expected indentation of 2 spaces         indentation                     
+ 205:2   ×  Expected indentation of 2 spaces         indentation                     
+ 209:2   ×  Expected indentation of 2 spaces         indentation                     
+ 210:2   ×  Expected indentation of 2 spaces         indentation                     
+ 211:2   ×  Expected indentation of 2 spaces         indentation                     
+ 215:2   ×  Expected indentation of 2 spaces         indentation                     
+ 216:2   ×  Expected indentation of 2 spaces         indentation                     
+ 217:2   ×  Expected indentation of 2 spaces         indentation                     
+ 218:2   ×  Expected indentation of 2 spaces         indentation                     
+ 219:2   ×  Expected indentation of 2 spaces         indentation                     
+ 220:2   ×  Expected indentation of 2 spaces         indentation                     
+ 221:2   ×  Expected indentation of 2 spaces         indentation                     
+ 222:2   ×  Expected indentation of 2 spaces         indentation                     
+ 223:2   ×  Expected indentation of 2 spaces         indentation                     
+ 224:2   ×  Expected indentation of 2 spaces         indentation                     
+ 225:2   ×  Expected indentation of 2 spaces         indentation                     
+ 229:2   ×  Expected indentation of 2 spaces         indentation                     
+ 233:2   ×  Expected indentation of 2 spaces         indentation                     
+ 234:2   ×  Expected indentation of 2 spaces         indentation                     
+ 234:9   ×  Unexpected unit                          length-zero-no-unit             
+ 235:2   ×  Expected indentation of 2 spaces         indentation                     
+ 239:2   ×  Expected indentation of 2 spaces         indentation                     
+ 240:2   ×  Expected indentation of 2 spaces         indentation                     
+ 241:2   ×  Expected indentation of 2 spaces         indentation                     
+ 245:2   ×  Expected indentation of 2 spaces         indentation                     
+ 246:2   ×  Expected indentation of 2 spaces         indentation                     
+ 246:10  ×  Unexpected unit                          length-zero-no-unit             
+ 247:2   ×  Expected indentation of 2 spaces         indentation                     
+ 251:2   ×  Expected indentation of 2 spaces         indentation                     
+ 252:2   ×  Expected indentation of 2 spaces         indentation                     
+ 252:9   ×  Unexpected unit                          length-zero-no-unit             
+ 253:2   ×  Expected indentation of 2 spaces         indentation                     
+ 257:2   ×  Expected indentation of 2 spaces         indentation                     
+ 258:2   ×  Expected indentation of 2 spaces         indentation                     
+ 262:2   ×  Expected indentation of 2 spaces         indentation                     
+ 263:2   ×  Expected indentation of 2 spaces         indentation                     
+ 263:10  ×  Unexpected unit                          length-zero-no-unit             
+ 264:2   ×  Expected indentation of 2 spaces         indentation                     
+ 267:2   ×  Expected indentation of 2 spaces         indentation                     
+ 268:2   ×  Expected indentation of 2 spaces         indentation                     
+ 269:2   ×  Expected indentation of 2 spaces         indentation                     
+ 269:9   ×  Unexpected unit                          length-zero-no-unit             
+ 270:2   ×  Expected indentation of 2 spaces         indentation                     
+ 274:2   ×  Expected indentation of 2 spaces         indentation                     
+ 275:2   ×  Expected indentation of 2 spaces         indentation                     
+ 275:10  ×  Unexpected unit                          length-zero-no-unit             
+ 276:2   ×  Expected indentation of 2 spaces         indentation                     
+ 280:2   ×  Expected indentation of 2 spaces         indentation                     
+ 281:2   ×  Expected indentation of 2 spaces         indentation                     
+ 282:2   ×  Expected indentation of 2 spaces         indentation                     
+
+ui-designer/settings-pane-elements/ui-color-picker.html
+ 19:2  ×  Expected indentation of 2 spaces   indentation
+ 24:2  ×  Expected indentation of 2 spaces   indentation
+ 25:2  ×  Expected indentation of 2 spaces   indentation
+ 26:2  ×  Expected indentation of 2 spaces   indentation
+ 27:2  ×  Expected indentation of 2 spaces   indentation
+ 31:2  ×  Expected indentation of 2 spaces   indentation
+ 32:2  ×  Expected indentation of 2 spaces   indentation
+ 33:2  ×  Expected indentation of 2 spaces   indentation
+ 34:2  ×  Expected indentation of 2 spaces   indentation
+
+ui-designer/settings-pane-elements/ui-css-rule-editor.html
+ 19:5   ×  Expected indentation of 2 spaces         indentation                     
+ 20:5   ×  Expected indentation of 2 spaces         indentation                     
+ 21:5   ×  Expected empty line before at-rule       at-rule-empty-line-before       
+ 21:5   ×  Expected indentation of 2 spaces         indentation                     
+ 22:5   ×  Expected indentation of 2 spaces         indentation                     
+ 23:5   ×  Expected empty line before declaration   declaration-empty-line-before   
+ 23:5   ×  Expected indentation of 2 spaces         indentation                     
+ 27:5   ×  Expected indentation of 2 spaces         indentation                     
+ 28:5   ×  Expected indentation of 2 spaces         indentation                     
+ 32:5   ×  Expected indentation of 2 spaces         indentation                     
+ 32:15  ×  Unexpected unit                          length-zero-no-unit             
+ 36:5   ×  Expected indentation of 2 spaces         indentation                     
+ 37:5   ×  Expected indentation of 2 spaces         indentation                     
+ 38:5   ×  Expected indentation of 2 spaces         indentation                     
+ 42:5   ×  Expected indentation of 2 spaces         indentation                     
+ 42:17  ×  Expected "#CFD8DC" to be "#cfd8dc"       color-hex-case                  
+ 43:5   ×  Expected indentation of 2 spaces         indentation                     
+ 47:5   ×  Expected indentation of 2 spaces         indentation                     
+ 48:9   ×  Expected indentation of 4 spaces         indentation                     
+ 49:9   ×  Expected indentation of 4 spaces         indentation                     
+ 50:9   ×  Expected indentation of 4 spaces         indentation                     
+ 51:9   ×  Expected indentation of 4 spaces         indentation                     
+ 52:5   ×  Expected indentation of 2 spaces         indentation                     
+ 53:5   ×  Expected indentation of 2 spaces         indentation                     
+ 54:9   ×  Expected indentation of 4 spaces         indentation                     
+ 55:9   ×  Expected indentation of 4 spaces         indentation                     
+ 56:5   ×  Expected indentation of 2 spaces         indentation                     
+ 57:5   ×  Expected indentation of 2 spaces         indentation                     
+ 58:9   ×  Expected indentation of 4 spaces         indentation                     
+ 59:5   ×  Expected indentation of 2 spaces         indentation                     
+ 60:5   ×  Expected indentation of 2 spaces         indentation                     
+ 61:9   ×  Expected indentation of 4 spaces         indentation                     
+ 62:5   ×  Expected indentation of 2 spaces         indentation                     
+ 64:1   ×  Expected empty line before rule          rule-empty-line-before          
+ 64:6   ×  Expected single space before "{"         block-opening-brace-space-before
+ 65:5   ×  Expected indentation of 2 spaces         indentation                     
+ 65:36  ×  Unexpected whitespace before ":"         declaration-colon-space-before  
+ 66:5   ×  Expected indentation of 2 spaces         indentation                     
+ 66:25  ×  Unexpected whitespace before ":"         declaration-colon-space-before  
+
+ui-designer/settings-pane-elements/ui-image-picker.html
+ 33:21  ×  Expected "#0C1013" to be "#0c1013"   color-hex-case
+
+ui-designer/settings-pane-elements/ui-style-editor.html
+  19:2   ×  Expected indentation of 2 spaces     indentation              
+  20:2   ×  Expected indentation of 2 spaces     indentation              
+  20:14  ×  Expected "#0C1012" to be "#0c1012"   color-hex-case           
+  24:2   ×  Expected indentation of 2 spaces     indentation              
+  25:2   ×  Expected indentation of 2 spaces     indentation              
+  26:2   ×  Expected indentation of 2 spaces     indentation              
+  26:9   ×  Expected "#ffffff" to be "#fff"      color-hex-length         
+  27:2   ×  Expected indentation of 2 spaces     indentation              
+  28:2   ×  Expected empty line before at-rule   at-rule-empty-line-before
+  28:2   ×  Expected indentation of 2 spaces     indentation              
+  32:2   ×  Expected indentation of 2 spaces     indentation              
+  33:2   ×  Expected indentation of 2 spaces     indentation              
+  34:2   ×  Expected empty line before at-rule   at-rule-empty-line-before
+  34:2   ×  Expected indentation of 2 spaces     indentation              
+  35:2   ×  Expected indentation of 2 spaces     indentation              
+  39:2   ×  Expected indentation of 2 spaces     indentation              
+  40:2   ×  Expected indentation of 2 spaces     indentation              
+  41:2   ×  Expected empty line before at-rule   at-rule-empty-line-before
+  41:2   ×  Expected indentation of 2 spaces     indentation              
+  42:2   ×  Expected indentation of 2 spaces     indentation              
+  43:2   ×  Expected indentation of 2 spaces     indentation              
+  47:2   ×  Expected indentation of 2 spaces     indentation              
+  51:2   ×  Expected indentation of 2 spaces     indentation              
+  55:2   ×  Expected indentation of 2 spaces     indentation              
+  59:2   ×  Expected indentation of 2 spaces     indentation              
+  60:2   ×  Expected indentation of 2 spaces     indentation              
+  61:2   ×  Expected indentation of 2 spaces     indentation              
+  62:2   ×  Expected indentation of 2 spaces     indentation              
+  63:2   ×  Expected indentation of 2 spaces     indentation              
+  64:2   ×  Expected indentation of 2 spaces     indentation              
+  65:2   ×  Expected indentation of 2 spaces     indentation              
+  66:2   ×  Expected indentation of 2 spaces     indentation              
+  70:2   ×  Expected indentation of 2 spaces     indentation              
+  71:2   ×  Expected indentation of 2 spaces     indentation              
+  75:2   ×  Expected indentation of 2 spaces     indentation              
+  79:2   ×  Expected indentation of 2 spaces     indentation              
+  80:2   ×  Expected indentation of 2 spaces     indentation              
+  81:2   ×  Expected indentation of 2 spaces     indentation              
+  85:2   ×  Expected indentation of 2 spaces     indentation              
+  86:2   ×  Expected indentation of 2 spaces     indentation              
+  87:2   ×  Expected indentation of 2 spaces     indentation              
+  88:2   ×  Expected empty line before at-rule   at-rule-empty-line-before
+  88:2   ×  Expected indentation of 2 spaces     indentation              
+  89:2   ×  Expected indentation of 2 spaces     indentation              
+  93:2   ×  Expected indentation of 2 spaces     indentation              
+  94:2   ×  Expected indentation of 2 spaces     indentation              
+  95:2   ×  Expected indentation of 2 spaces     indentation              
+  96:2   ×  Expected indentation of 2 spaces     indentation              
+  97:2   ×  Expected indentation of 2 spaces     indentation              
+  98:2   ×  Expected indentation of 2 spaces     indentation              
+  99:2   ×  Expected indentation of 2 spaces     indentation              
+ 100:2   ×  Expected indentation of 2 spaces     indentation              
+ 104:2   ×  Expected indentation of 2 spaces     indentation              
+ 105:2   ×  Expected indentation of 2 spaces     indentation              
+ 106:2   ×  Expected indentation of 2 spaces     indentation              
+ 110:2   ×  Expected indentation of 2 spaces     indentation              
+ 110:24  ×  Expected "#292D2F" to be "#292d2f"   color-hex-case           
+ 114:2   ×  Expected indentation of 2 spaces     indentation              
+ 118:2   ×  Expected indentation of 2 spaces     indentation              
+ 119:2   ×  Expected indentation of 2 spaces     indentation              
+ 120:2   ×  Expected indentation of 2 spaces     indentation              
+ 124:2   ×  Expected indentation of 2 spaces     indentation              
+ 125:2   ×  Expected indentation of 2 spaces     indentation              
+ 126:2   ×  Expected indentation of 2 spaces     indentation              
+ 127:2   ×  Expected indentation of 2 spaces     indentation              
+ 128:2   ×  Expected indentation of 2 spaces     indentation              
+ 129:2   ×  Expected indentation of 2 spaces     indentation              
+ 130:2   ×  Expected indentation of 2 spaces     indentation              
+ 134:2   ×  Expected indentation of 2 spaces     indentation              
+ 134:12  ×  Unexpected unit                      length-zero-no-unit      
+ 135:2   ×  Expected empty line before at-rule   at-rule-empty-line-before
+ 135:2   ×  Expected indentation of 2 spaces     indentation              
+ 136:2   ×  Expected indentation of 2 spaces     indentation              
+ 137:2   ×  Expected indentation of 2 spaces     indentation              
+ 141:2   ×  Expected indentation of 2 spaces     indentation              
+ 145:2   ×  Expected indentation of 2 spaces     indentation              
+ 146:2   ×  Expected indentation of 2 spaces     indentation              
+ 147:2   ×  Expected indentation of 2 spaces     indentation              
+ 149:1   ×  Expected empty line before rule      rule-empty-line-before   
+ 150:2   ×  Expected indentation of 2 spaces     indentation              
+ 151:2   ×  Expected indentation of 2 spaces     indentation              
+
+ui-designer/settings-pane-elements/ui-style-manager.html
+  19:2   ×  Expected indentation of 2 spaces     indentation                     
+  20:2   ×  Expected indentation of 2 spaces     indentation                     
+  20:14  ×  Expected "#0C1012" to be "#0c1012"   color-hex-case                  
+  21:2   ×  Expected indentation of 2 spaces     indentation                     
+  25:2   ×  Expected indentation of 2 spaces     indentation                     
+  26:2   ×  Expected indentation of 2 spaces     indentation                     
+  30:2   ×  Expected indentation of 2 spaces     indentation                     
+  31:2   ×  Expected indentation of 2 spaces     indentation                     
+  32:2   ×  Expected indentation of 2 spaces     indentation                     
+  33:2   ×  Expected indentation of 2 spaces     indentation                     
+  34:2   ×  Expected indentation of 2 spaces     indentation                     
+  35:2   ×  Expected indentation of 2 spaces     indentation                     
+  39:2   ×  Expected indentation of 2 spaces     indentation                     
+  40:4   ×  Expected indentation of 4 spaces     indentation                     
+  41:4   ×  Expected indentation of 4 spaces     indentation                     
+  42:4   ×  Expected indentation of 4 spaces     indentation                     
+  43:2   ×  Expected indentation of 2 spaces     indentation                     
+  48:2   ×  Expected indentation of 2 spaces     indentation                     
+  49:4   ×  Expected indentation of 4 spaces     indentation                     
+  50:4   ×  Expected indentation of 4 spaces     indentation                     
+  50:14  ×  Unexpected unit                      length-zero-no-unit             
+  51:4   ×  Expected indentation of 4 spaces     indentation                     
+  52:4   ×  Expected indentation of 4 spaces     indentation                     
+  53:4   ×  Expected indentation of 4 spaces     indentation                     
+  54:4   ×  Expected indentation of 4 spaces     indentation                     
+  55:4   ×  Expected indentation of 4 spaces     indentation                     
+  55:11  ×  Expected "#ffffff" to be "#fff"      color-hex-length                
+  56:2   ×  Expected indentation of 2 spaces     indentation                     
+  57:2   ×  Expected indentation of 2 spaces     indentation                     
+  58:4   ×  Expected indentation of 4 spaces     indentation                     
+  59:4   ×  Expected indentation of 4 spaces     indentation                     
+  60:4   ×  Expected indentation of 4 spaces     indentation                     
+  61:2   ×  Expected indentation of 2 spaces     indentation                     
+  62:2   ×  Expected indentation of 2 spaces     indentation                     
+  63:4   ×  Expected indentation of 4 spaces     indentation                     
+  64:2   ×  Expected indentation of 2 spaces     indentation                     
+  65:2   ×  Expected indentation of 2 spaces     indentation                     
+  66:4   ×  Expected indentation of 4 spaces     indentation                     
+  67:2   ×  Expected indentation of 2 spaces     indentation                     
+  68:2   ×  Expected indentation of 2 spaces     indentation                     
+  69:4   ×  Expected indentation of 4 spaces     indentation                     
+  70:4   ×  Expected indentation of 4 spaces     indentation                     
+  70:11  ×  Expected "#989A9C" to be "#989a9c"   color-hex-case                  
+  71:4   ×  Expected indentation of 4 spaces     indentation                     
+  72:4   ×  Expected indentation of 4 spaces     indentation                     
+  73:4   ×  Expected indentation of 4 spaces     indentation                     
+  74:2   ×  Expected indentation of 2 spaces     indentation                     
+  75:2   ×  Expected indentation of 2 spaces     indentation                     
+  76:4   ×  Expected indentation of 4 spaces     indentation                     
+  76:14  ×  Unexpected unit                      length-zero-no-unit             
+  77:2   ×  Expected indentation of 2 spaces     indentation                     
+  81:2   ×  Expected indentation of 2 spaces     indentation                     
+  82:4   ×  Expected indentation of 4 spaces     indentation                     
+  83:4   ×  Expected indentation of 4 spaces     indentation                     
+  84:4   ×  Expected indentation of 4 spaces     indentation                     
+  85:2   ×  Expected indentation of 2 spaces     indentation                     
+  89:2   ×  Expected indentation of 2 spaces     indentation                     
+  90:4   ×  Expected indentation of 4 spaces     indentation                     
+  91:4   ×  Expected indentation of 4 spaces     indentation                     
+  92:4   ×  Expected indentation of 4 spaces     indentation                     
+  93:2   ×  Expected indentation of 2 spaces     indentation                     
+  96:10  ×  Expected single space after "+"      selector-combinator-space-after 
+  96:10  ×  Expected single space before "+"     selector-combinator-space-before
+  97:2   ×  Expected indentation of 2 spaces     indentation                     
+ 100:5   ×  Expected single space after "+"      selector-combinator-space-after 
+ 100:5   ×  Expected single space before "+"     selector-combinator-space-before
+ 101:2   ×  Expected indentation of 2 spaces     indentation                     
+ 105:2   ×  Expected indentation of 2 spaces     indentation                     
+ 106:2   ×  Expected indentation of 2 spaces     indentation                     
+ 109:11  ×  Expected single space after "+"      selector-combinator-space-after 
+ 109:11  ×  Expected single space before "+"     selector-combinator-space-before
+ 110:2   ×  Expected indentation of 2 spaces     indentation                     
+ 114:2   ×  Expected indentation of 2 spaces     indentation                     
+ 115:2   ×  Expected indentation of 2 spaces     indentation                     
+ 115:9   ×  Expected "#ffffff" to be "#fff"      color-hex-length                
+ 116:2   ×  Expected indentation of 2 spaces     indentation                     
+ 117:2   ×  Expected indentation of 2 spaces     indentation                     
+ 118:2   ×  Expected indentation of 2 spaces     indentation                     
+ 119:2   ×  Expected indentation of 2 spaces     indentation                     
+ 120:2   ×  Expected indentation of 2 spaces     indentation                     
+ 121:2   ×  Expected indentation of 2 spaces     indentation                     
+ 125:2   ×  Expected indentation of 2 spaces     indentation                     
+ 129:2   ×  Expected indentation of 2 spaces     indentation                     
+ 130:2   ×  Expected indentation of 2 spaces     indentation                     
+ 130:10  ×  Unexpected unit                      length-zero-no-unit             
+ 131:2   ×  Expected indentation of 2 spaces     indentation                     
+ 132:2   ×  Expected indentation of 2 spaces     indentation                     
+ 133:2   ×  Expected indentation of 2 spaces     indentation                     
+ 133:12  ×  Unexpected unit                      length-zero-no-unit             
+ 134:2   ×  Expected indentation of 2 spaces     indentation                     
+ 138:2   ×  Expected indentation of 2 spaces     indentation                     
+ 139:2   ×  Expected indentation of 2 spaces     indentation                     
+ 143:2   ×  Expected indentation of 2 spaces     indentation                     
+ 147:2   ×  Expected indentation of 2 spaces     indentation                     
+
+ui-designer/settings-pane-elements/ui-style-object-editor.html
+  19:4   ×  Expected indentation of 2 spaces     indentation              
+  20:4   ×  Expected indentation of 2 spaces     indentation              
+  25:4   ×  Expected indentation of 2 spaces     indentation              
+  26:8   ×  Expected indentation of 4 spaces     indentation              
+  27:8   ×  Expected indentation of 4 spaces     indentation              
+  27:18  ×  Unexpected unit                      length-zero-no-unit      
+  28:8   ×  Expected indentation of 4 spaces     indentation              
+  29:8   ×  Expected indentation of 4 spaces     indentation              
+  30:8   ×  Expected indentation of 4 spaces     indentation              
+  31:8   ×  Expected indentation of 4 spaces     indentation              
+  32:8   ×  Expected indentation of 4 spaces     indentation              
+  32:15  ×  Expected "#ffffff" to be "#fff"      color-hex-length         
+  33:4   ×  Expected indentation of 2 spaces     indentation              
+  34:4   ×  Expected indentation of 2 spaces     indentation              
+  35:8   ×  Expected indentation of 4 spaces     indentation              
+  36:8   ×  Expected indentation of 4 spaces     indentation              
+  37:8   ×  Expected indentation of 4 spaces     indentation              
+  38:4   ×  Expected indentation of 2 spaces     indentation              
+  39:4   ×  Expected indentation of 2 spaces     indentation              
+  40:8   ×  Expected indentation of 4 spaces     indentation              
+  41:4   ×  Expected indentation of 2 spaces     indentation              
+  42:4   ×  Expected indentation of 2 spaces     indentation              
+  43:8   ×  Expected indentation of 4 spaces     indentation              
+  44:4   ×  Expected indentation of 2 spaces     indentation              
+  45:4   ×  Expected indentation of 2 spaces     indentation              
+  46:8   ×  Expected indentation of 4 spaces     indentation              
+  47:8   ×  Expected indentation of 4 spaces     indentation              
+  47:15  ×  Expected "#989A9C" to be "#989a9c"   color-hex-case           
+  48:8   ×  Expected indentation of 4 spaces     indentation              
+  49:8   ×  Expected indentation of 4 spaces     indentation              
+  50:8   ×  Expected indentation of 4 spaces     indentation              
+  51:4   ×  Expected indentation of 2 spaces     indentation              
+  52:4   ×  Expected indentation of 2 spaces     indentation              
+  53:8   ×  Expected indentation of 4 spaces     indentation              
+  53:18  ×  Unexpected unit                      length-zero-no-unit      
+  54:4   ×  Expected indentation of 2 spaces     indentation              
+  58:4   ×  Expected indentation of 2 spaces     indentation              
+  59:8   ×  Expected indentation of 4 spaces     indentation              
+  60:8   ×  Expected indentation of 4 spaces     indentation              
+  61:4   ×  Expected indentation of 2 spaces     indentation              
+  65:4   ×  Expected indentation of 2 spaces     indentation              
+  66:8   ×  Expected indentation of 4 spaces     indentation              
+  67:8   ×  Expected indentation of 4 spaces     indentation              
+  68:8   ×  Expected indentation of 4 spaces     indentation              
+  69:4   ×  Expected indentation of 2 spaces     indentation              
+  73:4   ×  Expected indentation of 2 spaces     indentation              
+  74:8   ×  Expected indentation of 4 spaces     indentation              
+  75:4   ×  Expected indentation of 2 spaces     indentation              
+  79:4   ×  Expected indentation of 2 spaces     indentation              
+  80:8   ×  Expected indentation of 4 spaces     indentation              
+  81:8   ×  Expected indentation of 4 spaces     indentation              
+  82:8   ×  Expected indentation of 4 spaces     indentation              
+  83:4   ×  Expected indentation of 2 spaces     indentation              
+  87:4   ×  Expected indentation of 2 spaces     indentation              
+  91:4   ×  Expected indentation of 2 spaces     indentation              
+  92:4   ×  Expected indentation of 2 spaces     indentation              
+  93:4   ×  Expected indentation of 2 spaces     indentation              
+  94:4   ×  Expected indentation of 2 spaces     indentation              
+  95:4   ×  Expected empty line before at-rule   at-rule-empty-line-before
+  95:4   ×  Expected indentation of 2 spaces     indentation              
+  99:4   ×  Expected indentation of 2 spaces     indentation              
+  99:14  ×  Unexpected unit                      length-zero-no-unit      
+ 100:4   ×  Expected empty line before at-rule   at-rule-empty-line-before
+ 100:4   ×  Expected indentation of 2 spaces     indentation              
+ 101:4   ×  Expected indentation of 2 spaces     indentation              
+ 102:4   ×  Expected indentation of 2 spaces     indentation              
+ 106:4   ×  Expected indentation of 2 spaces     indentation              
+ 110:4   ×  Expected indentation of 2 spaces     indentation              
+ 110:19  ×  Unexpected unit                      length-zero-no-unit      
+ 111:4   ×  Expected indentation of 2 spaces     indentation              
+ 115:4   ×  Expected indentation of 2 spaces     indentation              
+ 116:8   ×  Expected indentation of 4 spaces     indentation              
+ 117:8   ×  Expected indentation of 4 spaces     indentation              
+ 117:15  ×  Expected "#989A9C" to be "#989a9c"   color-hex-case           
+ 118:8   ×  Expected indentation of 4 spaces     indentation              
+ 119:8   ×  Expected indentation of 4 spaces     indentation              
+ 119:18  ×  Unexpected unit                      length-zero-no-unit      
+ 120:4   ×  Expected indentation of 2 spaces     indentation              
+ 124:4   ×  Expected indentation of 2 spaces     indentation              
+ 128:4   ×  Expected indentation of 2 spaces     indentation              
+ 129:4   ×  Expected indentation of 2 spaces     indentation              
+ 133:4   ×  Expected indentation of 2 spaces     indentation              
+ 133:26  ×  Expected "#292D2F" to be "#292d2f"   color-hex-case           
+ 134:4   ×  Expected indentation of 2 spaces     indentation              
+ 134:18  ×  Unexpected unit                      length-zero-no-unit      
+ 138:4   ×  Expected indentation of 2 spaces     indentation              
+ 139:4   ×  Expected indentation of 2 spaces     indentation              
+ 143:4   ×  Expected indentation of 2 spaces     indentation              
+ 144:4   ×  Expected indentation of 2 spaces     indentation              
+ 145:4   ×  Expected indentation of 2 spaces     indentation              
+ 149:4   ×  Expected indentation of 2 spaces     indentation              
+ 150:4   ×  Expected indentation of 2 spaces     indentation              
+ 154:4   ×  Expected indentation of 2 spaces     indentation              
+ 155:4   ×  Expected indentation of 2 spaces     indentation              
+ 156:4   ×  Expected indentation of 2 spaces     indentation              
+ 160:4   ×  Expected indentation of 2 spaces     indentation              
+ 161:4   ×  Expected indentation of 2 spaces     indentation              
+ 162:4   ×  Expected indentation of 2 spaces     indentation              
+ 163:4   ×  Expected indentation of 2 spaces     indentation              
+ 164:4   ×  Expected indentation of 2 spaces     indentation              
+ 165:4   ×  Expected indentation of 2 spaces     indentation              
+ 166:4   ×  Expected indentation of 2 spaces     indentation              
+ 166:22  ×  Expected "#ffffff" to be "#fff"      color-hex-length         
+ 170:4   ×  Expected indentation of 2 spaces     indentation              
+ 174:4   ×  Expected indentation of 2 spaces     indentation              
+
+ui-designer/ui-asset-manager.html
+  31:3   ×  Unexpected longhand value '0px 0px' instead of '0px'   shorthand-property-no-redundant-values
+  31:13  ×  Unexpected unit                                        length-zero-no-unit                   
+  31:17  ×  Unexpected unit                                        length-zero-no-unit                   
+ 100:34  ×  Expected a trailing semicolon                          declaration-block-trailing-semicolon  
+ 156:16  ×  Unexpected unit                                        length-zero-no-unit                   
+
+ui-designer/ui-attribute-editor.html
+  19:4   ×  Expected indentation of 2 spaces     indentation                     
+  20:4   ×  Expected indentation of 2 spaces     indentation                     
+  27:4   ×  Expected indentation of 2 spaces     indentation                     
+  28:8   ×  Expected indentation of 4 spaces     indentation                     
+  29:8   ×  Expected indentation of 4 spaces     indentation                     
+  30:8   ×  Expected indentation of 4 spaces     indentation                     
+  31:8   ×  Expected indentation of 4 spaces     indentation                     
+  32:4   ×  Expected indentation of 2 spaces     indentation                     
+  33:4   ×  Expected indentation of 2 spaces     indentation                     
+  34:8   ×  Expected indentation of 4 spaces     indentation                     
+  35:8   ×  Expected indentation of 4 spaces     indentation                     
+  35:15  ×  Expected "#ffffff" to be "#fff"      color-hex-length                
+  36:8   ×  Expected indentation of 4 spaces     indentation                     
+  37:4   ×  Expected indentation of 2 spaces     indentation                     
+  38:4   ×  Expected indentation of 2 spaces     indentation                     
+  39:8   ×  Expected indentation of 4 spaces     indentation                     
+  40:4   ×  Expected indentation of 2 spaces     indentation                     
+  41:4   ×  Expected indentation of 2 spaces     indentation                     
+  42:8   ×  Expected indentation of 4 spaces     indentation                     
+  43:4   ×  Expected indentation of 2 spaces     indentation                     
+  50:4   ×  Expected indentation of 2 spaces     indentation                     
+  51:8   ×  Expected indentation of 4 spaces     indentation                     
+  52:8   ×  Expected indentation of 4 spaces     indentation                     
+  53:8   ×  Expected indentation of 4 spaces     indentation                     
+  54:8   ×  Expected indentation of 4 spaces     indentation                     
+  55:4   ×  Expected indentation of 2 spaces     indentation                     
+  56:4   ×  Expected indentation of 2 spaces     indentation                     
+  57:8   ×  Expected indentation of 4 spaces     indentation                     
+  58:8   ×  Expected indentation of 4 spaces     indentation                     
+  59:4   ×  Expected indentation of 2 spaces     indentation                     
+  60:4   ×  Expected indentation of 2 spaces     indentation                     
+  61:8   ×  Expected indentation of 4 spaces     indentation                     
+  62:4   ×  Expected indentation of 2 spaces     indentation                     
+  63:4   ×  Expected indentation of 2 spaces     indentation                     
+  64:8   ×  Expected indentation of 4 spaces     indentation                     
+  65:4   ×  Expected indentation of 2 spaces     indentation                     
+  69:4   ×  Expected indentation of 2 spaces     indentation                     
+  70:4   ×  Expected indentation of 2 spaces     indentation                     
+  71:4   ×  Expected indentation of 2 spaces     indentation                     
+  72:4   ×  Expected indentation of 2 spaces     indentation                     
+  73:4   ×  Expected indentation of 2 spaces     indentation                     
+  74:4   ×  Expected indentation of 2 spaces     indentation                     
+  78:4   ×  Expected indentation of 2 spaces     indentation                     
+  79:4   ×  Expected indentation of 2 spaces     indentation                     
+  80:4   ×  Expected indentation of 2 spaces     indentation                     
+  81:4   ×  Expected indentation of 2 spaces     indentation                     
+  82:4   ×  Expected indentation of 2 spaces     indentation                     
+  83:4   ×  Expected indentation of 2 spaces     indentation                     
+  84:4   ×  Expected indentation of 2 spaces     indentation                     
+  85:4   ×  Expected indentation of 2 spaces     indentation                     
+  89:4   ×  Expected indentation of 2 spaces     indentation                     
+  89:19  ×  Unexpected unit                      length-zero-no-unit             
+  90:4   ×  Expected indentation of 2 spaces     indentation                     
+  94:4   ×  Expected indentation of 2 spaces     indentation                     
+  95:4   ×  Expected indentation of 2 spaces     indentation                     
+  96:4   ×  Expected indentation of 2 spaces     indentation                     
+  96:12  ×  Unexpected unit                      length-zero-no-unit             
+ 100:4   ×  Expected indentation of 2 spaces     indentation                     
+ 104:4   ×  Expected indentation of 2 spaces     indentation                     
+ 105:4   ×  Expected indentation of 2 spaces     indentation                     
+ 105:18  ×  Unexpected unit                      length-zero-no-unit             
+ 106:4   ×  Expected indentation of 2 spaces     indentation                     
+ 107:4   ×  Expected indentation of 2 spaces     indentation                     
+ 108:4   ×  Expected indentation of 2 spaces     indentation                     
+ 112:4   ×  Expected indentation of 2 spaces     indentation                     
+ 113:4   ×  Expected indentation of 2 spaces     indentation                     
+ 114:4   ×  Expected indentation of 2 spaces     indentation                     
+ 118:4   ×  Expected indentation of 2 spaces     indentation                     
+ 121:18  ×  Expected single space after "+"      selector-combinator-space-after 
+ 121:18  ×  Expected single space before "+"     selector-combinator-space-before
+ 122:4   ×  Expected indentation of 2 spaces     indentation                     
+ 126:4   ×  Expected indentation of 2 spaces     indentation                     
+ 127:4   ×  Expected indentation of 2 spaces     indentation                     
+ 127:16  ×  Expected "#CFD8DC" to be "#cfd8dc"   color-hex-case                  
+ 128:4   ×  Expected indentation of 2 spaces     indentation                     
+ 128:14  ×  Unexpected unit                      length-zero-no-unit             
+ 132:4   ×  Expected indentation of 2 spaces     indentation                     
+ 132:14  ×  Unexpected unit                      length-zero-no-unit             
+ 136:4   ×  Expected indentation of 2 spaces     indentation                     
+ 140:4   ×  Expected indentation of 2 spaces     indentation                     
+ 144:4   ×  Expected indentation of 2 spaces     indentation                     
+ 148:4   ×  Expected indentation of 2 spaces     indentation                     
+ 149:4   ×  Expected indentation of 2 spaces     indentation                     
+ 150:4   ×  Expected indentation of 2 spaces     indentation                     
+ 154:4   ×  Expected indentation of 2 spaces     indentation                     
+ 155:4   ×  Expected indentation of 2 spaces     indentation                     
+ 157:1   ×  Expected empty line before rule      rule-empty-line-before          
+ 158:4   ×  Expected indentation of 2 spaces     indentation                     
+ 159:4   ×  Expected indentation of 2 spaces     indentation                     
+ 160:4   ×  Expected indentation of 2 spaces     indentation                     
+ 161:4   ×  Expected indentation of 2 spaces     indentation                     
+ 162:4   ×  Expected indentation of 2 spaces     indentation                     
+ 162:14  ×  Unexpected unit                      length-zero-no-unit             
+ 163:4   ×  Expected indentation of 2 spaces     indentation                     
+ 167:4   ×  Expected indentation of 2 spaces     indentation                     
+ 168:4   ×  Expected indentation of 2 spaces     indentation                     
+ 169:4   ×  Expected indentation of 2 spaces     indentation                     
+ 173:4   ×  Expected indentation of 2 spaces     indentation                     
+ 174:4   ×  Expected indentation of 2 spaces     indentation                     
+ 175:4   ×  Expected indentation of 2 spaces     indentation                     
+ 176:4   ×  Expected indentation of 2 spaces     indentation                     
+ 177:4   ×  Expected indentation of 2 spaces     indentation                     
+ 178:4   ×  Expected indentation of 2 spaces     indentation                     
+ 179:4   ×  Expected indentation of 2 spaces     indentation                     
+
+ui-designer/ui-bottom-panel.html
+ 19:2   ×  Expected indentation of 2 spaces   indentation                     
+ 20:2   ×  Expected indentation of 2 spaces   indentation                     
+ 21:2   ×  Expected indentation of 2 spaces   indentation                     
+ 25:2   ×  Expected indentation of 2 spaces   indentation                     
+ 29:2   ×  Expected indentation of 2 spaces   indentation                     
+ 33:2   ×  Expected indentation of 2 spaces   indentation                     
+ 34:2   ×  Expected indentation of 2 spaces   indentation                     
+ 35:2   ×  Expected indentation of 2 spaces   indentation                     
+ 35:12  ×  Unexpected unit                    length-zero-no-unit             
+ 39:2   ×  Expected indentation of 2 spaces   indentation                     
+ 40:2   ×  Expected indentation of 2 spaces   indentation                     
+ 41:2   ×  Expected indentation of 2 spaces   indentation                     
+ 44:17  ×  Expected single space after ">"    selector-combinator-space-after 
+ 44:17  ×  Expected single space before ">"   selector-combinator-space-before
+ 45:2   ×  Expected indentation of 2 spaces   indentation                     
+ 48:19  ×  Expected single space after "+"    selector-combinator-space-after 
+ 48:19  ×  Expected single space before "+"   selector-combinator-space-before
+ 49:2   ×  Expected indentation of 2 spaces   indentation                     
+ 53:2   ×  Expected indentation of 2 spaces   indentation                     
+ 57:2   ×  Expected indentation of 2 spaces   indentation                     
+ 58:2   ×  Expected indentation of 2 spaces   indentation                     
+ 59:2   ×  Expected indentation of 2 spaces   indentation                     
+ 63:2   ×  Expected indentation of 2 spaces   indentation                     
+ 64:2   ×  Expected indentation of 2 spaces   indentation                     
+ 68:2   ×  Expected indentation of 2 spaces   indentation                     
+ 69:2   ×  Expected indentation of 2 spaces   indentation                     
+ 69:12  ×  Unexpected unit                    length-zero-no-unit             
+ 70:2   ×  Expected indentation of 2 spaces   indentation                     
+ 71:2   ×  Expected indentation of 2 spaces   indentation                     
+ 72:2   ×  Expected indentation of 2 spaces   indentation                     
+
+ui-designer/ui-clone-page.html
+ 19:2   ×  Expected indentation of 2 spaces             indentation                      
+ 20:2   ×  Expected indentation of 2 spaces             indentation                      
+ 21:2   ×  Expected indentation of 2 spaces             indentation                      
+ 22:2   ×  Expected indentation of 2 spaces             indentation                      
+ 23:2   ×  Expected indentation of 2 spaces             indentation                      
+ 27:2   ×  Expected indentation of 2 spaces             indentation                      
+ 28:2   ×  Expected indentation of 2 spaces             indentation                      
+ 29:2   ×  Expected indentation of 2 spaces             indentation                      
+ 30:2   ×  Expected indentation of 2 spaces             indentation                      
+ 35:2   ×  Expected indentation of 2 spaces             indentation                      
+ 35:39  ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+ 36:2   ×  Expected indentation of 2 spaces             indentation                      
+ 37:2   ×  Expected indentation of 2 spaces             indentation                      
+ 41:2   ×  Expected indentation of 2 spaces             indentation                      
+ 42:2   ×  Expected indentation of 2 spaces             indentation                      
+ 42:16  ×  Unexpected unit                              length-zero-no-unit              
+ 43:2   ×  Expected empty line before custom property   custom-property-empty-line-before
+ 43:2   ×  Expected indentation of 2 spaces             indentation                      
+ 44:2   ×  Expected indentation of 2 spaces             indentation                      
+ 45:2   ×  Expected indentation of 2 spaces             indentation                      
+ 49:2   ×  Expected indentation of 2 spaces             indentation                      
+ 49:20  ×  Unexpected unit                              length-zero-no-unit              
+ 53:2   ×  Expected indentation of 2 spaces             indentation                      
+ 54:2   ×  Expected indentation of 2 spaces             indentation                      
+ 55:2   ×  Expected indentation of 2 spaces             indentation                      
+ 55:12  ×  Unexpected unit                              length-zero-no-unit              
+ 59:2   ×  Expected indentation of 2 spaces             indentation                      
+ 60:2   ×  Expected indentation of 2 spaces             indentation                      
+ 62:1   ×  Expected empty line before rule              rule-empty-line-before           
+ 63:2   ×  Expected indentation of 2 spaces             indentation                      
+ 64:2   ×  Expected indentation of 2 spaces             indentation                      
+ 66:1   ×  Expected empty line before rule              rule-empty-line-before           
+ 67:2   ×  Expected indentation of 2 spaces             indentation                      
+ 68:2   ×  Expected indentation of 2 spaces             indentation                      
+ 69:2   ×  Expected indentation of 2 spaces             indentation                      
+
+ui-designer/ui-create-component.html
+  19:2   ×  Expected indentation of 2 spaces             indentation                      
+  20:2   ×  Expected indentation of 2 spaces             indentation                      
+  21:2   ×  Expected indentation of 2 spaces             indentation                      
+  25:2   ×  Expected indentation of 2 spaces             indentation                      
+  29:2   ×  Expected indentation of 2 spaces             indentation                      
+  30:2   ×  Expected indentation of 2 spaces             indentation                      
+  31:2   ×  Expected indentation of 2 spaces             indentation                      
+  31:15  ×  Unexpected unit                              length-zero-no-unit              
+  32:2   ×  Expected indentation of 2 spaces             indentation                      
+  33:2   ×  Expected indentation of 2 spaces             indentation                      
+  34:2   ×  Expected indentation of 2 spaces             indentation                      
+  38:2   ×  Expected indentation of 2 spaces             indentation                      
+  39:2   ×  Expected indentation of 2 spaces             indentation                      
+  39:34  ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+  40:2   ×  Expected indentation of 2 spaces             indentation                      
+  40:36  ×  Expected "#000000" to be "#000"              color-hex-length                 
+  41:2   ×  Expected indentation of 2 spaces             indentation                      
+  41:32  ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+  42:2   ×  Expected indentation of 2 spaces             indentation                      
+  43:4   ×  Expected indentation of 4 spaces             indentation                      
+  44:4   ×  Expected indentation of 4 spaces             indentation                      
+  45:4   ×  Expected indentation of 4 spaces             indentation                      
+  46:4   ×  Expected indentation of 4 spaces             indentation                      
+  47:2   ×  Expected indentation of 2 spaces             indentation                      
+  51:2   ×  Expected indentation of 2 spaces             indentation                      
+  52:2   ×  Expected indentation of 2 spaces             indentation                      
+  53:2   ×  Expected indentation of 2 spaces             indentation                      
+  53:16  ×  Unexpected unit                              length-zero-no-unit              
+  57:2   ×  Expected indentation of 2 spaces             indentation                      
+  58:2   ×  Expected indentation of 2 spaces             indentation                      
+  58:16  ×  Unexpected unit                              length-zero-no-unit              
+  59:2   ×  Expected empty line before custom property   custom-property-empty-line-before
+  59:2   ×  Expected indentation of 2 spaces             indentation                      
+  60:2   ×  Expected indentation of 2 spaces             indentation                      
+  61:2   ×  Expected indentation of 2 spaces             indentation                      
+  65:2   ×  Expected indentation of 2 spaces             indentation                      
+  65:39  ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+  66:2   ×  Expected indentation of 2 spaces             indentation                      
+  67:2   ×  Expected indentation of 2 spaces             indentation                      
+  71:2   ×  Expected indentation of 2 spaces             indentation                      
+  71:39  ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+  72:2   ×  Expected indentation of 2 spaces             indentation                      
+  73:2   ×  Expected indentation of 2 spaces             indentation                      
+  77:2   ×  Expected indentation of 2 spaces             indentation                      
+  78:2   ×  Expected indentation of 2 spaces             indentation                      
+  79:2   ×  Expected indentation of 2 spaces             indentation                      
+  80:2   ×  Expected indentation of 2 spaces             indentation                      
+  81:2   ×  Expected empty line before at-rule           at-rule-empty-line-before        
+  81:2   ×  Expected indentation of 2 spaces             indentation                      
+  82:2   ×  Expected indentation of 2 spaces             indentation                      
+  83:2   ×  Expected indentation of 2 spaces             indentation                      
+  84:2   ×  Expected empty line before declaration       declaration-empty-line-before    
+  84:2   ×  Expected indentation of 2 spaces             indentation                      
+  88:2   ×  Expected indentation of 2 spaces             indentation                      
+  89:2   ×  Expected indentation of 2 spaces             indentation                      
+  90:2   ×  Expected indentation of 2 spaces             indentation                      
+  91:2   ×  Expected indentation of 2 spaces             indentation                      
+  92:2   ×  Expected indentation of 2 spaces             indentation                      
+  93:2   ×  Expected indentation of 2 spaces             indentation                      
+  94:2   ×  Expected indentation of 2 spaces             indentation                      
+  95:2   ×  Expected empty line before at-rule           at-rule-empty-line-before        
+  95:2   ×  Expected indentation of 2 spaces             indentation                      
+  96:2   ×  Expected indentation of 2 spaces             indentation                      
+  97:2   ×  Expected indentation of 2 spaces             indentation                      
+ 101:2   ×  Expected indentation of 2 spaces             indentation                      
+ 105:2   ×  Expected indentation of 2 spaces             indentation                      
+ 106:2   ×  Expected indentation of 2 spaces             indentation                      
+ 107:2   ×  Expected indentation of 2 spaces             indentation                      
+ 111:2   ×  Expected indentation of 2 spaces             indentation                      
+ 112:2   ×  Expected indentation of 2 spaces             indentation                      
+ 113:2   ×  Expected indentation of 2 spaces             indentation                      
+ 114:2   ×  Expected indentation of 2 spaces             indentation                      
+ 115:2   ×  Expected indentation of 2 spaces             indentation                      
+ 116:2   ×  Expected indentation of 2 spaces             indentation                      
+ 117:2   ×  Expected indentation of 2 spaces             indentation                      
+ 121:2   ×  Expected indentation of 2 spaces             indentation                      
+ 125:2   ×  Expected indentation of 2 spaces             indentation                      
+ 129:2   ×  Expected indentation of 2 spaces             indentation                      
+ 130:2   ×  Expected indentation of 2 spaces             indentation                      
+ 134:2   ×  Expected indentation of 2 spaces             indentation                      
+ 135:2   ×  Expected indentation of 2 spaces             indentation                      
+ 136:2   ×  Expected indentation of 2 spaces             indentation                      
+ 137:2   ×  Expected indentation of 2 spaces             indentation                      
+ 141:2   ×  Expected indentation of 2 spaces             indentation                      
+ 145:2   ×  Expected indentation of 2 spaces             indentation                      
+ 149:2   ×  Expected indentation of 2 spaces             indentation                      
+ 150:2   ×  Expected indentation of 2 spaces             indentation                      
+ 151:2   ×  Expected indentation of 2 spaces             indentation                      
+ 151:12  ×  Unexpected unit                              length-zero-no-unit              
+ 155:2   ×  Expected indentation of 2 spaces             indentation                      
+ 156:2   ×  Expected indentation of 2 spaces             indentation                      
+ 157:2   ×  Expected indentation of 2 spaces             indentation                      
+ 158:2   ×  Expected indentation of 2 spaces             indentation                      
+ 162:2   ×  Expected indentation of 2 spaces             indentation                      
+ 163:2   ×  Expected indentation of 2 spaces             indentation                      
+ 167:2   ×  Expected indentation of 2 spaces             indentation                      
+ 168:2   ×  Expected indentation of 2 spaces             indentation                      
+ 169:2   ×  Expected indentation of 2 spaces             indentation                      
+ 170:2   ×  Expected indentation of 2 spaces             indentation                      
+ 171:2   ×  Expected indentation of 2 spaces             indentation                      
+ 172:2   ×  Expected indentation of 2 spaces             indentation                      
+ 173:2   ×  Expected indentation of 2 spaces             indentation                      
+ 177:2   ×  Expected indentation of 2 spaces             indentation                      
+ 181:2   ×  Expected indentation of 2 spaces             indentation                      
+ 182:2   ×  Expected indentation of 2 spaces             indentation                      
+ 182:12  ×  Unexpected unit                              length-zero-no-unit              
+ 186:2   ×  Expected indentation of 2 spaces             indentation                      
+ 187:2   ×  Expected indentation of 2 spaces             indentation                      
+ 191:2   ×  Expected indentation of 2 spaces             indentation                      
+ 195:2   ×  Expected indentation of 2 spaces             indentation                      
+ 199:2   ×  Expected indentation of 2 spaces             indentation                      
+ 200:2   ×  Expected indentation of 2 spaces             indentation                      
+ 204:2   ×  Expected indentation of 2 spaces             indentation                      
+ 208:2   ×  Expected indentation of 2 spaces             indentation                      
+ 208:17  ×  Unexpected unit                              length-zero-no-unit              
+ 212:2   ×  Expected indentation of 2 spaces             indentation                      
+ 212:16  ×  Unexpected unit                              length-zero-no-unit              
+ 213:2   ×  Expected indentation of 2 spaces             indentation                      
+ 217:2   ×  Expected indentation of 2 spaces             indentation                      
+ 217:37  ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+ 221:2   ×  Expected indentation of 2 spaces             indentation                      
+ 222:2   ×  Expected indentation of 2 spaces             indentation                      
+ 223:2   ×  Expected indentation of 2 spaces             indentation                      
+ 224:2   ×  Expected indentation of 2 spaces             indentation                      
+
+ui-designer/ui-designer.html
+ 20:9   ×  Unexpected unit   length-zero-no-unit
+ 21:11  ×  Unexpected unit   length-zero-no-unit
+
+ui-designer/ui-dom-manager.html
+  19:2   ×  Expected indentation of 2 spaces                indentation                              
+  23:2   ×  Expected indentation of 2 spaces                indentation                              
+  27:2   ×  Expected indentation of 2 spaces                indentation                              
+  31:2   ×  Expected indentation of 2 spaces                indentation                              
+  32:2   ×  Expected indentation of 2 spaces                indentation                              
+  36:2   ×  Expected indentation of 2 spaces                indentation                              
+  36:11  ×  Unexpected unit                                 length-zero-no-unit                      
+  40:2   ×  Expected indentation of 2 spaces                indentation                              
+  41:2   ×  Expected indentation of 2 spaces                indentation                              
+  45:2   ×  Expected indentation of 2 spaces                indentation                              
+  45:17  ×  Expected a trailing semicolon                   declaration-block-trailing-semicolon     
+  47:1   ×  Expected empty line before comment              comment-empty-line-before                
+  47:3   ×  Expected whitespace after "/*"                  comment-whitespace-inside                
+  47:20  ×  Expected whitespace before "*/"                 comment-whitespace-inside                
+  50:2   ×  Expected indentation of 2 spaces                indentation                              
+  51:2   ×  Expected indentation of 2 spaces                indentation                              
+  52:2   ×  Expected indentation of 2 spaces                indentation                              
+  52:48  ×  Unexpected unit                                 length-zero-no-unit                      
+  56:2   ×  Expected indentation of 2 spaces                indentation                              
+  57:2   ×  Expected indentation of 2 spaces                indentation                              
+  58:2   ×  Expected indentation of 2 spaces                indentation                              
+  59:2   ×  Expected indentation of 2 spaces                indentation                              
+  60:2   ×  Expected indentation of 2 spaces                indentation                              
+  61:2   ×  Expected indentation of 2 spaces                indentation                              
+  62:2   ×  Expected indentation of 2 spaces                indentation                              
+  63:2   ×  Expected indentation of 2 spaces                indentation                              
+  64:2   ×  Expected indentation of 2 spaces                indentation                              
+  65:2   ×  Unexpected duplicate "background"               declaration-block-no-duplicate-properties
+  65:2   ×  Expected indentation of 2 spaces                indentation                              
+  65:14  ×  Expected "#CFD8DC" to be "#cfd8dc"              color-hex-case                           
+  68:20  ×  Expected double colon pseudo-element notation   selector-pseudo-element-colon-notation   
+  69:2   ×  Expected indentation of 2 spaces                indentation                              
+  70:2   ×  Expected indentation of 2 spaces                indentation                              
+  71:2   ×  Expected indentation of 2 spaces                indentation                              
+  72:2   ×  Expected indentation of 2 spaces                indentation                              
+  73:2   ×  Expected indentation of 2 spaces                indentation                              
+  74:2   ×  Expected indentation of 2 spaces                indentation                              
+  75:2   ×  Expected indentation of 2 spaces                indentation                              
+  76:2   ×  Expected indentation of 2 spaces                indentation                              
+  77:2   ×  Expected indentation of 2 spaces                indentation                              
+  78:2   ×  Expected indentation of 2 spaces                indentation                              
+  79:2   ×  Expected indentation of 2 spaces                indentation                              
+  79:18  ×  Unexpected unit                                 length-zero-no-unit                      
+  79:22  ×  Unexpected unit                                 length-zero-no-unit                      
+  79:26  ×  Unexpected unit                                 length-zero-no-unit                      
+  83:2   ×  Expected indentation of 2 spaces                indentation                              
+  86:32  ×  Expected double colon pseudo-element notation   selector-pseudo-element-colon-notation   
+  87:2   ×  Expected indentation of 2 spaces                indentation                              
+  90:31  ×  Expected double colon pseudo-element notation   selector-pseudo-element-colon-notation   
+  91:2   ×  Expected indentation of 2 spaces                indentation                              
+  95:2   ×  Expected indentation of 2 spaces                indentation                              
+  96:2   ×  Expected indentation of 2 spaces                indentation                              
+ 100:2   ×  Expected indentation of 2 spaces                indentation                              
+ 104:2   ×  Expected indentation of 2 spaces                indentation                              
+ 105:2   ×  Expected indentation of 2 spaces                indentation                              
+ 109:2   ×  Expected indentation of 2 spaces                indentation                              
+ 110:2   ×  Expected indentation of 2 spaces                indentation                              
+ 114:2   ×  Expected indentation of 2 spaces                indentation                              
+ 115:2   ×  Expected indentation of 2 spaces                indentation                              
+
+ui-designer/ui-dom-tree-container.html
+ 20:1  ×  Expected no more than 1 empty line(s)   max-empty-lines
+
+ui-designer/ui-dom-tree.html
+  19:2   ×  Expected indentation of 2 spaces                indentation                           
+  20:2   ×  Expected indentation of 2 spaces                indentation                           
+  21:2   ×  Expected indentation of 2 spaces                indentation                           
+  22:2   ×  Expected indentation of 2 spaces                indentation                           
+  26:2   ×  Expected indentation of 2 spaces                indentation                           
+  30:2   ×  Expected indentation of 2 spaces                indentation                           
+  31:2   ×  Expected empty line before custom property      custom-property-empty-line-before     
+  31:2   ×  Expected indentation of 2 spaces                indentation                           
+  32:2   ×  Expected indentation of 2 spaces                indentation                           
+  33:2   ×  Expected empty line before declaration          declaration-empty-line-before         
+  33:2   ×  Expected indentation of 2 spaces                indentation                           
+  37:2   ×  Expected indentation of 2 spaces                indentation                           
+  41:2   ×  Expected indentation of 2 spaces                indentation                           
+  42:2   ×  Expected indentation of 2 spaces                indentation                           
+  46:2   ×  Expected indentation of 2 spaces                indentation                           
+  50:2   ×  Expected indentation of 2 spaces                indentation                           
+  54:2   ×  Expected indentation of 2 spaces                indentation                           
+  58:2   ×  Expected indentation of 2 spaces                indentation                           
+  63:2   ×  Expected indentation of 2 spaces                indentation                           
+  67:2   ×  Expected indentation of 2 spaces                indentation                           
+  71:2   ×  Expected indentation of 2 spaces                indentation                           
+  72:2   ×  Expected indentation of 2 spaces                indentation                           
+  77:2   ×  Expected indentation of 2 spaces                indentation                           
+  77:9   ×  Expected "#AAA" to be "#aaa"                    color-hex-case                        
+  82:2   ×  Expected indentation of 2 spaces                indentation                           
+  83:2   ×  Expected indentation of 2 spaces                indentation                           
+  87:2   ×  Expected indentation of 2 spaces                indentation                           
+  88:2   ×  Expected indentation of 2 spaces                indentation                           
+  91:10  ×  Expected single space after "+"                 selector-combinator-space-after       
+  91:10  ×  Expected single space before "+"                selector-combinator-space-before      
+  92:2   ×  Expected indentation of 2 spaces                indentation                           
+  92:11  ×  Unexpected unit                                 length-zero-no-unit                   
+  96:2   ×  Expected indentation of 2 spaces                indentation                           
+  97:2   ×  Expected indentation of 2 spaces                indentation                           
+  98:2   ×  Expected indentation of 2 spaces                indentation                           
+ 101:22  ×  Expected single space after "+"                 selector-combinator-space-after       
+ 101:22  ×  Expected single space before "+"                selector-combinator-space-before      
+ 101:32  ×  Expected single space after ">"                 selector-combinator-space-after       
+ 101:32  ×  Expected single space before ">"                selector-combinator-space-before      
+ 102:2   ×  Expected indentation of 2 spaces                indentation                           
+ 102:16  ×  Expected "#AAA" to be "#aaa"                    color-hex-case                        
+ 105:27  ×  Expected single space after ">"                 selector-combinator-space-after       
+ 105:27  ×  Expected single space before ">"                selector-combinator-space-before      
+ 106:2   ×  Expected indentation of 2 spaces                indentation                           
+ 109:29  ×  Expected single space after ">"                 selector-combinator-space-after       
+ 109:29  ×  Expected single space before ">"                selector-combinator-space-before      
+ 109:58  ×  Expected double colon pseudo-element notation   selector-pseudo-element-colon-notation
+ 110:2   ×  Expected indentation of 2 spaces                indentation                           
+ 111:2   ×  Expected indentation of 2 spaces                indentation                           
+ 114:29  ×  Expected single space after ">"                 selector-combinator-space-after       
+ 114:29  ×  Expected single space before ">"                selector-combinator-space-before      
+ 115:2   ×  Expected indentation of 2 spaces                indentation                           
+ 119:2   ×  Expected indentation of 2 spaces                indentation                           
+ 124:2   ×  Expected indentation of 2 spaces                indentation                           
+
+ui-designer/ui-element-layers-panel.html
+ 19:2  ×  Expected indentation of 2 spaces   indentation     
+ 20:2  ×  Expected indentation of 2 spaces   indentation     
+ 24:2  ×  Expected indentation of 2 spaces   indentation     
+ 25:2  ×  Expected indentation of 2 spaces   indentation     
+ 26:2  ×  Expected indentation of 2 spaces   indentation     
+ 26:9  ×  Expected "#ffffff" to be "#fff"    color-hex-length
+ 27:2  ×  Expected indentation of 2 spaces   indentation     
+ 28:2  ×  Expected indentation of 2 spaces   indentation     
+ 32:2  ×  Expected indentation of 2 spaces   indentation     
+ 33:2  ×  Expected indentation of 2 spaces   indentation     
+ 34:2  ×  Expected indentation of 2 spaces   indentation     
+ 35:2  ×  Expected indentation of 2 spaces   indentation     
+ 39:2  ×  Expected indentation of 2 spaces   indentation     
+ 40:2  ×  Expected indentation of 2 spaces   indentation     
+ 41:2  ×  Expected indentation of 2 spaces   indentation     
+
+ui-designer/ui-element-list.html
+  19:2   ×  Expected indentation of 2 spaces     indentation                     
+  20:2   ×  Expected indentation of 2 spaces     indentation                     
+  21:2   ×  Expected indentation of 2 spaces     indentation                     
+  22:2   ×  Expected indentation of 2 spaces     indentation                     
+  23:2   ×  Expected indentation of 2 spaces     indentation                     
+  23:14  ×  Expected "#ffffff" to be "#fff"      color-hex-length                
+  24:2   ×  Expected indentation of 2 spaces     indentation                     
+  25:2   ×  Expected indentation of 2 spaces     indentation                     
+  29:2   ×  Expected indentation of 2 spaces     indentation                     
+  30:2   ×  Expected indentation of 2 spaces     indentation                     
+  31:2   ×  Expected indentation of 2 spaces     indentation                     
+  35:2   ×  Expected indentation of 2 spaces     indentation                     
+  35:27  ×  Expected "#EEE" to be "#eee"         color-hex-case                  
+  39:2   ×  Expected indentation of 2 spaces     indentation                     
+  43:2   ×  Expected indentation of 2 spaces     indentation                     
+  43:9   ×  Expected "#000000" to be "#000"      color-hex-length                
+  44:2   ×  Expected indentation of 2 spaces     indentation                     
+  45:2   ×  Expected indentation of 2 spaces     indentation                     
+  46:2   ×  Expected indentation of 2 spaces     indentation                     
+  50:2   ×  Expected indentation of 2 spaces     indentation                     
+  50:10  ×  Unexpected unit                      length-zero-no-unit             
+  51:2   ×  Expected indentation of 2 spaces     indentation                     
+  52:2   ×  Expected indentation of 2 spaces     indentation                     
+  53:2   ×  Expected indentation of 2 spaces     indentation                     
+  53:8   ×  Unexpected unit                      length-zero-no-unit             
+  54:2   ×  Expected indentation of 2 spaces     indentation                     
+  55:2   ×  Expected indentation of 2 spaces     indentation                     
+  56:2   ×  Expected indentation of 2 spaces     indentation                     
+  56:16  ×  Unexpected unit                      length-zero-no-unit             
+  57:2   ×  Expected indentation of 2 spaces     indentation                     
+  58:2   ×  Expected indentation of 2 spaces     indentation                     
+  59:2   ×  Expected indentation of 2 spaces     indentation                     
+  63:2   ×  Expected indentation of 2 spaces     indentation                     
+  64:2   ×  Expected indentation of 2 spaces     indentation                     
+  68:2   ×  Expected indentation of 2 spaces     indentation                     
+  72:2   ×  Expected indentation of 2 spaces     indentation                     
+  76:2   ×  Expected indentation of 2 spaces     indentation                     
+  76:14  ×  Expected "#455A64" to be "#455a64"   color-hex-case                  
+  77:2   ×  Expected indentation of 2 spaces     indentation                     
+  80:27  ×  Expected single space after ">"      selector-combinator-space-after 
+  80:27  ×  Expected single space before ">"     selector-combinator-space-before
+  81:2   ×  Expected indentation of 2 spaces     indentation                     
+  85:2   ×  Expected indentation of 2 spaces     indentation                     
+  86:2   ×  Expected indentation of 2 spaces     indentation                     
+  87:2   ×  Expected indentation of 2 spaces     indentation                     
+  88:2   ×  Expected indentation of 2 spaces     indentation                     
+  89:2   ×  Expected indentation of 2 spaces     indentation                     
+  90:2   ×  Expected indentation of 2 spaces     indentation                     
+  94:2   ×  Expected indentation of 2 spaces     indentation                     
+  95:2   ×  Expected indentation of 2 spaces     indentation                     
+  96:2   ×  Expected indentation of 2 spaces     indentation                     
+  97:2   ×  Expected indentation of 2 spaces     indentation                     
+  97:9   ×  Expected "#000000" to be "#000"      color-hex-length                
+  98:2   ×  Expected indentation of 2 spaces     indentation                     
+  99:2   ×  Expected indentation of 2 spaces     indentation                     
+ 103:2   ×  Expected indentation of 2 spaces     indentation                     
+ 107:2   ×  Expected indentation of 2 spaces     indentation                     
+ 107:9   ×  Expected "#ffffff" to be "#fff"      color-hex-length                
+ 111:2   ×  Expected indentation of 2 spaces     indentation                     
+ 115:2   ×  Expected indentation of 2 spaces     indentation                     
+ 116:2   ×  Expected indentation of 2 spaces     indentation                     
+ 117:2   ×  Expected indentation of 2 spaces     indentation                     
+ 121:2   ×  Expected indentation of 2 spaces     indentation                     
+ 122:2   ×  Expected indentation of 2 spaces     indentation                     
+ 123:2   ×  Expected indentation of 2 spaces     indentation                     
+ 124:2   ×  Expected indentation of 2 spaces     indentation                     
+ 125:2   ×  Expected indentation of 2 spaces     indentation                     
+ 126:2   ×  Expected indentation of 2 spaces     indentation                     
+ 127:2   ×  Expected indentation of 2 spaces     indentation                     
+ 131:2   ×  Expected indentation of 2 spaces     indentation                     
+ 132:2   ×  Expected indentation of 2 spaces     indentation                     
+ 132:8   ×  Unexpected unit                      length-zero-no-unit             
+ 133:2   ×  Expected indentation of 2 spaces     indentation                     
+ 134:2   ×  Expected indentation of 2 spaces     indentation                     
+ 135:2   ×  Expected indentation of 2 spaces     indentation                     
+ 136:2   ×  Expected indentation of 2 spaces     indentation                     
+ 137:2   ×  Expected indentation of 2 spaces     indentation                     
+ 138:2   ×  Expected indentation of 2 spaces     indentation                     
+ 138:16  ×  Unexpected unit                      length-zero-no-unit             
+ 139:2   ×  Expected indentation of 2 spaces     indentation                     
+ 139:19  ×  Unexpected unit                      length-zero-no-unit             
+ 143:2   ×  Expected indentation of 2 spaces     indentation                     
+ 144:2   ×  Expected indentation of 2 spaces     indentation                     
+ 145:2   ×  Expected indentation of 2 spaces     indentation                     
+ 145:9   ×  Unexpected unit                      length-zero-no-unit             
+ 146:2   ×  Expected indentation of 2 spaces     indentation                     
+ 147:2   ×  Expected indentation of 2 spaces     indentation                     
+ 148:2   ×  Expected indentation of 2 spaces     indentation                     
+ 149:2   ×  Expected indentation of 2 spaces     indentation                     
+ 150:2   ×  Expected indentation of 2 spaces     indentation                     
+ 151:2   ×  Expected indentation of 2 spaces     indentation                     
+ 155:2   ×  Expected indentation of 2 spaces     indentation                     
+ 159:2   ×  Expected indentation of 2 spaces     indentation                     
+ 163:2   ×  Expected indentation of 2 spaces     indentation                     
+ 164:2   ×  Expected indentation of 2 spaces     indentation                     
+ 165:2   ×  Expected indentation of 2 spaces     indentation                     
+ 166:2   ×  Expected indentation of 2 spaces     indentation                     
+ 167:2   ×  Expected indentation of 2 spaces     indentation                     
+ 167:8   ×  Unexpected unit                      length-zero-no-unit             
+ 168:2   ×  Expected indentation of 2 spaces     indentation                     
+ 168:9   ×  Unexpected unit                      length-zero-no-unit             
+ 169:2   ×  Expected indentation of 2 spaces     indentation                     
+ 173:2   ×  Expected indentation of 2 spaces     indentation                     
+ 174:2   ×  Expected indentation of 2 spaces     indentation                     
+ 177:18  ×  Expected single space after ">"      selector-combinator-space-after 
+ 177:18  ×  Expected single space before ">"     selector-combinator-space-before
+ 178:2   ×  Expected indentation of 2 spaces     indentation                     
+ 182:2   ×  Expected indentation of 2 spaces     indentation                     
+ 186:2   ×  Expected indentation of 2 spaces     indentation                     
+ 190:2   ×  Expected indentation of 2 spaces     indentation                     
+ 191:2   ×  Expected indentation of 2 spaces     indentation                     
+ 194:28  ×  Unexpected empty block               block-no-empty                  
+
+ui-designer/ui-element-tree.html
+  19:2   ×  Expected indentation of 2 spaces                indentation                           
+  20:2   ×  Expected indentation of 2 spaces                indentation                           
+  21:2   ×  Expected indentation of 2 spaces                indentation                           
+  25:2   ×  Expected indentation of 2 spaces                indentation                           
+  26:4   ×  Expected indentation of 4 spaces                indentation                           
+  27:4   ×  Expected indentation of 4 spaces                indentation                           
+  28:2   ×  Expected indentation of 2 spaces                indentation                           
+  30:2   ×  Expected indentation of 2 spaces                indentation                           
+  31:4   ×  Expected indentation of 4 spaces                indentation                           
+  32:4   ×  Expected indentation of 4 spaces                indentation                           
+  33:4   ×  Expected indentation of 4 spaces                indentation                           
+  34:2   ×  Expected indentation of 2 spaces                indentation                           
+  38:2   ×  Expected indentation of 2 spaces                indentation                           
+  39:2   ×  Expected indentation of 2 spaces                indentation                           
+  40:2   ×  Expected indentation of 2 spaces                indentation                           
+  44:2   ×  Expected indentation of 2 spaces                indentation                           
+  44:11  ×  Unexpected unit                                 length-zero-no-unit                   
+  45:2   ×  Expected indentation of 2 spaces                indentation                           
+  46:2   ×  Expected indentation of 2 spaces                indentation                           
+  47:2   ×  Expected indentation of 2 spaces                indentation                           
+  51:2   ×  Expected indentation of 2 spaces                indentation                           
+  51:11  ×  Unexpected unit                                 length-zero-no-unit                   
+  52:2   ×  Expected indentation of 2 spaces                indentation                           
+  53:2   ×  Expected indentation of 2 spaces                indentation                           
+  54:2   ×  Expected indentation of 2 spaces                indentation                           
+  55:2   ×  Expected indentation of 2 spaces                indentation                           
+  56:2   ×  Expected indentation of 2 spaces                indentation                           
+  60:2   ×  Expected indentation of 2 spaces                indentation                           
+  61:2   ×  Expected empty line before custom property      custom-property-empty-line-before     
+  61:2   ×  Expected indentation of 2 spaces                indentation                           
+  62:2   ×  Expected indentation of 2 spaces                indentation                           
+  63:2   ×  Expected empty line before declaration          declaration-empty-line-before         
+  63:2   ×  Expected indentation of 2 spaces                indentation                           
+  64:2   ×  Expected indentation of 2 spaces                indentation                           
+  65:2   ×  Expected indentation of 2 spaces                indentation                           
+  69:2   ×  Expected indentation of 2 spaces                indentation                           
+  73:2   ×  Expected indentation of 2 spaces                indentation                           
+  77:2   ×  Expected indentation of 2 spaces                indentation                           
+  78:2   ×  Expected indentation of 2 spaces                indentation                           
+  79:2   ×  Expected indentation of 2 spaces                indentation                           
+  80:2   ×  Expected indentation of 2 spaces                indentation                           
+  81:2   ×  Expected indentation of 2 spaces                indentation                           
+  82:2   ×  Expected indentation of 2 spaces                indentation                           
+  83:2   ×  Expected indentation of 2 spaces                indentation                           
+  87:2   ×  Expected indentation of 2 spaces                indentation                           
+  90:5   ×  Expected single space after ">"                 selector-combinator-space-after       
+  90:5   ×  Expected single space before ">"                selector-combinator-space-before      
+  91:2   ×  Expected indentation of 2 spaces                indentation                           
+  94:8   ×  Expected single space after "+"                 selector-combinator-space-after       
+  94:8   ×  Expected single space before "+"                selector-combinator-space-before      
+  95:2   ×  Expected indentation of 2 spaces                indentation                           
+  96:2   ×  Expected indentation of 2 spaces                indentation                           
+ 100:2   ×  Expected indentation of 2 spaces                indentation                           
+ 101:2   ×  Expected indentation of 2 spaces                indentation                           
+ 102:2   ×  Expected indentation of 2 spaces                indentation                           
+ 103:2   ×  Expected indentation of 2 spaces                indentation                           
+ 104:2   ×  Expected indentation of 2 spaces                indentation                           
+ 105:2   ×  Expected indentation of 2 spaces                indentation                           
+ 106:2   ×  Expected indentation of 2 spaces                indentation                           
+ 107:2   ×  Expected indentation of 2 spaces                indentation                           
+ 108:2   ×  Expected indentation of 2 spaces                indentation                           
+ 109:2   ×  Expected indentation of 2 spaces                indentation                           
+ 112:9   ×  Expected double colon pseudo-element notation   selector-pseudo-element-colon-notation
+ 113:2   ×  Expected indentation of 2 spaces                indentation                           
+ 114:2   ×  Expected indentation of 2 spaces                indentation                           
+ 115:2   ×  Expected indentation of 2 spaces                indentation                           
+ 116:2   ×  Expected indentation of 2 spaces                indentation                           
+ 117:2   ×  Expected indentation of 2 spaces                indentation                           
+ 118:2   ×  Expected indentation of 2 spaces                indentation                           
+ 119:2   ×  Expected indentation of 2 spaces                indentation                           
+ 120:2   ×  Expected indentation of 2 spaces                indentation                           
+ 121:2   ×  Expected indentation of 2 spaces                indentation                           
+ 122:2   ×  Expected indentation of 2 spaces                indentation                           
+ 125:16  ×  Expected single space after "~"                 selector-combinator-space-after       
+ 125:16  ×  Expected single space before "~"                selector-combinator-space-before      
+ 125:22  ×  Expected single space after "~"                 selector-combinator-space-after       
+ 125:22  ×  Expected single space before "~"                selector-combinator-space-before      
+ 127:2   ×  Expected indentation of 2 spaces                indentation                           
+ 128:2   ×  Expected indentation of 2 spaces                indentation                           
+ 129:2   ×  Expected indentation of 2 spaces                indentation                           
+
+ui-designer/ui-model-manager.html
+  42:10  ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+  67:10  ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+  90:10  ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+ 111:15  ×  Unexpected unit                              length-zero-no-unit              
+ 147:28  ×  Expected "#292D2F" to be "#292d2f"           color-hex-case                   
+ 153:28  ×  Expected "#292D2F" to be "#292d2f"           color-hex-case                   
+ 164:3   ×  Expected empty line before custom property   custom-property-empty-line-before
+ 173:10  ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+ 187:10  ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+
+ui-designer/ui-navigation-settings.html
+  19:2   ×  Expected indentation of 2 spaces   indentation        
+  20:2   ×  Expected indentation of 2 spaces   indentation        
+  21:2   ×  Expected indentation of 2 spaces   indentation        
+  22:2   ×  Expected indentation of 2 spaces   indentation        
+  23:2   ×  Expected indentation of 2 spaces   indentation        
+  24:2   ×  Expected indentation of 2 spaces   indentation        
+  25:2   ×  Expected indentation of 2 spaces   indentation        
+  29:2   ×  Expected indentation of 2 spaces   indentation        
+  29:39  ×  Expected "#ffffff" to be "#fff"    color-hex-length   
+  30:2   ×  Expected indentation of 2 spaces   indentation        
+  31:2   ×  Expected indentation of 2 spaces   indentation        
+  35:2   ×  Expected indentation of 2 spaces   indentation        
+  35:39  ×  Expected "#ffffff" to be "#fff"    color-hex-length   
+  36:2   ×  Expected indentation of 2 spaces   indentation        
+  37:2   ×  Expected indentation of 2 spaces   indentation        
+  41:2   ×  Expected indentation of 2 spaces   indentation        
+  41:12  ×  Unexpected unit                    length-zero-no-unit
+  42:2   ×  Expected indentation of 2 spaces   indentation        
+  43:2   ×  Expected indentation of 2 spaces   indentation        
+  47:2   ×  Expected indentation of 2 spaces   indentation        
+  51:2   ×  Expected indentation of 2 spaces   indentation        
+  52:2   ×  Expected indentation of 2 spaces   indentation        
+  53:2   ×  Expected indentation of 2 spaces   indentation        
+  54:2   ×  Expected indentation of 2 spaces   indentation        
+  55:2   ×  Expected indentation of 2 spaces   indentation        
+  59:2   ×  Expected indentation of 2 spaces   indentation        
+  60:2   ×  Expected indentation of 2 spaces   indentation        
+  64:2   ×  Expected indentation of 2 spaces   indentation        
+  68:2   ×  Expected indentation of 2 spaces   indentation        
+  69:2   ×  Expected indentation of 2 spaces   indentation        
+  70:2   ×  Expected indentation of 2 spaces   indentation        
+  70:12  ×  Unexpected unit                    length-zero-no-unit
+  74:2   ×  Expected indentation of 2 spaces   indentation        
+  75:2   ×  Expected indentation of 2 spaces   indentation        
+  76:2   ×  Expected indentation of 2 spaces   indentation        
+  77:2   ×  Expected indentation of 2 spaces   indentation        
+  78:2   ×  Expected indentation of 2 spaces   indentation        
+  82:2   ×  Expected indentation of 2 spaces   indentation        
+  83:2   ×  Expected indentation of 2 spaces   indentation        
+  87:2   ×  Expected indentation of 2 spaces   indentation        
+  88:2   ×  Expected indentation of 2 spaces   indentation        
+  89:2   ×  Expected indentation of 2 spaces   indentation        
+  93:2   ×  Expected indentation of 2 spaces   indentation        
+  94:2   ×  Expected indentation of 2 spaces   indentation        
+  95:2   ×  Expected indentation of 2 spaces   indentation        
+  96:2   ×  Expected indentation of 2 spaces   indentation        
+  97:2   ×  Expected indentation of 2 spaces   indentation        
+  98:2   ×  Expected indentation of 2 spaces   indentation        
+  98:11  ×  Unexpected unit                    length-zero-no-unit
+  99:2   ×  Expected indentation of 2 spaces   indentation        
+ 100:2   ×  Expected indentation of 2 spaces   indentation        
+ 104:2   ×  Expected indentation of 2 spaces   indentation        
+ 108:2   ×  Expected indentation of 2 spaces   indentation        
+ 112:2   ×  Expected indentation of 2 spaces   indentation        
+ 113:2   ×  Expected indentation of 2 spaces   indentation        
+ 117:2   ×  Expected indentation of 2 spaces   indentation        
+ 121:2   ×  Expected indentation of 2 spaces   indentation        
+
+ui-designer/ui-page-list.html
+  28:13  ×  Unexpected unit                                                         length-zero-no-unit                   
+  31:21  ×  Unexpected unit                                                         length-zero-no-unit                   
+  38:19  ×  Unexpected unit                                                         length-zero-no-unit                   
+  67:22  ×  Expected single space after "+"                                         selector-combinator-space-after       
+  67:22  ×  Expected single space before "+"                                        selector-combinator-space-before      
+  82:50  ×  Expected a trailing semicolon                                           declaration-block-trailing-semicolon  
+  89:3   ×  Expected empty line before at-rule                                      at-rule-empty-line-before             
+ 100:3   ×  Expected empty line before at-rule                                      at-rule-empty-line-before             
+ 118:3   ×  Expected empty line before at-rule                                      at-rule-empty-line-before             
+ 150:44  ×  Unexpected trailing zero(s)                                             number-no-trailing-zeros              
+ 150:78  ×  Unexpected trailing zero(s)                                             number-no-trailing-zeros              
+ 163:10  ×  Expected single space after "+"                                         selector-combinator-space-after       
+ 163:10  ×  Expected single space before "+"                                        selector-combinator-space-before      
+ 167:5   ×  Expected single space after "+"                                         selector-combinator-space-after       
+ 167:5   ×  Expected single space before "+"                                        selector-combinator-space-before      
+ 192:13  ×  Unexpected unit                                                         length-zero-no-unit                   
+ 198:13  ×  Unexpected unit                                                         length-zero-no-unit                   
+ 209:12  ×  Unexpected unit                                                         length-zero-no-unit                   
+ 243:10  ×  Expected "#ffffff" to be "#fff"                                         color-hex-length                      
+ 251:3   ×  Expected empty line before declaration                                  declaration-empty-line-before         
+ 261:34  ×  Expected double colon pseudo-element notation                           selector-pseudo-element-colon-notation
+ 262:33  ×  Expected double colon pseudo-element notation                           selector-pseudo-element-colon-notation
+ 267:3   ×  Unexpected longhand value '10px 10px 0 10px' instead of '10px 10px 0'   shorthand-property-no-redundant-values
+ 271:33  ×  Expected double colon pseudo-element notation                           selector-pseudo-element-colon-notation
+ 275:53  ×  Expected double colon pseudo-element notation                           selector-pseudo-element-colon-notation
+ 281:18  ×  Unexpected unit                                                         length-zero-no-unit                   
+
+ui-designer/ui-right-panel.html
+ 19:2  ×  Expected indentation of 2 spaces             indentation                      
+ 20:2  ×  Expected indentation of 2 spaces             indentation                      
+ 21:2  ×  Expected indentation of 2 spaces             indentation                      
+ 22:2  ×  Expected indentation of 2 spaces             indentation                      
+ 26:2  ×  Expected indentation of 2 spaces             indentation                      
+ 27:2  ×  Expected indentation of 2 spaces             indentation                      
+ 31:2  ×  Expected indentation of 2 spaces             indentation                      
+ 32:2  ×  Expected indentation of 2 spaces             indentation                      
+ 36:2  ×  Expected indentation of 2 spaces             indentation                      
+ 37:2  ×  Expected empty line before custom property   custom-property-empty-line-before
+ 37:2  ×  Expected indentation of 2 spaces             indentation                      
+ 38:2  ×  Expected indentation of 2 spaces             indentation                      
+ 42:2  ×  Expected indentation of 2 spaces             indentation                      
+ 46:2  ×  Expected indentation of 2 spaces             indentation                      
+ 46:9  ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+ 50:2  ×  Expected indentation of 2 spaces             indentation                      
+ 51:2  ×  Expected indentation of 2 spaces             indentation                      
+ 52:2  ×  Expected indentation of 2 spaces             indentation                      
+ 53:2  ×  Expected indentation of 2 spaces             indentation                      
+ 54:2  ×  Expected indentation of 2 spaces             indentation                      
+ 58:2  ×  Expected indentation of 2 spaces             indentation                      
+ 59:2  ×  Expected indentation of 2 spaces             indentation                      
+ 60:2  ×  Expected indentation of 2 spaces             indentation                      
+ 61:2  ×  Expected indentation of 2 spaces             indentation                      
+ 62:2  ×  Expected indentation of 2 spaces             indentation                      
+ 63:2  ×  Expected indentation of 2 spaces             indentation                      
+ 64:2  ×  Expected indentation of 2 spaces             indentation                      
+ 65:2  ×  Expected indentation of 2 spaces             indentation                      
+ 65:8  ×  Unexpected unit                              length-zero-no-unit              
+ 66:2  ×  Expected indentation of 2 spaces             indentation                      
+ 67:2  ×  Expected indentation of 2 spaces             indentation                      
+ 71:2  ×  Expected indentation of 2 spaces             indentation                      
+ 72:2  ×  Expected indentation of 2 spaces             indentation                      
+
+ui-designer/ui-scripter-element.html
+  19:2   ×  Expected indentation of 2 spaces   indentation                     
+  20:2   ×  Expected indentation of 2 spaces   indentation                     
+  21:2   ×  Expected indentation of 2 spaces   indentation                     
+  22:2   ×  Expected indentation of 2 spaces   indentation                     
+  23:2   ×  Expected indentation of 2 spaces   indentation                     
+  24:2   ×  Expected indentation of 2 spaces   indentation                     
+  25:2   ×  Expected indentation of 2 spaces   indentation                     
+  29:2   ×  Expected indentation of 2 spaces   indentation                     
+  30:2   ×  Expected indentation of 2 spaces   indentation                     
+  31:2   ×  Expected indentation of 2 spaces   indentation                     
+  35:2   ×  Expected indentation of 2 spaces   indentation                     
+  36:2   ×  Expected indentation of 2 spaces   indentation                     
+  37:2   ×  Expected indentation of 2 spaces   indentation                     
+  37:12  ×  Unexpected unit                    length-zero-no-unit             
+  38:2   ×  Expected indentation of 2 spaces   indentation                     
+  39:2   ×  Expected indentation of 2 spaces   indentation                     
+  40:2   ×  Expected indentation of 2 spaces   indentation                     
+  41:2   ×  Expected indentation of 2 spaces   indentation                     
+  45:2   ×  Expected indentation of 2 spaces   indentation                     
+  46:2   ×  Expected indentation of 2 spaces   indentation                     
+  47:2   ×  Expected indentation of 2 spaces   indentation                     
+  51:2   ×  Expected indentation of 2 spaces   indentation                     
+  55:2   ×  Expected indentation of 2 spaces   indentation                     
+  56:2   ×  Expected indentation of 2 spaces   indentation                     
+  57:2   ×  Expected indentation of 2 spaces   indentation                     
+  58:2   ×  Expected indentation of 2 spaces   indentation                     
+  58:12  ×  Unexpected unit                    length-zero-no-unit             
+  59:2   ×  Expected indentation of 2 spaces   indentation                     
+  60:2   ×  Expected indentation of 2 spaces   indentation                     
+  61:2   ×  Expected indentation of 2 spaces   indentation                     
+  62:2   ×  Expected indentation of 2 spaces   indentation                     
+  63:2   ×  Expected indentation of 2 spaces   indentation                     
+  64:2   ×  Expected indentation of 2 spaces   indentation                     
+  65:2   ×  Expected indentation of 2 spaces   indentation                     
+  66:2   ×  Expected indentation of 2 spaces   indentation                     
+  70:2   ×  Expected indentation of 2 spaces   indentation                     
+  71:2   ×  Expected indentation of 2 spaces   indentation                     
+  72:2   ×  Expected indentation of 2 spaces   indentation                     
+  72:23  ×  Unexpected unit                    length-zero-no-unit             
+  76:2   ×  Expected indentation of 2 spaces   indentation                     
+  77:2   ×  Expected indentation of 2 spaces   indentation                     
+  77:12  ×  Unexpected unit                    length-zero-no-unit             
+  80:34  ×  Expected single space after "+"    selector-combinator-space-after 
+  80:34  ×  Expected single space before "+"   selector-combinator-space-before
+  81:2   ×  Expected indentation of 2 spaces   indentation                     
+  82:2   ×  Expected indentation of 2 spaces   indentation                     
+  83:2   ×  Expected indentation of 2 spaces   indentation                     
+  87:2   ×  Expected indentation of 2 spaces   indentation                     
+  88:2   ×  Expected indentation of 2 spaces   indentation                     
+  89:2   ×  Expected indentation of 2 spaces   indentation                     
+  90:2   ×  Expected indentation of 2 spaces   indentation                     
+  90:12  ×  Unexpected unit                    length-zero-no-unit             
+  91:2   ×  Expected indentation of 2 spaces   indentation                     
+  92:2   ×  Expected indentation of 2 spaces   indentation                     
+  93:2   ×  Expected indentation of 2 spaces   indentation                     
+  94:2   ×  Expected indentation of 2 spaces   indentation                     
+  98:2   ×  Expected indentation of 2 spaces   indentation                     
+  99:2   ×  Expected indentation of 2 spaces   indentation                     
+ 100:2   ×  Expected indentation of 2 spaces   indentation                     
+ 104:2   ×  Expected indentation of 2 spaces   indentation                     
+ 105:2   ×  Expected indentation of 2 spaces   indentation                     
+ 109:2   ×  Expected indentation of 2 spaces   indentation                     
+ 110:2   ×  Expected indentation of 2 spaces   indentation                     
+ 110:10  ×  Unexpected unit                    length-zero-no-unit             
+ 111:2   ×  Expected indentation of 2 spaces   indentation                     
+ 111:19  ×  Unexpected unit                    length-zero-no-unit             
+ 111:27  ×  Unexpected unit                    length-zero-no-unit             
+ 112:2   ×  Expected indentation of 2 spaces   indentation                     
+ 113:2   ×  Expected indentation of 2 spaces   indentation                     
+ 114:2   ×  Expected indentation of 2 spaces   indentation                     
+ 115:2   ×  Expected indentation of 2 spaces   indentation                     
+ 116:2   ×  Expected indentation of 2 spaces   indentation                     
+ 117:2   ×  Expected indentation of 2 spaces   indentation                     
+ 118:2   ×  Expected indentation of 2 spaces   indentation                     
+ 119:2   ×  Expected indentation of 2 spaces   indentation                     
+ 119:12  ×  Unexpected unit                    length-zero-no-unit             
+ 120:2   ×  Expected indentation of 2 spaces   indentation                     
+ 124:2   ×  Expected indentation of 2 spaces   indentation                     
+ 128:2   ×  Expected indentation of 2 spaces   indentation                     
+ 129:2   ×  Expected indentation of 2 spaces   indentation                     
+ 133:2   ×  Expected indentation of 2 spaces   indentation                     
+ 137:2   ×  Expected indentation of 2 spaces   indentation                     
+ 141:2   ×  Expected indentation of 2 spaces   indentation                     
+ 145:2   ×  Expected indentation of 2 spaces   indentation                     
+ 146:2   ×  Expected indentation of 2 spaces   indentation                     
+ 147:2   ×  Expected indentation of 2 spaces   indentation                     
+ 148:2   ×  Expected indentation of 2 spaces   indentation                     
+ 148:15  ×  Unexpected unit                    length-zero-no-unit             
+ 148:19  ×  Unexpected unit                    length-zero-no-unit             
+ 149:2   ×  Expected indentation of 2 spaces   indentation                     
+ 153:2   ×  Expected indentation of 2 spaces   indentation                     
+ 156:23  ×  Expected single space after ">"    selector-combinator-space-after 
+ 156:23  ×  Expected single space after ">"    selector-combinator-space-after 
+ 156:23  ×  Expected single space before ">"   selector-combinator-space-before
+ 156:23  ×  Expected single space before ">"   selector-combinator-space-before
+ 157:2   ×  Expected single space after ">"    selector-combinator-space-after 
+ 157:2   ×  Expected single space before ">"   selector-combinator-space-before
+ 158:32  ×  Expected single space before "{"   block-opening-brace-space-before
+ 160:2   ×  Expected indentation of 2 spaces   indentation                     
+
+ui-designer/ui-search-element.html
+  19:2   ×  Expected indentation of 2 spaces   indentation                     
+  20:2   ×  Expected indentation of 2 spaces   indentation                     
+  21:2   ×  Expected indentation of 2 spaces   indentation                     
+  22:2   ×  Expected indentation of 2 spaces   indentation                     
+  23:2   ×  Expected indentation of 2 spaces   indentation                     
+  24:2   ×  Expected indentation of 2 spaces   indentation                     
+  25:2   ×  Expected indentation of 2 spaces   indentation                     
+  26:2   ×  Expected indentation of 2 spaces   indentation                     
+  27:2   ×  Expected indentation of 2 spaces   indentation                     
+  31:2   ×  Expected indentation of 2 spaces   indentation                     
+  32:2   ×  Expected indentation of 2 spaces   indentation                     
+  32:15  ×  Unexpected unit                    length-zero-no-unit             
+  33:2   ×  Expected indentation of 2 spaces   indentation                     
+  37:2   ×  Expected indentation of 2 spaces   indentation                     
+  38:2   ×  Expected indentation of 2 spaces   indentation                     
+  39:2   ×  Expected indentation of 2 spaces   indentation                     
+  43:2   ×  Expected indentation of 2 spaces   indentation                     
+  44:2   ×  Expected indentation of 2 spaces   indentation                     
+  45:2   ×  Expected indentation of 2 spaces   indentation                     
+  46:2   ×  Expected indentation of 2 spaces   indentation                     
+  47:2   ×  Expected indentation of 2 spaces   indentation                     
+  48:2   ×  Expected indentation of 2 spaces   indentation                     
+  48:11  ×  Unexpected unit                    length-zero-no-unit             
+  49:2   ×  Expected indentation of 2 spaces   indentation                     
+  50:2   ×  Expected indentation of 2 spaces   indentation                     
+  54:2   ×  Expected indentation of 2 spaces   indentation                     
+  55:2   ×  Expected indentation of 2 spaces   indentation                     
+  56:2   ×  Expected indentation of 2 spaces   indentation                     
+  57:2   ×  Expected indentation of 2 spaces   indentation                     
+  58:2   ×  Expected indentation of 2 spaces   indentation                     
+  59:2   ×  Expected indentation of 2 spaces   indentation                     
+  60:2   ×  Expected indentation of 2 spaces   indentation                     
+  64:2   ×  Expected indentation of 2 spaces   indentation                     
+  65:2   ×  Expected indentation of 2 spaces   indentation                     
+  66:2   ×  Expected indentation of 2 spaces   indentation                     
+  67:2   ×  Expected indentation of 2 spaces   indentation                     
+  68:2   ×  Expected indentation of 2 spaces   indentation                     
+  69:2   ×  Expected indentation of 2 spaces   indentation                     
+  70:2   ×  Expected indentation of 2 spaces   indentation                     
+  71:2   ×  Expected indentation of 2 spaces   indentation                     
+  72:2   ×  Expected indentation of 2 spaces   indentation                     
+  73:2   ×  Expected indentation of 2 spaces   indentation                     
+  77:2   ×  Expected indentation of 2 spaces   indentation                     
+  78:2   ×  Expected indentation of 2 spaces   indentation                     
+  82:2   ×  Expected indentation of 2 spaces   indentation                     
+  82:9   ×  Expected "#ffffff" to be "#fff"    color-hex-length                
+  86:2   ×  Expected indentation of 2 spaces   indentation                     
+  90:2   ×  Expected indentation of 2 spaces   indentation                     
+  91:2   ×  Expected indentation of 2 spaces   indentation                     
+  92:2   ×  Expected indentation of 2 spaces   indentation                     
+  96:2   ×  Expected indentation of 2 spaces   indentation                     
+  97:2   ×  Expected indentation of 2 spaces   indentation                     
+  98:2   ×  Expected indentation of 2 spaces   indentation                     
+  99:2   ×  Expected indentation of 2 spaces   indentation                     
+ 100:2   ×  Expected indentation of 2 spaces   indentation                     
+ 104:2   ×  Expected indentation of 2 spaces   indentation                     
+ 105:2   ×  Expected indentation of 2 spaces   indentation                     
+ 106:2   ×  Expected indentation of 2 spaces   indentation                     
+ 107:2   ×  Expected indentation of 2 spaces   indentation                     
+ 108:2   ×  Expected indentation of 2 spaces   indentation                     
+ 109:2   ×  Expected indentation of 2 spaces   indentation                     
+ 110:2   ×  Expected indentation of 2 spaces   indentation                     
+ 114:2   ×  Expected indentation of 2 spaces   indentation                     
+ 115:2   ×  Expected indentation of 2 spaces   indentation                     
+ 116:2   ×  Expected indentation of 2 spaces   indentation                     
+ 120:2   ×  Expected indentation of 2 spaces   indentation                     
+ 122:1   ×  Expected empty line before rule    rule-empty-line-before          
+ 122:15  ×  Expected single space before "{"   block-opening-brace-space-before
+ 123:2   ×  Expected indentation of 2 spaces   indentation                     
+ 124:2   ×  Expected indentation of 2 spaces   indentation                     
+
+ui-designer/ui-snippeter-dialog.html
+ 21:10  ×  Expected "#039BE5" to be "#039be5"   color-hex-case
+
+ui-designer/ui-theme-designer.html
+  19:2   ×  Expected indentation of 2 spaces             indentation                      
+  20:2   ×  Expected indentation of 2 spaces             indentation                      
+  24:2   ×  Expected indentation of 2 spaces             indentation                      
+  25:2   ×  Expected indentation of 2 spaces             indentation                      
+  26:2   ×  Expected indentation of 2 spaces             indentation                      
+  27:2   ×  Expected indentation of 2 spaces             indentation                      
+  28:2   ×  Expected indentation of 2 spaces             indentation                      
+  29:2   ×  Expected indentation of 2 spaces             indentation                      
+  30:2   ×  Expected indentation of 2 spaces             indentation                      
+  31:2   ×  Expected indentation of 2 spaces             indentation                      
+  35:2   ×  Expected indentation of 2 spaces             indentation                      
+  36:2   ×  Expected indentation of 2 spaces             indentation                      
+  37:2   ×  Expected indentation of 2 spaces             indentation                      
+  38:2   ×  Expected indentation of 2 spaces             indentation                      
+  39:2   ×  Expected indentation of 2 spaces             indentation                      
+  39:8   ×  Unexpected unit                              length-zero-no-unit              
+  40:2   ×  Expected indentation of 2 spaces             indentation                      
+  41:2   ×  Expected indentation of 2 spaces             indentation                      
+  42:2   ×  Expected indentation of 2 spaces             indentation                      
+  43:2   ×  Expected indentation of 2 spaces             indentation                      
+  43:15  ×  Unexpected unit                              length-zero-no-unit              
+  43:27  ×  Unexpected unit                              length-zero-no-unit              
+  46:21  ×  Expected single space after ">"              selector-combinator-space-after  
+  46:21  ×  Expected single space before ">"             selector-combinator-space-before 
+  47:2   ×  Expected indentation of 2 spaces             indentation                      
+  48:2   ×  Expected indentation of 2 spaces             indentation                      
+  52:2   ×  Expected indentation of 2 spaces             indentation                      
+  53:2   ×  Expected indentation of 2 spaces             indentation                      
+  54:2   ×  Expected indentation of 2 spaces             indentation                      
+  55:2   ×  Expected indentation of 2 spaces             indentation                      
+  56:2   ×  Expected indentation of 2 spaces             indentation                      
+  57:2   ×  Expected indentation of 2 spaces             indentation                      
+  61:2   ×  Expected indentation of 2 spaces             indentation                      
+  61:37  ×  Unexpected trailing zero(s)                  number-no-trailing-zeros         
+  65:2   ×  Expected indentation of 2 spaces             indentation                      
+  66:2   ×  Expected indentation of 2 spaces             indentation                      
+  66:9   ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+  67:2   ×  Expected indentation of 2 spaces             indentation                      
+  68:2   ×  Expected indentation of 2 spaces             indentation                      
+  69:2   ×  Expected indentation of 2 spaces             indentation                      
+  70:2   ×  Expected indentation of 2 spaces             indentation                      
+  71:2   ×  Expected indentation of 2 spaces             indentation                      
+  72:2   ×  Expected indentation of 2 spaces             indentation                      
+  73:2   ×  Expected indentation of 2 spaces             indentation                      
+  77:2   ×  Expected indentation of 2 spaces             indentation                      
+  78:2   ×  Expected indentation of 2 spaces             indentation                      
+  79:2   ×  Expected indentation of 2 spaces             indentation                      
+  80:2   ×  Expected indentation of 2 spaces             indentation                      
+  84:2   ×  Expected indentation of 2 spaces             indentation                      
+  85:2   ×  Expected indentation of 2 spaces             indentation                      
+  86:2   ×  Expected indentation of 2 spaces             indentation                      
+  87:2   ×  Expected indentation of 2 spaces             indentation                      
+  87:9   ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+  88:2   ×  Expected indentation of 2 spaces             indentation                      
+  89:2   ×  Expected indentation of 2 spaces             indentation                      
+  89:16  ×  Unexpected unit                              length-zero-no-unit              
+  93:2   ×  Expected indentation of 2 spaces             indentation                      
+  93:12  ×  Unexpected unit                              length-zero-no-unit              
+  97:2   ×  Expected indentation of 2 spaces             indentation                      
+  97:16  ×  Unexpected unit                              length-zero-no-unit              
+  98:2   ×  Expected indentation of 2 spaces             indentation                      
+  99:2   ×  Expected indentation of 2 spaces             indentation                      
+ 100:2   ×  Expected indentation of 2 spaces             indentation                      
+ 101:2   ×  Expected indentation of 2 spaces             indentation                      
+ 101:9   ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+ 102:2   ×  Expected indentation of 2 spaces             indentation                      
+ 106:2   ×  Expected indentation of 2 spaces             indentation                      
+ 107:2   ×  Expected indentation of 2 spaces             indentation                      
+ 111:2   ×  Expected indentation of 2 spaces             indentation                      
+ 112:2   ×  Expected indentation of 2 spaces             indentation                      
+ 113:2   ×  Expected indentation of 2 spaces             indentation                      
+ 114:2   ×  Expected indentation of 2 spaces             indentation                      
+ 114:16  ×  Unexpected unit                              length-zero-no-unit              
+ 115:2   ×  Expected indentation of 2 spaces             indentation                      
+ 116:2   ×  Expected indentation of 2 spaces             indentation                      
+ 120:2   ×  Expected indentation of 2 spaces             indentation                      
+ 121:2   ×  Expected indentation of 2 spaces             indentation                      
+ 125:2   ×  Expected indentation of 2 spaces             indentation                      
+ 129:2   ×  Expected indentation of 2 spaces             indentation                      
+ 130:2   ×  Expected indentation of 2 spaces             indentation                      
+ 131:2   ×  Expected indentation of 2 spaces             indentation                      
+ 132:2   ×  Expected indentation of 2 spaces             indentation                      
+ 133:2   ×  Expected indentation of 2 spaces             indentation                      
+ 133:12  ×  Unexpected unit                              length-zero-no-unit              
+ 133:20  ×  Unexpected unit                              length-zero-no-unit              
+ 134:2   ×  Expected indentation of 2 spaces             indentation                      
+ 135:2   ×  Expected indentation of 2 spaces             indentation                      
+ 136:2   ×  Expected indentation of 2 spaces             indentation                      
+ 137:2   ×  Expected indentation of 2 spaces             indentation                      
+ 138:2   ×  Expected indentation of 2 spaces             indentation                      
+ 139:2   ×  Expected indentation of 2 spaces             indentation                      
+ 140:2   ×  Expected indentation of 2 spaces             indentation                      
+ 144:2   ×  Expected indentation of 2 spaces             indentation                      
+ 144:20  ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+ 145:2   ×  Expected indentation of 2 spaces             indentation                      
+ 146:2   ×  Expected indentation of 2 spaces             indentation                      
+ 147:2   ×  Expected indentation of 2 spaces             indentation                      
+ 148:2   ×  Expected indentation of 2 spaces             indentation                      
+ 149:2   ×  Expected indentation of 2 spaces             indentation                      
+ 150:2   ×  Expected indentation of 2 spaces             indentation                      
+ 154:2   ×  Expected indentation of 2 spaces             indentation                      
+ 155:2   ×  Expected indentation of 2 spaces             indentation                      
+ 159:2   ×  Expected indentation of 2 spaces             indentation                      
+ 163:2   ×  Expected indentation of 2 spaces             indentation                      
+ 167:2   ×  Expected indentation of 2 spaces             indentation                      
+ 168:2   ×  Expected indentation of 2 spaces             indentation                      
+ 172:2   ×  Expected indentation of 2 spaces             indentation                      
+ 173:2   ×  Expected indentation of 2 spaces             indentation                      
+ 174:2   ×  Expected indentation of 2 spaces             indentation                      
+ 174:11  ×  Unexpected unit                              length-zero-no-unit              
+ 175:2   ×  Expected indentation of 2 spaces             indentation                      
+ 179:2   ×  Expected indentation of 2 spaces             indentation                      
+ 180:2   ×  Expected indentation of 2 spaces             indentation                      
+ 180:9   ×  Expected "#ffffff" to be "#fff"              color-hex-length                 
+ 181:2   ×  Expected indentation of 2 spaces             indentation                      
+ 182:2   ×  Expected indentation of 2 spaces             indentation                      
+ 186:2   ×  Expected indentation of 2 spaces             indentation                      
+ 187:2   ×  Expected empty line before custom property   custom-property-empty-line-before
+ 187:2   ×  Expected indentation of 2 spaces             indentation                      
+ 188:2   ×  Expected empty line before declaration       declaration-empty-line-before    
+ 188:2   ×  Expected indentation of 2 spaces             indentation                      
+ 192:2   ×  Expected indentation of 2 spaces             indentation                      
+ 196:2   ×  Expected indentation of 2 spaces             indentation                      
+ 197:2   ×  Expected indentation of 2 spaces             indentation                      
+ 198:2   ×  Expected indentation of 2 spaces             indentation                      
+ 202:2   ×  Expected indentation of 2 spaces             indentation                      
+ 203:2   ×  Expected indentation of 2 spaces             indentation                      
+ 208:2   ×  Expected indentation of 2 spaces             indentation                      
+
+ui-designer/ui-toolbar.html
+  38:13  ×  Unexpected unit                                                             length-zero-no-unit                   
+  50:19  ×  Unexpected unit                                                             length-zero-no-unit                   
+  70:13  ×  Unexpected unit                                                             length-zero-no-unit                   
+  74:15  ×  Expected double colon pseudo-element notation                               selector-pseudo-element-colon-notation
+  79:3   ×  Unexpected longhand value '10px 10px 0 10px' instead of '10px 10px 0'       shorthand-property-no-redundant-values
+  93:3   ×  Unexpected longhand value '8px 16px 16px 16px' instead of '8px 16px 16px'   shorthand-property-no-redundant-values
+  96:19  ×  Expected single space after ">"                                             selector-combinator-space-after       
+  96:19  ×  Expected single space before ">"                                            selector-combinator-space-before      
+ 113:3   ×  Expected empty line before declaration                                      declaration-empty-line-before         
+ 122:13  ×  Unexpected unit                                                             length-zero-no-unit                   
+ 127:12  ×  Unexpected unit                                                             length-zero-no-unit                   
+
+workflow.html
+  4:21  ×  Expected "#F5F5F5" to be "#f5f5f5"   color-hex-case
+  9:21  ×  Expected "#F5F5F5" to be "#f5f5f5"   color-hex-case
+ 13:21  ×  Expected "#A9A9A9" to be "#a9a9a9"   color-hex-case
+ 14:21  ×  Expected "#D4D4D4" to be "#d4d4d4"   color-hex-case
+ 19:21  ×  Expected "#F5F5F5" to be "#f5f5f5"   color-hex-case
+ 24:21  ×  Expected "#F5F5F5" to be "#f5f5f5"   color-hex-case
+ 28:21  ×  Expected "#A9A9A9" to be "#a9a9a9"   color-hex-case
+ 29:21  ×  Expected "#D4D4D4" to be "#d4d4d4"   color-hex-case
+

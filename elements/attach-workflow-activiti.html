@@ -1,0 +1,68 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<dom-module id="attach-workflow-activiti">
+  <style>
+    iron-icon {
+      --iron-icon-width: 20px;
+      --iron-icon-height: 20px;
+    }
+    
+    .col-2 > * {
+      width: calc(50% - 16px);
+      box-sizing: border-box;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+  </style>
+  <template>
+        <ev-ajax auto last-response={{workflowDefinitions}} 
+                     url='/api/Activiti_ProcessDefinitions/get'></ev-ajax>
+        <div class="vertical flex layout">
+            <div class="layout horizontal col-2">
+                <div class="vertical flex layout">
+                    <ev-radio-group field-id="operation" required label="Operations" value={{vm.operation}} 
+                                    displayproperty="display"
+                                    valueproperty="value"
+                                    listdata='[{"display":"Create","value":"create"}, {"display":"Update","value":"update"}, {"display":"Delete","value":"delete"}]'></ev-radio-group>
+                    <ev-input field-id="workflowBody.businessKey" label="Business Key" value={{vm.workflowBody.businessKey}}></ev-input>
+                    <ev-combo field-id="workflowBody.processDefinitionKey" required label="Process Name" 
+                              value={{vm.workflowBody.processDefinitionKey}} 
+                              listdata={{workflowDefinitions.data}} displayproperty="name" valueproperty="id" allow-free-text></ev-combo>
+                    <ev-checkbox field-id="wfDependent" label="Workflow Dependent" value={{vm.wfDependent}}></ev-checkbox>
+                </div>
+                <ev-data-table label="Workflow Variables" items={{vm.workflowBody.variables}} record-handling="local" editor-form-url="evf-designer/ui-designer/workflow-prop-form.html" columns='[{"key": "name","label": "Name","readOnly": true},{"key": "value","label": "Value","readOnly": true}]'></ev-data-table>
+            </div>
+            <div class="dialog-footer flex horizontal layout end-justified">
+                <div class="layout horizontal center justified">
+                    <paper-button primary on-tap="doSave">Save</paper-button>
+                </div>
+            </div>
+        </div>
+    </template>
+  <script>
+    Polymer({
+      is: 'attach-workflow-activiti',
+      behaviors: [CommonBehavior.EVAjaxBehavior, EV.ModelHandler, EV.FormValidationBehavior],
+      properties: {
+        vm: {
+          type: Object,
+          value: function() {
+            return {
+              wfDependent: false,
+              operation: 'create',
+              workflowBody: {
+                variables: []
+              }
+            }
+          }
+        }
+      }
+    });
+
+  </script>
+</dom-module>

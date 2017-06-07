@@ -1,0 +1,68 @@
+<link rel="import" href="ui-dom-tree.html">
+<link rel="import" href="../redux-store.html">
+<dom-module is="ui-dom-tree-container">
+  <style>
+
+
+  </style>
+  <template>
+        <ui-dom-tree dom={{dom}} dom-being-dragged={{domBeingDragged}}></ui-dom-tree>
+    </template>
+  <script>
+    Polymer({
+      is: 'ui-dom-tree-container',
+      properties: {
+        dom: {
+          type: Object,
+          statePath: 'dom'
+        },
+        domBeingDragged: {
+          type: Object
+        },
+        selectedElement: {
+          type: Object,
+          statePath: 'selectedElement'
+        },
+        selectedPolymerElement: {
+          type: Object,
+          statePath: 'selectedPolymerElement',
+          observer: 'elementSelected'
+        }
+      },
+      behaviors: [
+        ReduxBehavior
+      ],
+      listeners: {
+        'reposition-node': '_repositionNode'
+      },
+      elementSelected: function(newVal,oldVal) {
+        if (this.selectedElement && newVal !== oldVal) {
+          var prevElem = this.querySelector('[selected][ev-id]')
+          if (prevElem) {
+            prevElem.removeAttribute('selected');
+          }
+          var currentElem = this.querySelector('[ev-id="' + this.selectedElement.getAttribute('ev-id') + '"]')
+          currentElem.setAttribute('selected', '');
+          currentElem.scrollIntoViewIfNeeded();
+        }
+      },
+      actions: {
+        move: function(parentId, childElement, index) {
+          return {
+            type: 'MOVE_ELEMENT',
+            parentId: parentId,
+            childElement: childElement,
+            index: index
+          }
+        }
+      },
+      _repositionNode: function(event) {
+        var detail = event.detail;
+        var parentId = detail.target.getAttribute('ev-id');
+        this.dispatch('move', parentId, this.domBeingDragged, detail.index);
+      }
+
+    });
+
+  </script>
+</dom-module>

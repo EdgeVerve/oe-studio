@@ -1,0 +1,749 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<link rel="import" href="../../polymer/polymer.html">
+<dom-module id="model-container">
+  <template>
+    <style>
+      :host {
+        position: absolute;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        transition: box-shadow 300ms ease-out;
+        --paper-input-container-focus-color: #fff;
+        --paper-input-container-input-color: rgba(255, 255, 255, 0.6);
+        --paper-input-container-color: rgba(255, 255, 255, 0.6);
+      }
+
+      :host:hover {
+        box-shadow: 0 0 6px rgba(0, 0, 0, .16), 0 6px 12px rgba(0, 0, 0, .32);
+      }
+
+      paper-menu-button {
+        padding: 0;
+      }
+
+      paper-icon-button {
+        width: 20px;
+        height: 20px;
+        padding: 2px;
+      }
+
+      .header iron-icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      :host > div {
+        width: 250px;
+        height: 350px;
+        color: var(--model-container-font-color, #fff);
+        overflow: hidden;
+      }
+
+      .listing {
+        padding: 10px 16px;
+        box-sizing: border-box;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 245px;
+      }
+
+      .options {
+        position: absolute;
+        width: auto;
+        min-width: 50px;
+        opacity: 0;
+        transition: all 300ms ease-in;
+        top: 0;
+        padding: 0 4px;
+        display: flex;
+        justify-content: space-around;
+        background: var(--model-container-bg, #595959);
+      }
+
+      .options iron-icon {
+        width: 15px;
+        height: 15px;
+      }
+
+      .list-item:hover .options {
+        opacity: 1;
+      }
+
+      .container {
+        background: var(--model-container-bg, #595959);
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        transition: background 300ms ease-out;
+        font-family: Roboto-Light;
+      }
+
+      .header {
+        font-size: 14px;
+        display: block;
+        padding: 8px;
+        background: var(--model-container-header-bg, #474747);
+        transition: background 300ms ease-out;
+      }
+
+      :host.new > div {
+        color: var(--model-container-font-color, #727272);
+      }
+
+      :host.new .container {
+        background: var(--model-container-new-bg, #fcf9a3);
+        transition: background 300ms ease-in;
+      }
+
+      :host.new .options {
+        background: var(--model-container-new-bg, #fcf9a3);
+      }
+
+      :host.new .header {
+        transition: background 300ms ease-in;
+        background: var(--model-container-new-header-bg, #f7f380);
+      }
+
+      :host.active .container {
+        background: var(--model-container-active-bg, #2196f3);
+        transition: background 300ms ease-in;
+      }
+
+      :host.active .options {
+        background: var(--model-container-active-bg, #2196f3);
+      }
+
+      :host.active .header {
+        transition: background 300ms ease-in;
+        background: var(--model-container-active-header-bg, #1976d2);
+      }
+
+      paper-button {
+        background: inherit;
+        color: inherit;
+        text-transform: none;
+        font-size: 12px;
+      }
+
+      .list-item {
+        padding: 4px 0;
+        font-size: 12px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .pull-right {
+        float: right;
+      }
+
+      .options-icon {
+        opacity: 0;
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        transition: all 300ms ease-in;
+      }
+
+      :host:hover .options-icon {
+        opacity: 1;
+      }
+
+      .pull-left {
+        float: left;
+      }
+
+      .list-item.true {
+        border-left: 2px solid rgba(224, 224, 224, 0.15);
+      }
+
+      .list-item:not(:last-child) {
+        border-bottom: 1px solid rgba(224, 224, 224, 0.15);
+      }
+
+      .pull-right {
+        float: right;
+      }
+
+      .empty-state {
+        font-size: 14px;
+        padding: 20px;
+        text-align: center;
+        line-height: 23px;
+      }
+
+      .model-name {
+        width: 80%;
+        padding-left: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        line-height: 26px;
+        box-sizing: border-box;
+      }
+
+      .required {
+        background: #fff;
+        margin-right: 3px;
+      }
+
+      .property-name {
+        width: 50%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      ul,
+      li {
+        margin: 0;
+        padding: 0;
+      }
+
+      .sub-category:not(.last) {
+        border-bottom: 1px solid var(--divider-color);
+      }
+
+      .sub-category > * {
+        padding: 8px;
+      }
+
+      .dropdown-content {
+        background: #fff;
+        color: var(--secondary-text-color);
+        cursor: pointer;
+      }
+
+      li.sub-category {
+        padding: 8px;
+      }
+
+      .sub-category iron-icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      .sub-category iron-icon+span {
+        margin-left: 8px;
+      }
+
+      /* Model description style */
+      .model-detail {
+        padding-bottom: 8px;
+      }
+
+      .model-detail > iron-icon {
+        padding-right: 10px;
+        width: 20px;
+      }
+
+      .model-detail .model-detail-text {
+        width: calc(100% - 40px);
+      }
+
+      .show-panel {
+        font-size: 12px;
+        padding: 0 8px;
+      }
+
+      .show-panel iron-icon {
+        width: 20px;
+        height: 20px;
+        padding-left: 8px;
+      }
+
+      .model-extra-detail {
+        height: 275px;
+        padding: 0 8px;
+      }
+
+      .model-detail-text .detail-heading {
+        padding-bottom: 4px;
+      }
+
+      .model-detail-text .detail-value {
+        font-size: 12px;
+        line-height: 18px;
+      }
+
+      /* Property Listing style */
+      .property-listing {
+        height: 100%;
+      }
+
+      .property-type {
+        position: relative;
+        padding: 0 4px;
+        overflow: hidden;
+        font-style: italic;
+        min-width: 50px;
+      }
+
+      .add-property-panel {
+        position: absolute;
+        top: 100%;
+        background: inherit;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        transition: all 300ms ease-out;
+      }
+
+      .container.add-prop .add-property-panel {
+        top: 0%;
+      }
+
+      .empty-property-panel {
+        background: inherit;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        font-size: 14px;
+        letter-spacing: 0.7px;
+        padding: 40px;
+        box-sizing: border-box;
+      }
+
+      .empty-property-panel .main-text {
+        padding: 8px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .empty-property-panel .main-text > iron-icon {
+        padding-right: 8px;
+      }
+
+      #addPropertyForm {
+        padding: 16px;
+        box-sizing: border-box;
+      }
+
+      .add-property-panel .property-definition {
+        position: relative;
+        height: 100%;
+      }
+
+      .add-property-panel .property-definition paper-input {
+        color: #fff;
+      }
+
+      .add-property-panel .property-definition > div:not(.prop-actions) {
+        margin-bottom: 8px;
+      }
+
+      .add-property-panel .prop-actions {
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        padding: 10px 0;
+        box-sizing: border-box;
+      }
+
+      .field-label {
+        padding-bottom: 4px;
+      }
+
+      .property-validation iron-icon {
+        color: #fff;
+        border-left: 3px solid #fff;
+        width: 12px;
+        height: 12px;
+        margin-left: 8px;
+        padding-left: 2px;
+      }
+
+      .has-validation-false iron-icon {
+        opacity: 0.3;
+      }
+
+      .toggle-btn-container {
+        width: 50%;
+      }
+
+      paper-dropdown-menu.customized {
+        width: 100%;
+      }
+
+      paper-dropdown-menu.customized .dropdown-content {
+        --paper-menu: {
+          height: 200px;
+        }
+      }
+    </style> 
+    <div on-tap="_modelSelected" class="layout vertical">
+      <div class="header">
+        <span class="model-name" title="{{modelObj.name}}">{{modelObj.name}}</span>
+        <iron-collapse id="modelDetail" opened$={{showDetail}}>
+          <div class="layout vertical model-extra-detail">
+            <div class="layout horizontal model-detail">
+              <iron-icon icon="communication:vpn-key"></iron-icon>
+              <div class="model-detail-text">
+                <div class="detail-heading">Primary Key</div>
+                <div class="detail-value">Id</div>
+              </div>
+            </div>
+            <div class="layout horizontal model-detail">
+              <iron-icon icon="hardware:device-hub"></iron-icon>
+              <div class="model-detail-text">
+                <div class="detail-heading">Base Model</div>
+                <div class="detail-value">[[modelObj.base]]</div>
+              </div>
+            </div>
+            <div class="layout horizontal model-detail" hidden$="{{!modelObj.description}}">
+              <iron-icon icon="communication:comment"></iron-icon>
+              <div class="model-detail-text">
+                <div class="detail-heading">Description</div>
+                <div class="detail-value">[[modelObj.description]]</div>
+              </div>
+            </div>
+          </div>
+        </iron-collapse>
+        <div class="layout horizontal show-panel justified center">
+          <div on-tap="_toggleDetail" id="toggle-detail-view">
+            <label>[[modelDetailStatus]]</label>
+            <iron-icon icon="[[modelDetailIcon]]"></iron-icon>
+          </div>
+          <paper-button hidden$={{!showDetail}} on-tap="_viewModel" id="view-detail-view">
+            View Detail
+          </paper-button>
+        </div>
+        <div class="options-icon">
+          <paper-menu-button noink id="optionsMenu" horizontal-align="right">
+            <paper-icon-button noink icon="icons:more-vert" class="dropdown-trigger"></paper-icon-button>
+            <div class="dropdown-content">
+              <ul class="categories">
+                <li class="sub-category">
+                  <div on-tap="_attachWorkflow" id="attach-workflow-starter">
+                    <iron-icon icon="icons:play-for-work"></iron-icon>
+                    <span>Attach Workflow</span>
+                  </div>
+                  <div on-tap="_addRule" id="personalization-rule-starter">
+                    <iron-icon icon="icons:assignment"></iron-icon>
+                    <span>Add Personalization Rule</span>
+                  </div>
+                  <div on-tap="_addModelRule" id="model-rule-starter">
+                    <iron-icon icon="icons:assignment-turned-in"></iron-icon>
+                    <span>Add Model Rule</span>
+                  </div>
+                  <!--<div on-tap="_addDynamicAcl" id="dynamic-acl-starter">
+													<iron-icon icon="icons:filter-list"></iron-icon>
+													<span>Define Dynamic Acl</span>
+												</div>-->
+                  <div on-tap="_addDataAcl" id="data-acl-starter">
+                    <iron-icon icon="icons:filter-list"></iron-icon>
+                    <span>Define Data Acl</span>
+                  </div>
+                  <div on-tap="_manageStartupData" id="initial-data-starter">
+                    <iron-icon icon="icons:folder-open"></iron-icon>
+                    <span>Manage Startup Data</span>
+                  </div>
+                </li>
+                <li class="sub-category last">
+                  <div on-tap='_editModel' id="edit-model-starter">
+                    <iron-icon icon="icons:create"></iron-icon><span>Edit Model</span></div>
+                  <div on-tap='_cloneModel' id="clone-model-starter">
+                    <iron-icon icon="icons:content-copy"></iron-icon><span>Clone Model</span></div>
+                  <div on-tap='_deleteModel' id="delete-model-starter">
+                    <iron-icon icon="icons:cancel"></iron-icon><span>Delete Model</span></div>
+                </li>
+              </ul>
+            </div>
+          </paper-menu-button>
+          <iron-icon id="close-container" icon="clear" on-tap="closeContainer"></iron-icon>
+        </div>
+      </div>
+      <div class="container flex" id="propLister">
+        <template is="dom-if" if="{{!showProperties}}">
+          <div class="empty-property-panel layout vertical center">
+            <div class="main-text" on-tap="_launchNewProp">
+              <iron-icon icon="icons:view-carousel"></iron-icon> Add Property
+            </div>
+            <label>Tap to add property</label>
+          </div>
+        </template>
+        <template is="dom-if" if="{{showProperties}}">
+          <div class="property-listing layout vertical justified">
+            <div class="listing">
+              <template is="dom-repeat" items="{{modelObj.properties}}" as="property">
+                <div class="list-item">
+                  <div class="property-name pull-left" title="{{property.__name__}}"><span class="required" hidden$="{{!property.required}}">|</span>{{property.__name__}}</div>
+                  <div class$="property-validation pull-right has-validation-[[hasValidation(property)]]">
+                    <iron-icon id="validate-icon" icon="icons:done-all" on-tap="_addPropValidation"></iron-icon>
+                  </div>
+                  <div class="property-type pull-right">
+                    <div class="options">
+                      <iron-icon class="small" icon="create" id="edit-icon" on-tap="_launchEditProp"></iron-icon>
+                      <iron-icon class="small" icon="delete" id="delete-icon" on-tap="_deleteProperty"></iron-icon>
+                    </div>
+                    {{property.type}}
+                  </div>
+                </div>
+              </template>
+            </div>
+            <div class="buttons">
+              <paper-button on-tap="_launchNewProp" id="add-prop-panel">
+                <iron-icon icon="icons:view-carousel"></iron-icon><span>Add Property</span>
+              </paper-button>
+            </div>
+          </div>
+        </template>
+        <div class="add-property-panel">
+          <form is="iron-form" id="addPropertyForm">
+            <div class="property-definition">
+              <div>
+                <paper-input required allowed-pattern="[A-Za-z0-9_]+$" label="Property name" error-message="Please enter the property name"
+                  value="{{propertyObj.__name__}}"></paper-input>
+              </div>
+              <div>
+                <ev-combo listdata="[[validTypes]]" required class="customized" value="{{propertyObj.type}}" label="Property Type"></ev-combo>
+                <!--<paper-dropdown-menu label="Property Type" class="customized" vertical-align="bottom">
+                  <paper-menu required class="dropdown-content" attr-for-selected="datavalue" selected="{{propertyObj.type}}">
+                    <template is="dom-repeat" items="[[validTypes]]">
+                      <paper-item datavalue="[[item]]">[[item]]</paper-item>
+                    </template>
+                  </paper-menu>
+                </paper-dropdown-menu>-->
+              </div>
+              <div>
+                <div class="field-label">
+                  Field Required
+                </div>
+                <div class="toggle-btn-container">
+                  <paper-toggle-button noink checked="{{propertyObj.required}}">{{propertyObj.required}}</paper-toggle-button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="prop-actions">
+            <paper-button on-tap="_addNewPropValidations" id="validate-prop-btn">
+              Validate
+            </paper-button>
+            <paper-button on-tap="_cancelNewProp" id="cancel-add-prop">
+              Cancel
+            </paper-button>
+            <paper-button on-tap="_addNewProp" id="add-prop-btn">
+              Save
+            </paper-button>
+          </div>
+        </div>
+      </div>
+      <!--<ev-message-handler id="toast" fit-bottom duration=5000></ev-message-handler>-->
+    </div>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    'is': 'model-container',
+    properties: {
+      modelObj: {
+        type: Object,
+        value: function () {
+          return {};
+        }
+      },
+      showProperties: false
+    },
+    observers: ['propertiesChanged(modelObj.*)'],
+    behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior],
+    attached: function () {
+      var self = this;
+      this.set('modelObj', this.modelObj);
+      this.showDetail = false;
+      this._cancelNewProp();
+      this.editProperty = false;
+      this.calculatePrimaryKey();
+      this.modelDetailStatus = this.showDetail ? 'show less' : 'show more'
+      this.modelDetailIcon = this.showDetail ? 'expand-less' : 'expand-more'
+      document.addEventListener('save-property', function (e) {
+        if (self.modelObj.name === e.detail.modelObj.name) {
+          var newObj = e.detail.propertyObj;
+          var index = e.detail.index;
+          if (index >= 0) {
+            self.set('modelObj.properties.' + index, newObj);
+          } else {
+            self.push('modelObj.properties', newObj);
+          }
+          self._cancelNewProp();
+        }
+      });
+    },
+    propertiesChanged: function () {
+      if (this.modelObj.properties) {
+        if (this.modelObj.properties.length != 0) {
+          this.showProperties = true
+        } else {
+          this.showProperties = false;
+        }
+      } else {
+        this.showProperties = false;
+      }
+    },
+    _editModel: function () {
+      this.$.optionsMenu.close();
+      this.fire('edit-model', this.modelObj);
+    },
+    _cloneModel: function () {
+      this.$.optionsMenu.close();
+      this.fire('clone-model', this.modelObj);
+    },
+    _viewModel: function () {
+      this.fire('view-model-detail', this.modelObj);
+    },
+    _deleteModel: function () {
+      this.$.optionsMenu.close();
+      this.fire('delete-model', this.modelObj);
+    },
+    _addRule: function () {
+      this.$.optionsMenu.close();
+      this.fire('add-rule', this.modelObj);
+    },
+    _manageStartupData: function () {
+      this.$.optionsMenu.close();
+      this.fire('manage-startup-data', this.modelObj.name);
+    },
+    _addModelRule: function () {
+      this.$.optionsMenu.close();
+      this.fire('attach-model-rule', this.modelObj.name);
+    },
+    _addDataAcl: function () {
+      this.$.optionsMenu.close();
+      this.fire('attach-data-acl', this.modelObj);
+    },
+    _addDynamicAcl: function () {
+      this.$.optionsMenu.close();
+      this.fire('attach-dynamic-acl', this.modelObj);
+    },
+    _attachWorkflow: function () {
+      this.$.optionsMenu.close();
+      this.fire('attach-workflow', this.modelObj);
+    },
+    _deleteProperty: function (e) {
+      var data = {
+        message: 'Do you want to delete the property ?',
+        ok: function () {
+          this.splice('modelObj.properties', e.model.index, 1);
+        }.bind(this),
+        cancel: function () {
+          return;
+        }.bind(this)
+      }
+      this.fire('ev-show-confirm', data);
+    },
+    _modelSelected: function () {
+      this.fire('model-selected');
+    },
+    calculatePrimaryKey: function () {
+      var self = this;
+      this.primaryKey = 'id';
+      _.forEach(self.modelObj.properties, function (prop) {
+        if (prop.id) {
+          self.primaryKey = prop.__name__;
+        }
+      })
+    },
+    hasValidation: function (prop) {
+      var validationList = ['min', 'max', 'is', 'format', 'absence', 'unique', 'in', 'notin'];
+      for (var i = 0, len = validationList.length; i < len; i++) {
+        var k = validationList[i]
+        if (prop[k] != undefined &&
+          ((typeof prop[k] == 'boolean') ? true : ((typeof prop[k] == 'number') ? true : (prop[k].length > 0)))) {
+          return true
+        }
+      }
+      return false;
+    },
+    _toggleDetail: function () {
+      this.showDetail = !this.showDetail;
+      this.modelDetailStatus = this.showDetail ? 'show less' : 'show more'
+      this.modelDetailIcon = this.showDetail ? 'expand-less' : 'expand-more'
+    },
+    _launchNewProp: function () {
+      this.editProperty = false;
+      if (this.domHost && this.domHost.modelList) {
+        this.set('validTypes', this.getPropertyTypes(this.domHost.modelList));
+      } else {
+        this.set('validTypes', this.getPropertyTypes([]));
+      }
+      this.$.propLister.classList.add('add-prop');
+      this.set('propertyObj.type', "string");
+      this.set('propertyIndex', -1);
+    },
+    _launchEditProp: function (e) {
+      this.editProperty = true;
+      if (this.domHost && this.domHost.modelList) {
+        this.set('validTypes', this.getPropertyTypes(this.domHost.modelList));
+      } else {
+        this.set('validTypes', this.getPropertyTypes([]));
+      }
+      this.$.propLister.classList.add('add-prop');
+      this.set('propertyIndex', e.model.index);
+      this.set('propertyObj', JSON.parse(JSON.stringify(e.model.property)));
+    },
+    _cancelNewProp: function () {
+      this.propertyObj = {
+        __name__: '',
+        type: '',
+        required: false
+      }
+      this.resetFormValidations(this.$.addPropertyForm);
+      this.$.propLister.classList.remove('add-prop')
+    },
+    closeContainer: function (e) {
+      e.stopPropagation();
+      this.fire('close-model-container', this.modelObj);
+    },
+    _addNewProp: function () {
+      if (this.$.addPropertyForm.validate()) {
+        var name = this.propertyObj.__name__;
+        if (this.propertyIndex == -1) {
+          var attr = JSON.parse(JSON.stringify(this.propertyObj));
+          if (this.modelObj.properties.findIndex(function (k) {
+              return k.__name__ == name
+            }) == -1) {
+            this.push('modelObj.properties', attr);
+          } else {
+            this.fire('ev-show-error', 'Property name already exists');
+            return;
+          }
+        } else {
+          this.set('modelObj.properties.' + this.propertyIndex, JSON.parse(JSON.stringify(this.propertyObj)));
+        }
+        this._cancelNewProp();
+        Polymer.dom(this).flush();
+        var ele=this.querySelector('.property-name[title="'+name+'"]');
+        ele.scrollIntoViewIfNeeded();
+      }
+    },
+    resetFormValidations: function (form) {
+      for (var i = 0, len = form.elements.length; i < len; i++) {
+        form.elements[i].checked = false;
+        form.elements[i].invalid = false;
+      }
+    },
+    _addPropValidation: function (e) {
+      var prop = JSON.parse(JSON.stringify(e.model.property));
+      this.fire('edit-property', {
+        property: prop,
+        index: e.model.__data__.index,
+        modelObj: this.modelObj,
+        editValidation: true
+      });
+    },
+    _addNewPropValidations: function () {
+      var prop = JSON.parse(JSON.stringify(this.propertyObj))
+      this.fire('edit-property', {
+        property: prop,
+        index: this.propertyIndex,
+        modelObj: this.modelObj,
+        editValidation: true
+      });
+    }
+  });
+</script>

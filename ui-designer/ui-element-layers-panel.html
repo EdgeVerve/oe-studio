@@ -1,0 +1,97 @@
+<link rel="import" href="ui-element-tree.html">
+<link rel="import" href="../redux-store.html">
+<dom-module is="ui-element-layers-panel">
+  <style>
+     :host {
+      display: block;
+      position: relative;
+    }
+    
+    .section-header {
+      font-family: Roboto-Medium;
+      font-size: 12px;
+      color: #ffffff;
+      padding: 12px;
+      box-sizing: border-box;
+    }
+    
+    .main-container {
+      width: 240px;
+      overflow: auto;
+      max-height: calc(100vh - 119px);
+      box-sizing: border-box;
+    }
+    
+    .element-tree-container {
+      background: var(--default-primary-color);
+      float: left;
+      min-width: 100%;
+    }
+
+  </style>
+  <template>
+        <div class="section-header">Element Layers</div>
+        <div class="main-container">
+            <div class="element-tree-container">
+                <ui-element-tree dom={{dom}} dom-being-dragged={{domBeingDragged}} level="0"></ui-element-tree>
+            </div>
+        </div>
+    </template>
+  <script>
+    Polymer({
+      is: 'ui-element-layers-panel',
+      properties: {
+        dom: {
+          type: Object,
+          statePath: 'dom'
+        },
+        domBeingDragged: {
+          type: Object
+        },
+        selectedElement: {
+          type: Object,
+          statePath: 'selectedElement'
+        },
+        selectedPolymerElement: {
+          type: Object,
+          statePath: 'selectedPolymerElement',
+          observer: 'elementSelected'
+        }
+      },
+      behaviors: [
+        ReduxBehavior
+      ],
+      listeners: {
+        'reposition-node': '_repositionNode'
+      },
+      elementSelected: function(newVal,oldVal) {
+        if (this.selectedElement && newVal !== oldVal) {
+          var prevElem = this.querySelector('.selected[ev-id]')
+          if (prevElem) {
+            prevElem.classList.remove('selected');
+          }
+          var currentElem = this.querySelector('[ev-id="' + this.selectedElement.getAttribute(
+            'ev-id') + '"]')
+          currentElem.classList
+            .add('selected');
+        }
+      },
+      actions: {
+        move: function(parentId, childElement, index) {
+          return {
+            type: 'MOVE_ELEMENT',
+            parentId: parentId,
+            childElement: childElement,
+            index: index
+          }
+        }
+      },
+      _repositionNode: function(event) {
+        var detail = event.detail;
+        var parentId = detail.target.getAttribute('ev-id');
+        this.dispatch('move', parentId, this.domBeingDragged, detail.index);
+      }
+    });
+
+  </script>
+</dom-module>

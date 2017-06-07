@@ -1,0 +1,921 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<link rel="import" href="../../polymer/polymer.html">
+<script src="../../inflection/inflection.min.js"></script>
+<link rel="import" href="../behaviours/designer-wrapper-behaviors.html">
+<dom-module id="model-definition-dialog">
+  <style>
+    :host {
+      color: var(--secondary-text-color);
+      letter-spacing: 0.75px;
+    }
+
+    .dialog-header.custom-shadow {
+      box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.15);
+    }
+
+    paper-dialog {
+      width: calc(100% - 48px);
+      height: calc(100% - 48px);
+      margin: 24px !important;
+      background: var(--paper-dialog-background-color);
+    }
+
+    .dialog-content {
+      border-bottom: 1px solid var(--divider-color);
+      height: calc(100% - 168px);
+      overflow: auto;
+      margin-top: 0 !important;
+    }
+
+    .pull-right {
+      float: right;
+    }
+
+    .toggle-btn-text,
+    .sub-text {
+      font-size: 12px;
+      line-height: 24px;
+    }
+
+    ul,
+    li {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .stepper > li {
+      display: inline-block;
+    }
+
+    .custom-icon {
+      height: 24px;
+      width: 24px;
+    }
+
+    .base-properties-container {
+      padding: 2px 0 !important;
+    }
+
+    .base-properties {
+      border-left: 3px solid var(--divider-color);
+      padding: 2px 5px;
+      box-sizing: border-box;
+      max-height: 85px;
+      overflow-y: auto;
+    }
+
+    .base-properties-list > div {
+      display: inline-block;
+      background: #d8d8d8;
+      font-size: 12px;
+      padding: 2px 10px;
+      border-radius: 16px;
+      margin: 2px 0;
+      box-sizing: border-box;
+    }
+
+    .stepper {
+      padding: 16px 0 20px;
+      font-size: 14px;
+      font-family: Roboto;
+      height: 72px;
+      box-sizing: border-box;
+    }
+
+    .tab-index {
+      background: #9b9b9b;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      display: inline-block;
+      line-height: 24px;
+      color: var(--default-text-color);
+      cursor: pointer;
+    }
+
+    .tab-name {
+      display: inline-block;
+      padding-left: 8px;
+    }
+
+    .tab-index iron-icon {
+      width: 15px;
+      height: 15px;
+      margin-top: -2px;
+    }
+
+    .stepper > iron-selector div.tab-edit {
+      background: var(--accent-color);
+    }
+
+    .stepper > iron-selector div.tab-valid {
+      background: var(--accent-color);
+    }
+
+    .stepper > iron-selector div.tab-invalid {
+      color: var(--error-color);
+      display: inline-block;
+    }
+
+    .tab-name .main-txt {
+      font-size: 14px;
+      color: #000;
+      cursor: pointer;
+    }
+
+    .tab-name .alt-txt {
+      font-size: 12px;
+    }
+
+    .stepper > iron-selector > div.iron-selected .tab-name .main-txt {
+      font-weight: bold;
+    }
+
+    .stepper > iron-selector .tab-name.invalid .main-txt {
+      color: var(--error-color);
+    }
+
+    .stepper > iron-selector .tab-name.invalid .alt-txt {
+      color: var(--error-color);
+    }
+
+    .stepper > iron-selector > div + div:before {
+      height: 1px;
+      width: 60px;
+      display: inline-block;
+      background: var(--divider-color);
+      content: "";
+      margin: 0 8px;
+    }
+
+    .basic-options {
+      border-right: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .additional-options {
+      padding-left: 16px;
+    }
+
+    .model-option {
+      display: flex;
+      flex-direction: row;
+      margin: 8px 0;
+      align-items: center;
+      padding: 8px 16px 8px 0;
+    }
+
+    .toggle-btn-subtext {
+      font-size: 12px;
+      line-height: 24px;
+      font-style: italic;
+    }
+
+    .toggle-btn-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .toggle-btn-container:not(.custom) > * {
+      flex: 1;
+    }
+
+    .model-option > div:nth-child(1) {
+      flex: 3;
+    }
+
+    .model-option > *:nth-child(2) {
+      flex: 6;
+    }
+
+    iron-icon + span {
+      margin-right: 8px;
+    }
+
+    .mixin-heading {
+      height: 40px;
+      background: #fafafa;
+      padding-right: 16px;
+    }
+
+    .mixin-heading a:-webkit-any-link {
+      color: inherit !important;
+    }
+
+    .mixin-heading iron-icon {
+      --iron-icon-width: 20px;
+      --iron-icon-height: 20px;
+    }
+
+    .mixin-listing {
+      max-height: 110px;
+      overflow: auto;
+      font-size: 14px;
+    }
+
+    .mixin-listing > div {
+      height: 40px;
+      padding: 4px 8px;
+      box-sizing: border-box;
+    }
+
+    .custom-border-btn {
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      padding: 4px 8px;
+      height: 30px;
+      margin-right: 16px;
+    }
+
+    .name {
+      max-width: 95%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+  <template>
+    <paper-dialog id="createModelDialog" with-backdrop no-cancel-on-outside-click no-cancel-on-esc-key>
+      <div class="dialog-header custom-shadow">
+        <div class="title flex horizontal layout justified center">
+          <div class="name flex layout horizontal center">
+            <iron-icon icon="ev-icons:model"></iron-icon>
+            <span>
+                            <span hidden$="{{editModel}}">Create Model</span>
+            <span hidden$="{{!editModel}}">[[vm.name]]</span>
+            </span>
+          </div>
+
+          <iron-icon icon="icons:close" id="model-definition-dialog-custom-save" on-tap="_customSaveModel"></iron-icon>
+        </div>
+        <div class="stepper layout horizontal center justified">
+          <iron-selector class="layout horizontal center" attr-for-selected="datavalue" selected="{{selected}}" on-iron-select="_validateTab">
+            <template is="dom-repeat" items="{{tabList}}" as="tab">
+              <div class="layout horizontal center" id$="step_{{_calculateTabIndex(index)}}" datavalue="{{index}}">
+                <div class="tab-no tab-index" hidden$="{{_showOrHide(tab.class,'shownum')}}">{{_calculateTabIndex(index)}}
+                </div>
+                <div class="tab-edit tab-index" hidden$="{{_showOrHide(tab.class,'edit')}}">
+                  <iron-icon icon="icons:create"></iron-icon>
+                </div>
+                <div class="tab-valid tab-index" hidden$="{{_showOrHide(tab.class,'valid')}}">
+                  <iron-icon icon="icons:done"></iron-icon>
+                </div>
+                <div class="tab-invalid" hidden$="{{_showOrHide(tab.class,'invalid')}}">
+                  <iron-icon icon="icons:report-problem"></iron-icon>
+                </div>
+                <div class$="tab-name {{tab.class}}">
+                  <div class="main-txt">{{tab.name}}</div>
+                  <div class="alt-txt" hidden="{{!tab.optional}}">Optional</div>
+                </div>
+              </div>
+            </template>
+          </iron-selector>
+          <paper-button secondary raised hidden="{{isModelInfoPage(selected)}}" id="model-definition-dialog-add-item" on-tap="addItem">
+            [[getAddItemLabel(selected)]]
+          </paper-button>
+        </div>
+      </div>
+      <div class="dialog-content">
+        <iron-pages selected="{{selected}}">
+          <div class="create-model-step">
+            <form is="iron-form" id="basicform" class=" layout horizontal">
+              <div class="basic-options flex">
+                <div class="model-option">
+                  <div class="label">Enter the model name</div>
+                  <paper-input id="model-name" required allowed-pattern="^[a-zA-Z][a-zA-Z0-9_]*$" label="Enter model name" error-message="Please enter the model name"
+                    value="{{vm.name}}" no-label-float></paper-input>
+                </div>
+                <div class="model-option">
+                  <div class="label">Choose the base</div>
+                  <ev-combo listdata=[[baseTypes]] label="Select base model" no-label-float displayproperty="name" valueproperty="name" value={{vm.base}}></ev-combo>
+                </div>
+                <div class="base-properties-container model-option">
+                  <div class="label"></div>
+                  <div class="base-properties">
+                    <template is="dom-if" if={{baseProperties.length}}>
+                      <span class="sub-text">Properties of the selected model listed below</span>
+                      <div class="base-properties-list">
+                        <template is="dom-repeat" items="[[baseProperties]]">
+                          <div>[[item.__name__]]</div>
+                        </template>
+                      </div>
+                    </template>
+                    <template is="dom-if" if={{!baseProperties.length}}>
+                      <span class="sub-text">No Properties</span>
+                    </template>
+                  </div>
+                </div>
+                <div class="model-option">
+                  <div class="label">Variant of</div>
+                  <ev-combo listdata=[[baseTypes]] label="Select model to override" no-label-float displayproperty="name" valueproperty="name"
+                    value={{vm.variantOf}}></ev-combo>
+                </div>
+                <div class="model-option">
+                  <div class="label">Plural</div>
+                  <paper-input id="plural" allowed-pattern="^[a-zA-Z][a-zA-Z0-9_]*$" value="{{vm.plural}}" label="Enter model plural name"
+                    no-label-float></paper-input>
+                </div>
+                <div class="model-option">
+                  <div class="label">Enter the model description</div>
+                  <paper-textarea id="description" no-label-float label="Enter model description" value="{{vm.description}}" char-counter maxlength="200"
+                    max-rows=4></paper-textarea>
+                </div>
+              </div>
+              <div class="additional-options flex">
+                <div class="model-option">
+                  <div class="label">idInjection</div>
+                  <div class="toggle-btn-container">
+                    <paper-toggle-button id="id-injection" checked="{{vm.idInjection}}">{{vm.idInjection}}</paper-toggle-button>
+                    <div class="toggle-btn-subtext">If true, id property is added to the model automatically.</div>
+                  </div>
+                </div>
+                <div class="model-option">
+                  <div class="label">Strict</div>
+                  <div class="toggle-btn-container">
+                    <paper-toggle-button id="strict" checked="{{vm.strict}}">{{vm.strict}}</paper-toggle-button>
+                    <div class="toggle-btn-subtext">Only properties defined in the model are accepted</div>
+                  </div>
+                </div>
+                <div class="model-option">
+                  <div class="label">Enable Default UI</div>
+                  <div class="toggle-btn-container">
+                    <paper-toggle-button id="enableDefaultUI" checked="{{vm.enableDefaultUI}}">{{vm.enableDefaultUI}}</paper-toggle-button>
+                    <div class="toggle-btn-subtext">Enable UI for the model</div>
+                  </div>
+                </div>
+                <!--
+                <div class="model-option layout start">
+                    <div class="label">Enable WorkFlow</div>
+                    <div class="toggle-btn-container layout start">
+                        <paper-toggle-button id="enable-workflow" checked="{{workFlowEnabled.status}}">{{workFlowEnabled.status}}</paper-toggle-button>
+                        <div class="workflow-option" hidden="{{!workFlowEnabled.status}}">
+                            <paper-input allowed-pattern="[A-Za-z0-9_]+$" label="Oncreate Process Id" value="{{workFlowEnabled.createdId}}"></paper-input>
+                            <paper-input allowed-pattern="[A-Za-z0-9_]+$" label="Onupdate Process Id" value="{{workFlowEnabled.updatedId}}"></paper-input>
+                        </div>
+                    </div>
+                </div>
+                -->
+                <div class="mixin-listing-block">
+                  <div class="mixin-heading layout horizontal justified center">
+                    <div>
+                      [[activeMixins]] mixins applied
+                      <iron-icon icon="create" on-tap="toggleMixinPanel"></iron-icon>
+                      <a href="http://10.73.53.167/ev/ev-foundation/wikis/home" target="_blank">
+                        <iron-icon id="info-icon" icon="info"></iron-icon>
+                      </a>
+                    </div>
+                    <div class="layout horizontal justified center">
+                      <paper-checkbox checked="{{checkAllMixins}}" on-tap="toggleMixins"> All Mixins</paper-checkbox>
+                    </div>
+                  </div>
+                  <iron-collapse opened="{{showMixinPanel}}">
+                    <div class="mixin-listing">
+                      <template is="dom-repeat" items="{{modelmixinsList}}">
+                        <div class="layout horizontal justified center">
+                          <label>[[item.label]]</label>
+                          <paper-checkbox checked="{{item.value}}" on-tap="getActiveMixinCount"></paper-checkbox>
+                        </div>
+                      </template>
+                    </div>
+                  </iron-collapse>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="add-properties-step">
+            <property-grid id="propertyGrid" property-list="{{vm.properties}}" property-types="{{propertyTypes}}"></property-grid>
+          </div>
+          <div class="add-validations-step">
+            <validation-grid id="validationGrid" ev-validations="{{vm.evValidations}}" model-list="{{modelList}}"></validation-grid>
+          </div>
+          <div class="add-relations-step">
+            <relation-grid id="relationGrid" relations="{{vm.relations}}" model-list="{{modelList}}"></relation-grid>
+          </div>
+          <div class="add-acls-step">
+            <acl-grid id="aclGrid" acls="{{vm.acls}}"></acl-grid>
+          </div>
+        </iron-pages>
+      </div>
+      <div class="dialog-footer flex layout horizontal justified">
+        <div>
+          <paper-button secondary id="backbtn" on-tap="_prevStep">BACK</paper-button>
+
+          <paper-icon-button icon="icons:file-download" on-tap="_downloadDefinition">
+          </paper-icon-button>
+        </div>
+        <div>
+          <paper-button primary id="savebtn" on-tap="_saveModel">SAVE</paper-button>
+          <paper-button secondary id="nextbtn" on-tap="_nextStep">NEXT</paper-button>
+        </div>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    Polymer({
+      is: 'model-definition-dialog',
+      properties: {
+        vm: {
+          type: Object
+        },
+        tabList: {
+          type: Array,
+          value: [{
+            name: 'Model Information',
+            optional: false,
+            class: 'edit'
+          }, {
+            name: 'Properties',
+            optional: false,
+            class: 'shownum'
+          }, {
+            name: 'Validations',
+            optional: false,
+            class: 'shownum'
+          }, {
+            name: 'Relations',
+            optional: true,
+            class: 'shownum'
+          }, {
+            name: "ACL's",
+            optional: false,
+            class: 'shownum'
+          }]
+        },
+        mixinsList: {
+          type: Array,
+          value: []
+        },
+        selected: {
+          type: Number,
+          value: 0,
+          notify: true,
+          observer: '_tabSelected'
+        },
+        modelObj: {
+          type: Object,
+          value: function () {
+            return {};
+          }
+        },
+        currentModelObj: {
+          type: Object,
+          value: function () {
+            return {};
+          }
+        },
+        modelList: {
+          type: Array,
+          value: function () {
+            return [];
+          },
+          notify: true
+        },
+        toggleIcon: {
+          type: String,
+          value: 'icons:expand-more'
+        },
+        baseProperties: {
+          type: Array
+        },
+        isEditMode: {
+          type: Boolean,
+          value: false
+        },
+        editModel: {
+          type: Boolean,
+          value: false
+        },
+        lastVisitedTabIndex: 0,
+        showBaseProperties: false,
+        renderInWorkArea: false
+      },
+      _calculateTabIndex: function (index) {
+        return index + 1;
+      },
+      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.HTMLHelper, CommonBehavior.ModelBehavior],
+      observers: [
+        'baseModelChanged(vm.base)',
+        'modelNameChanged(vm.name)'
+      ],
+      modelNameChanged: function (name) {
+
+        /*When editing the model, display the plural as is for the first time
+            and change it when it is edited the next time i.e isEditMode=false*/
+        if (!this.isEditMode) {
+          if (name != '') {
+            this.set('vm.plural', inflection.pluralize(name));
+          } else {
+            this.set('vm.plural', '');
+          }
+        }
+        this.isEditMode = false;
+      },
+      getActiveMixinCount: function () {
+        var count = this.modelmixinsList.filter(function (m) {
+          return m.value;
+        }).length;
+        this.set('activeMixins', count);
+        this.set('checkAllMixins', count == this.modelmixinsList.length);
+      },
+      toggleMixins: function () {
+        var self = this;
+        this.modelmixinsList.forEach(function (m, idx) {
+          self.set('modelmixinsList.' + idx + '.value', self.checkAllMixins);
+        })
+        this.getActiveMixinCount();
+      },
+      ready: function () {
+        this.selected = 0;
+        this.selectedContribs = [];
+        this.contextContribs = ['tenant_id', 'userId', 'remote_user', 'location', 'lang', 'device',
+          'roles'
+        ];
+      },
+      baseModelChanged: function () {
+
+        var baseModel = this.modelList.find(function (d) {
+          return d.name === this.vm.base;
+        }.bind(this)) || {
+          properties: [],
+          mixins: []
+        };
+
+        /* Show the Properties of Base Model */
+        this.set('baseProperties', baseModel.properties);
+
+        /* And apply the mixins afresh from the Base Model selected */
+        this.setMixinsArray(baseModel.mixins || []);
+      },
+      setMixinsArray: function (mixinObj) {
+        var self = this;
+        if (!this.modelMixinsList) {
+          return;
+        }
+        this.modelmixinsList.forEach(function (mixin, idx) {
+          self.set('modelmixinsList.' + idx + '.value', mixinObj[mixin.key]);
+        });
+        this.getActiveMixinCount();
+      },
+      calculateActiveMixin: function (list) {
+        return list.filter(function (mix) {
+          return mix.value
+        }).length;
+      },
+      toggleMixinPanel: function () {
+        this.showMixinPanel = !this.showMixinPanel;
+      },
+      _customSaveModel: function () {
+        var ismodeldetail = this.$.basicform.validate();
+        if (ismodeldetail) {
+          this._setFlags(this.selected + 1);
+          this.clearAdditionalFields();
+          //var isDirty = !_.isEqual(this.originalvm, this.vm)
+          var isDirty = !(JSON.stringify(this.vm) == JSON.stringify(this.originalvm))
+          if (isDirty) {
+            var data = {
+              message: 'Do you want to save the changes to the model ?',
+              ok: function () {
+                this._saveModel();
+              }.bind(this),
+              cancel: function () {
+                this.hideDialog();
+              }.bind(this)
+            }
+            this.fire('ev-show-confirm', data);
+          } else {
+            this.hideDialog();
+          }
+        } else {
+          this.hideDialog();
+        }
+      },
+      clearAdditionalFields: function () {
+        this.vm.relations.forEach(function (d) {
+          if (d.__name__ && d.__name__.trim() !== '') {
+            delete d.newRelation;
+            delete d.editable;
+            delete d.checked;
+          }
+        });
+
+        this.vm.properties.forEach(function (d) {
+          if (d.__name__ && d.__name__.trim() !== '') {
+            delete d.newProp;
+            delete d.editable;
+            delete d.checked;
+          }
+        });
+
+        this.vm.acls.forEach(function (d) {
+          delete d.customFunction;
+          delete d.propertyValue;
+          delete d.newProp;
+          delete d.editable;
+          delete d.checked;
+        });
+      },
+      isModelInfoPage: function (page) {
+        return page == 0
+      },
+      getAddItemLabel: function (selected) {
+        switch (selected) {
+          case 1:
+            return 'Add Property';
+          case 2:
+            return 'Add Validation';
+          case 3:
+            return 'Add Relation';
+          case 4:
+            return 'Add ACL';
+          default:
+            return ''
+        }
+      },
+      addItem: function () {
+        switch (this.selected) {
+          case 1:
+            this.$.propertyGrid._addProperty();
+            break;
+          case 2:
+            this.$.validationGrid._addValidation();
+            break;
+          case 3:
+            this.$.relationGrid._addRelation();
+            break;
+          case 4:
+            this.$.aclGrid._addacl();
+            break;
+          default:
+            return '';
+        }
+      },
+      _camelCaseToKebabCase: function (str) {
+        var ret = str.replace(/([A-Z])/g, function (group) {
+          return '-' + group.toLowerCase();
+        });
+        if (ret[0] === '-') {
+          ret = ret.substr(1);
+        }
+        return ret;
+      },
+      _downloadDefinition: function () {
+        var validflag = this._setFlags(this.selected + 1);
+        // var checked;
+        if (validflag) {
+          // if (this.vm.checked) { //to retain checked
+          //   checked = this.vm.checked;
+          // }
+          this.clearAdditionalFields();
+          this.set('modelObj', JSON.parse(JSON.stringify(this.vm)));
+          delete this.modelObj.checked;
+          this.modelObj = this.modelToObject(this.modelObj);
+          this.attachWorkFlowSetting();
+          this.attachMixins();
+          var fileName = this._camelCaseToKebabCase(this.modelObj.name) + '.json';
+          this.downloadToFile(fileName, 'application/json', this.modelObj);
+        }
+      },
+      _saveModel: _.debounce(function () {
+        var checked = false;
+        var validflag = this._setFlags(this.selected + 1);
+        if (validflag) {
+          var isNewModel = !this.editModel;
+          //to retain checked
+          if (this.vm.checked) {
+            checked = this.vm.checked;
+          }
+          this.clearAdditionalFields();
+          this.set('modelObj', EV.clone(this.vm));
+          delete this.modelObj.checked;
+          this.modelObj = this.modelToObject(this.modelObj);
+          this.attachWorkFlowSetting();
+          this.attachMixins();
+
+          var url = 'api/ModelDefinitions';
+          var method = isNewModel ? 'POST' : 'PUT';
+          var body = this.modelObj;
+          this.makeAjaxCall(url, method, body, null, null, function (err, response) {
+            if (err) {
+              this.resolveError(err);
+            } else if (response) {
+              response = this.modelToArray(response);
+              response.checked = checked;
+              // making it false in order to not trigger the inflection method
+              this.isEditMode = true;
+              this.set('vm', response);
+              if (!isNewModel) {
+                var index = this.modelList.findIndex(function (x) {
+                  return x.id == response.id;
+                });
+
+                this.set('modelList.' + index, this.vm);
+                this.fire('model-saved', {
+                  'model': this.vm,
+                  'newmodel': false
+                });
+              } else {
+                if (this.renderInWorkArea) {
+                  this.set('vm.checked', true);
+                } else {
+                  this.set('vm.checked', false);
+                }
+                this.push('modelList', this.vm);
+                this.fire('model-saved', {
+                  'model': this.vm,
+                  'newmodel': true,
+                  'renderInWorkArea': this.renderInWorkArea
+                });
+                this.set('editModel', true);
+              }
+              this.fire('ev-show-success', 'Saved successfully');
+              this.hideDialog();
+            }
+          }.bind(this));
+        }
+      }, 500),
+      attachWorkFlowSetting: function () {
+
+        var hasValue = false;
+
+        var setting = {}
+
+        if (this.workFlowEnabled.createdId && this.workFlowEnabled.createdId.length != 0) {
+          setting.create = this.workFlowEnabled.createdId;
+          hasValue = true;
+        }
+        if (this.workFlowEnabled.updatedId && this.workFlowEnabled.updatedId.length != 0) {
+          setting.update = this.workFlowEnabled.updatedId;
+          hasValue = true;
+        }
+
+        if (this.workFlowEnabled.status && hasValue) {
+          this.modelObj.options = this.modelObj.options || {};
+          this.modelObj.options.evEnableWorkflow = setting;
+        } else if (this.modelObj.options && this.modelObj.options.evEnableWorkflow) {
+          delete this.modelObj.options.evEnableWorkflow;
+        }
+      },
+      attachMixins: function () {
+        var obj = {};
+        this.modelmixinsList.forEach(function (mixin) {
+          obj[mixin.key] = mixin.value;
+        });
+        this.set('modelObj.mixins', obj);
+      },
+      openDialog: function () {
+        this.refreshModelList();
+        this.$.createModelDialog.open();
+        this.selected = 0;
+        this.lastVisitedTabIndex = 0;
+
+
+        this.$.aclGrid._fetchRoles();
+
+        /*this.set('selectedContribs', this.vm ? (this.vm.autoscope || []) : []);*/
+        var tempWorkFlow = {
+          status: false,
+          createdId: '',
+          updatedId: ''
+        }
+
+        if (this.vm && this.vm.options && this.vm.options.evEnableWorkflow) {
+          tempWorkFlow = {
+            status: true,
+            createdId: (this.vm.options.evEnableWorkflow.create || ''),
+            updatedId: (this.vm.options.evEnableWorkflow.update || '')
+          }
+        }
+
+        this.set('modelmixinsList', JSON.parse(JSON.stringify(this.mixinsList)));
+        this.set('activeMixins', this.mixinsList.length);
+        if (this.vm) {
+          this.originalvm = JSON.parse(JSON.stringify(this.vm));
+          if (this.vm.mixins) {
+            this.setMixinsArray(this.vm.mixins)
+          }
+        }
+
+        this.getActiveMixinCount();
+        this.set('workFlowEnabled', tempWorkFlow)
+
+        //this.$.attrChooser.showFillBox = false;
+        this.tabList.forEach(function (tab, index) {
+          this.set('tabList.' + index + '.class', 'shownum');
+        }.bind(this));
+        this.set('tabList.' + this.selected + '.class', 'edit');
+        this.$.propertyGrid.deleteMultiple = false;
+        this.$.propertyGrid.setAll(false);
+      },
+      hideDialog: function () {
+        this.$.createModelDialog.close();
+      },
+      _tabSelected: function () {
+        this.$.backbtn.disabled = false;
+        this.$.nextbtn.disabled = false;
+        if (this.selected == 0) {
+          this.$.backbtn.disabled = true;
+        } else if (this.selected == 4) {
+          this.$.nextbtn.disabled = true;
+        }
+      },
+      _prevStep: function () {
+        if (this.selected != 0) {
+          this.selected -= 1;
+        }
+        this._setFlags(this.selected - 1);
+      },
+      _nextStep: function () {
+        if (this.selected != 4) {
+          this.selected += 1;
+        }
+        this._setFlags(this.selected);
+      },
+      _showOrHide: function (className, param) {
+        if (className == param) {
+          return false;
+        } else {
+          return true;
+        }
+      },
+      _validateTab: function () {
+        this._setFlags(this.selected);
+      },
+      _setFlags: function (tabindex) {
+        var saveFlag = false;
+        if (tabindex == this.selected + 1) {
+          saveFlag = true;
+        }
+        if (this.selected > this.lastVisitedTabIndex) {
+          this.lastVisitedTabIndex = this.selected;
+        }
+
+        _.forEach(this.tabList, function (tab, index) {
+          if (index >= this.lastVisitedTabIndex) {
+            this.set('tabList.' + index + '.class', 'shownum');
+          }
+        }.bind(this));
+        var valid = true;
+        var flags = [true, true, true, true, true];
+
+        if (tabindex <= this.lastVisitedTabIndex) {
+          tabindex = this.lastVisitedTabIndex;
+        }
+
+        if (this.lastVisitedTabIndex == 4) {
+          flags[4] = this.$.aclGrid.customValidation();
+          if (flags[4]) {
+            this.$.aclGrid._setReadOnly();
+          }
+        }
+
+        switch (tabindex) {
+          case 5:
+            flags[4] = this.$.validationGrid.customValidation();
+            if (flags[4]) {
+              this.$.validationGrid._setReadOnly();
+            }
+          case 4:
+            flags[3] = this.$.aclGrid.customValidation();
+            if (flags[3]) {
+              this.$.aclGrid._setReadOnly();
+            }
+          case 3:
+            flags[2] = this.$.relationGrid.customValidation();
+            if (flags[2]) {
+              this.$.relationGrid._setReadOnly();
+            }
+          case 2:
+            flags[1] = this.$.propertyGrid.customValidation();
+            if (flags[1]) {
+              this.$.propertyGrid._setReadOnly();
+            }
+          case 1:
+            flags[0] = this.$.basicform.validate();
+            break;
+          default:
+            break;
+        }
+
+        flags.forEach(function (val, index) {
+          if (index <= tabindex - 1) {
+            if (val) {
+              this.set('tabList.' + index + '.class', 'valid');
+            } else {
+              valid = false;
+              this.set('tabList.' + index + '.class', 'invalid');
+            }
+          }
+        }.bind(this));
+        if (!saveFlag) {
+          this.set('tabList.' + this.selected + '.class', 'edit');
+        }
+        return valid;
+      }
+    });
+  </script>
+</dom-module>

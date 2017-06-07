@@ -1,0 +1,158 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <!-- importing dependent elements -->
+  <link rel="import" href="../all-imports.html">
+
+</head>
+
+<body>
+
+  <!-- You can use the document as a place to set up your fixtures. -->
+  <test-fixture id="service-personalization-field-value-replace-test">
+    <template>
+            <service-personalization-field-value-replace></service-personalization-field-replace>
+        </template>
+  </test-fixture>
+
+  <script>
+    suite('<service-personalization-field-value-replace>', function() {
+
+      var myEl;
+      var listConfig = {
+        'listType': 'stack',
+        'uniqueRecords': true,
+        'uniqueKey': null,
+        'defaultItem': null,
+        'validateFields': ['name', 'value']
+      }
+
+
+
+
+
+      setup(function() {
+        myEl = fixture('service-personalization-field-value-replace-test');
+        myEl._listConfig = listConfig;
+
+
+        var msgHandler = document.createElement('ev-message-handler');
+        msgHandler.id = 'toast';
+        msgHandler.fitBottom = true;
+        msgHandler.duration = 5000;
+        myEl.appendChild(msgHandler);
+        Polymer.dom(myEl.root).flush();
+      });
+
+      test('Inital state when no parameters are set', function() {
+        expect(myEl.propertyList.length).to.equal(0);
+
+      })
+
+
+      test('Add empty row ', function(done) {
+        flush(function() {
+          var addfieldvaluereplace = Polymer.dom(myEl.root).querySelector('#addfieldvaluereplace');
+          addfieldvaluereplace.click();
+          flush(function() {
+            done();
+          })
+        })
+      });
+
+      test('Deleting a Empty row', function(done) {
+
+        flush(function() {
+          var emptyStateBtn = Polymer.dom(myEl.root).querySelector('#addfieldvaluereplace');
+          emptyStateBtn.click();
+          flush(function() {
+            var deleteBtn = Polymer.dom(myEl.root).querySelector('.table-body .table-row #delete');
+            deleteBtn.click();
+            expect(myEl.propertyList.length).to.equal(0);
+            done();
+          })
+        })
+
+      });
+
+      test('Deleting multiple filled rows', function(done) {
+
+        flush(function() {
+          var emptyStateBtn = Polymer.dom(myEl.root).querySelector('#addfieldvaluereplace');
+          emptyStateBtn.click();
+          flush(function() {
+            var checkBtn = Polymer.dom(myEl.root).querySelector('#checkbox');
+            checkBtn.click();
+            var deleteBtn = Polymer.dom(myEl.root).querySelector('#multi-delete');
+            deleteBtn.click();
+            var msgHandler = myEl.childNodes[myEl.childNodes.length - 1];
+            var confirmToast = Polymer.dom(msgHandler.root).querySelector('paper-toast#confirm');
+            var okBtn = confirmToast.querySelector('paper-button#ok');
+            okBtn.click();
+            expect(myEl.propertyList.length).to.equal(0);
+            done();
+          })
+        })
+
+      });
+
+      test('Add empty row if the data is filled', function(done) {
+        flush(function() {
+          var addfieldvaluereplace = Polymer.dom(myEl.root).querySelector('#addfieldvaluereplace');
+          addfieldvaluereplace.click();
+          flush(function() {
+            var fieldValueReplace = {
+              'Property': 'product name',
+              'FromValue': 'furniture',
+              'ToValue': 'cupboard'
+            }
+            myEl.set('fieldValueReplace', fieldValueReplace);
+
+            myEl.setData();
+            flush(function() {
+              var addfieldvaluereplace = Polymer.dom(myEl.root).querySelector('#addfieldvaluereplace');
+              addfieldvaluereplace.click();
+              myEl.addedItem();
+              myEl.getData();
+              expect(myEl.collapsePanel).to.equal(false);
+              done();
+            });
+          })
+        })
+      })
+
+
+
+      test('togglepanel', function(done) {
+        flush(function() {
+          var togglepanel = Polymer.dom(myEl.root).querySelector('#toggle-panel')
+          togglepanel.click();
+          flush(function() {
+            done();
+          })
+        })
+      });
+
+
+
+    });
+
+  </script>
+
+</body>
+
+</html>

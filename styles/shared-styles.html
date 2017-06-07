@@ -1,0 +1,177 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<dom-module id="shared-styles">
+  <template>
+    <style>
+      body /deep/ app-toolbar {
+        height: 40px;
+        background: var(--default-primary-color);
+        padding: 0px;
+      }
+
+      .page-title {
+        @apply(--paper-font-display2);
+      }
+
+      paper-menu a > *,
+      paper-menu paper-item > *,
+      paper-menu paper-icon-item > * {
+        pointer-events: none;
+      }
+
+      .overlay-label-style {
+        background: #fff;
+        font-size: 12px;
+        padding: 2px 0px;
+        z-index: 1;
+      }
+
+      img.custom-end-point.jsplumb-endpoint-drop-allowed {
+        width: 0px !important;
+        height: 0px !important;
+        padding: 8px !important;
+        background: url('../images/valid_end_point.svg');
+      }
+
+      .jsplumb-drag-select * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      svg.custom-connector > path {
+        stroke: var(--default-primary-color);
+        stroke-width: 2;
+      }
+
+      body /deep/ paper-button iron-icon {
+        width: 18px;
+        height: 18px;
+      }
+
+      body /deep/ paper-button.primary {
+        background: var(--accent-color);
+        color: #fff;
+      }
+
+      body /deep/ paper-button.white {
+        background: inherit;
+        color: var(--default-text-color);
+      }
+
+      body /deep/ paper-button[secondary] {
+        color: var(--accent-color);
+        background-color: transparent;
+      }
+
+      body /deep/ paper-button[secondary][disabled] {
+        color: var(--disabled-text-color);
+        background-color: transparent;
+        opacity: 0.5;
+      }
+
+      body /deep/ paper-button[primary] {
+        background-color: var(--accent-color);
+        color: #fff;
+      }
+
+      body /deep/ paper-button[primary][disabled] {
+        background-color: var(--accent-color);
+        color: #fff;
+        opacity: 0.5;
+      }
+
+      body /deep/ paper-dialog .dialog-content {
+        padding-bottom: 24px;
+        box-sizing: border-box;
+      }
+
+      body /deep/ paper-dialog .dialog-footer paper-button {
+        padding: 0px 8px;
+      }
+
+      body /deep/ paper-dialog .dialog-footer paper-button + paper-button {
+        margin-left: 8px;
+      }
+
+      body /deep/ paper-button[custom] {
+        background: transparent;
+        color: var(--secondary-text-color);
+      }
+
+      .dark-theme-dialog {
+        background: var(--dark-primary-color);
+        box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.22), 0 24px 24px 0 rgba(0, 0, 0, 0.30);
+        border-radius: 4px;
+        color: var(--text-primary-color);
+      }
+
+      .dark-theme-dialog .dialog-footer {
+        background: rgba(255, 255, 255, 0.16);
+      }
+
+      .dark-theme-input {
+        --paper-input-container: {
+          padding: 2px 8px;
+          background: #eceff1;
+          border-radius: 2px;
+          box-sizing: border-box;
+        }
+
+        --paper-input-container-input: {
+          font-size: 12px;
+          color: var(--primary-text-color);
+          opacity: 0.87;
+        }
+        --paper-input-container-input-focus {
+          outline: 2px solid var(--accent-color);
+          outline-offset: -1px;
+        }
+        --paper-input-container-underline: {
+          display: none;
+        }
+        --paper-input-container-underline-focus: {
+          display: none;
+        }
+      }
+
+      .search-input {
+        --paper-input-container: {
+          border-radius: 2px;
+          box-sizing: border-box;
+          padding: 6px 16px;
+          background: var(--default-primary-color);
+          height: 36px;
+        }
+        --paper-input-container-input: {
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.54);
+        }
+
+        --paper-input-container-underline: {
+          display: none;
+        }
+        --paper-input-container-underline-focus: {
+          display: none;
+        }
+      }
+
+      .search-input [prefix] {
+        width: 20px;
+        padding-right: 8px;
+      }
+
+      .search-input /deep/ label.ev-input {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.54);
+      }
+    </style>
+  </template>
+</dom-module>

@@ -1,0 +1,57 @@
+<dom-module id=":componentName">
+  <template>
+    <style>
+      #fields>* {
+        width: calc(100% - 16px);
+        margin: 0px 8px;
+      }
+    </style>
+    <div class="content layout vertical">
+      <div class="evform layout vertical">
+        <div class="layout horizontal">
+          <h2 class="flex">:modelName</h2>
+          <div>
+            <template is="toolbar"></template>
+            <paper-button raised primary on-tap="doSave" ev-action-model=":modelAlias">Save</paper-button>
+            <paper-button raised on-tap="doClear" ev-action-model=":modelAlias">Clear</paper-button>
+            <template is="dom-if" if="{{:modelAlias.id}}">
+              <paper-button raised on-tap="doFetch">Reset</paper-button>
+              <paper-button raised on-tap="doDelete" ev-action-model=":modelAlias">Delete</paper-button>
+            </template>
+          </div>
+        </div>
+
+        <ev-template id="main">
+        </ev-template>
+
+        <ev-template id="details">
+        </ev-template>
+
+        <ev-template id="audit">
+        </ev-template>
+
+        <div id="fields" class="layout horizontal wrap">
+
+        </div>
+
+        <div id="grids" class="layout vertical">
+        </div>
+        <ev-json-input fieldid="scope" field-id="scope" label="scope"></ev-json-input>
+      </div>
+    </div>
+  </template>
+  <script>
+    MetaPolymer({
+      is: ":componentName",
+      properties: {:modelAlias: {
+          type: 'object',
+          notify: true,
+          value: function () {
+            return {}
+          }
+        }
+      },
+      behaviors: [EV.FormValidationBehavior, EV.ModelHandler, EV.FormMessagesBehavior]
+    });
+  </script>
+</dom-module>

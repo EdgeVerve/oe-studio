@@ -1,0 +1,36 @@
+<link rel="import" href="../../evf-ui/core/meta-polymer.html">
+<dom-module id="workflow-prop-form">
+  <style>
+    :host {
+      padding: 16px;
+      display: block;
+    }
+    
+    .panel {
+      margin-bottom: 16px;
+    }
+
+  </style>
+  <template>
+		<div class="layout vertical panel">
+			<ev-input required field-id="name" label="Name" value="{{vm.name}}"></ev-input>
+			<ev-input required label="Value" field-id="value" value="{{vm.value}}"></ev-input>
+		</div>
+		<div class="layout horizontal center justified">
+			<paper-button raised primary on-tap="doSave">Save</paper-button>
+			<paper-button raised on-tap="doClear">Clear</paper-button>
+		</div>
+	</template>
+  <script>
+    MetaPolymer({
+      is: 'workflow-prop-form',
+      property: {
+        vm: {
+          type: Object
+        }
+      },
+      behaviors: [EV.FormValidationBehavior, EV.ModelHandler]
+    })
+
+  </script>
+</dom-module>

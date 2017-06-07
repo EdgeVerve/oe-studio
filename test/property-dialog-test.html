@@ -1,0 +1,148 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <!-- importing dependent elements -->
+  <link rel="import" href="../all-imports.html">
+  <!-- importing element to be tested -->
+  <!--     <link rel="import" href="../elements/property-dialog.html">
+ -->
+</head>
+
+<body>
+  <!-- You can use the document as a place to set up your fixtures. -->
+  <test-fixture id="property-dialog-fixture">
+    <template>
+            <property-dialog>
+            </property-dialog>
+        </template>
+  </test-fixture>
+  <script>
+    suite('<property-dialog>', function() {
+      var testElement;
+      var propertyTypes = [
+        'string',
+        'boolean',
+        'number',
+        'array'
+      ];
+
+      var ModelTest = {
+        'properties': [{
+          'type': 'number',
+          'required': true,
+          'min': '5',
+          'max': '90',
+          '__name__': 'Age'
+        }, {
+          'type': 'string',
+          'required': true,
+          'unique': true,
+          '__name__': 'Email'
+        }, {
+          'type': 'string',
+          'required': true,
+          'min': '5',
+          'max': '20',
+          '__name__': 'Name'
+        }],
+        'readonly': false,
+        'name': 'ModelTest',
+        'description': '',
+        'plural': 'ModelTests',
+        'base': 'BaseEntity',
+        'strict': true,
+        'public': true,
+        'idInjection': false,
+        'validateUpsert': false,
+        'validations': [],
+        'relations': [],
+        'acls': [],
+        'methods': [],
+        'dataSourceName': '',
+        'id': '576d13490ee97924335a8826',
+        '_type': 'ModelDefinition',
+        '_createdBy': 'sourav',
+        '_modifiedBy': 'sourav',
+        '_createdOn': '2016-06-24T11:02:33.635Z',
+        '_modifiedOn': '2016-06-24T11:02:33.635Z',
+        '_version': 'b7887713-1b87-4b59-b96e-431f1f130ed8',
+        '_isDeleted': false,
+        'evValidations': [],
+        'autoscope': [],
+        'scope': {},
+        'mongodb': {
+          'collection': 'ModelTest'
+        },
+        'checked': true
+      }
+      setup(function() {
+        testElement = fixture('property-dialog-fixture');
+      });
+
+      test('edit property with validations', function(done) {
+        flush(function() {
+          testElement.set('propertyObj', {});
+          var tempObj = ModelTest.properties[0];
+          if (tempObj.type == 'array') {
+            tempObj.arrayElementType = tempObj.items.type;
+          }
+          testElement.set('modelObj', ModelTest);
+          testElement.set('index', 0);
+          testElement.set('propertyTypes', propertyTypes);
+          testElement.set('propertyObj', tempObj);
+          testElement.set('editValidation', true);
+          testElement.title = 'Edit Property';
+          testElement.showProperty = true;
+          testElement.openDialog();
+          flush(function() {
+            var saveProperty = Polymer.dom(testElement.root).querySelector('#property-dialog-add-property-with-validation');
+            saveProperty.click();
+            flush(function() {
+              done();
+            });
+          });
+        });
+      });
+
+      test('edit property without validations', function(done) {
+        flush(function() {
+          testElement.set('propertyObj', {});
+          var tempObj = ModelTest.properties[0];
+          if (tempObj.type == 'array') {
+            tempObj.arrayElementType = tempObj.items.type;
+          }
+          testElement.set('modelObj', ModelTest);
+          testElement.set('index', 0);
+          testElement.set('propertyTypes', propertyTypes);
+          testElement.set('propertyObj', tempObj);
+          testElement.set('editValidation', false);
+          testElement.title = 'Edit Property';
+          testElement.showProperty = true;
+          testElement.openDialog();
+          flush(function() {
+            var saveProperty = Polymer.dom(testElement.root).querySelector('#property-dialog-add-property-with-validation');
+            saveProperty.click();
+            flush(function() {
+              done();
+            });
+          });
+        });
+      });
+
+    });
+
+  </script>
+</body>
+
+</html>

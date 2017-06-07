@@ -1,0 +1,236 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <!-- importing dependent elements -->
+  <link rel="import" href="../all-imports.html">
+</head>
+
+<body>
+  <!-- You can use the document as a place to set up your fixtures. -->
+  <test-fixture id="app-config-fixture">
+    <template>
+			<app-config></app-config>
+		</template>
+  </test-fixture>
+  <script>
+    suite('app-config', function() {
+
+      var myEl;
+      var server;
+      var tenantList;
+      setup(function() {
+
+        server = sinon.fakeServer.create();
+        server.autoRespond = true;
+        server.respondImmediately = true;
+
+        tenantList = [{
+          'tenantId': 'default',
+          'tenantName': 'default',
+          'id': '9fab3286-442a-11e6-beb8-9e71128cae77',
+          '_type': 'Tenant',
+          '_createdBy': 'system',
+          '_modifiedBy': 'system',
+          '_createdOn': '2016-07-19T12:14:45.427Z',
+          '_modifiedOn': '2016-07-19T12:14:45.427Z',
+          'scope': {},
+          '_version': '5ef76328-9d01-4968-ac46-3f62bd674b90',
+          '_isDeleted': false
+        }, {
+          'tenantId': 'ev',
+          'tenantName': 'ev',
+          'id': '9fab3286-443a-11e6-beb8-9e71128cae77',
+          '_type': 'Tenant',
+          '_createdBy': 'system',
+          '_modifiedBy': 'system',
+          '_createdOn': '2016-07-19T12:14:45.427Z',
+          '_modifiedOn': '2016-07-19T12:14:45.427Z',
+          'scope': {},
+          '_version': '5ef76ds8-9d01-4968-ac46-3f62bd674b90',
+          '_isDeleted': false
+        }, {
+          'tenantId': 'fin',
+          'tenantName': 'fin',
+          'id': '9fab3286-443a-11e7-beb8-9e71128cae77',
+          '_type': 'Tenant',
+          '_createdBy': 'system',
+          '_modifiedBy': 'system',
+          '_createdOn': '2016-07-19T12:14:45.427Z',
+          '_modifiedOn': '2016-07-19T12:14:45.427Z',
+          'scope': {},
+          '_version': '5ef76ds7-9d01-4968-ac46-3f62bd674b90',
+          '_isDeleted': false
+        }]
+
+        server.respondWith('GET', /api\/Tenants/, function(req) {
+          req.respond(200, {
+            'Content-Type': 'application/json'
+          }, JSON.stringify(tenantList));
+        });
+
+        server.respondWith('PUT', /api\/Tenants/, function(req) {
+          var dataToUpdate = JSON.parse(req.requestBody);
+
+          var id = tenantList.findIndex(function(m) {
+            return m.id == dataToUpdate.id
+          });
+
+          if (id != -1) {
+            tenantList[id] = dataToUpdate;
+          } else {
+            tenantList.push(dataToUpdate);
+          }
+          req.respond(200, {
+            'Content-Type': 'application/json'
+          }, JSON.stringify(dataToUpdate));
+        }.bind(this));
+        server.respondWith('POST', /api\/Tenants/, function(req) {
+          var dataToUpdate = JSON.parse(req.requestBody);
+          var id = tenantList.findIndex(function(m) {
+            return m.tenantId == dataToUpdate.tenantId
+          });
+          if (id != -1) {
+            req.respond(500, {
+              'Content-Type': 'application/json'
+            }, JSON.stringify({
+              'error': {
+                'message': 'Record not found'
+              }
+            }));
+          } else {
+            tenantList.push(dataToUpdate);
+            req.respond(200, {
+              'Content-Type': 'application/json'
+            }, JSON.stringify(dataToUpdate));
+          }
+        }.bind(this));
+        myEl = fixture('app-config-fixture');
+        myEl.initialize();
+      });
+
+      test('switch-tenant', function(done) {
+        var newTenant = tenantList[2];
+
+        myEl.addEventListener('switch-tenant', function(e) {
+          assert.equal(e.detail, newTenant);
+          done();
+        });
+        flush(function() {
+          var element = Polymer.dom(myEl.root).querySelector('#tenantCombo');
+          var btn = Polymer.dom(myEl.root).querySelector('#switchTenantBtn');
+          element.set('value', tenantList[2]);
+          flush(function() {
+            btn.fire('tap');
+          })
+        })
+      });
+
+      test('Create new Tenant', function(done) {
+
+        myEl.addEventListener('ev-show-success', function() {
+          var id = tenantList.findIndex(function(m) {
+            return m.tenantId == 'newTenantId'
+          });
+          assert.notEqual(-1, id);
+          done();
+        });
+
+        flush(function() {
+          var fabBtn = Polymer.dom(myEl.root).querySelector('#primary-fab-icon');
+          fabBtn.fire('tap');
+          flush(function() {
+            var form = Polymer.dom(myEl.root).querySelector('#tenantForm')
+            assert.equal(false, form.validate());
+            myEl.set('newTenant.tenantName', 'newTenantName');
+            fabBtn.fire('tap');
+            assert.equal(false, form.validate());
+            myEl.set('newTenant.tenantId', 'newTenantId');
+            flush(function() {
+              assert.equal(true, form.validate());
+              fabBtn.fire('tap');
+            })
+          })
+        })
+      });
+
+      test('Create duplicate Tenant', function(done) {
+
+        myEl.addEventListener('ev-show-error', function() {
+          done();
+        });
+
+        flush(function() {
+          var fabBtn = Polymer.dom(myEl.root).querySelector('#primary-fab-icon');
+          fabBtn.fire('tap');
+          flush(function() {
+            var form = Polymer.dom(myEl.root).querySelector('#tenantForm')
+            myEl.set('newTenant.tenantName', 'fin');
+            fabBtn.fire('tap');
+            assert.equal(false, form.validate());
+            myEl.set('newTenant.tenantId', 'fin');
+            flush(function() {
+              assert.equal(true, form.validate());
+              fabBtn.fire('tap');
+            })
+          })
+        })
+      });
+
+
+      test('Edit Tenant', function(done) {
+        myEl.addEventListener('ev-show-success', function() {
+          var id = tenantList.findIndex(function(m) {
+            return m.tenantName == 'Fin'
+          });
+          assert.equal(2, id);
+          myEl.closeDrawer();
+          done();
+        });
+        flush(function() {
+          var element = Polymer.dom(myEl.root).querySelector('#tenantCombo');
+          var fabBtn = Polymer.dom(myEl.root).querySelector('#primary-fab-icon');
+          element.set('value', tenantList[2]);
+          flush(function() {
+            var editBtn = Polymer.dom(myEl.root).querySelector('#editTenantIcon');
+            editBtn.fire('tap');
+            flush(function() {
+              var form = Polymer.dom(myEl.root).querySelector('#tenantForm');
+              assert.equal(true, form.validate());
+              myEl.set('newTenant.tenantName', 'Fin');
+              flush(function() {
+                assert.equal(true, form.validate());
+                fabBtn.fire('tap');
+              })
+            })
+          })
+        })
+      });
+
+
+      /*test('undo relation on cancel', function(done) {
+      	console.log('hi');
+      	var element = Polymer.dom(myEl.root).querySelector('#cancel');
+      	myEl.addEventListener('undo-relation', function(e) {
+      		done();
+      	})
+      	element.fire('tap');
+
+      });*/
+    });
+
+  </script>
+</body>
+
+</html>

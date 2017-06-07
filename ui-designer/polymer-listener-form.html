@@ -1,0 +1,36 @@
+<link rel="import" href="../../evf-ui/core/meta-polymer.html">
+<dom-module id="polymer-listener-form">
+  <style>
+     :host {
+      padding: 16px;
+      display: block;
+    }
+    
+    .panel {
+      margin-bottom: 16px;
+    }
+
+  </style>
+  <template>
+		<div class="layout vertical panel">
+			<ev-input required field-id="eventName" label="Name" value="{{vm.eventName}}"></ev-input>
+			<ev-input required field-id="fnName" label="Function Name" value="{{vm.fnName}}"></ev-input>
+		</div>
+		<div class="layout horizontal center justified">
+			<paper-button raised primary on-tap="doSave">Save</paper-button>
+			<paper-button raised on-tap="doClear">Clear</paper-button>
+		</div>
+	</template>
+  <script>
+    MetaPolymer({
+      is: 'polymer-listener-form',
+      property: {
+        vm: {
+          type: Object
+        }
+      },
+      behaviors: [EV.FormValidationBehavior, EV.ModelHandler]
+    })
+
+  </script>
+</dom-module>

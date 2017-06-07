@@ -1,0 +1,481 @@
+<link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../redux-store.html">
+<link rel="import" href="ui-alignment-chooser.html">
+<link rel="import" href="ui-style-object-editor.html">
+<link rel="import" href="ui-style-behavior.html">
+<link rel="import" href="../../styles/shared-styles.html">
+<dom-module id="ui-style-editor">
+  <template>
+   <style include="shared-styles">
+     :host {
+      display: block;
+      background: #0C1012;
+    }
+
+    .tag-name {
+      font-family: Roboto-Medium;
+      font-size: 12px;
+      color: #ffffff;
+      padding: 12px;
+      @apply(--layout-flex);
+    }
+
+    .class-suggestions-empty {
+      padding: 12px;
+      font-size: 12px;
+      @apply(--layout-horizontal);
+      @apply(--layout-center);
+    }
+
+    .add-class {
+      padding: 12px;
+      font-size: 12px;
+      @apply(--layout-horizontal);
+      @apply(--layout-center);
+      @apply(--layout-center-justified);
+    }
+
+    .class-suggestions {
+      position: relative;
+    }
+
+    .class-suggestions-list {
+      background: #263238;
+    }
+
+    .class-suggestions-strip {
+      margin-bottom: 16px;
+    }
+
+    .class-suggestions-name {
+      cursor: pointer;
+      font-size: 14px;
+      padding: 5px 8px;
+      margin: 4px 8px;
+      background: #fff;
+      color: var(--accent-color);
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .class-suggestions-name.new {
+      color: #fff;
+      background: var(--accent-color);
+    }
+
+    .result {
+      display: initial;
+    }
+
+    .create-class-button {
+      float: right;
+      height: 30px;
+      margin-right: 6px;
+    }
+
+    .applied-classes {
+      padding: 10px;
+      padding-bottom: 2px;
+      background: #37474f;
+      @apply(--layout-wrap);
+      @apply(--layout-horizontal);
+    }
+
+    .applied-class {
+      padding: 5px;
+      background: #fff;
+      color: var(--accent-color);
+      font-size: 12px;
+      border-radius: 3px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+
+    .applied-class iron-icon {
+      width: 14px;
+      height: 14px;
+      margin-left: 4px;
+    }
+
+    .seperator {
+      border-top: 1px solid #292D2F;
+    }
+
+    .applied-class.active {
+      background: #039be5;
+    }
+
+    .applied-class.predefined {
+      background: #333;
+      color: #fff;
+      cursor: not-allowed;
+    }
+
+    .empty-state {
+      font-style: italic;
+      opacity: 0.54;
+      font-size: 12px;
+      margin: 12px;
+      padding: 16px;
+      border-radius: 4px;
+      background: var(--default-primary-color);
+    }
+
+    .action-bar {
+      padding: 0px 10px;
+      @apply(--layout-horizontal);
+      @apply(--layout-center);
+      @apply(--layout-end-justified);
+    }
+
+    paper-toggle-button {
+      --paper-toggle-button-unchecked-bar-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .sub-header {
+      padding: 8px;
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 14px;
+    }
+    .helper-text {
+      font-size: 12px;
+      padding: 6px 8px;
+    }
+
+  </style>
+    <div>
+      <div hidden$="{{!selectedElement}}">
+        <div class="tag-name">
+          {{selectedElement.nodeName}}
+        </div>
+        <div class="class-list">
+          <div class="class-suggestions">
+            <ev-input id="search-class-input" no-label-float class="search-class search-input" label="Type/Search to Add class" auto-validate
+              prevent-invalid-input invalid={{_invalidClassName}} pattern="[a-zA-Z]+[a-zA-Z0-9-]+[a-zA-Z0-9]" error-message="Enter valid class name"
+              value="{{_classSearchString}}">
+             <iron-icon icon="search" prefix></iron-icon>
+            </ev-input>
+            <div class="class-suggestions-list" hidden$={{_invalidClassName}}>
+              <template is="dom-if" if={{_classSearchString}}>
+                <template is="dom-if" if=[[!_classExists]]>
+                  <div class="class-suggestions-strip">
+                    <div class="helper-text">Create new class</div>
+                    <div class="class-suggestions-name new" on-tap="_createClass"> [[_classSearchString]] </div>
+                  </div>
+                </template>
+  <div class="class-suggestions-strip" hidden="[[!_classExists]]">
+    <div class="helper-text">Choose existing classes</div>
+    <template is="dom-repeat" items="{{_filterStyles(_classSearchString)}}">
+                    <div class="class-suggestions-name" on-tap="_addClass"> [[_getClassName(item.selectorText)]] </div>
+                  </template>
+  </div>
+  </template>
+  </div>
+  </div>
+  </div>
+  <template is="dom-if" if={{_classList.length}}>
+          <div class="applied-classes">
+            <template is="dom-repeat" items="[[_classList]]" as="className" initial-count=5>
+              <div class$="applied-class [[_computeSelectorClass(className)]]" on-tap="_editClassRule">
+                <span> [[className]] </span>
+                <iron-icon icon="close" on-tap="_removeClass"></iron-icon>
+              </div>
+            </template>
+  </div>
+  </template>
+  <div class="sub-header flex layout horizontal justified">
+    <span>Inline Style</span>
+    <paper-toggle-button checked="{{showStyleEditor}}"></paper-toggle-button>
+  </div>
+  <div hidden$="{{!showStyleEditor}}">
+    <div class="action-bar">
+      <paper-button on-tap="_updateElement"> Apply Inline Style </paper-button>
+    </div>
+    <ui-style-object-editor style-obj="{{_styleObj}}" assets="{{assets}}" on-style-change="_updateElement"></ui-style-object-editor>
+    <ui-alignment-chooser element={{selectedElement}} alignment-config={{alignmentConfig}}></ui-alignment-chooser>
+  </div>
+  </div>
+  <template is="dom-if" if="{{!selectedElement}}">
+        <div class="empty-state">
+          Please select an element to manage its style and alignment.
+        </div>
+      </template>
+  </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'ui-style-editor',
+      properties: {
+        selectedElement: {
+          type: Object,
+          statePath: 'selectedElement',
+          observer: '_elementSelectionChanged'
+        },
+        selectedPolymerElement: {
+          type: Object,
+          statePath: 'selectedPolymerElement'
+        },
+        _styleObj: {
+          type: Object,
+          notify: true
+        },
+        styleSheet: {
+          type: Object,
+          notify: true
+        },
+        predefinedStyles: {
+          type: Object,
+          notify: true,
+          observer: '_predefinedStylesChanged'
+        },
+        _predefinedStyles: {
+          type: Array
+        },
+        assets: {
+          type: Object,
+          notify: true
+        },
+        _classExists: {
+          type: Boolean,
+          value: false
+        },
+        _classList: {
+          type: Array
+        },
+        fontList: {
+          type: Array
+        },
+        fontWeightList: {
+          type: Array
+        },
+        _predefinedLayoutClasses: {
+          type: Array,
+          value: function() {
+            return []
+          }
+        },
+        alignmentConfig: {
+          type: Object
+        },
+        showStyleEditor: {
+          type: Boolean,
+          value: false
+        }
+      },
+      actions: {
+        update: function(element) {
+          return {
+            type: 'UPDATE_ELEMENT',
+            element: element
+          }
+        }
+      },
+      behaviors: [
+        ReduxBehavior, StyleBehavior.StyleBehavior
+      ],
+      observers: [
+        '_alignmentConfigChanged(alignmentConfig.*)'
+      ],
+      attached: function() {
+        this.set('fontList', ['', 'Roboto', 'Times New Roman', 'Georgia', 'sans-serif']);
+        this.set('fontWeightList', ['', 100, 200, 300, 400, 500, 600, 700, 800, 900]);
+        this.set('_predefinedLayoutClasses', ['horizontal', 'vertical', 'justified',
+          'center-justified', 'wrap', 'end-justified', 'start', 'center', 'end',
+          'center-center', 'layout', 'ev-rl-25-75', 'ev-rl-2eq', 'ev-rl-75-25',
+          'ev-rl-3eq', 'ev-rl-343', 'ev-rl-4eq'
+        ]);
+      },
+      _elementSelectionChanged: function() {
+        if (this.selectedElement) {
+          this.async(function() {
+            this.set('showStyleEditor', false);
+            this.set('_styleObj', JSON.parse(JSON.stringify(this.selectedElement.style)));
+            var className = this.selectedElement.className;
+            this.set('_classList', className ? className.split(' ') : []);
+          });
+        }
+      },
+      _createClass: function() {
+        if (this._classSearchString) {
+          var cssRule = this.addRuleToSheet(this.styleSheet, 'styleSheet.cssRules', '.' + this._classSearchString);
+          this.fire('edit-style-rule', cssRule);
+          this.push('_classList', this._classSearchString);
+          this._updateElement();
+          this.set('_classSearchString', '');
+          this.set('_showSearch', false);
+        }
+      },
+      _updateElement: function() {
+        this.async(function() {
+          this.selectedElement.classList = this._classList.join(' ');
+          if (this._classList.length === 0) {
+            this.selectedElement.removeAttribute('class');
+          }
+          var styleProperties = [
+            'margin', 'padding', 'width', 'minWidth', 'maxWidth', 'height',
+            'minHeight', 'maxHeight', 'overflow', 'position', 'fontFamily',
+            'fontSize', 'fontWeight', 'letterSpacing', 'lineHeight',
+            'textAlign', 'display', 'boxShadow', 'boxSizing',
+            'color', 'textDecoration', 'textTransform', 'background',
+            'backgroundImage', 'border', 'borderLeft', 'borderBottom',
+            'borderRight', 'borderTop', 'borderRadius', 'borderTopLeftRadius',
+            'borderTopRightRadius', 'borderBottomLeftRadius',
+            'borderBottomRightRadius'
+          ]
+          styleProperties.forEach(function(key) {
+            this.selectedElement.style[key] = this._styleObj[key];
+          }.bind(this));
+          this.set('_elementUpdateInProgress', true);
+          this.dispatch('update', this.selectedElement);
+        });
+      },
+      _filterStyles: function(searchText) {
+        var result = [];
+        var cssRules = this.styleSheet.cssRules;
+        this.set('_classExists', false);
+        var selectorText = '';
+        for (var i = 0, l = cssRules.length; i < l; i++) {
+          if (cssRules[i].type == 4) {
+            for (var j = 0, len = cssRules[i].cssRules.length; j < len; j++) {
+              selectorText = cssRules[i].cssRules[j].selectorText;
+              if (selectorText.slice(1) === searchText) {
+                this.set('_classExists', true);
+              }
+              if (selectorText.indexOf(searchText) > 0) {
+                result.push(cssRules[i].cssRules[j]);
+              }
+            }
+          } else {
+            selectorText = cssRules[i].selectorText;
+            if (selectorText.slice(1) === searchText) {
+              this.set('_classExists', true);
+            }
+            if (selectorText.indexOf(searchText) > 0) {
+              result.push(cssRules[i]);
+            }
+          }
+        }
+        return result;
+      },
+      _getClassName: function(selectorText) {
+        return selectorText.slice(1);
+      },
+      _addClass: function(event) {
+        var cssRule = event.model.item;
+        var classNames = cssRule.selectorText.slice(1).split('.');
+        var input = this.$$('#search-class-input');
+        if (!input.invalid) {
+          this.set('_classList', this._classList.concat(classNames));
+          this.set('_classSearchString', '');
+          this._updateElement();
+        }
+      },
+      _removeClass: function(event) {
+        event.stopPropagation();
+        this.splice('_classList', event.model.index, 1);
+
+        /*var classList = this._classList;
+            if (classList.length > 0) {
+                var className = classList[classList.length - 1];
+            }*/
+        this._updateElement();
+      },
+      _editClassRule: function(event) {
+        var className = event.model.className;
+        var cssRules = this.styleSheet.cssRules;
+        var selectorText = '';
+        for (var i = 0, l = cssRules.length; i < l; i++) {
+          if (cssRules[i].type == 4) {
+            for (var j = 0; j < cssRules[i].cssRules.length; j++) {
+              selectorText = cssRules[i].cssRules[j].selectorText;
+              if (selectorText.slice(1) === className) {
+                this.fire('edit-style-rule', cssRules[i].cssRules[j]);
+                break;
+              }
+            }
+          } else {
+            selectorText = cssRules[i].selectorText;
+            if (selectorText.slice(1) === className) {
+              this.fire('edit-style-rule', cssRules[i]);
+              break;
+            }
+          }
+
+        }
+      },
+      _computeSelectorClass: function(className) {
+        var isPredefinedClass = this._predefinedLayoutClasses.indexOf(className) !== -1;
+        return isPredefinedClass ? 'predefined' : '';
+      },
+      _predefinedStylesChanged: function() {
+        var styles = []
+        if (this.predefinedStyles) {
+          styles = EV.designer.xExtractCSS([this.predefinedStyles]);
+        }
+        this.set('_predefinedStyles', styles);
+      },
+      _alignmentConfigChanged: function() {
+        if (this.alignmentConfig && !this._elementUpdateInProgress) {
+          var config = this.alignmentConfig;
+          var classList = this._classList ? this._classList.concat() : [];
+
+          var hasCenter = classList.indexOf('center') !== -1;
+
+          if (classList.length > 0) {
+            this._predefinedLayoutClasses.forEach(function(c) {
+              var index = classList.indexOf(c);
+              if (index > -1) {
+                classList.splice(index, 1);
+              }
+            });
+          }
+
+          //Add new layout classes
+          if (config.layout == 'horizontal' || config.layout == 'vertical') {
+            classList.push('layout');
+            classList.push('wrap');
+            classList.push(config.layout);
+          }
+          if (config.layout == 'horizontal') {
+            if (config.childrenLayout) {
+              classList.push(config.childrenLayout);
+            }
+            var layoutMap = {
+              'top-left': 'justified start',
+              'top-center': 'center-justified start',
+              'top-right': 'end-justified start',
+              'middle-left': 'justified center',
+              'middle-center': 'center-center',
+              'middle-right': 'end-justified center',
+              'bottom-left': 'justified end',
+              'bottom-center': 'center-justified end',
+              'bottom-right': 'end-justified end'
+            }
+            if (config.alignment) {
+              var layClasses = layoutMap[config.alignment].split(' ');
+              classList.push(layClasses[0]);
+              if (layClasses[1]) {
+                classList.push(layClasses[1]);
+              }
+            }
+          }
+
+          if (hasCenter && (classList.indexOf('center') == -1)) {
+            classList.push('center');
+          }
+
+          if (!(_.isEqual(_.sortBy(this._classList), _.sortBy(classList)))) {
+            this.set('_classList', classList);
+            this._updateElement();
+          }
+        }
+        this.set('_elementUpdateInProgress', false);
+      }
+    });
+
+  </script>
+</dom-module>

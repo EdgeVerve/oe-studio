@@ -1,0 +1,225 @@
+<script src="scripts/redux.js"></script>
+<link rel="import" href="../polymer-redux/polymer-redux.html">
+<script>
+  var initialState = {
+    dom: null,
+    selectedElement: null,
+    selectedPolymerElement: null,
+    rightPanelState: {
+      opened: false
+    },
+    current: -1,
+    undoStack: [],
+    stackSize: 0,
+    styleObj: {
+      current: null,
+      previous: null
+    }
+  }
+
+  var deepCloneNode = function(node) {
+    var temp = document.createElement('template');
+    temp.innerHTML = node.outerHTML;
+    return temp.content.querySelector(node.nodeName.toLowerCase()).cloneNode(true)
+  };
+
+
+  var insertNode = function(node, target, index) {
+    if (!node || !target) {
+      return;
+    }
+
+    if (target.nodeName && target.nodeName.toLowerCase() == 'template') {
+      target = target.content
+    }
+
+    var nextSibling = target.children[index];
+    if (!nextSibling) {
+      target.appendChild(node);
+    } else {
+      target.insertBefore(node, nextSibling);
+    }
+  }
+
+  var moveElement = function(dom, parentId, childElement, index) {
+    var parentEle = dom.querySelector('[ev-id="' + parentId + '"]') || dom;
+    insertNode(childElement, parentEle, index);
+  }
+
+  var updateElement = function(dom, element) {
+    var target = dom.querySelector('[ev-id="' + element.getAttribute('ev-id') + '"]');
+    if (!target) {
+      return
+    }
+    target.parentElement.replaceChild(element, target);
+  }
+
+  var deleteElement = function(dom, element) {
+    var target = dom.querySelector('[ev-id="' + element.getAttribute('ev-id') + '"]');
+    if (!target) {
+      return
+    }
+    target.parentElement.removeChild(target);
+  }
+
+  var pushToStack = function(state, obj, type) {
+    if (type === 'dom') {
+      if (state.current + 1 != state.stackSize) {
+        state.undoStack = state.undoStack.slice(0, state.current + 1);
+        state.undoStack.push({
+          type: 'dom',
+          'dom': deepCloneNode(obj),
+          'style': EV.clone(state.styleObj)
+        });
+        state.stackSize = state.undoStack.length;
+        state.current = state.stackSize - 1;
+      } else {
+        state.undoStack.push({
+          type: 'dom',
+          'dom': deepCloneNode(obj),
+          'style': EV.clone(state.styleObj)
+        });
+        state.stackSize = state.undoStack.length;
+        state.current++;
+      }
+    } else {
+      if (state.current + 1 != state.stackSize) {
+        state.undoStack = state.undoStack.slice(0, state.current + 1);
+        state.undoStack.push({
+          type: 'style',
+          'style': obj,
+          'dom': deepCloneNode(state.dom)
+        });
+        state.stackSize = state.undoStack.length;
+        state.current = state.stackSize - 1;
+      } else {
+        state.undoStack.push({
+          type: 'style',
+          'style': obj,
+          'dom': deepCloneNode(state.dom)
+        });
+        state.stackSize = state.undoStack.length;
+        state.current++;
+      }
+    }
+  }
+
+  var reducer = function(state, action) {
+    if (!state) {
+      return initialState;
+    }
+    var modifiedState,current,obj;
+    switch (action.type) {
+      case 'INIT_DOM':
+        modifiedState = Object.assign({}, state, {
+          dom: deepCloneNode(action.dom),
+          selectedElement: null,
+          selectedPolymerElement: null,
+          undoStack: [{
+            'dom': deepCloneNode(action.dom),
+            'type': 'dom'
+          }],
+          current: 0,
+          stackSize: 1,
+          styleObj: {
+            current: null,
+            previous: null
+          }
+        });
+        break;
+      case 'ADD_ELEMENT':
+        //find parentElement in scope.DOM using parentId
+        //Add childElement inside at the index
+        //set as new scope.DOM
+        moveElement(state.dom, action.parentId, action.childElement, action.index);
+        pushToStack(state, state.dom, 'dom');
+        modifiedState = Object.assign({}, state, {
+          dom: deepCloneNode(state.dom)
+        });
+        break;
+      case 'MOVE_ELEMENT':
+        moveElement(state.dom, action.parentId, action.childElement, action.index);
+        pushToStack(state, state.dom, 'dom');
+        modifiedState = Object.assign({}, state, {
+          dom: deepCloneNode(state.dom)
+        });
+        break;
+      case 'DELETE_ELEMENT':
+        deleteElement(state.dom, action.element);
+        pushToStack(state, state.dom, 'dom');
+        modifiedState = Object.assign({}, state, {
+          selectedElement: null,
+          selectedPolymerElement: null,
+          dom: deepCloneNode(state.dom)
+        });
+        break;
+      case 'UPDATE_ELEMENT':
+        updateElement(state.dom, action.element);
+        pushToStack(state, state.dom, 'dom');
+        modifiedState = Object.assign({}, state, {
+          dom: deepCloneNode(state.dom)
+        });
+        break;
+      case 'SELECT_ELEMENT':
+        modifiedState = Object.assign({}, state, {
+          selectedElement: action.element,
+          selectedPolymerElement: action.attachedElement
+        });
+        break;
+      case 'TOGGLE_RIGHT_PANEL':
+        var rightPanelState = {
+          opened: !state.rightPanelState.opened
+        }
+        modifiedState = Object.assign({}, state, {
+          rightPanelState: rightPanelState
+        });
+        break;
+      case 'UNDO':
+        obj = state.undoStack[state.current];
+        current = state.current - 1;
+        var previousState = state.undoStack[current];
+        if (obj.type === 'dom') {
+          modifiedState = Object.assign({}, state, {
+            dom: deepCloneNode(previousState.dom),
+            current: current,
+            stackSize: state.undoStack.length
+          });
+        } else if (obj.type === 'style') {
+          modifiedState = Object.assign({}, state, {
+            styleObj: EV.clone(previousState.style),
+            current: current,
+            stackSize: state.undoStack.length
+          });
+        }
+        break;
+      case 'REDO':
+        current = state.current + 1;
+        obj = state.undoStack[current];
+        if (obj.type === 'dom') {
+          modifiedState = Object.assign({}, state, {
+            dom: deepCloneNode(obj.dom),
+            current: current,
+            stackSize: state.undoStack.length
+          });
+        } else if (obj.type === 'style') {
+          modifiedState = Object.assign({}, state, {
+            styleObj: EV.clone(obj.style),
+            current: current,
+            stackSize: state.undoStack.length,
+            dom: deepCloneNode(obj.dom)
+          });
+        }
+        break;
+      case 'STYLE_CHANGE':
+        pushToStack(state, action.styleObj, 'style');
+        modifiedState =  state;
+        break;
+      default:modifiedState = Object.assign({},state,{});
+    }
+    return modifiedState;
+  }
+
+  var store = Redux.createStore(reducer);
+  var ReduxBehavior = PolymerRedux(store);
+
+</script>

@@ -1,0 +1,218 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to
+remain with the applicable third party licensors or the open source community as the case may be and nothing
+here transfers the rights to the third party and open source components, except as expressly permitted.
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<link rel="import" href="all-imports.html">
+<dom-module id="evf-designer">
+  <template>
+    <style>
+      #leftDrawer .user-details {
+        height: 60px;
+        background: var(--light-primary-color);
+        padding: 16px;
+        color: #fff;
+      }
+
+      .user-name {
+        margin-left: 8px;
+      }
+
+      #leftDrawer paper-button iron-icon+span {
+        margin-left: 8px;
+      }
+
+      app-header-layout {
+        z-index: unset;
+      }
+
+      app-header-layout::content #contentContainer {
+        z-index: unset;
+      }
+
+      app-drawer {
+        z-index: 100
+      }
+
+      paper-spinner {
+        position: absolute;
+        top: 35%;
+        left: 50%;
+      }
+
+      .spinner {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.54);
+        z-index: 9000;
+      }
+    </style>
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <ev-message-handler id="toast" fit-bottom duration=5000></ev-message-handler>
+    <app-drawer-layout fullbleed force-narrow>
+      <app-drawer id="leftDrawer">
+        <div class="user-details layout horizontal center">
+          <div class="user-icon">
+            <iron-icon icon="social:person"></iron-icon>
+          </div>
+          <div class="user-name">[[currentSession.username]]</div>
+        </div>
+        <div>
+          <language-picker></language-picker>Language
+        </div>
+        <div>
+          <paper-button>
+            <iron-icon icon="icons:lock-outline"></iron-icon><span>Change Password</span>
+          </paper-button>
+        </div>
+        <div>
+          <paper-button id="logOut-btn" on-tap="_logOut">
+            <iron-icon icon="icons:power-settings-new"></iron-icon><span>Log Out</span>
+          </paper-button>
+        </div>
+      </app-drawer>
+      <app-drawer id="rightDrawer" align="end">
+        <app-config id="appConfig" on-close-drawer="toggleRightDrawer"></app-config>
+      </app-drawer>
+      <app-header-layout>
+        <div class="main-app-content">
+          <iron-pages selected="{{route.path}}" attr-for-selected="router-path">
+            <model-designer router-path=""></model-designer>
+            <workflow-designer router-path="workflow"></workflow-designer>
+            <ui-designer router-path="uidesigner"></ui-designer>
+            <route-flow-designer router-path="routeflow"></route-flow-designer>
+            <rule-manager router-path="rulemanager"></rule-manager>
+            <resource-manager router-path="resourcemanager"></resource-manager>
+          </iron-pages>
+        </div>
+      </app-header-layout>
+    </app-drawer-layout>
+    <div class="spinner" hidden$="[[!showSpinner]]">
+      <paper-spinner id="spinner" active></paper-spinner>
+    </div>
+    <ev-ajax id="logout" method="post" content-type="application/json" on-response="logoutRedirect" on-error="logoutRedirect"></ev-ajax>
+  </template>
+  <script>
+    Polymer({
+      is: 'evf-designer',
+      properties: {
+        hideIcons: {
+          type: Boolean,
+          value: false
+        },
+        showSpinner: {
+          type: Boolean,
+          value: false
+        },
+        tenantList: {
+          type: Array,
+          value: function() {
+            return [];
+          }
+        },
+        currentSession: {
+          type: Object,
+          value: function() {
+            return {};
+          }
+        },
+        ajaxQueue: {
+          type: Number,
+          value: function() {
+            return 0;
+          }
+        }
+      },
+      behaviors: [CommonBehavior.EVAjaxBehavior],
+      listeners: {
+        'switch-tenant': '_changeTenant',
+        'toggle-left-drawer': 'toggleLeftDrawer',
+        'toggle-right-drawer': 'toggleRightDrawer',
+        'start-spinner': '_startSpinner',
+        'end-spinner': '_endSpinner'
+      },
+
+      /*Drawer Panel control*/
+      toggleRightDrawer: function() {
+        this.$.appConfig.initialize();
+        this.$.rightDrawer.toggle();
+      },
+      toggleLeftDrawer: function() {
+        this.$.leftDrawer.toggle();
+      },
+
+      /*Common Functions*/
+      attached: function() {
+        this._fetchTenants();
+        this.makeAjaxCall('api/BaseUsers/session', 'GET', null, null, null, function(err, response) {
+          if (response) {
+            this.set('currentSession', response);
+            localStorage.setItem('tenantId', response.tenantId);
+            this.set('selectedTenant', response.tenantId);
+            this.set('currentSession.isAdmin', (this.currentSession.roles.indexOf(
+              'admin') != -1));
+            this.fire('session-fetched', this.currentSession);
+          } else {
+            this.fire('ev-show-error', 'Unable to fetch user information');
+            this._logOut();
+          }
+        }.bind(this))
+      },
+      _logOut: function() {
+        this.$.logout.body = {};
+        this.$.logout.url = '/auth/logout';
+        this.$.logout.generateRequest();
+        localStorage.removeItem('auth_token');
+      },
+      logoutRedirect: function() {
+        location.assign('/login');
+      },
+      _changeTenant: function(e) {
+        var tenant = e.detail;
+        if (tenant.tenantId === this.selectedTenant) {
+          return;
+        }
+        var url = '/api/BaseUsers/switch-tenant';
+        var body = {
+          tenantId: tenant.tenantId
+        }
+        this.makeAjaxCall(url, 'POST', body, null, null, function(err, response) {
+          if (response && response.tenantId) {
+            this.fire('ev-show-success', ('Switching to tenant - ' + response.tenantId));
+            localStorage.setItem('tenantId', response.tenantId);
+            window.location.reload();
+          } else {
+            this.fire('ev-show-error', 'UnAuthorized to switch tenant')
+          }
+        }.bind(this))
+      },
+      _fetchTenants: function() {
+        var url = '/api/Tenants';
+        this.makeAjaxCall(url, 'GET', null, null, null, function(err, response) {
+          if (response) {
+            this.set('tenantList', response);
+          } else if (err) {
+            this.resolveError(err);
+          }
+        }.bind(this))
+      },
+      _startSpinner: function() {
+        this.ajaxQueue += 1;
+        if (this.ajaxQueue > 0) {
+          this.set('showSpinner', true);
+        }
+      },
+      _endSpinner: function() {
+        this.ajaxQueue -= 1;
+        if (this.ajaxQueue == 0) {
+          this.set('showSpinner', false);
+        }
+      }
+    });
+
+  </script>
+</dom-module>
