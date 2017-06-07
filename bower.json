@@ -8,7 +8,7 @@
     "jquery": "^2.2.0",
     "lodash": "^4.3.0",
     "jquery-ui": "^1.11.4",
-    "oe-ui": "http://10.73.53.167/evf/oe-ui.git#master",
+    "oe-ui": "http://10.73.53.167/oecloud.io/oe-ui.git#master",
     "roboto-fontface": "^0.4.5",
     "inflection": "^1.10.0",
     "materialize": "#0.97.7",
