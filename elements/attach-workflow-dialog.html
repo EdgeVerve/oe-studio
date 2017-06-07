@@ -106,14 +106,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       <div class="dialog-content">
         <div class="vertical flex layout">
 
-          <ev-ajax auto last-response={{workflowMappings}} url={{_getFetchUrl(workflowType,workflowDef.modelName)}} on-response="_onDataFetched"></ev-ajax>
+          <oe-ajax auto last-response={{workflowMappings}} url={{_getFetchUrl(workflowType,workflowDef.modelName)}} on-response="_onDataFetched"></oe-ajax>
           <div class="customize-rule-page">
-            <ev-data-table id="maintable" items={{workflowMappings}} columns='[{"key": "operation","label": "Operation","readOnly": true},{"key":"workflowDefinitionName","valueGetter": "(row.workflowBody.workflowDefinitionName||row.workflowBody.processDefinitionKey)","label": "Workflow Definition","readOnly": true}]'
-              editor-form-url="evf-designer/elements/attach-workflow-{{workflowType}}.html" default-record={{workflowDef}}>
+            <oe-data-table id="maintable" items={{workflowMappings}} columns='[{"key": "operation","label": "Operation","readOnly": true},{"key":"workflowDefinitionName","valueGetter": "(row.workflowBody.workflowDefinitionName||row.workflowBody.processDefinitionKey)","label": "Workflow Definition","readOnly": true}]'
+              editor-form-url="oe-designer/elements/attach-workflow-{{workflowType}}.html" default-record={{workflowDef}}>
               <div header-title class="layout horizontal center">
-                <ev-radio-group value={{workflowType}} displayproperty="display" valueproperty="value" listdata='[{"display":"Activiti","value":"activiti"},{"display":"Symphony","value":"ev-workflow"} ]'></ev-radio-group>
+                <oe-radio-group value={{workflowType}} displayproperty="display" valueproperty="value" listdata='[{"display":"Activiti","value":"activiti"},{"display":"Symphony","value":"oe-workflow"} ]'></oe-radio-group>
               </div>
-            </ev-data-table>
+            </oe-data-table>
           </div>
         </div>
       </div>

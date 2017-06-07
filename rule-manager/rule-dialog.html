@@ -95,8 +95,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       <div class="dialog-content">
         <form is="iron-form" id="form">
           <label class="helper-text">Rule Name</label>
-          <ev-input class="dark-theme-input" no-label-float value="{{ruleObj.name}}" required></ev-input>
-          <ev-json-input no-label-float value="{{ruleObj.scope}}" placeholder="Scope"></ev-json-input>
+          <oe-input class="dark-theme-input" no-label-float value="{{ruleObj.name}}" required></oe-input>
+          <oe-json-input no-label-float value="{{ruleObj.scope}}" placeholder="Scope"></oe-json-input>
           <label class="helper-text upload-title">Upload Rule File</label>
           <div hidden="{{tempDocObj.documentName}}" class="help-panel">
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
@@ -106,7 +106,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           </div>
           <div class="file-name layout center justified flex horizontal" hidden="{{!tempDocObj.documentName}}">
             <div>
-              <iron-icon icon="ev-designer-icons:excel" class="file-icon"></iron-icon><span>{{tempDocObj.documentName}}</span></div>
+              <iron-icon icon="oe-designer-icons:excel" class="file-icon"></iron-icon><span>{{tempDocObj.documentName}}</span></div>
             <iron-icon icon="close" on-tap="removeFile" class="remove-icon"></iron-icon>
           </div>
           <template is="dom-if" if="{{isloading}}">
@@ -119,8 +119,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         <paper-button id="add" secondary on-tap="saveRule">SAVE RULE</paper-button>
       </div>
     </paper-dialog>
-    <ev-ajax id="ajax" url="/api/DecisionTables" loading="{{isloading}}" content-type="application/json" handle-as="json" on-error="handleError"
-      on-response="handleResponse"></ev-ajax>
+    <oe-ajax id="ajax" url="/api/DecisionTables" loading="{{isloading}}" content-type="application/json" handle-as="json" on-error="handleError"
+      on-response="handleResponse"></oe-ajax>
   </template>
   <script>
     Polymer({
@@ -146,12 +146,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           var regexp = /(?:\.([^.]+))?$/;
           var type = regexp.exec(file.name)[1];
           if (type != 'xlsx' && type != 'xls') {
-            this.fire('ev-show-error', 'File type is not supported');
+            this.fire('oe-show-error', 'File type is not supported');
             this.$.fileInput.value = '';
             return;
           }
           if (!this.validateFileSize(file.size)) {
-            this.fire('ev-show-error', 'File size cannot exceed 5MB');
+            this.fire('oe-show-error', 'File size cannot exceed 5MB');
             this.$.fileInput.value = '';
             return false;
           }
@@ -193,7 +193,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         ajax.generateRequest();
       },
       handleError: function (event) {
-        this.fire('ev-show-error', EV.extractErrorMessage(event));
+        this.fire('oe-show-error', EV.extractErrorMessage(event));
       },
       handleResponse: function (event) {
         var rule = event.detail.response;

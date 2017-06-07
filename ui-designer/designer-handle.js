@@ -57,7 +57,7 @@ var designerController = (function () {
 	}
 
 	function removePlaceHolder() {
-		var curDropPos = document.querySelector('.ev-drop-placeholder');
+		var curDropPos = document.querySelector('.oe-drop-placeholder');
 		if (curDropPos) {
 			curDropPos.setAttribute('hidden', true);
 		}
@@ -118,7 +118,7 @@ var designerController = (function () {
 						Polymer.Base.importHref(config.config.importUrl, function handleDynamicImport() {
 
 						}, function handleImportError() {
-							fireParent('ev-show-error', 'Error in importing element from ' + config.config.importUrl);
+							fireParent('oe-show-error', 'Error in importing element from ' + config.config.importUrl);
 						});
 					}
 				}
@@ -126,7 +126,7 @@ var designerController = (function () {
 			} else if (act === 'move') {
 				var ele;
 				var eleId = event.dataTransfer.getData('eleId');
-				ele = document.querySelector('[ev-id="' + eleId + '"]');
+				ele = document.querySelector('[oe-id="' + eleId + '"]');
 				ele.classList.remove('currently-dragging');
 				detail.ele = ele;
 				if (ele.contains(dropInfo.parent)) {
@@ -142,7 +142,7 @@ var designerController = (function () {
 		}
 
 		function getDropPosition() {
-			var curDropPos = document.querySelector('.ev-drop-placeholder');
+			var curDropPos = document.querySelector('.oe-drop-placeholder');
 			if (curDropPos) {
 				var parent = curDropPos.parentElement;
 				var index = [].indexOf.call(parent.children, curDropPos);
@@ -203,10 +203,10 @@ var designerController = (function () {
 
 		function addPlaceHolder(element, position) {
 			// removePlaceHolder();
-			var placeHolder = document.querySelector('.ev-drop-placeholder');
+			var placeHolder = document.querySelector('.oe-drop-placeholder');
 			if (!placeHolder) {
 				placeHolder = document.createElement('div');
-				placeHolder.classList.add('ev-drop-placeholder');
+				placeHolder.classList.add('oe-drop-placeholder');
 			}
 
 			placeHolder.removeAttribute('hidden');
@@ -285,7 +285,7 @@ var designerController = (function () {
 				isEmpty = (validNodes.length === 0);
 			}
 			if (isEmpty) {
-				element.classList.add('ev-empty-container');
+				element.classList.add('oe-empty-container');
 			}
 		}
 	}
@@ -298,7 +298,7 @@ var designerController = (function () {
 			removeContext('focus');
 			event.dataTransfer.effectAllowed = 'move';
 			event.dataTransfer.setData('action', 'move');
-			event.dataTransfer.setData('eleId', element.getAttribute('ev-id'));
+			event.dataTransfer.setData('eleId', element.getAttribute('oe-id'));
 			element.classList.add('currently-dragging');
 		}
 
@@ -315,9 +315,9 @@ var designerController = (function () {
 	}
 
 	function createContextHandlers(element) {
-		var isTextEditable = (element.getAttribute('ev-ele-type') === 'text');
+		var isTextEditable = (element.getAttribute('oe-ele-type') === 'text');
 		var isTemplate = element.hasAttribute('template-item');
-		var uniqId = element.getAttribute('ev-id');
+		var uniqId = element.getAttribute('oe-id');
 		var clipBoard = null;
 
 		function mouseOver(event) {
@@ -347,7 +347,7 @@ var designerController = (function () {
 		element.addEventListener('mouseover', mouseOver);
 
 		function editTextHandler() {
-			var originalElement = GLOBAL_ISOLATED_DOM.querySelector('[ev-id="' + uniqId + '"]');
+			var originalElement = GLOBAL_ISOLATED_DOM.querySelector('[oe-id="' + uniqId + '"]');
 			clipBoard = element.innerHTML;
 			element.innerHTML = originalElement.innerHTML;
 			element.setAttribute('contentEditable', true);
@@ -357,7 +357,7 @@ var designerController = (function () {
 		}
 
 		function blurHandler() {
-			var originalElement = GLOBAL_ISOLATED_DOM.querySelector('[ev-id="' + uniqId + '"]');
+			var originalElement = GLOBAL_ISOLATED_DOM.querySelector('[oe-id="' + uniqId + '"]');
 			element.__selection = getTextSelection();
 			element.removeAttribute('contentEditable');
 			element.removeEventListener('blur', blurHandler);
@@ -378,7 +378,7 @@ var designerController = (function () {
 
 			var isTextSel = sel.focusNode &&
 				sel.focusNode.parentNode &&
-				(sel.focusNode.parentNode.getAttribute('ev-ele-type') === 'text');
+				(sel.focusNode.parentNode.getAttribute('oe-ele-type') === 'text');
 			var textSelection = null;
 			if (isTextSel) {
 				var startIndex = [].findIndex.call(sel.focusNode.parentNode.childNodes, function getStartIndex(n) {
@@ -427,7 +427,7 @@ var designerController = (function () {
 		if (!element) {
 			return;
 		}
-		var target = cont.querySelector('[ev-id="' + element.getAttribute('ev-id') + '"]');
+		var target = cont.querySelector('[oe-id="' + element.getAttribute('oe-id') + '"]');
 		target.click();
 	}
 
@@ -473,10 +473,10 @@ var designerController = (function () {
 		} else {
 			var link = document.createElement('link');
 			link.setAttribute('rel', 'import');
-			link.setAttribute('href', '/evf-designer/iframe-imports.html');
+			link.setAttribute('href', '/oe-designer/iframe-imports.html');
 			link.onload = function () {
 				isElementsLoaded = true;
-				fireParent('ev-show-success', 'Initial Elements Loaded successfully');
+				fireParent('oe-show-success', 'Initial Elements Loaded successfully');
 				cb();
 			}
 			document.head.appendChild(link);
@@ -495,8 +495,8 @@ var designerController = (function () {
 			removeContext('drop');
 			setTimeout(function delayedFocusElement() {
 				if (GLOBAL_STATIC_ELEMENTS.selectedElement) {
-					var selId = GLOBAL_STATIC_ELEMENTS.selectedElement.getAttribute('ev-id');
-					var newSel = cont.querySelector('[ev-id="' + selId + '"]');
+					var selId = GLOBAL_STATIC_ELEMENTS.selectedElement.getAttribute('oe-id');
+					var newSel = cont.querySelector('[oe-id="' + selId + '"]');
 					removeContext('focus');
 					if (newSel) {
 						newSel.click();
@@ -507,9 +507,9 @@ var designerController = (function () {
 	}
 
 	function attachHandlers(dom) {
-		var elements = dom.querySelectorAll('[ev-id]');
+		var elements = dom.querySelectorAll('[oe-id]');
 		[].forEach.call(elements, function addSelectiveHandler(node) {
-			var type = node.getAttribute('ev-ele-type');
+			var type = node.getAttribute('oe-ele-type');
 
 			if (type === 'droppable') {
 				createAsContainer(node);
@@ -610,7 +610,7 @@ var designerController = (function () {
 						name: mod.name,
 						value: mod.value,
 						type: 'modify',
-						evId: nodeA.getAttribute('ev-id')
+						evId: nodeA.getAttribute('oe-id')
 					};
 				}
 			} else if (nodeAAttr.length > nodeBAttr.length) {
@@ -621,7 +621,7 @@ var designerController = (function () {
 						name: mod.name,
 						value: mod.value,
 						type: 'delete',
-						evId: nodeA.getAttribute('ev-id')
+						evId: nodeA.getAttribute('oe-id')
 					};
 				}
 			} else {
@@ -632,7 +632,7 @@ var designerController = (function () {
 						name: mod.name,
 						value: mod.value,
 						type: 'add',
-						evId: nodeA.getAttribute('ev-id')
+						evId: nodeA.getAttribute('oe-id')
 					};
 				}
 			}
@@ -641,17 +641,17 @@ var designerController = (function () {
 				return {
 					value: nodeB.textContent,
 					type: 'text',
-					evId: nodeA.getAttribute('ev-id')
+					evId: nodeA.getAttribute('oe-id')
 				};
 			}
 		}
 
 		function isPosChanged(nodeA, nodeB) {
-			var a = [].map.call(nodeA.querySelectorAll('[ev-id]'), function getEvId(n) {
-				return n.getAttribute('ev-id');
+			var a = [].map.call(nodeA.querySelectorAll('[oe-id]'), function getEvId(n) {
+				return n.getAttribute('oe-id');
 			});
-			var b = [].map.call(nodeB.querySelectorAll('[ev-id]'), function getEvId(n) {
-				return n.getAttribute('ev-id');
+			var b = [].map.call(nodeB.querySelectorAll('[oe-id]'), function getEvId(n) {
+				return n.getAttribute('oe-id');
 			});
 			return !(a.length === b.length && a.every(function matchElements(v, i) {
 				return v === b[i];
@@ -661,11 +661,11 @@ var designerController = (function () {
 		var needRender = !GLOBAL_ISOLATED_DOM || isPosChanged(GLOBAL_ISOLATED_DOM, dom);
 
 		if (!needRender) {
-			var nodeList = [].map.call(GLOBAL_ISOLATED_DOM.querySelectorAll('[ev-id]'), function getMappedElements(n) {
-				var evId = n.getAttribute('ev-id');
+			var nodeList = [].map.call(GLOBAL_ISOLATED_DOM.querySelectorAll('[oe-id]'), function getMappedElements(n) {
+				var evId = n.getAttribute('oe-id');
 				return {
 					a: n,
-					b: dom.querySelector('[ev-id="' + evId + '"]')
+					b: dom.querySelector('[oe-id="' + evId + '"]')
 				};
 			});
 			var diff = null;
@@ -676,7 +676,7 @@ var designerController = (function () {
 				}
 			});
 			if (diff) {
-				var attachedNode = cont.querySelector('[ev-id="' + diff.evId + '"]');
+				var attachedNode = cont.querySelector('[oe-id="' + diff.evId + '"]');
 				switch (diff.type) {
 					case 'add':
 					case 'modify':
@@ -707,7 +707,7 @@ var designerController = (function () {
 	// function findDesignerElement(element){
 	// 	if(cont.contains(element)){
 	// 		var target = element;
-	// 		while(!(target.getAttribute && target.getAttribute('ev-id'))){
+	// 		while(!(target.getAttribute && target.getAttribute('oe-id'))){
 	// 			target = target.parentElement;
 	// 		}
 	// 		return target;

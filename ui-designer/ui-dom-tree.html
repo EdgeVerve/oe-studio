@@ -117,7 +117,7 @@
 
   </style>
   <template>
-        <div class$="layout [[computeClass(node.isCollapsed)]] parent-container" ev-id$="[[node.evId]]">
+        <div class$="layout [[computeClass(node.isCollapsed)]] parent-container" oe-id$="[[node.evId]]">
             <div class="node-start-tag layout horizontal center" on-tap="_handleFocus">
                 <template is="dom-if" if="{{node.isTextNode}}">
                     <span class="text-node-content">[[node.value]]</span>
@@ -192,13 +192,13 @@
           node.value = dom.textContent;
         } else if (dom.nodeType === HTMLElement.ELEMENT_NODE) {
           node.isTextNode = false;
-          node.evId = dom.getAttribute('ev-id');
+          node.evId = dom.getAttribute('oe-id');
           collapseState = dom.hasAttribute('desg-tree-collapse');
           this.classList.add('non-text-node')
           node.name = dom.nodeName;
           node.attributes = [];
           var ignoreAttrList = ['template-item', 'desg-content', 'designer-id', 'desg-index',
-            'desg-tree-collapse', 'ev-ui-type', 'ev-ele-type', 'ev-id'
+            'desg-tree-collapse', 'oe-ui-type', 'oe-ele-type', 'oe-id'
           ];
           for (i = 0, len = dom.attributes.length; i < len; i++) {
             var attr = dom.attributes[i];
@@ -289,7 +289,7 @@
           } else if (event.clientY < (midPoint - 10)) {
             dropBelow = false;
           } else {
-            if (element.dom.getAttribute('ev-ele-type') !== 'droppable') {
+            if (element.dom.getAttribute('oe-ele-type') !== 'droppable') {
               return;
             }
             if (node.children.length == 0) {
@@ -326,7 +326,7 @@
             } else if (event.clientY < (midPoint - 10)) {
               element.style.borderTop = '1px dashed red';
             } else {
-              if (element.dom.getAttribute('ev-ele-type') !== 'droppable') {
+              if (element.dom.getAttribute('oe-ele-type') !== 'droppable') {
                 return;
               }
               if (node.children.length == 0) {

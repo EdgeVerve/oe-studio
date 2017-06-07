@@ -212,7 +212,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }.bind(this));
 
         testElement = fixture('service-personalization-fixture');
-        var msgHandler = document.createElement('ev-message-handler');
+        var msgHandler = document.createElement('oe-message-handler');
         msgHandler.id = 'toast';
         msgHandler.fitBottom = true;
         msgHandler.duration = 5000;
@@ -295,7 +295,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               var deleteRule = Polymer.dom(testElement.root).querySelector('#service-personalization-delete-rule');
               deleteRule.click();
               flush(function() {
-                var msgHandler = testElement.querySelector('ev-message-handler');
+                var msgHandler = testElement.querySelector('oe-message-handler');
                 var confirmToast = Polymer.dom(msgHandler.root).querySelector('paper-toast#confirm');
                 var okBtn = confirmToast.querySelector('paper-button#ok');
                 var cancelBtn = confirmToast.querySelector('paper-button#cancel');

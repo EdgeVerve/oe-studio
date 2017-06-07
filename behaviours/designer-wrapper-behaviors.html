@@ -16,7 +16,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         ajaxProps = {};
       }
 
-      var ajax = document.createElement('ev-ajax');
+      var ajax = document.createElement('oe-ajax');
       ajax.contentType = ajaxProps.contentType || 'application/json';
       ajax.handleAs = ajaxProps.handleAs || 'json';
       ajax.url = url;
@@ -77,14 +77,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }
       }
       xhr.onerror = function() {
-        self.fire('ev-show-error', 'Error fetching data -' + xhr.status);
+        self.fire('oe-show-error', 'Error fetching data -' + xhr.status);
       };
       xhr.open('get', url, true);
       xhr.send();
     },
     resolveError: function(err) {
       var errObj = EV.extractErrorMessage(err);
-      this.fire('ev-show-error', errObj);
+      this.fire('oe-show-error', errObj);
       return errObj.code || errObj.message;
     },
     resolveErrors: function(err) {
@@ -171,12 +171,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       };
       var errObj = extractErr(err);
       if (Array.isArray(errObj)) {
-        this.fire('ev-show-error', errObj.map(function(e) {
+        this.fire('oe-show-error', errObj.map(function(e) {
           return e.message || e.code
         }).join(' , '));
         return errObj;
       }
-      this.fire('ev-show-error', errObj);
+      this.fire('oe-show-error', errObj);
       return errObj.code || errObj.message;
     }
   }

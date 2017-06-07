@@ -219,7 +219,7 @@
           decisionTables: function(callback) {
             this.makeAjaxCall('api/DecisionTables', 'GET', null, null, null, function(err, resp) {
               if (err) {
-                this.fire('ev-show-error', 'Error fetching DecisionTables');
+                this.fire('oe-show-error', 'Error fetching DecisionTables');
                 callback(err, null)
               } else {
                 callback(null, resp)
@@ -230,7 +230,7 @@
             var url = 'api/ModelRules?filter[where][modelName]=' + modelName;
             this.makeAjaxCall(url, 'get', null, null, null, function(err, res) {
               if (err) {
-                this.fire('ev-show-error', 'Error fetching ModelRule');
+                this.fire('oe-show-error', 'Error fetching ModelRule');
                 callback(err, null)
               } else {
                 callback(null, res[0])
@@ -288,7 +288,7 @@
         payload.validationRules = this.validationRules;
         this.makeAjaxCall('api/ModelRules', method, payload, null, null, function(err, resp) {
           if (resp) {
-            this.fire('ev-show-success', 'Rules Mapped Successfully');
+            this.fire('oe-show-success', 'Rules Mapped Successfully');
             this.closeDialog();
           } else {
             this.resolveError(err);
@@ -351,7 +351,7 @@
           }.bind(this),
           cancel: function() {}
         }
-        this.fire('ev-show-confirm', data);
+        this.fire('oe-show-confirm', data);
       }
     })
 

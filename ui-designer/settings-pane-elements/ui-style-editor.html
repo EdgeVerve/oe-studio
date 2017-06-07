@@ -153,11 +153,11 @@
         </div>
         <div class="class-list">
           <div class="class-suggestions">
-            <ev-input id="search-class-input" no-label-float class="search-class search-input" label="Type/Search to Add class" auto-validate
+            <oe-input id="search-class-input" no-label-float class="search-class search-input" label="Type/Search to Add class" auto-validate
               prevent-invalid-input invalid={{_invalidClassName}} pattern="[a-zA-Z]+[a-zA-Z0-9-]+[a-zA-Z0-9]" error-message="Enter valid class name"
               value="{{_classSearchString}}">
              <iron-icon icon="search" prefix></iron-icon>
-            </ev-input>
+            </oe-input>
             <div class="class-suggestions-list" hidden$={{_invalidClassName}}>
               <template is="dom-if" if={{_classSearchString}}>
                 <template is="dom-if" if=[[!_classExists]]>
@@ -285,8 +285,8 @@
         this.set('fontWeightList', ['', 100, 200, 300, 400, 500, 600, 700, 800, 900]);
         this.set('_predefinedLayoutClasses', ['horizontal', 'vertical', 'justified',
           'center-justified', 'wrap', 'end-justified', 'start', 'center', 'end',
-          'center-center', 'layout', 'ev-rl-25-75', 'ev-rl-2eq', 'ev-rl-75-25',
-          'ev-rl-3eq', 'ev-rl-343', 'ev-rl-4eq'
+          'center-center', 'layout', 'oe-rl-25-75', 'oe-rl-2eq', 'oe-rl-75-25',
+          'oe-rl-3eq', 'oe-rl-343', 'oe-rl-4eq'
         ]);
       },
       _elementSelectionChanged: function() {

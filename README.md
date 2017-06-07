@@ -2,20 +2,20 @@
 
 ## Introduction
 
-EVF Designer, which itself is a web application,is a tool that is developed to make working with ev-foundation(EVF) easier. This tools provides end user a web interface using which he/she (particularly developer) will be able to perform several tasks like creating models, posting and retrieving data from models and other operations with ease
+EVF Designer, which itself is a web application,is a tool that is developed to make working with oe-foundation(EVF) easier. This tools provides end user a web interface using which he/she (particularly developer) will be able to perform several tasks like creating models, posting and retrieving data from models and other operations with ease
 
 ---
 
 ## Installing EVF Designer
 
-# If you have only ev-foundation
+# If you have only oe-foundation
 
-* git clone https://github.com/EdgeVerve/ev-foundation.git
-* cd ev-foundation
+* git clone https://github.com/EdgeVerve/oe-foundation.git
+* cd oe-foundation
 * npm install --no-optional
 * bower install
 * node .
-* Browse evf-designer at localhost:3000/designer
+* Browse oe-designer at localhost:3000/designer
 
 Use username and password as "admin" to login
 
@@ -24,7 +24,7 @@ Use username and password as "admin" to login
 # Model Administration 
 
 ### List of Existing Models :-
-In the side pan of EVF-Designer tool, all the existing models are listed as shown in the image below. A model can be selected by clicking on the model name.
+In the side pan of oe-Designer tool, all the existing models are listed as shown in the image below. A model can be selected by clicking on the model name.
 
 <img src="images/documentationImages/existingModels.png" width="500" height="400">
 
@@ -109,7 +109,7 @@ After all the edits , model can be saved using the save button (bottom right).
 
 # Data Management
 
-This part of EVF-Designer provides the facility to interact with data.
+This part of oe-Designer provides the facility to interact with data.
 
 ### Data management operations : -
 

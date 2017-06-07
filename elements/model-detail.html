@@ -124,7 +124,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     <div class="header flex">
       <div class="title layout horizontal center justified">
         <div>
-          <iron-icon icon="ev-icons:model" class="custom-icon"></iron-icon> <span on-tap="showModelDetail" class="model-name" id="model-detail-show-model-detail">{{modelObj.name}}</span>
+          <iron-icon icon="oe-icons:model" class="custom-icon"></iron-icon> <span on-tap="showModelDetail" class="model-name" id="model-detail-show-model-detail">{{modelObj.name}}</span>
           <span hidden$="{{!showSubTitle}}">&nbsp;
             <iron-icon icon="icons:chevron-right"></iron-icon>&nbsp;{{subTitle}}</span>
         </div>
@@ -205,7 +205,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               </div>
             </div>
             <iron-collapse opened class="sub-content">
-              <validation-grid id="validationGrid" ev-validations="{{modelObj.evValidations}}" model-list="{{modelList}}" hide-add-btn="true"></validation-grid>
+              <validation-grid id="validationGrid" oe-validations="{{modelObj.evValidations}}" model-list="{{modelList}}" hide-add-btn="true"></validation-grid>
             </iron-collapse>
           </div>
           <div class="relations" id="relations" hidden$="{{!viewType.Relations}}">

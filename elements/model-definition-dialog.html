@@ -244,7 +244,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       <div class="dialog-header custom-shadow">
         <div class="title flex horizontal layout justified center">
           <div class="name flex layout horizontal center">
-            <iron-icon icon="ev-icons:model"></iron-icon>
+            <iron-icon icon="oe-icons:model"></iron-icon>
             <span>
                             <span hidden$="{{editModel}}">Create Model</span>
             <span hidden$="{{!editModel}}">[[vm.name]]</span>
@@ -292,7 +292,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 </div>
                 <div class="model-option">
                   <div class="label">Choose the base</div>
-                  <ev-combo listdata=[[baseTypes]] label="Select base model" no-label-float displayproperty="name" valueproperty="name" value={{vm.base}}></ev-combo>
+                  <oe-combo listdata=[[baseTypes]] label="Select base model" no-label-float displayproperty="name" valueproperty="name" value={{vm.base}}></oe-combo>
                 </div>
                 <div class="base-properties-container model-option">
                   <div class="label"></div>
@@ -312,8 +312,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 </div>
                 <div class="model-option">
                   <div class="label">Variant of</div>
-                  <ev-combo listdata=[[baseTypes]] label="Select model to override" no-label-float displayproperty="name" valueproperty="name"
-                    value={{vm.variantOf}}></ev-combo>
+                  <oe-combo listdata=[[baseTypes]] label="Select model to override" no-label-float displayproperty="name" valueproperty="name"
+                    value={{vm.variantOf}}></oe-combo>
                 </div>
                 <div class="model-option">
                   <div class="label">Plural</div>
@@ -365,7 +365,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     <div>
                       [[activeMixins]] mixins applied
                       <iron-icon icon="create" on-tap="toggleMixinPanel"></iron-icon>
-                      <a href="http://10.73.53.167/ev/ev-foundation/wikis/home" target="_blank">
+                      <a href="http://10.73.53.167/ev/oe-foundation/wikis/home" target="_blank">
                         <iron-icon id="info-icon" icon="info"></iron-icon>
                       </a>
                     </div>
@@ -391,7 +391,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             <property-grid id="propertyGrid" property-list="{{vm.properties}}" property-types="{{propertyTypes}}"></property-grid>
           </div>
           <div class="add-validations-step">
-            <validation-grid id="validationGrid" ev-validations="{{vm.evValidations}}" model-list="{{modelList}}"></validation-grid>
+            <validation-grid id="validationGrid" oe-validations="{{vm.evValidations}}" model-list="{{modelList}}"></validation-grid>
           </div>
           <div class="add-relations-step">
             <relation-grid id="relationGrid" relations="{{vm.relations}}" model-list="{{modelList}}"></relation-grid>
@@ -586,7 +586,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 this.hideDialog();
               }.bind(this)
             }
-            this.fire('ev-show-confirm', data);
+            this.fire('oe-show-confirm', data);
           } else {
             this.hideDialog();
           }
@@ -732,7 +732,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 });
                 this.set('editModel', true);
               }
-              this.fire('ev-show-success', 'Saved successfully');
+              this.fire('oe-show-success', 'Saved successfully');
               this.hideDialog();
             }
           }.bind(this));

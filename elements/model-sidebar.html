@@ -185,7 +185,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     </style>
     <div class="model-listing models" hidden$="{{!showModels}}">
       <search-header filter-val="{{filterVal}}">
-        <iron-icon class="small" icon="ev-designer-icons:model"></iron-icon><span class="flex">Models ({{modelCount}})</span>
+        <iron-icon class="small" icon="oe-designer-icons:model"></iron-icon><span class="flex">Models ({{modelCount}})</span>
         <iron-icon icon="notification:sync" class="small" id="refresh-all-model" on-tap="refreshModels"></iron-icon>
       </search-header>
       <div class$="list {{setClass}}">
@@ -199,9 +199,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 </div>
                 <iron-icon icon="icons:visibility" class="pull-right" hidden$="{{!model.checked}}"></iron-icon>
                 <div class="view-options">
-                  <iron-icon icon="ev-designer-icons:data-manager" class="cluster" type="model-definition" on-tap="openOptions" id$="[[model.name]]-cluster"></iron-icon>
-                  <iron-icon icon="ev-designer-icons:data-manager" class="data-manager" type="data-manager" on-tap="openOptions" id$="[[model.name]]-data-manager"></iron-icon>
-                  <iron-icon icon="ev-designer-icons:detailed-view" class="model-detail" type="model-detail" on-tap="openOptions" id$="[[model.name]]-model-detail"></iron-icon>
+                  <iron-icon icon="oe-designer-icons:data-manager" class="cluster" type="model-definition" on-tap="openOptions" id$="[[model.name]]-cluster"></iron-icon>
+                  <iron-icon icon="oe-designer-icons:data-manager" class="data-manager" type="data-manager" on-tap="openOptions" id$="[[model.name]]-data-manager"></iron-icon>
+                  <iron-icon icon="oe-designer-icons:detailed-view" class="model-detail" type="model-detail" on-tap="openOptions" id$="[[model.name]]-model-detail"></iron-icon>
                   <paper-tooltip position="left" animation-delay="0" for$="[[model.name]]-data-manager">Data Manager</paper-tooltip>
                   <paper-tooltip position="left" animation-delay="0" for$="[[model.name]]-model-detail">Detailed view</paper-tooltip>
                   <paper-tooltip position="left" animation-delay="0" for$="[[model.name]]-cluster">Cluster</paper-tooltip>
@@ -414,7 +414,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         })
 
         if (!currInstance) {
-          this.fire('ev-show-error', 'Unable to find the associated model');
+          this.fire('oe-show-error', 'Unable to find the associated model');
           return;
         }
 

@@ -92,7 +92,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       margin-left: 4px;
     }
     
-    ev-typeahead {
+    oe-typeahead {
       --paper-input-container-input: {
         color: rgba(255, 255, 255, 0.54);
       }
@@ -201,13 +201,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     <div> Add Model </div>
                 </div>
                 <div class="search-panel">
-                    <ev-typeahead id="typeahead" no-label-float="true" on-pt-item-confirmed="_modelChanged" label="Search Model...
+                    <oe-typeahead id="typeahead" no-label-float="true" on-pt-item-confirmed="_modelChanged" label="Search Model...
            " displayproperty="name" valueproperty="name" searchurl="api/ModelDefinitions?filter[where][name][regexp]=/^SEARCH_STRING/i&filter[limit]=10"
                         dataurl="api/ModelDefinitions/findOne?filter[where][name][regexp]=/^VALUE_STRING/i" value="{{selectedModel}}">
                         <div prefix>
                             <iron-icon class="search-icon" icon="search"></iron-icon>
                         </div>
-                    </ev-typeahead>
+                    </oe-typeahead>
                 </div>
                 <div>
                     <div class="title layout center horizontal">

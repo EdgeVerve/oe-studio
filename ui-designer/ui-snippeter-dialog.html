@@ -14,9 +14,9 @@
 		<paper-dialog modal id="animated" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
 			<h2>Snippet information</h2>
 			<paper-dialog-scrollable>
-				<ev-input id="snipName" label="Enter snippet Name" required value="{{snippetData.name}}"></ev-input>
-				<ev-input required id="snipDesc" label="Enter snippet Description" value="{{snippetData.description}}">
-				</ev-input>
+				<oe-input id="snipName" label="Enter snippet Name" required value="{{snippetData.name}}"></oe-input>
+				<oe-input required id="snipDesc" label="Enter snippet Description" value="{{snippetData.description}}">
+				</oe-input>
 			</paper-dialog-scrollable>
 			<div class="buttons layout horizontal">
 				<paper-button on-tap="closeDialog">CANCEL</paper-button>
@@ -35,7 +35,7 @@
         var tempDom = dom.cloneNode(true);
 
         this.traverseDom(tempDom, function(node) {
-          node.removeAttribute('ev-id');
+          node.removeAttribute('oe-id');
         })
 
         var snippetData = {
@@ -71,7 +71,7 @@
             self.resolveError(err);
           } else {
             self.fire('snippet-added', resp);
-            self.fire('ev-show-success', 'Snippet successfuly created');
+            self.fire('oe-show-success', 'Snippet successfuly created');
             self.closeDialog();
           }
         });

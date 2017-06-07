@@ -42,7 +42,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.splice('_tabList', tabIndex, 1);
         this._selectedTab = null;
       } else {
-        this.fire('ev-show-error', 'Cannot close all tabs');
+        this.fire('oe-show-error', 'Cannot close all tabs');
         return;
       }
 

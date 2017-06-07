@@ -150,19 +150,19 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           this.fire('apply-validation');
           this.closeDialog();
         } else {
-          this.fire('ev-show-error', 'Fill all fields for validation')
+          this.fire('oe-show-error', 'Fill all fields for validation')
         }
       },
       convertComparator: function(comparator) {
         switch (comparator) {
           case 'less than':
-            return 'ev-lt-validator';
+            return 'oe-lt-validator';
           case 'less than or equal':
-            return 'ev-le-validator';
+            return 'oe-le-validator';
           case 'equals to':
-            return 'ev-eq-validator';
+            return 'oe-eq-validator';
           case 'not equals to':
-            return 'ev-ne-validator';
+            return 'oe-ne-validator';
           default : 
             break;
         }

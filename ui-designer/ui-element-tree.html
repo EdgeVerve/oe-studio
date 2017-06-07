@@ -12,13 +12,13 @@
       display: block;
     }
     
-    ev-info {
-      --ev-info-label: {
+    oe-info {
+      --oe-info-label: {
         font-size: 10px;
         color: var(--secondary-text-color);
       }
       ;
-      --ev-info-value: {
+      --oe-info-value: {
         font-size: 12px;
         color: var(--primary-text-color);
         white-space: nowrap;
@@ -82,7 +82,7 @@
       flex-shrink: 0;
     }
     
-    ev-info+ev-info {
+    oe-info+oe-info {
       margin-top: 8px;
       display: block;
     }
@@ -122,7 +122,7 @@
 
   </style>
   <template>
-        <div class="row layout horizontal center" id="el_[[node.evId]]" on-tap="_handleFocus" ev-id$="[[node.evId]]" style$="padding-left:[[_calcPadding(level)]]">
+        <div class="row layout horizontal center" id="el_[[node.evId]]" on-tap="_handleFocus" oe-id$="[[node.evId]]" style$="padding-left:[[_calcPadding(level)]]">
             <iron-icon icon="arrow-drop-down" class$="node-collapse-icon rotate-[[node.isCollapsed]] hide-[[!node.hasChild]]" on-tap="expandPanel"></iron-icon>
             <template is="dom-if" if="[[node.icon]]">
                 <iron-icon class="node-icon" icon="[[node.icon]]"></iron-icon>
@@ -134,7 +134,7 @@
   <template is="dom-if" if="[[node.nodeInfo.length]]">
                 <div class="tooltip">
                     <template is="dom-repeat" items="[[node.nodeInfo]]">
-                        <ev-info label="[[item.name]]" value="[[item.value]]"></ev-info>
+                        <oe-info label="[[item.name]]" value="[[item.value]]"></oe-info>
                     </template>
   </div>
   </template>
@@ -226,8 +226,8 @@
           return obj.tag == node.name;
         })
         node.icon = elem ? elem.icon : null;
-        node.evId = dom.getAttribute('ev-id');
-        node.type = dom.getAttribute('ev-ele-type');
+        node.evId = dom.getAttribute('oe-id');
+        node.type = dom.getAttribute('oe-ele-type');
         this._getElementInfo(node, dom);
         this.set('node', node);
         this.set('node.children', children);
@@ -295,7 +295,7 @@
         }
         var boundingClientRect = element.getBoundingClientRect();
         var midPoint = boundingClientRect.top + 15;
-        if (element.dom.getAttribute('ev-ele-type') == 'droppable') {
+        if (element.dom.getAttribute('oe-ele-type') == 'droppable') {
           if (event.clientY > (midPoint + 5)) {
             dropBelow = true;
           } else if (event.clientY < (midPoint - 5)) {
@@ -338,7 +338,7 @@
         element.style.borderColor = 'green';
         //var dropBelow;
         if (!node.isCollapsed) {
-          if (element.dom.getAttribute('ev-ele-type') == 'droppable') {
+          if (element.dom.getAttribute('oe-ele-type') == 'droppable') {
             if (event.clientY > (midPoint + 5)) {
              // dropBelow = true;
               element.style.borderWidth = '0px 0px 6px 0px';

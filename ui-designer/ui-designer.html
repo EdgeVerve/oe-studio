@@ -86,7 +86,7 @@
         var detail = e.detail;
         self.makeXhrCall(('/api/UIComponents/component/' + detail.name), function(err, res) {
           if (err) {
-            self.fire('ev-show-error', 'Error fetching uicomponent')
+            self.fire('oe-show-error', 'Error fetching uicomponent')
           } else {
             var component = self.createNodeFromStr(res);
             detail.component = component;
@@ -140,7 +140,7 @@
           pageDetail.templateConfig = self.getPolymerJSON(polymerScript)
 
           if (!pageDetail.polyConfig) {
-            this.fire('ev-show-error', 'Error obtaining Polymer Object');
+            this.fire('oe-show-error', 'Error obtaining Polymer Object');
             this.$.toolbar.fire('reset-page-selection');
             self.set('pageSelected', false);
             return;
@@ -211,7 +211,7 @@
           var polymerScript = component.querySelector('script');
           payload.polyConfig = self.getPolymerJSON(polymerScript);
           if (!payload.polyConfig) {
-            this.fire('ev-show-error', 'Error obtaining Polymer Object');
+            this.fire('oe-show-error', 'Error obtaining Polymer Object');
             this.$.toolbar.fire('reset-page-selection');
             self.set('pageSelected', false);
             return;
@@ -271,7 +271,7 @@
           window.EV.tempPolyObj = null;
           return polyJson;
         } else {
-          this.fire('ev-show-error', 'Error obtaining Polymer Object');
+          this.fire('oe-show-error', 'Error obtaining Polymer Object');
         }
         //document.head.removeChild(script);
         window.EV.tempPolyObj = null;
@@ -410,7 +410,7 @@
         }
         this.makeAjaxCall('/api/UIComponents/', event.detail.method, page, null, null, function(err, res) {
           if (!err) {
-            this.fire('ev-show-success', 'Element successfully created');
+            this.fire('oe-show-success', 'Element successfully created');
             this.fire('launch-page', res);
           } else {
             this.resolveError(err);
@@ -420,7 +420,7 @@
       savePage: function() {
         var self = this;
         if (this.element.isFile) {
-          this.fire('ev-show-error', 'Cannot save File as UIComponent,Try downloading the file');
+          this.fire('oe-show-error', 'Cannot save File as UIComponent,Try downloading the file');
           return;
         }
         var payload = self._preparePayload();
@@ -428,7 +428,7 @@
 
           if (!err) {
             self.$.toolbar.fire('update-component', res);
-            self.fire('ev-show-success', 'Element successfully created');
+            self.fire('oe-show-success', 'Element successfully created');
           } else {
             self.resolveError(err);
           }
@@ -611,8 +611,8 @@
         this.reFactorFromDesigner(dom);
         self.traverseDom(dom, function(el) {
           el.removeAttribute('template-item')
-          el.removeAttribute('ev-id')
-          el.removeAttribute('ev-ele-type')
+          el.removeAttribute('oe-id')
+          el.removeAttribute('oe-ele-type')
           el.removeAttribute('desg-tree-collapse')
         });
         var styleDom = this.throughClone(self.$.domManager.getCustomStyle());
@@ -631,15 +631,15 @@
         this.traverseDom(dom, function(el) {
 
           el.removeAttribute('template-item')
-          el.removeAttribute('ev-id')
-          el.removeAttribute('ev-ele-type')
+          el.removeAttribute('oe-id')
+          el.removeAttribute('oe-ele-type')
         });
 
         [].forEach.call(modDom, function(node) {
 
           var parentId = node.parentElement.getAttribute('id');
           if (parentId) {
-            node.setAttribute('ev-container', parentId);
+            node.setAttribute('oe-container', parentId);
           }
           contentStr += node.outerHTML + '\n';
         })
@@ -653,7 +653,7 @@
         var allModels = self.element.modelMeta.metadata.models;
 
         var ignoreFromPropList = ['fieldId', 'container', 'type', 'uitype']
-        var ignoreFromAttrList = ['ev-id', 'ev-ele-type', 'fieldid', 'container', 'field-id', 'value'];
+        var ignoreFromAttrList = ['oe-id', 'oe-ele-type', 'fieldid', 'container', 'field-id', 'value'];
 
         function customEqual(strVal, actVal) {
           var isEqual = false;
@@ -736,7 +736,7 @@
             fieldObj.container = parentEle.getAttribute('id');
           }
 
-          var placeHolder = document.createElement('ev-field');
+          var placeHolder = document.createElement('oe-field');
           placeHolder.setAttribute('field-id', fieldObj.fieldId)
           parentEle.replaceChild(placeHolder, node);
           return fieldObj;
@@ -755,7 +755,7 @@
         //Handle Validators
         var validators = [];
         //Handle async validator
-        var evAsyncValidators = dom.querySelectorAll('ev-async-validator');
+        var evAsyncValidators = dom.querySelectorAll('oe-async-validator');
         [].forEach.call(evAsyncValidators, function(node) {
           var k = node.getAttribute('fields');
           var fields = k.substring(2, k.length - 2);
@@ -774,7 +774,7 @@
           } else {
 
             var validationObj = {
-              type: 'ev-async-validator',
+              type: 'oe-async-validator',
               fields: fields.split(',')
             }
             if (error) {
@@ -788,7 +788,7 @@
 
         })
 
-        var evCombinationValidators = dom.querySelectorAll('ev-combination-validator');
+        var evCombinationValidators = dom.querySelectorAll('oe-combination-validator');
         [].forEach.call(evCombinationValidators, function(node) {
           var k = node.getAttribute('fields');
           var fields = k.substring(2, k.length - 2);
@@ -813,7 +813,7 @@
             }
           } else {
             var validationObj = {
-              type: 'ev-combination-validator',
+              type: 'oe-combination-validator',
               fields: fields.split(',')
             }
             if (error) {
@@ -827,14 +827,14 @@
           node.parentElement.removeChild(node);
         });
 
-        var evExpressionValidators = dom.querySelectorAll('ev-expression-validator');
+        var evExpressionValidators = dom.querySelectorAll('oe-expression-validator');
         [].forEach.call(evExpressionValidators, function(node) {
           var k = node.getAttribute('fields');
           var fields = k.substring(2, k.length - 2);
           var error = node.getAttribute('error');
           var expression = node.getAttribute('expression');
           var validationObj = {
-            type: 'ev-expression-validator',
+            type: 'oe-expression-validator',
             fields: fields.split(',')
           }
           if (error) {
@@ -888,7 +888,7 @@
 
         var dom = this.$.domManager.dom;
         var metadata = this.unMetaPolymer(dom);
-        var prevEvFields = metadata.dom.querySelectorAll('ev-field');
+        var prevEvFields = metadata.dom.querySelectorAll('oe-field');
 
         var includedFields = detail.allProperties.filter(function(p) {
           return p.checked
@@ -945,8 +945,8 @@
           container.classList.add('layout');
           container.classList.add('horizontal');
           container.classList.add('wrap');
-          container.classList.add(detail.layout ? detail.layout : 'ev-rl-2eq');
-          var parentEl = metadata.dom.querySelector('[ev-ele-type="droppable"][id][template-item]')
+          container.classList.add(detail.layout ? detail.layout : 'oe-rl-2eq');
+          var parentEl = metadata.dom.querySelector('[oe-ele-type="droppable"][id][template-item]')
           parentEl.appendChild(container);
         }
         payload.content = this.getValidContentDom(metadata.dom);
@@ -960,7 +960,7 @@
         self.makeAjaxCall('/api/UIComponents/', 'put', payload, null, null, function(err, res) {
           if (!err) {
             self.$.toolbar.fire('update-component', res);
-            self.fire('ev-show-success', 'Element successfully created');
+            self.fire('oe-show-success', 'Element successfully created');
           } else {
             self.resolveError(err);
           }

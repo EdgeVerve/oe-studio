@@ -1,14 +1,14 @@
 {
   "name": "oe-studio",
   "version": "1.1.0",
-  "description": "EVF Designer",
-  "main": "evf-designer.html",
+  "description": "OE Designer",
+  "main": "oe-designer.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.2.0",
     "jquery": "^2.2.0",
     "lodash": "^4.3.0",
     "jquery-ui": "^1.11.4",
-    "evf-ui": "http://10.73.53.167/evf/evf-ui.git#master",
+    "oe-ui": "http://10.73.53.167/evf/oe-ui.git#master",
     "roboto-fontface": "^0.4.5",
     "inflection": "^1.10.0",
     "materialize": "#0.97.7",
@@ -32,8 +32,8 @@
   },
   "resolutions": {
     "lodash": "^4.3.0",
-    "ev-i18n-msg": "^1.1.5",
-    "evf-ui": "master",
+    "oe-i18n-msg": "^1.1.5",
+    "oe-ui": "master",
     "firebase": "^2.3.1",
     "paper-styles": "^1.1.4",
     "web-animations-js": "^2.2.0"

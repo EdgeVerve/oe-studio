@@ -27,7 +27,7 @@
 				<span>Define Data Acls for [[modelObj.name]]</span>
 			</div>
 			<div class="dialog-content flex">
-				<ev-data-table label="Data Acls" items={{dataAcls}} record-handling="remote" editor-form-url="evf-designer/elements/data-acl-form.html" columns=[[dataAclColumnDef]]></ev-data-table>
+				<oe-data-table label="Data Acls" items={{dataAcls}} record-handling="remote" editor-form-url="oe-designer/elements/data-acl-form.html" columns=[[dataAclColumnDef]]></oe-data-table>
 			</div>
 			<div class="dialog-footer">
 				<div class="layout horizontal center end-justified">
@@ -105,7 +105,7 @@
             }
             this.makeAjaxCall('api/DataACLs', 'GET', null, null, params, null, function(err, resp) {
               if (err) {
-                this.fire('ev-show-error', 'Error fetching Data ACLs');
+                this.fire('oe-show-error', 'Error fetching Data ACLs');
                 callback(err, null)
               } else {
                 callback(null, resp)
@@ -115,7 +115,7 @@
           usersList: function(callback) {
             this.makeAjaxCall('api/Users', 'get', null, null, null, function(err, res) {
               if (err) {
-                this.fire('ev-show-error', 'Error fetching UserData');
+                this.fire('oe-show-error', 'Error fetching UserData');
                 callback(err, null)
               } else {
                 callback(null, res)
@@ -125,7 +125,7 @@
           roleList: function(callback) {
             this.makeAjaxCall('api/BaseRoles', 'get', null, null, null, function(err, res) {
               if (err) {
-                this.fire('ev-show-error', 'Error fetching BaseRoles');
+                this.fire('oe-show-error', 'Error fetching BaseRoles');
                 callback(err, null)
               } else {
                 callback(null, res)
@@ -161,7 +161,7 @@
       },
       openDialog: function(modelObj) {
         this.set('modelObj', modelObj);
-        var table = this.querySelector('ev-data-table');
+        var table = this.querySelector('oe-data-table');
         var formElement = table.$['form-component'].element;
         if (formElement) {
           this.fetchData(formElement);

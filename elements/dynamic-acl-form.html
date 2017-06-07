@@ -63,7 +63,7 @@
         <label class="segment-header">Model Access Control</label>
         <div class="segment-controls-panel">
           <div class="segment-block">
-            <ev-combo field-id="accessType" label="Access Type" value="{{vm.accessType}}" listdata='["*","write","read","execute"]'></ev-combo>
+            <oe-combo field-id="accessType" label="Access Type" value="{{vm.accessType}}" listdata='["*","write","read","execute"]'></oe-combo>
             <iron-icon icon="info-outline" on-tap="toggleInfoPanel"></iron-icon>
             <iron-collapse>
               <div class="segment-input-helper">
@@ -73,10 +73,10 @@
           </div>
           <div class="segment-block">
             <template restamp is="dom-if" if="[[isCustomFunc(vm.accessType)]]">
-              <ev-input field-id="property" label="Property" value="{{vm.property}}"></ev-input>
+              <oe-input field-id="property" label="Property" value="{{vm.property}}"></oe-input>
             </template>
             <template restamp is="dom-if" if="[[!isCustomFunc(vm.accessType)]]">
-              <ev-combo field-id="property" label="Property" value="{{vm.property}}" listdata='[[_computePropertyList(vm.accessType)]]'></ev-combo>
+              <oe-combo field-id="property" label="Property" value="{{vm.property}}" listdata='[[_computePropertyList(vm.accessType)]]'></oe-combo>
             </template>
             <iron-icon icon="info-outline" on-tap="toggleInfoPanel"></iron-icon>
             <iron-collapse>
@@ -91,7 +91,7 @@
         <label class="segment-header">User Authentication Control</label>
         <div class="segment-controls-panel">
           <div class="segment-block">
-            <ev-combo required field-id="principalType" label="Principal Type" value="{{vm.principalType}}" listdata='["role","user"]'></ev-combo>
+            <oe-combo required field-id="principalType" label="Principal Type" value="{{vm.principalType}}" listdata='["role","user"]'></oe-combo>
             <iron-icon icon="info-outline" on-tap="toggleInfoPanel"></iron-icon>
             <iron-collapse>
               <div class="segment-input-helper">
@@ -100,7 +100,7 @@
             </iron-collapse>
           </div>
           <div class="segment-block">
-            <ev-combo required field-id="principalId" listdata='[[_computePrincipalList(vm.principalType)]]' label="Principal Id" value="{{vm.principalId}}"></ev-combo>
+            <oe-combo required field-id="principalId" listdata='[[_computePrincipalList(vm.principalType)]]' label="Principal Id" value="{{vm.principalId}}"></oe-combo>
             <iron-icon icon="info-outline" on-tap="toggleInfoPanel"></iron-icon>
             <iron-collapse>
               <div class="segment-input-helper">
@@ -120,7 +120,7 @@
         <label class="segment-header">ACL Control</label>
         <div class="segment-controls-panel">
           <div class="segment-block">
-            <ev-combo field-id="permission" required label="Permission" value="{{vm.permission}}" listdata='["ALLOW","DENY"]'></ev-combo>
+            <oe-combo field-id="permission" required label="Permission" value="{{vm.permission}}" listdata='["ALLOW","DENY"]'></oe-combo>
             <iron-icon icon="info-outline" on-tap="toggleInfoPanel"></iron-icon>
             <iron-collapse>
               <div class="segment-input-helper">
@@ -129,7 +129,7 @@
             </iron-collapse>
           </div>
           <div class="segment-block">
-            <ev-json-input field-id="scope" label="Scope" value="{{vm.scope}}"></ev-json-input>
+            <oe-json-input field-id="scope" label="Scope" value="{{vm.scope}}"></oe-json-input>
             <iron-icon icon="info-outline" on-tap="toggleInfoPanel"></iron-icon>
             <iron-collapse>
               <div class="segment-input-helper">

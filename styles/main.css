@@ -102,16 +102,16 @@ element-helper .main-prop * {
     color: #FFF !important;
 }
 
-[ev-custom-container],
-[ev-custom-field] {
+[oe-custom-container],
+[oe-custom-field] {
     box-sizing: border-box;
 }
 
-attach-workflow-dialog ev-hblock .parent {
+attach-workflow-dialog oe-hblock .parent {
     align-items: center !important;
 }
 
-add-rule-dialog ev-hblock .parent {
+add-rule-dialog oe-hblock .parent {
     align-items: center !important;
 }
 
@@ -493,50 +493,50 @@ html-dom-element #canvasBoard [designer-id] {
     background: red;
 }
 
-.ev-resize-handler {
+.oe-resize-handler {
     display: block;
     position: absolute;
     z-index: 1;
 }
 
-.ev-resize-handler.ev-resize-e:hover,
-.ev-resize-handler.ev-resize-w:hover {
+.oe-resize-handler.oe-resize-e:hover,
+.oe-resize-handler.oe-resize-w:hover {
     background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
 
-.ev-resize-handler.ev-resize-e,
-.ev-resize-handler.ev-resize-w {
+.oe-resize-handler.oe-resize-e,
+.oe-resize-handler.oe-resize-w {
     height: 100%;
     width: 5px;
     top: 0px;
     cursor: e-resize;
 }
 
-.ev-resize-handler.ev-resize-e {
+.oe-resize-handler.oe-resize-e {
     right: -4px;
 }
 
-.ev-resize-handler.ev-resize-w {
+.oe-resize-handler.oe-resize-w {
     left: 0px;
 }
 
-.ev-resize-handler.ev-resize-n,
-.ev-resize-handler.ev-resize-s {
+.oe-resize-handler.oe-resize-n,
+.oe-resize-handler.oe-resize-s {
     width: 100%;
     height: 5px;
     left: 0px;
     cursor: n-resize;
 }
 
-.ev-resize-handler.ev-resize-n {
+.oe-resize-handler.oe-resize-n {
     top: 0px;
 }
 
-.ev-resize-handler.ev-resize-s {
+.oe-resize-handler.oe-resize-s {
     bottom: 0px;
 }
 
-.ev-resize-handler.ev-resize-n:hover,
-.ev-resize-handler.ev-resize-s:hover {
+.oe-resize-handler.oe-resize-n:hover,
+.oe-resize-handler.oe-resize-s:hover {
     background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }

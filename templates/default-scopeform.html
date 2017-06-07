@@ -12,23 +12,23 @@
           <h2 class="flex">:modelName</h2>
           <div>
             <template is="toolbar"></template>
-            <paper-button raised primary on-tap="doSave" ev-action-model=":modelAlias">Save</paper-button>
-            <paper-button raised on-tap="doClear" ev-action-model=":modelAlias">Clear</paper-button>
+            <paper-button raised primary on-tap="doSave" oe-action-model=":modelAlias">Save</paper-button>
+            <paper-button raised on-tap="doClear" oe-action-model=":modelAlias">Clear</paper-button>
             <template is="dom-if" if="{{:modelAlias.id}}">
               <paper-button raised on-tap="doFetch">Reset</paper-button>
-              <paper-button raised on-tap="doDelete" ev-action-model=":modelAlias">Delete</paper-button>
+              <paper-button raised on-tap="doDelete" oe-action-model=":modelAlias">Delete</paper-button>
             </template>
           </div>
         </div>
 
-        <ev-template id="main">
-        </ev-template>
+        <oe-template id="main">
+        </oe-template>
 
-        <ev-template id="details">
-        </ev-template>
+        <oe-template id="details">
+        </oe-template>
 
-        <ev-template id="audit">
-        </ev-template>
+        <oe-template id="audit">
+        </oe-template>
 
         <div id="fields" class="layout horizontal wrap">
 
@@ -36,7 +36,7 @@
 
         <div id="grids" class="layout vertical">
         </div>
-        <ev-json-input fieldid="scope" field-id="scope" label="scope"></ev-json-input>
+        <oe-json-input fieldid="scope" field-id="scope" label="scope"></oe-json-input>
       </div>
     </div>
   </template>

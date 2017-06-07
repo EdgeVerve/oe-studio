@@ -12,13 +12,13 @@
 				background: var(--default-primary-color);
 			}
 
-			ev-input.light-input {
+			oe-input.light-input {
 				--paper-input-container-focus-color: #ffffff;
 				--paper-input-container-input-color: rgba(255, 255, 255, 0.6);
 				--paper-input-container-color: rgba(255, 255, 255, 0.6);
 			}
 
-			ev-typeahead {
+			oe-typeahead {
 				--paper-input-container-focus-color: #ffffff;
 				--paper-input-container-input-color: rgba(255, 255, 255, 0.6);
 				--paper-input-container-color: rgba(255, 255, 255, 0.6);
@@ -120,13 +120,13 @@
 				</div>
 			</div>
 			<form is="iron-form" id="navForm">
-				<ev-input class="light-input" label="Set URL" value="{{config.url}}" required error-message="URL is Mandatory for Navigation" pattern="(\/[A-Za-z0-9-_&?=]+)+" auto-validate id="urlInput"></ev-input>
+				<oe-input class="light-input" label="Set URL" value="{{config.url}}" required error-message="URL is Mandatory for Navigation" pattern="(\/[A-Za-z0-9-_&?=]+)+" auto-validate id="urlInput"></oe-input>
 				<span class="helper-text">Path to Navigate to the element</span>
-				<ev-input class="light-input" label="Navigation Label" id="navLabel" value="{{config.navigationLabel}}"></ev-input>
+				<oe-input class="light-input" label="Navigation Label" id="navLabel" value="{{config.navigationLabel}}"></oe-input>
 				<span class="helper-text">appears on the navigation link</span>
-				<ev-typeahead strict label="Navigation Parent" displayproperty="name" valueproperty="name" searchurl="{{generateSearchUrl(linking.navLink.name)}}" dataurl="/api/NavigationLinks/findOne?filter[where][name][regexp]=/^VALUE_STRING/i" value="{{config.parent}}" id="navParent"></ev-typeahead>
+				<oe-typeahead strict label="Navigation Parent" displayproperty="name" valueproperty="name" searchurl="{{generateSearchUrl(linking.navLink.name)}}" dataurl="/api/NavigationLinks/findOne?filter[where][name][regexp]=/^VALUE_STRING/i" value="{{config.parent}}" id="navParent"></oe-typeahead>
 				<span class="helper-text">Name of the parent link</span>
-				<ev-input class="light-input" label="Navigation Group" value="{{config.group}}" id="navGroup"></ev-input>
+				<oe-input class="light-input" label="Navigation Group" value="{{config.group}}" id="navGroup"></oe-input>
 				<span class="helper-text">Navigation link group</span>
 				<icon-picker selected-icon="{{config.navigationIcon}}"></icon-picker>
 				<span class="helper-text">Navigation link icon</span>
@@ -395,30 +395,30 @@
                       navigationLink: navres
                     }
                     self.set('routeData', rtData);
-                    self.fire('ev-show-success', 'UIRoute and Navigation Link saved successfully');
+                    self.fire('oe-show-success', 'UIRoute and Navigation Link saved successfully');
                     self.closePanel();
                   } else {
-                    self.fire('ev-show-error',
+                    self.fire('oe-show-error',
                       'Error in saving Navigation Link');
                   }
                 })
             } else {
               self.set('routeData.uiRoute', uires);
-              self.fire('ev-show-success', 'UIRoute saved successfully');
+              self.fire('oe-show-success', 'UIRoute saved successfully');
               self.closePanel();
             }
           } else {
-            self.fire('ev-show-error', 'Error in saving UIRoute');
+            self.fire('oe-show-error', 'Error in saving UIRoute');
           }
         })
       } else {
-        self.fire('ev-show-error', 'Please enter valid Routing Data');
+        self.fire('oe-show-error', 'Please enter valid Routing Data');
       }
     },
     deleteactiveRoute: function() {
       this.deleteRouteDetails(this.activePage.routeData, function() {
         this.set('activePage.routeData', {});
-        this.fire('ev-show-success', 'Route and Navigation Setting deleted successfully')
+        this.fire('oe-show-success', 'Route and Navigation Setting deleted successfully')
       }.bind(this));
     },
     closePanel: function() {

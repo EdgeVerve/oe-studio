@@ -114,11 +114,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               <iron-icon icon="icons:clear" on-tap="closeDrawer"></iron-icon>
             </div>
             <div class="layout horizontal justified center" hidden=[[disableSwitch]]>
-              <ev-combo class="combo-box" id="tenantCombo" label="Choose Tenant"
+              <oe-combo class="combo-box" id="tenantCombo" label="Choose Tenant"
               listdata="{{tenantList}}"
               displayproperty="tenantName" value="{{selectedTenant}}"
                 listurl="/api/Tenants">
-              </ev-combo>
+              </oe-combo>
               <paper-button on-tap="switchTenant" id="switchTenantBtn" secondary raised>SWITCH TENANT</paper-button>
             </div>
             <paper-fab mini icon="add" id="primary-fab-icon" on-tap="currentFabTap"></paper-fab>
@@ -221,7 +221,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 this.resolveError(err);
               } else {
                 var msg = this.editState ? 'Tenant Updated Successfully' : 'Tenant Created Successfully'
-                this.fire('ev-show-success', msg);
+                this.fire('oe-show-success', msg);
                 this.$.tenantCombo.set('value', undefined);
                 this.$.tenantCombo._fetchListData();
                 this.gotoSelect();

@@ -390,7 +390,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }
 
         if (this.showValidation) {
-          this.fire('ev-show-warning', 'Please close the validation panel');
+          this.fire('oe-show-warning', 'Please close the validation panel');
           return;
         }
 
@@ -413,7 +413,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             //checking for duplicate property name
             this.propertyList.forEach(function (d, i) {
               if (i != editableIndex && d.__name__ == editable.__name__) {
-                this.fire('ev-show-error', 'Property name already exists');
+                this.fire('oe-show-error', 'Property name already exists');
                 valid = false;
               }
             }.bind(this));
@@ -450,7 +450,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         if (editable) {
           this.propertyList.forEach(function (d, i) {
             if (i != editableIndex && d.__name__ == editable.__name__) {
-              this.fire('ev-show-error', 'Property name already exists');
+              this.fire('oe-show-error', 'Property name already exists');
               valid = false;
             }
           }.bind(this));
@@ -501,7 +501,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           if (editable) {
             this.propertyList.forEach(function (d, i) {
               if (i != editableIndex && d.__name__ == editable.__name__) {
-                this.fire('ev-show-error', 'Property name already exists');
+                this.fire('oe-show-error', 'Property name already exists');
                 valid = false;
               }
             }.bind(this));
@@ -599,7 +599,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               return;
             }
           }
-          this.fire('ev-show-confirm', data);
+          this.fire('oe-show-confirm', data);
         }
       },
       isEditableEmpty: function () {
@@ -632,7 +632,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             return;
           }
         }
-        this.fire('ev-show-confirm', data);
+        this.fire('oe-show-confirm', data);
       },
       _checkAll: function () {
         this.setAll(this.allChecked);

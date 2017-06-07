@@ -107,7 +107,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         var url = '/designer/save-file';
         this.makeAjaxCall(url, 'POST', body, null, null, function (err, resp) {
           if (resp) {
-            this.fire('ev-show-success', 'Data saved successfully');
+            this.fire('oe-show-success', 'Data saved successfully');
           } else {
             this.resolveError(err);
           }

@@ -1,4 +1,4 @@
-<link rel="import" href="../../evf-ui/core/meta-polymer.html">
+<link rel="import" href="../../oe-ui/core/meta-polymer.html">
 <dom-module id="workflow-prop-form">
   <style>
     :host {
@@ -13,8 +13,8 @@
   </style>
   <template>
 		<div class="layout vertical panel">
-			<ev-input required field-id="name" label="Name" value="{{vm.name}}"></ev-input>
-			<ev-input required label="Value" field-id="value" value="{{vm.value}}"></ev-input>
+			<oe-input required field-id="name" label="Name" value="{{vm.name}}"></oe-input>
+			<oe-input required label="Value" field-id="value" value="{{vm.value}}"></oe-input>
 		</div>
 		<div class="layout horizontal center justified">
 			<paper-button raised primary on-tap="doSave">Save</paper-button>

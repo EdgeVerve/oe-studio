@@ -12,9 +12,9 @@
   </style>
   <template>
 		<div class="layout vertical panel">
-			<ev-input required field-id="fnName" label="Name" value="{{vm.fnName}}"></ev-input>
-			<ev-textarea required field-id="fnDef" label="Definition" value="{{vm.fnDef}}"
-						 validation-function="{{funcValidator}}"></ev-textarea>
+			<oe-input required field-id="fnName" label="Name" value="{{vm.fnName}}"></oe-input>
+			<oe-textarea required field-id="fnDef" label="Definition" value="{{vm.fnDef}}"
+						 validation-function="{{funcValidator}}"></oe-textarea>
 		</div>
 		<div class="layout horizontal center justified">
 			<paper-button raised primary on-tap="doSave">Save</paper-button>

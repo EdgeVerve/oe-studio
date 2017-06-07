@@ -12,4 +12,4 @@ buildwindows:
   tags:
     - windows
     - ev
-    - evf-designer
+    - oe-designer

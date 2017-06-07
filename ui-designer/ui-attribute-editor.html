@@ -7,10 +7,10 @@
                 position: relative;
             }
 
-            ev-input,
-            ev-json-input,
-            ev-decimal,
-            ev-combo {
+            oe-input,
+            oe-json-input,
+            oe-decimal,
+            oe-combo {
                 --paper-input-container: {
                     background: #263238;
                     padding: 2px 8px;
@@ -30,10 +30,10 @@
                 }
             }
 
-            ev-input.light-control,
-            ev-combo.light-control,
-            ev-json-input.light-control,
-            ev-decimal.light-control {
+            oe-input.light-control,
+            oe-combo.light-control,
+            oe-json-input.light-control,
+            oe-decimal.light-control {
                 --paper-input-container: {
                     background: rgba(38, 49, 56, 0.12);
                     padding: 2px 8px;
@@ -123,7 +123,7 @@
                 color: var(--primary-text-color);
             }
 
-            ev-checkbox {
+            oe-checkbox {
                 --paper-checkbox-unchecked-color: rgba(255, 255, 255, 0.6);
             }
 
@@ -196,7 +196,7 @@
             <div class="info-box layout horizontal center">
               <div class="info-label">Attribute: </div>
               <div class="info-value">
-                <ev-combo allow-free-text class="light-control" listdata="{{listdata}}" displayproperty="name" pattern="^[a-z][0-9a-z-]+[0-9a-z]$" required no-label-float value="{{attributeObj}}"></ev-combo>
+                <oe-combo allow-free-text class="light-control" listdata="{{listdata}}" displayproperty="name" pattern="^[a-z][0-9a-z-]+[0-9a-z]$" required no-label-float value="{{attributeObj}}"></oe-combo>
               </div>
             </div>
             <template is="dom-if" if="{{!isString(attributeObj.type)}}">
@@ -209,23 +209,23 @@
               <div class="info-label">Value: </div>
               <div class="info-value flex">
                 <template is="dom-if" restamp if="{{attributeObj.isBindedValue}}">
-                                                        <ev-input class="light-control" no-label-float value="{{attributeObj.value}}" pattern="^(\{\{[0-9a-zA-Z\.]+\}\}|\[\[[0-9a-zA-Z\.]+\]\])$"></ev-input>
+                                                        <oe-input class="light-control" no-label-float value="{{attributeObj.value}}" pattern="^(\{\{[0-9a-zA-Z\.]+\}\}|\[\[[0-9a-zA-Z\.]+\]\])$"></oe-input>
                                                     </template>
                 <template is="dom-if" restamp if="{{!attributeObj.isBindedValue}}">
                                                         <template is="dom-if" restamp if="{{_showControl('String',attributeObj.name)}}">
-                                                            <ev-input class="light-control" no-label-float value="{{attributeObj.value}}"></ev-input>
+                                                            <oe-input class="light-control" no-label-float value="{{attributeObj.value}}"></oe-input>
                                                         </template>
                 <template is="dom-if" restamp if="{{_showControl('Boolean',attributeObj.name)}}">
-                                                            <ev-checkbox class="light-control" value="{{attributeObj.value}}"></ev-checkbox>
+                                                            <oe-checkbox class="light-control" value="{{attributeObj.value}}"></oe-checkbox>
                                                         </template>
                 <template is="dom-if" restamp if="{{_showControl('Object',attributeObj.name)}}">
-                                                            <ev-json-input class="light-control" no-label-float value="{{attributeObj.value}}"></ev-json-input>
+                                                            <oe-json-input class="light-control" no-label-float value="{{attributeObj.value}}"></oe-json-input>
                                                         </template>
                 <template is="dom-if" restamp if="{{_showControl('Array',attributeObj.name)}}">
-                                                            <ev-json-input class="light-control" no-label-float value="{{attributeObj.value}}"></ev-json-input>
+                                                            <oe-json-input class="light-control" no-label-float value="{{attributeObj.value}}"></oe-json-input>
                                                         </template>
                 <template is="dom-if" restamp if="{{_showControl('Number',attributeObj.name)}}">
-                                                            <ev-decimal class="light-control" precision="0" no-label-float value="{{attributeObj.value}}"></ev-decimal>
+                                                            <oe-decimal class="light-control" precision="0" no-label-float value="{{attributeObj.value}}"></oe-decimal>
                                                         </template>
                 </template>
               </div>
@@ -462,7 +462,7 @@
           }
         } else {
           obj.name = props[key].name;
-          if (obj.name == 'ev-id' || obj.name == 'ev-ele-type') {
+          if (obj.name == 'oe-id' || obj.name == 'oe-ele-type') {
             return;
           }
           index = self.propertyList.findIndex(function(attr) {

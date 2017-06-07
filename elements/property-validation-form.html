@@ -227,10 +227,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             <div class="layout vertical justified validation-block">
               <label>Property Length</label>
               <div class="layout horizontal justified center">
-                <ev-decimal precision="0" value="{{validation.min}}" label="Min" type="number" on-change="validateEntry" disabled="{{disableMinMax}}"
-                  min="0"></ev-decimal>
-                <ev-decimal precision="0" value="{{validation.max}}" label="Max" type="number" on-change="validateEntry" disabled="{{disableMinMax}}"
-                  min="0"></ev-decimal>
+                <oe-decimal precision="0" value="{{validation.min}}" label="Min" type="number" on-change="validateEntry" disabled="{{disableMinMax}}"
+                  min="0"></oe-decimal>
+                <oe-decimal precision="0" value="{{validation.max}}" label="Max" type="number" on-change="validateEntry" disabled="{{disableMinMax}}"
+                  min="0"></oe-decimal>
               </div>
               <div class="validation-help-text">Set Property Min and Max Length</div>
               <div class="seperator layout horizontal justified center">
@@ -238,7 +238,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 <span class="flex-2">or</span>
                 <hr class="flex-3">
               </div>
-              <ev-decimal precision="0" value="{{validation.is}}" label="Length" min="0" on-change="validateEntry" disabled="{{disableIsField}}"></ev-decimal>
+              <oe-decimal precision="0" value="{{validation.is}}" label="Length" min="0" on-change="validateEntry" disabled="{{disableIsField}}"></oe-decimal>
               <div class="validation-help-text">Set Specific Property Length</div>
             </div>
           </template>
@@ -246,8 +246,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             <div class="layout vertical justified validation-block">
               <label>Property Value</label>
               <div class="layout horizontal justified center">
-                <ev-decimal value="{{validation.min}}" label="Min" on-change="validateEntry" disabled="{{disableMinMax}}"></ev-decimal>
-                <ev-decimal value="{{validation.max}}" label="Max" on-change="validateEntry" disabled="{{disableMinMax}}"></ev-decimal>
+                <oe-decimal value="{{validation.min}}" label="Min" on-change="validateEntry" disabled="{{disableMinMax}}"></oe-decimal>
+                <oe-decimal value="{{validation.max}}" label="Max" on-change="validateEntry" disabled="{{disableMinMax}}"></oe-decimal>
               </div>
               <div class="validation-help-text">Set Property Min and Max Value</div>
               <div class="seperator layout horizontal justified center">
@@ -255,7 +255,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 <span class="flex-2">or</span>
                 <hr class="flex-3">
               </div>
-              <ev-decimal value="{{validation.is}}" label="Value" type="number" on-change="validateEntry" disabled="{{disableIsField}}"></ev-decimal>
+              <oe-decimal value="{{validation.is}}" label="Value" type="number" on-change="validateEntry" disabled="{{disableIsField}}"></oe-decimal>
               <div class="validation-help-text">Set Specific Property Value</div>
             </div>
           </template>
@@ -273,7 +273,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             <template is="dom-if" if="{{!booleanSelected(validation.type)}}">
               <paper-checkbox checked="{{validation.unique}}" on-change="setScopedTo">Unique</paper-checkbox>
               <template is="dom-if" if="{{validation.unique}}">
-                <ev-paper-chip label="Scoped To" title="Use Enter , Space or ',' Key to seperate the values" value="{{validation.scopedTo}}"></ev-paper-chip>
+                <oe-paper-chip label="Scoped To" title="Use Enter , Space or ',' Key to seperate the values" value="{{validation.scopedTo}}"></oe-paper-chip>
               </template>
               <div class="validation-help-text">Property values are unique</div>
             </template>
@@ -285,13 +285,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           <template is="dom-if" if="{{stringSelected(validation.type)}}">
             <div class="layout vertical justified validation-block">
               <label>Inclusion/Exclusion Validation</label>
-              <ev-paper-chip label="In" title="Use Enter , Space or ',' Key to seperate the values" value="{{validation.in}}"></ev-paper-chip>
+              <oe-paper-chip label="In" title="Use Enter , Space or ',' Key to seperate the values" value="{{validation.in}}"></oe-paper-chip>
               <div class="validation-help-text">
                 Value for property to be in the specified array
                 <iron-icon icon="info" id="help"></iron-icon>
                 <paper-tooltip>Use Comma, Space or Enter Key to seperate the values</paper-tooltip>
               </div>
-              <ev-paper-chip label="Not In" title="Use Enter , Space or ',' Key to seperate the values" value="{{validation.notin}}"></ev-paper-chip>
+              <oe-paper-chip label="Not In" title="Use Enter , Space or ',' Key to seperate the values" value="{{validation.notin}}"></oe-paper-chip>
               <div class="validation-help-text">Value for property not to be in the specified array
                 <iron-icon icon="info" id="help"></iron-icon>
                 <paper-tooltip>Use Comma, Space or Enter Key to seperate the values</paper-tooltip>
@@ -301,12 +301,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           <template is="dom-if" if="{{numberSelected(validation.type)}}">
             <div class="layout vertical justified validation-block">
               <label>Inclusion/Exclusion Validation</label>
-              <ev-paper-chip label="In" title="Use Comma, Space or Enter Key to seperate the values" value="{{validation.in}}"></ev-paper-chip>
+              <oe-paper-chip label="In" title="Use Comma, Space or Enter Key to seperate the values" value="{{validation.in}}"></oe-paper-chip>
               <div class="validation-help-text">Value for property to be in the specified array
                 <iron-icon icon="info" id="help"></iron-icon>
                 <paper-tooltip>Use Comma, Space or Enter Key to seperate the values</paper-tooltip>
               </div>
-              <ev-paper-chip label="Not In" title="Use Comma, Space or Enter Key to seperate the values" value="{{validation.notin}}"></ev-paper-chip>
+              <oe-paper-chip label="Not In" title="Use Comma, Space or Enter Key to seperate the values" value="{{validation.notin}}"></oe-paper-chip>
               <div class="validation-help-text">Value for property not to be in the specified array
                 <iron-icon icon="info" id="help"></iron-icon>
                 <paper-tooltip>Use Comma, Space or Enter Key to seperate the values</paper-tooltip>
@@ -366,7 +366,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         });
 
         if (prop.min != undefined && prop.max != undefined && (prop.max) < (prop.min)) {
-          this.fire('ev-show-error', 'Property minimum maximum validation failed');
+          this.fire('oe-show-error', 'Property minimum maximum validation failed');
           return;
         }
         if (prop.scopedTo && Array.isArray(prop.scopedTo)) {

@@ -6,10 +6,10 @@
                 position: relative;
             }
 
-            ev-input,
-            ev-json-input,
-            ev-decimal,
-            ev-combo {
+            oe-input,
+            oe-json-input,
+            oe-decimal,
+            oe-combo {
                 --paper-input-container: {
                     background: #263238;
                     padding: 2px 8px;
@@ -62,7 +62,7 @@
                 max-width: 90px;
             }
 
-            ev-checkbox {
+            oe-checkbox {
                 --paper-checkbox-unchecked-color: rgba(255, 255, 255, 0.6);
             }
 
@@ -89,23 +89,23 @@
   </div>
   <div class="info-value">
     <template is="dom-if" restamp if="{{attrObj.isBindedValue}}">
-                        <ev-input pattern="^(\{\{[0-9a-zA-Z\.]+\}\}|\[\[[0-9a-zA-Z\.]+\]\])$" no-label-float value="{{attrObj.value}}" on-change="saveAttrConfiguration"></ev-input>
+                        <oe-input pattern="^(\{\{[0-9a-zA-Z\.]+\}\}|\[\[[0-9a-zA-Z\.]+\]\])$" no-label-float value="{{attrObj.value}}" on-change="saveAttrConfiguration"></oe-input>
                     </template>
     <template is="dom-if" restamp if="{{!attrObj.isBindedValue}}">
                         <template is="dom-if" restamp if="{{_showControl('String',attrObj.type)}}">
-                            <ev-input no-label-float value="{{attrObj.value}}" on-change="saveAttrConfiguration"></ev-input>
+                            <oe-input no-label-float value="{{attrObj.value}}" on-change="saveAttrConfiguration"></oe-input>
                         </template>
     <template is="dom-if" restamp if="{{_showControl('Boolean',attrObj.type)}}">
-                            <ev-checkbox value="{{attrObj.value}}" on-change="saveAttrConfiguration"></ev-checkbox>
+                            <oe-checkbox value="{{attrObj.value}}" on-change="saveAttrConfiguration"></oe-checkbox>
                         </template>
     <template is="dom-if" restamp if="{{_showControl('Object',attrObj.type)}}">
-                            <ev-json-input no-label-float value="{{attrObj.value}}" on-change="saveAttrConfiguration"></ev-json-input>
+                            <oe-json-input no-label-float value="{{attrObj.value}}" on-change="saveAttrConfiguration"></oe-json-input>
                         </template>
     <template is="dom-if" restamp if="{{_showControl('Array',attrObj.type)}}">
-                            <ev-json-input no-label-float value="{{attrObj.value}}" on-change="saveAttrConfiguration"></ev-json-input>
+                            <oe-json-input no-label-float value="{{attrObj.value}}" on-change="saveAttrConfiguration"></oe-json-input>
                         </template>
     <template is="dom-if" restamp if="{{_showControl('Number',attrObj.type)}}">
-                            <ev-decimal precision="0" no-label-float value="{{attrObj.value}}" on-change="saveAttrConfiguration"></ev-decimal>
+                            <oe-decimal precision="0" no-label-float value="{{attrObj.value}}" on-change="saveAttrConfiguration"></oe-decimal>
                         </template>
     </template>
   </div>

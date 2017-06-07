@@ -27,11 +27,11 @@
 				<span>Define Acls for [[modelObj.name]]</span>
 			</div>
 			<div class="dialog-content flex">
-				<ev-data-table label="Static Acls" disabled items={{modelObj.acls}}
+				<oe-data-table label="Static Acls" disabled items={{modelObj.acls}}
 							  	toolbar-actions="[[staticTableActions]]"
-							   columns=[[staticAclColumnDef]]></ev-data-table>
+							   columns=[[staticAclColumnDef]]></oe-data-table>
 				<br>
-				<ev-data-table id="dynamicACLTable" label="Data Acls" items={{dynamicAcls}} record-handling="remote" editor-form-url="evf-designer/elements/dynamic-acl-form.html" columns=[[dynamicAclColumnDef]]></ev-data-table>
+				<oe-data-table id="dynamicACLTable" label="Data Acls" items={{dynamicAcls}} record-handling="remote" editor-form-url="oe-designer/elements/dynamic-acl-form.html" columns=[[dynamicAclColumnDef]]></oe-data-table>
 			</div>
 			<div class="dialog-footer">
 				<div class="layout horizontal center end-justified">
@@ -116,12 +116,12 @@
         }]);
       },
       listeners: {
-        'ev-data-table-action-edit-static': 'handleStaticEditor'
+        'oe-data-table-action-edit-static': 'handleStaticEditor'
       },
       behaviors: [CommonBehavior.EVAjaxBehavior],
       handleStaticEditor: function() {
         if (!this.$.dynamicACLTable._hideGrid) {
-          this.fire('ev-show-error', 'Close editing dynamic ACLs and try again')
+          this.fire('oe-show-error', 'Close editing dynamic ACLs and try again')
           return;
         }
         this.fire('edit-model', this.modelObj);
@@ -139,7 +139,7 @@
             }
             this.makeAjaxCall('api/BaseACLs', 'GET', null, null, params, null, function(err, resp) {
               if (err) {
-                this.fire('ev-show-error', 'Error fetching ACLs');
+                this.fire('oe-show-error', 'Error fetching ACLs');
                 callback(err, null)
               } else {
                 callback(null, resp)
@@ -149,7 +149,7 @@
           usersList: function(callback) {
             this.makeAjaxCall('api/Users', 'get', null, null, null, function(err, res) {
               if (err) {
-                this.fire('ev-show-error', 'Error fetching UserData');
+                this.fire('oe-show-error', 'Error fetching UserData');
                 callback(err, null)
               } else {
                 callback(null, res)
@@ -159,7 +159,7 @@
           roleList: function(callback) {
             this.makeAjaxCall('api/BaseRoles', 'get', null, null, null, function(err, res) {
               if (err) {
-                this.fire('ev-show-error', 'Error fetching BaseRoles');
+                this.fire('oe-show-error', 'Error fetching BaseRoles');
                 callback(err, null)
               } else {
                 callback(null, res)
@@ -184,7 +184,7 @@
       },
       openDialog: function(modelObj) {
         this.set('modelObj', modelObj);
-        var table = this.querySelector('ev-data-table');
+        var table = this.querySelector('oe-data-table');
         var formElement = table.$['form-component'].element;
         if (formElement) {
           this.fetchData(formElement);

@@ -150,7 +150,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         var validExtention = ['json'];
         if (!files.length) {
           this.setSpinner(false);
-          this.fire('ev-show-error', 'Please select a file!');
+          this.fire('oe-show-error', 'Please select a file!');
           return;
         }
         var file = files[0];
@@ -159,7 +159,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         var res = patt.test(file.name);
         if (res) {
           this.setSpinner(false);
-          this.fire('ev-show-error', 'File name should not contain special characters.');
+          this.fire('oe-show-error', 'File name should not contain special characters.');
           return;
         }
         var extention = file.name.split('.')[1];
@@ -167,7 +167,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           this.uploadFile(file);
         } else {
           this.setSpinner(false);
-          this.fire('ev-show-error', '.' + extention + ' file extention is not supported.');
+          this.fire('oe-show-error', '.' + extention + ' file extention is not supported.');
         }
       },
       selectFile: function () {
@@ -189,10 +189,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             try {
               result = JSON.parse(result);
             } catch (err) {
-              this.fire('ev-show-error', 'Unable to parse json');
+              this.fire('oe-show-error', 'Unable to parse json');
             }
             if (typeof result !== 'object' && !result.length) {
-              this.fire('ev-show-error', 'No data in file !');
+              this.fire('oe-show-error', 'No data in file !');
               return;
             }
             this._handleUpload(result);

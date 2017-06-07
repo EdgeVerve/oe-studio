@@ -300,9 +300,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 <div class$="tab-name layout horizontal justified center trapezoid tab-active-[[_isSelectedTab(index,_activeTabIndex)]] [[tab.type]]"
                   on-tap="_switchTab">
                   <div class="layout horizontal center">
-                    <iron-icon icon="ev-designer-icons:data-manager" hidden$="{{showTabIcon(tab.type,'data-manager')}}"></iron-icon>
-                    <iron-icon icon="ev-designer-icons:data-manager" hidden$="{{showTabIcon(tab.type,'view')}}"></iron-icon>
-                    <iron-icon icon="ev-designer-icons:detailed-view" hidden$="{{showTabIcon(tab.type,'model-detail')}}"></iron-icon>
+                    <iron-icon icon="oe-designer-icons:data-manager" hidden$="{{showTabIcon(tab.type,'data-manager')}}"></iron-icon>
+                    <iron-icon icon="oe-designer-icons:data-manager" hidden$="{{showTabIcon(tab.type,'view')}}"></iron-icon>
+                    <iron-icon icon="oe-designer-icons:detailed-view" hidden$="{{showTabIcon(tab.type,'model-detail')}}"></iron-icon>
                     <div hidden="[[!_isDirtyTab(index,workSpaceModelCount)]]">*</div>
                     <span title$="[[_getTabName(index,_selectedTab.name)]]">[[_getTabName(index,_selectedTab.name)]]</span>
                   </div>
@@ -323,7 +323,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             </div>
             <template is="dom-if" if="[[_isEmpty(workSpaceModelCount)]]">
               <div class="empty-state layout vertical center-center">
-                <iron-icon icon="ev-designer-icons:model" class="empty-state-icon"></iron-icon>
+                <iron-icon icon="oe-designer-icons:model" class="empty-state-icon"></iron-icon>
                 <div class="main-label">Manage your Models</div>
                 <div class="sub-label">Start creating new models or
                   <br>select a model from the left panel to manage your data</div>
@@ -415,13 +415,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           type: Array,
           value: [{
             type: 'hasMany',
-            icon: 'ev-icons:has-many'
+            icon: 'oe-icons:has-many'
           }, {
             type: 'belongsTo',
-            icon: 'ev-icons:belongs-to'
+            icon: 'oe-icons:belongs-to'
           }, {
             type: 'hasOne',
-            icon: 'ev-icons:has-one'
+            icon: 'oe-icons:has-one'
           }]
         },
         showButtons: true,
@@ -529,7 +529,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                   }
                 }
                 if (err) {
-                  this.fire('ev-show-error', 'Error saving view')
+                  this.fire('oe-show-error', 'Error saving view')
                 }
               }.bind(this))
           } else {
@@ -599,7 +599,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }
         var self = this;
         if (this._tabList.length == 1) {
-          this.fire('ev-show-error', 'Cannot close all tabs');
+          this.fire('oe-show-error', 'Cannot close all tabs');
           return;
         }
         var hasView = this._selectedTab.view && this._selectedTab.view.name;
@@ -620,7 +620,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               self._closeTab(self._activeTabIndex);
             }
           }
-          this.fire('ev-show-confirm', data);
+          this.fire('oe-show-confirm', data);
         } else {
           if (hasView) {
             self.fire('add-view');
@@ -773,10 +773,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             this.set('_selectedTab.name', response.name);
             this.set('_selectedTab.models', response.models);
             this.set('_selectedTab.view', response);
-            this.fire('ev-show-success', 'View saved successfully');
+            this.fire('oe-show-success', 'View saved successfully');
           }
           if (err) {
-            this.fire('ev-show-error', 'Error saving view')
+            this.fire('oe-show-error', 'Error saving view')
           }
         }.bind(this))
       },
@@ -814,7 +814,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 self._openTab(tab);
               }
             }
-            this.fire('ev-show-confirm', data);
+            this.fire('oe-show-confirm', data);
           } else {
             self._openTab(tab);
           }
@@ -931,7 +931,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                   if (sModels.length) {
                     message += sModels + ' models saved successfully.';
                   }
-                  self.fire('ev-show-error', message);
+                  self.fire('oe-show-error', message);
                 }
               } else if (response) {
                 tempObj = response;
@@ -967,9 +967,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     ' models saved successfully. ';
                   if (fModels.length) {
                     message += fModels + ' failed to save. ';
-                    self.fire('ev-show-error', message);
+                    self.fire('oe-show-error', message);
                   } else {
-                    self.fire('ev-show-success', message);
+                    self.fire('oe-show-success', message);
                   }
                 }
               }
@@ -1027,7 +1027,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             return;
           }
         }
-        this.fire('ev-show-confirm', data);
+        this.fire('oe-show-confirm', data);
       },
       _deleteModel: function (event) {
         var modelObj = event.detail;
@@ -1037,7 +1037,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           if (err) {
             this.resolveError(err);
           } else if (response) {
-            this.fire('ev-show-success', 'Model deleted successfully');
+            this.fire('oe-show-success', 'Model deleted successfully');
             var modelNodes = this.$.workarea.querySelectorAll('model-container');
             var workareaIndex, workspaceIndex, updateModelIndex = -1;
             workareaIndex = [].findIndex.call(modelNodes, function (model) {
@@ -1150,7 +1150,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           uuid: ele.getAttribute('id') + '-right',
           cssClass: 'model-work-area custom-end-point',
           endpoint: ['Image', {
-            src: 'evf-designer/images/start_point_arrows.svg'
+            src: 'oe-designer/images/start_point_arrows.svg'
           }],
           anchor: 'Right',
           isSource: true,
@@ -1164,7 +1164,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           uuid: ele.getAttribute('id') + '-left',
           cssClass: 'model-work-area custom-end-point',
           endpoint: ['Image', {
-            src: 'evf-designer/images/end_point_arrows.svg'
+            src: 'oe-designer/images/end_point_arrows.svg'
           }],
           anchor: 'Left',
           isTarget: true,
@@ -1314,12 +1314,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               target: info.targetId
             });
             if (conn.length > 0) {
-              self.fire('ev-show-error', 'There is already a relation');
+              self.fire('oe-show-error', 'There is already a relation');
               return false;
             }
             self.set('selectedRelation', {
               type: 'hasMany',
-              icon: 'ev-icons:has-many'
+              icon: 'oe-icons:has-many'
             });
             return true;
           });

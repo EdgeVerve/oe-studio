@@ -9,12 +9,12 @@
           <h2 class="flex">:modelName</h2>
           <div>
             <template is="toolbar"></template>
-            <paper-button raised primary on-tap="doSave" ev-action-model=":modelAlias">
+            <paper-button raised primary on-tap="doSave" oe-action-model=":modelAlias">
               <i18n-msg msgid="Save">Save</i18n-msg>
             </paper-button>
             <paper-menu-button horizontal-align="right">
               <paper-icon-button icon="more-vert" class="dropdown-trigger"></paper-icon-button>
-              <paper-menu class="dropdown-content" ev-action-model=":modelAlias">
+              <paper-menu class="dropdown-content" oe-action-model=":modelAlias">
                 <paper-item on-tap="doClear">
                   <iron-icon icon="description" item-icon></iron-icon>
                   <i18n-msg msgid="New">New</i18n-msg>
@@ -27,7 +27,7 @@
                   <iron-icon icon="refresh" item-icon></iron-icon>
                   <i18n-msg msgid="Refresh">Refresh</i18n-msg>
                 </paper-item>
-                <paper-item on-tap="doDelete" ev-action-model=":modelAlias" disabled$="{{!:modelAlias.id}}">
+                <paper-item on-tap="doDelete" oe-action-model=":modelAlias" disabled$="{{!:modelAlias.id}}">
                   <iron-icon icon="delete" item-icon></iron-icon>
                   <i18n-msg msgid="Delete">Delete</i18n-msg>
                 </paper-item>

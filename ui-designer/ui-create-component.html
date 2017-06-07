@@ -46,13 +46,13 @@
       --paper-radio-button-label-color: rgba(255, 255, 255, 0.6);
     }
     
-    ev-input {
+    oe-input {
       --paper-input-container-focus-color: #ffffff;
       --paper-input-container-input-color: rgba(255, 255, 255, 0.6);
       --paper-input-container-color: rgba(255, 255, 255, 0.6);
     }
     
-    ev-combo {
+    oe-combo {
       --paper-input-container-focus-color: #ffffff;
       --paper-input-container-input-color: rgba(255, 255, 255, 0.6);
       --paper-input-container-color: rgba(255, 255, 255, 0.6);
@@ -244,7 +244,7 @@
                     <div class="step-2 step">
                         <div class="step-title">Name the page and configure</div>
                         <div class="step-content">
-                            <ev-input label="Page Name" value="{{elementName}}" required pattern="{{pattern}}" id="elName"></ev-input>
+                            <oe-input label="Page Name" value="{{elementName}}" required pattern="{{pattern}}" id="elName"></oe-input>
                             <template is="dom-if" if="[[polymerComponent]]">
                                 <div class="model-binder-options">
                                     <label>Want to make it dynamic?</label>
@@ -264,8 +264,8 @@
                         <div class="step-3 step">
                             <div class="step-title">Choose model and customize</div>
                             <div class="step-content">
-                                <ev-combo show-refresh required="true" label="Search Models" displayproperty="name" valueproperty="name" listurl="/api/ModelDefinitions?filter[fields][name]=true"
-                                    on-change="_getModelData"></ev-combo>
+                                <oe-combo show-refresh required="true" label="Search Models" displayproperty="name" valueproperty="name" listurl="/api/ModelDefinitions?filter[fields][name]=true"
+                                    on-change="_getModelData"></oe-combo>
                                 <div hidden$="[[!isModelObtained]]">
                                     <div class="more-props">
                                         <paper-toggle-button checked="{{modelMeta.autoInjectFields}}">Auto Inject Fields</paper-toggle-button>
@@ -279,7 +279,7 @@
                                         </template>
   </div>
   <div class="more-props">
-    <ev-combo label="Form Layout" displayproperty="layout" value="{{modelMeta.layoutClass}}" valueproperty="className" listdata='[{"layout":"2 column","className":"ev-rl-2eq"},{"layout":"3 column","className":"ev-rl-3eq"},{"layout":"4 column","className":"ev-rl-4eq"}]'></ev-combo>
+    <oe-combo label="Form Layout" displayproperty="layout" value="{{modelMeta.layoutClass}}" valueproperty="className" listdata='[{"layout":"2 column","className":"oe-rl-2eq"},{"layout":"3 column","className":"oe-rl-3eq"},{"layout":"4 column","className":"oe-rl-4eq"}]'></oe-combo>
   </div>
   </div>
   </div>
@@ -490,7 +490,7 @@
             self.generateFieldsArr(res);
             self.set('isModelObtained', true)
           } else {
-            self.fire('ev-show-error', 'Error in Fetching Model Meta');
+            self.fire('oe-show-error', 'Error in Fetching Model Meta');
             //console.log(err);
           }
         })
@@ -537,11 +537,11 @@
             formEle.setAttribute('desg-handle', 'form-builder');
             formEle.setAttribute('id', 'form-builder-1');
             formEle.setAttribute('model', this.modelMeta.modelName);
-            formEle.setAttribute('ev-container', 'content');
+            formEle.setAttribute('oe-container', 'content');
             formEle.classList.add('layout');
             formEle.classList.add('horizontal');
             formEle.classList.add('wrap');
-            formEle.classList.add(this.modelMeta.layoutClass || 'ev-rl-2eq');
+            formEle.classList.add(this.modelMeta.layoutClass || 'oe-rl-2eq');
             payload.content = formEle.outerHTML;
             payload.modelName = this.modelMeta.modelName;
             payload.fields = [];
@@ -565,7 +565,7 @@
               type: type,
               response: res
             });
-            self.fire('ev-show-success', 'Element successfully created');
+            self.fire('oe-show-success', 'Element successfully created');
           } else {
             self.resolveError(err);
           }

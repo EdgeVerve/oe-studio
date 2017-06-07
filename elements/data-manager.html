@@ -54,7 +54,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     }
 
     .json-view-options,
-    ev-data-table::content #grid-header {
+    oe-data-table::content #grid-header {
       padding: 6px 16px;
       height: 45px;
       background-color: #fafafa;
@@ -226,7 +226,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         <iron-pages selected="{{modelDataObj.viewMode}}">
           <div class="grid-view">
             <template is="dom-if" if="{{showDataTable}}" restamp="true" on-dom-change="_setNewData">
-              <ev-data-table editor-form-url="{{generateFormUrl(modelDataObj.model.name)}}" page-size=5 id="datagrid" config-code="[[modelDataObj.model.name]]"></ev-data-table>
+              <oe-data-table editor-form-url="{{generateFormUrl(modelDataObj.model.name)}}" page-size=5 id="datagrid" config-code="[[modelDataObj.model.name]]"></oe-data-table>
             </template>
           </div>
           <div class="json-view">
@@ -356,9 +356,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior],
       listeners: {
-        'ev-formdata-inserted': '_showInsertSuccess',
-        'ev-formdata-updated': '_showUpdateSuccess',
-        'ev-formdata-deleted': '_showDeleteSuccess'
+        'oe-formdata-inserted': '_showInsertSuccess',
+        'oe-formdata-updated': '_showUpdateSuccess',
+        'oe-formdata-deleted': '_showDeleteSuccess'
       },
       generateFormUrl: function (modelname) {
         if (modelname) {
@@ -369,13 +369,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.fire('refresh-model-list');
       },
       _showDeleteSuccess: function () {
-        this.fire('ev-show-success', 'Data deleted successfully');
+        this.fire('oe-show-success', 'Data deleted successfully');
       },
       _showUpdateSuccess: function () {
-        this.fire('ev-show-success', 'Data updated successfully');
+        this.fire('oe-show-success', 'Data updated successfully');
       },
       _showInsertSuccess: function () {
-        this.fire('ev-show-success', 'Data inserted successfully');
+        this.fire('oe-show-success', 'Data inserted successfully');
       },
       formatPath: function (path) {
         return path.split('/').map(function (params) {
@@ -742,7 +742,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               this.set('showDataTable', true);
             }
           } else if (err) {
-            this.fire('ev-show-error', 'Unable to fetch model routes');
+            this.fire('oe-show-error', 'Unable to fetch model routes');
           }
         }.bind(this));
       },
@@ -773,7 +773,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       getData: function (resturl) {
         if (!this.modelDataObj.method.path) {
-          this.fire('ev-show-error', 'No path to query.')
+          this.fire('oe-show-error', 'No path to query.')
         }
         var method = this.modelDataObj.method;
         var params = null;
@@ -804,7 +804,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       postData: function (type) {
         if (!this.modelDataObj.method.path) {
-          this.fire('ev-show-error', 'No path to query.')
+          this.fire('oe-show-error', 'No path to query.')
         }
         var data = this.parseData();
         var method = this.modelDataObj.method;

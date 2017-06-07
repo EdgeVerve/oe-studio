@@ -319,7 +319,7 @@ var publishWorkflow = function () {
         $.ajax(settings).done(function (response) {
             //console.log(response);
             window.currentFileStatus = 'old';
-           // $('ev-')
+           // $('oe-')
 			alert('Workflow published successfully!!');
 
 

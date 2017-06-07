@@ -132,15 +132,15 @@
         if (ele) {
           this.$.menuBtn.close();
           this.set('nodeName', ele.tagName.toUpperCase());
-          this.set('isTextNode', ele.getAttribute('ev-ele-type') == 'text')
-          this.set('isContainer', ele.getAttribute('ev-ele-type') == 'droppable')
+          this.set('isTextNode', ele.getAttribute('oe-ele-type') == 'text')
+          this.set('isContainer', ele.getAttribute('oe-ele-type') == 'droppable')
           this.set('isLinkNode', ele.tagName.toLowerCase() == 'a')
           var rect = this.element.getBoundingClientRect();
           this.style.top = rect.top + document.body.scrollTop;
           this.style.left = rect.left + document.body.scrollLeft;
           this.style.height = rect.height;
           this.style.width = rect.width;
-          this.$.heading.style.top = (this.element.getAttribute('ev-id')) ? '-24px' : '0px';
+          this.$.heading.style.top = (this.element.getAttribute('oe-id')) ? '-24px' : '0px';
         }
       },
       fireOnTap: function(e) {

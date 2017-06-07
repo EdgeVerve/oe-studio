@@ -37,11 +37,11 @@
       },
       elementSelected: function(newVal,oldVal) {
         if (this.selectedElement && newVal !== oldVal) {
-          var prevElem = this.querySelector('[selected][ev-id]')
+          var prevElem = this.querySelector('[selected][oe-id]')
           if (prevElem) {
             prevElem.removeAttribute('selected');
           }
-          var currentElem = this.querySelector('[ev-id="' + this.selectedElement.getAttribute('ev-id') + '"]')
+          var currentElem = this.querySelector('[oe-id="' + this.selectedElement.getAttribute('oe-id') + '"]')
           currentElem.setAttribute('selected', '');
           currentElem.scrollIntoViewIfNeeded();
         }
@@ -58,7 +58,7 @@
       },
       _repositionNode: function(event) {
         var detail = event.detail;
-        var parentId = detail.target.getAttribute('ev-id');
+        var parentId = detail.target.getAttribute('oe-id');
         this.dispatch('move', parentId, this.domBeingDragged, detail.index);
       }
 

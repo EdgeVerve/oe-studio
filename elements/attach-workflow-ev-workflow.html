@@ -4,7 +4,7 @@ The Program may contain/reference third party or open source components, the rig
 remain with the applicable third party licensors or the open source community as the case may be and nothing 
 here transfers the rights to the third party and open source components, except as expressly permitted. 
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
-<dom-module id="attach-workflow-ev-workflow">
+<dom-module id="attach-workflow-oe-workflow">
   <style>
     iron-icon {
       --iron-icon-width: 20px;
@@ -23,14 +23,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         <div class="vertical flex layout">
             <div class="layout horizontal col-2">
                 <div class="vertical flex layout">
-                    <ev-radio-group field-id="operation" required label="Operations" value={{vm.operation}} 
+                    <oe-radio-group field-id="operation" required label="Operations" value={{vm.operation}} 
                                     displayproperty="display"
                                     valueproperty="value"
-                                    listdata='[{"display":"Create","value":"create"}, {"display":"Update","value":"update"}, {"display":"Delete","value":"delete"}]'></ev-radio-group>
-                    <ev-combo field-id="workflowBody.workflowDefinitionName" required label="Process Name" value={{vm.workflowBody.workflowDefinitionName}} listurl="/api/WorkflowDefinitions" displayproperty="name" valueproperty="name" allow-free-text></ev-combo>
-                    <ev-checkbox field-id="wfDependent" label="Workflow Dependent" value={{vm.wfDependent}}></ev-checkbox>
+                                    listdata='[{"display":"Create","value":"create"}, {"display":"Update","value":"update"}, {"display":"Delete","value":"delete"}]'></oe-radio-group>
+                    <oe-combo field-id="workflowBody.workflowDefinitionName" required label="Process Name" value={{vm.workflowBody.workflowDefinitionName}} listurl="/api/WorkflowDefinitions" displayproperty="name" valueproperty="name" allow-free-text></oe-combo>
+                    <oe-checkbox field-id="wfDependent" label="Workflow Dependent" value={{vm.wfDependent}}></oe-checkbox>
                 </div>
-                <ev-data-table label="Workflow Variables" items={{vm.workflowBody.variables}} record-handling="local" editor-form-url="evf-designer/ui-designer/workflow-prop-form.html" columns='[{"key": "name","label": "Name","readOnly": true},{"key": "value","label": "Value","readOnly": true}]'></ev-data-table>
+                <oe-data-table label="Workflow Variables" items={{vm.workflowBody.variables}} record-handling="local" editor-form-url="oe-designer/ui-designer/workflow-prop-form.html" columns='[{"key": "name","label": "Name","readOnly": true},{"key": "value","label": "Value","readOnly": true}]'></oe-data-table>
 
             </div>
             <div class="dialog-footer flex horizontal layout end-justified">
@@ -42,7 +42,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     </template>
   <script>
     Polymer({
-      is: 'attach-workflow-ev-workflow',
+      is: 'attach-workflow-oe-workflow',
       behaviors: [CommonBehavior.EVAjaxBehavior, EV.ModelHandler, EV.FormValidationBehavior],
       properties: {
         vm: {

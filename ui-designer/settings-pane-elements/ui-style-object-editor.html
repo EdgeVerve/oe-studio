@@ -9,8 +9,8 @@
                 position: relative;
             }
 
-            ev-input,
-            ev-combo {
+            oe-input,
+            oe-combo {
                 --paper-input-container: {
                     background: #263238;
                     padding: 0px;
@@ -50,7 +50,7 @@
                 }
             }
 
-            ev-combo {
+            oe-combo {
                 --paper-input-container-input: {
                     text-align: initial;
                     font-size: 12px;
@@ -64,7 +64,7 @@
                 }
             }
 
-            ev-combo.number {
+            oe-combo.number {
                 --paper-input-container-input: {
                     text-align: right;
                     font-size: 12px;
@@ -192,30 +192,30 @@
                 <iron-collapse id="style-layout">
                     <div class="style-panel-body">
                         <div class="input-controls">
-                            <ev-input no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.margin}}">
+                            <oe-input no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.margin}}">
                                 <div prefix>Margin</div>
                                 <div suffix>&nbsp;</div>
-                            </ev-input>
+                            </oe-input>
                             <div>
                                 <iron-icon class="help-icon" icon="icons:help"></iron-icon>
                                 <paper-tooltip> Margin </paper-tooltip>
                             </div>
                         </div>
                         <div class="input-controls">
-                            <ev-input no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.padding}}">
+                            <oe-input no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.padding}}">
                                 <div prefix>Padding</div>
                                 <div suffix>&nbsp;</div>
-                            </ev-input>
+                            </oe-input>
                             <div>
                                 <iron-icon class="help-icon" icon="icons:help"></iron-icon>
                                 <paper-tooltip> Padding </paper-tooltip>
                             </div>
                         </div>
                         <div class="input-controls">
-                            <ev-input no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.boxShadow}}">
+                            <oe-input no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.boxShadow}}">
                                 <div prefix>Box Shadow</div>
                                 <div suffix>&nbsp;</div>
-                            </ev-input>
+                            </oe-input>
                             <div>
                                 <iron-icon class="help-icon" icon="icons:help"></iron-icon>
                                 <paper-tooltip> Box Shadow </paper-tooltip>
@@ -224,60 +224,60 @@
                         <div class="seperator"></div>
                         <div class="input-controls">
                             <div>
-                                <ev-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.width}}">
+                                <oe-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.width}}">
                                     <div prefix>
-                                        <iron-icon icon="ev-designer-icons:style-width"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-width"></iron-icon>
                                     </div>
                                     <div suffix>&nbsp;</div>
-                                </ev-input>
+                                </oe-input>
                                 <paper-tooltip> Width </paper-tooltip>
                             </div>
                             <div>
-                                <ev-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.minWidth}}">
+                                <oe-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.minWidth}}">
                                     <div prefix>
                                         <span> Min </span>
                                     </div>
                                     <div suffix>&nbsp;</div>
-                                </ev-input>
+                                </oe-input>
                                 <paper-tooltip> Min Width </paper-tooltip>
                             </div>
                             <div>
-                                <ev-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.maxWidth}}">
+                                <oe-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.maxWidth}}">
                                     <div prefix>
                                         <span> Max </span>
                                     </div>
                                     <div suffix>&nbsp;</div>
-                                </ev-input>
+                                </oe-input>
                                 <paper-tooltip> Max Width </paper-tooltip>
                             </div>
                         </div>
 
                         <div class="input-controls">
                             <div>
-                                <ev-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.height}}">
+                                <oe-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.height}}">
                                     <div prefix>
-                                        <iron-icon icon="ev-designer-icons:style-height"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-height"></iron-icon>
                                     </div>
                                     <div suffix>&nbsp;</div>
-                                </ev-input>
+                                </oe-input>
                                 <paper-tooltip> Height </paper-tooltip>
                             </div>
                             <div>
-                                <ev-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.minHeight}}">
+                                <oe-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.minHeight}}">
                                     <div prefix>
                                         <span> Min </span>
                                     </div>
                                     <div suffix>&nbsp;</div>
-                                </ev-input>
+                                </oe-input>
                                 <paper-tooltip> Min Height </paper-tooltip>
                             </div>
                             <div>
-                                <ev-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.maxHeight}}">
+                                <oe-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.maxHeight}}">
                                     <div prefix>
                                         <span> Max </span>
                                     </div>
                                     <div suffix>&nbsp;</div>
-                                </ev-input>
+                                </oe-input>
                                 <paper-tooltip> Max Height </paper-tooltip>
                             </div>
                         </div>
@@ -300,11 +300,11 @@
                                         <paper-tooltip> Hidden </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" overflow-value="scroll">
-                                        <iron-icon icon="ev-designer-icons:style-overflow-scroll"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-overflow-scroll"></iron-icon>
                                         <paper-tooltip> Scroll </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" overflow-value="auto">
-                                        <iron-icon icon="ev-designer-icons:style-overflow-auto"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-overflow-auto"></iron-icon>
                                         <paper-tooltip> Auto </paper-tooltip>
                                     </div>
                                 </iron-selector>
@@ -320,19 +320,19 @@
                                         <paper-tooltip> None </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" position-value="absolute">
-                                        <iron-icon icon="ev-designer-icons:style-position-absolute"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-position-absolute"></iron-icon>
                                         <paper-tooltip> Absolute </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" position-value="realtive">
-                                        <iron-icon icon="ev-designer-icons:style-position-relative"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-position-relative"></iron-icon>
                                         <paper-tooltip> Relative </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" position-value="static">
-                                        <iron-icon icon="ev-designer-icons:style-position-static" position-value="static"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-position-static" position-value="static"></iron-icon>
                                         <paper-tooltip> Static </paper-tooltip>
                                     </div> 
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" position-value="fixed">
-                                        <iron-icon icon="ev-designer-icons:style-position-fixed" position-value="fixed"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-position-fixed" position-value="fixed"></iron-icon>
                                         <paper-tooltip> Fixed </paper-tooltip>
                                     </div>
                                 </iron-selector>
@@ -347,15 +347,15 @@
                                         <paper-tooltip> None </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" position-value="inline">
-                                        <iron-icon icon="ev-designer-icons:style-position-absolute"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-position-absolute"></iron-icon>
                                         <paper-tooltip> inline </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" position-value="block">
-                                        <iron-icon icon="ev-designer-icons:style-position-relative"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-position-relative"></iron-icon>
                                         <paper-tooltip> block </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" position-value="inline-block">
-                                        <iron-icon icon="ev-designer-icons:style-position-static" position-value="inline-block"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-position-static" position-value="inline-block"></iron-icon>
                                         <paper-tooltip> inline-block </paper-tooltip>
                                     </div>
                                 </iron-selector>
@@ -366,19 +366,19 @@
                             <div class="option-buttons">
                                 <iron-selector attr-for-selected="position-value" selected="{{styleObj.boxSizing}}" on-iron-select="_changeInStyle">
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" position-value="border-box">
-                                        <iron-icon icon="ev-designer-icons:style-overflow-scroll"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-overflow-scroll"></iron-icon>
                                         <paper-tooltip> border-box </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" position-value="content-box">
-                                        <iron-icon icon="ev-designer-icons:style-position-absolute"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-position-absolute"></iron-icon>
                                         <paper-tooltip> content-box </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" position-value="initial">
-                                        <iron-icon icon="ev-designer-icons:style-position-relative"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-position-relative"></iron-icon>
                                         <paper-tooltip> initial </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" position-value="inherit">
-                                        <iron-icon icon="ev-designer-icons:style-position-static" position-value="inherit"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-position-static" position-value="inherit"></iron-icon>
                                         <paper-tooltip> inherit </paper-tooltip>
                                     </div>
                                 </iron-selector>
@@ -395,52 +395,52 @@
                     <div class="style-panel-body">
                         <div class="input-controls">
                             <div>
-                                <ev-combo no-label-float allow-free-text placeholder="Font Family" on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.fontFamily}}" listdata={{fontList}}>
+                                <oe-combo no-label-float allow-free-text placeholder="Font Family" on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.fontFamily}}" listdata={{fontList}}>
                                     <div prefix>
-                                        <iron-icon icon="ev-designer-icons:style-tg-font-family"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-tg-font-family"></iron-icon>
                                     </div>
-                                </ev-combo>
+                                </oe-combo>
                                 <paper-tooltip> Font Family </paper-tooltip>
                             </div>
                         </div>
                         <div class="input-controls">
                             <div>
-                                <ev-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.fontSize}}">
+                                <oe-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.fontSize}}">
                                     <div prefix>
-                                        <iron-icon icon="ev-designer-icons:style-tg-font-size"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-tg-font-size"></iron-icon>
                                     </div>
                                     <div suffix>&nbsp;</div>
-                                </ev-input>
+                                </oe-input>
                                 <paper-tooltip> Font Size </paper-tooltip>
                             </div>
                             <div>
-                                <ev-combo class="small-input number" placeholder="Font Weight" no-label-float allow-free-text on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.fontWeight}}"
+                                <oe-combo class="small-input number" placeholder="Font Weight" no-label-float allow-free-text on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.fontWeight}}"
                                     listdata="{{fontWeightList}}">
                                     <div prefix>
-                                        <iron-icon icon="ev-designer-icons:style-tg-font-weight"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-tg-font-weight"></iron-icon>
                                     </div>
                                     <div suffix>&nbsp;</div>
-                                </ev-combo>
+                                </oe-combo>
                                 <paper-tooltip> Font Weight </paper-tooltip>
                             </div>
                         </div>
                         <div class="input-controls">
                             <div>
-                                <ev-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.letterSpacing}}">
+                                <oe-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.letterSpacing}}">
                                     <div prefix>
-                                        <iron-icon icon="ev-designer-icons:style-tg-letter-spacing"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-tg-letter-spacing"></iron-icon>
                                     </div>
                                     <div suffix>&nbsp;</div>
-                                </ev-input>
+                                </oe-input>
                                 <paper-tooltip> Letter Spacing </paper-tooltip>
                             </div>
                             <div>
-                                <ev-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.lineHeight}}">
+                                <oe-input class="small-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.lineHeight}}">
                                     <div prefix>
-                                        <iron-icon icon="ev-designer-icons:style-tg-line-height"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-tg-line-height"></iron-icon>
                                     </div>
                                     <div suffix>&nbsp;</div>
-                                </ev-input>
+                                </oe-input>
                                 <paper-tooltip> Line Height </paper-tooltip>
                             </div>
                         </div>
@@ -475,7 +475,7 @@
                         <div class="seperator"></div>
 
                         <div class="input-controls">
-                            <ev-input class="background-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.color}}">
+                            <oe-input class="background-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.color}}">
                                 <div prefix class="background-preview-prefix">
                                     <iron-icon icon="editor:format-color-text"></iron-icon>
                                     <div class="background-preview" style$="background:{{styleObj.color}}" attribute-to-color="color" on-tap="_openColorPicker"></div>
@@ -483,7 +483,7 @@
                                 <div suffix>
                                     <iron-icon icon="icons:delete" attribute-to-clear="color" on-tap="_clearstyleObj"> </iron-icon>
                                 </div>
-                            </ev-input>
+                            </oe-input>
                         </div>
 
                         <div class="seperator"></div>
@@ -517,15 +517,15 @@
                                         <paper-tooltip> None </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" text-transform-value="capitalize">
-                                        <iron-icon icon="ev-designer-icons:style-tg-trans-capitalize"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-tg-trans-capitalize"></iron-icon>
                                         <paper-tooltip> Capitalize </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" text-transform-value="uppercase">
-                                        <iron-icon icon="ev-designer-icons:style-tg-trans-upper"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-tg-trans-upper"></iron-icon>
                                         <paper-tooltip> Uppercase </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" text-transform-value="lowercase">
-                                        <iron-icon icon="ev-designer-icons:style-tg-trans-lower"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-tg-trans-lower"></iron-icon>
                                         <paper-tooltip> Lowercase </paper-tooltip>
                                     </div>
                                 </iron-selector>
@@ -542,7 +542,7 @@
                 <iron-collapse id="style-background">
                     <div class="style-panel-body">
                         <div class="input-controls">
-                            <ev-input class="background-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.background}}">
+                            <oe-input class="background-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.background}}">
                                 <div prefix class="background-preview-prefix">
                                     <iron-icon icon="editor:format-color-fill"></iron-icon>
                                     <div class="background-preview" style$="background:{{styleObj.background}}" attribute-to-color="background" on-tap="_openColorPicker"></div>
@@ -550,10 +550,10 @@
                                 <div suffix>
                                     <iron-icon icon="delete" attribute-to-clear="background" on-tap="_clearstyleObj"></iron-icon>
                                 </div>
-                            </ev-input>
+                            </oe-input>
                         </div>
                         <div class="input-controls">
-                            <ev-input class="background-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.backgroundImage}}">
+                            <oe-input class="background-input" no-label-float on-blur="_changeInStyle" on-input="_changeStyleInstant" value="{{styleObj.backgroundImage}}">
                                 <div prefix class="background-preview-prefix">
                                     <iron-icon icon="image:image"></iron-icon>
                                     <iron-image class="background-preview" src="[[_getSrc(styleObj.backgroundImage)]]" sizing="contain" on-tap="_openBackgroundPickerDialog"></iron-image>
@@ -561,7 +561,7 @@
                                 <div suffix>
                                     <iron-icon icon="delete" attribute-to-clear="backgroundImage" on-tap="_clearstyleObj"></iron-icon>
                                 </div>
-                            </ev-input>
+                            </oe-input>
                         </div>
                     </div>
                 </iron-collapse>
@@ -582,28 +582,28 @@
                                         <paper-tooltip> None </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" border-style-value="solid">
-                                        <iron-icon icon="ev-designer-icons:style-border-style-solid"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-border-style-solid"></iron-icon>
                                         <paper-tooltip> Solid </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" border-style-value="dashed">
-                                        <iron-icon icon="ev-designer-icons:style-border-style-dashed"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-border-style-dashed"></iron-icon>
                                         <paper-tooltip> Dashed </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" border-style-value="dotted">
-                                        <iron-icon icon="ev-designer-icons:style-border-style-dotted"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-border-style-dotted"></iron-icon>
                                         <paper-tooltip> Dotted </paper-tooltip>
                                     </div>
                                 </iron-selector>
                             </div>
                         </div>
                         <div class="input-controls">
-                            <ev-input class="small-input" no-label-float value="{{_activeBorderObj.width}}" on-change="_borderChanged">
+                            <oe-input class="small-input" no-label-float value="{{_activeBorderObj.width}}" on-change="_borderChanged">
                                 <div prefix>
                                     <iron-icon icon="icons:line-weight"></iron-icon>
                                 </div>
                                 <div suffix>&nbsp;</div>
-                            </ev-input>
-                            <ev-input no-label-float value="{{_activeBorderObj.color}}" on-change="_borderChanged">
+                            </oe-input>
+                            <oe-input no-label-float value="{{_activeBorderObj.color}}" on-change="_borderChanged">
                                 <div prefix class="background-preview-prefix">
                                     <iron-icon icon="editor:format-color-fill"></iron-icon>
                                     <div class="background-preview" style$="border-color:{{_activeBorderObj.color}};border-width:9px;" attribute-to-color$="{{_getActiveBorder(_activeBorder,'Color')}}"
@@ -612,7 +612,7 @@
                                 <div suffix>
                                     <iron-icon icon="delete" attribute-to-clear$="{{_getActiveBorder(_activeBorder,'Color')}}" on-tap="_clearstyleObj"></iron-icon>
                                 </div>
-                            </ev-input>
+                            </oe-input>
                         </div>
                         <div class="input-controls">
                             <span class="style-label"> Sides : </span>
@@ -645,13 +645,13 @@
                         <div class="seperator"></div>
                         <div class="input-controls">
                             <span class="style-label"> Radius : </span>
-                            <ev-input class="small-input half-width" no-label-float value="{{_activeBorderObj.radius}}" on-change="_borderChanged">
+                            <oe-input class="small-input half-width" no-label-float value="{{_activeBorderObj.radius}}" on-change="_borderChanged">
                                 <div prefix>
-                                    <iron-icon icon="ev-designer-icons:style-radius"></iron-icon>
+                                    <iron-icon icon="oe-designer-icons:style-radius"></iron-icon>
                                     <paper-tooltip> Border Radius </paper-tooltip>
                                 </div>
                                 <div suffix>&nbsp;</div>
-                            </ev-input>
+                            </oe-input>
                         </div>
                         <div class="input-controls">
                             <span class="style-label"> Sides : </span>
@@ -659,23 +659,23 @@
                                 <iron-selector attr-for-selected="border-side" attribute-to-change="Radius" on-iron-select="_borderSelectionChanged" on-iron-deselect="_borderSelectionChanged"
                                     selected="{{_activeRadiusSide}}">
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" border-side="border">
-                                        <iron-icon icon="ev-designer-icons:style-radius-all"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-radius-all"></iron-icon>
                                         <paper-tooltip> All </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" border-side="borderTopLeft">
-                                        <iron-icon icon="ev-designer-icons:style-radius-top-left"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-radius-top-left"></iron-icon>
                                         <paper-tooltip> Top Left </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" border-side="borderTopRight">
-                                        <iron-icon icon="ev-designer-icons:style-radius-top-right"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-radius-top-right"></iron-icon>
                                         <paper-tooltip> Top Right </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" border-side="borderBottomLeft">
-                                        <iron-icon icon="ev-designer-icons:style-radius-bottom-left"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-radius-bottom-left"></iron-icon>
                                         <paper-tooltip> Bottom Left </paper-tooltip>
                                     </div>
                                     <div class="icon-wrapper" on-tap="_changeStyleInstant" border-side="borderBottomRight">
-                                        <iron-icon icon="ev-designer-icons:style-radius-bottom-right"></iron-icon>
+                                        <iron-icon icon="oe-designer-icons:style-radius-bottom-right"></iron-icon>
                                         <paper-tooltip> Bottom Right </paper-tooltip>
                                     </div>
                                 </iron-selector>

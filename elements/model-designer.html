@@ -65,7 +65,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       <div class="flex layout horizontal center">
         <paper-menu-button no-overlap vertical-align="bottom">
           <paper-button class="dropdown-trigger">
-            <iron-icon icon="ev-icons:sidebar"></iron-icon>
+            <iron-icon icon="oe-icons:sidebar"></iron-icon>
             <iron-icon icon="icons:arrow-drop-down"></iron-icon>
           </paper-button>
           <div class="dropdown-content">
@@ -145,15 +145,15 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       uploadModelMetadata: function () {
         this.makeAjaxCall('/api/admin/upload', 'POST', {}, null, null, function (err, response) {
           if (response) {
-            this.fire('ev-show-success', 'Successfully uploaded.');
+            this.fire('oe-show-success', 'Successfully uploaded.');
           } else {
-            this.fire('ev-show-error', 'Error while uploading files.');
+            this.fire('oe-show-error', 'Error while uploading files.');
           }
         }.bind(this))
       },
       downloadModelMetadata: function () {
         var self = this;
-        var ajax = document.createElement('ev-ajax');
+        var ajax = document.createElement('oe-ajax');
         ajax.contentType = 'application/json';
         // very important for file to download
         ajax.handleAs = 'blob';
@@ -168,7 +168,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           }
         });
         ajax.addEventListener('error', function () {
-          self.fire('ev-show-error', 'Error while downloading files.');
+          self.fire('oe-show-error', 'Error while downloading files.');
         });
         ajax.generateRequest();
       },

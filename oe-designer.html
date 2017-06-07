@@ -5,7 +5,7 @@ remain with the applicable third party licensors or the open source community as
 here transfers the rights to the third party and open source components, except as expressly permitted.
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
 <link rel="import" href="all-imports.html">
-<dom-module id="evf-designer">
+<dom-module id="oe-designer">
   <template>
     <style>
       #leftDrawer .user-details {
@@ -52,7 +52,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       }
     </style>
     <app-location route="{{route}}" use-hash-as-path></app-location>
-    <ev-message-handler id="toast" fit-bottom duration=5000></ev-message-handler>
+    <oe-message-handler id="toast" fit-bottom duration=5000></oe-message-handler>
     <app-drawer-layout fullbleed force-narrow>
       <app-drawer id="leftDrawer">
         <div class="user-details layout horizontal center">
@@ -94,11 +94,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     <div class="spinner" hidden$="[[!showSpinner]]">
       <paper-spinner id="spinner" active></paper-spinner>
     </div>
-    <ev-ajax id="logout" method="post" content-type="application/json" on-response="logoutRedirect" on-error="logoutRedirect"></ev-ajax>
+    <oe-ajax id="logout" method="post" content-type="application/json" on-response="logoutRedirect" on-error="logoutRedirect"></oe-ajax>
   </template>
   <script>
     Polymer({
-      is: 'evf-designer',
+      is: 'oe-designer',
       properties: {
         hideIcons: {
           type: Boolean,
@@ -157,7 +157,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               'admin') != -1));
             this.fire('session-fetched', this.currentSession);
           } else {
-            this.fire('ev-show-error', 'Unable to fetch user information');
+            this.fire('oe-show-error', 'Unable to fetch user information');
             this._logOut();
           }
         }.bind(this))
@@ -182,11 +182,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }
         this.makeAjaxCall(url, 'POST', body, null, null, function(err, response) {
           if (response && response.tenantId) {
-            this.fire('ev-show-success', ('Switching to tenant - ' + response.tenantId));
+            this.fire('oe-show-success', ('Switching to tenant - ' + response.tenantId));
             localStorage.setItem('tenantId', response.tenantId);
             window.location.reload();
           } else {
-            this.fire('ev-show-error', 'UnAuthorized to switch tenant')
+            this.fire('oe-show-error', 'UnAuthorized to switch tenant')
           }
         }.bind(this))
       },

@@ -16,8 +16,8 @@
 				overflow: auto;
 			}
 
-			ev-json-input,
-			ev-input {
+			oe-json-input,
+			oe-input {
 				--paper-input-container-focus-color: #ffffff;
 				--paper-input-container-input-color: rgba(255, 255, 255, 0.6);
 				--paper-input-container-color: rgba(255, 255, 255, 0.6);
@@ -56,9 +56,9 @@
 			}
 		</style>
 		<div class="container">
-			<ev-input label="Page Name" value="{{pageName}}" invalid="{{pageNameFlag}}" pattern="{{pattern}}" id="pageNameInput" auto-validate
-			  prevent-invalid-input></ev-input>
-			<ev-json-input label="Scope" value="{{scope}}"></ev-json-input>
+			<oe-input label="Page Name" value="{{pageName}}" invalid="{{pageNameFlag}}" pattern="{{pattern}}" id="pageNameInput" auto-validate
+			  prevent-invalid-input></oe-input>
+			<oe-json-input label="Scope" value="{{scope}}"></oe-json-input>
 			<div class="template-chooser" hidden$="{{!activePage.isPolymerElement}}">
 				<div class="step-title">Change template</div>
 				<div class="step-content">

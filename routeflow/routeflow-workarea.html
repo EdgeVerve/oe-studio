@@ -362,7 +362,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           uuid: ele.getAttribute('id') + '-right',
           cssClass: 'routeflow-workarea custom-end-point',
           endpoint: ['Image', {
-            src: 'evf-designer/images/start_point_arrows.svg'
+            src: 'oe-designer/images/start_point_arrows.svg'
           }],
           anchor: 'Right',
           isSource: true,
@@ -372,7 +372,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           uuid: ele.getAttribute('id') + '-left',
           cssClass: 'routeflow-workarea custom-end-point',
           endpoint: ['Image', {
-            src: 'evf-designer/images/end_point_arrows.svg'
+            src: 'oe-designer/images/end_point_arrows.svg'
           }],
           anchor: 'Left',
           isTarget: true,
@@ -550,7 +550,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                   if (sRoutes.length) {
                     message += sRoutes + ' routes saved successfully.';
                   }
-                  self.fire('ev-show-error', message);
+                  self.fire('oe-show-error', message);
                 }
               } else if (response) {
                 tempObj = response;
@@ -584,9 +584,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     ' routes saved successfully. ';
                   if (fRoutes.length) {
                     message += fRoutes + ' failed to save. ';
-                    self.fire('ev-show-error', message);
+                    self.fire('oe-show-error', message);
                   } else {
-                    self.fire('ev-show-success', message);
+                    self.fire('oe-show-success', message);
                   }
                 }
               }

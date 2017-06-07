@@ -20,22 +20,22 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
   </style>
   <template>
-        <ev-ajax auto last-response={{workflowDefinitions}} 
-                     url='/api/Activiti_ProcessDefinitions/get'></ev-ajax>
+        <oe-ajax auto last-response={{workflowDefinitions}} 
+                     url='/api/Activiti_ProcessDefinitions/get'></oe-ajax>
         <div class="vertical flex layout">
             <div class="layout horizontal col-2">
                 <div class="vertical flex layout">
-                    <ev-radio-group field-id="operation" required label="Operations" value={{vm.operation}} 
+                    <oe-radio-group field-id="operation" required label="Operations" value={{vm.operation}} 
                                     displayproperty="display"
                                     valueproperty="value"
-                                    listdata='[{"display":"Create","value":"create"}, {"display":"Update","value":"update"}, {"display":"Delete","value":"delete"}]'></ev-radio-group>
-                    <ev-input field-id="workflowBody.businessKey" label="Business Key" value={{vm.workflowBody.businessKey}}></ev-input>
-                    <ev-combo field-id="workflowBody.processDefinitionKey" required label="Process Name" 
+                                    listdata='[{"display":"Create","value":"create"}, {"display":"Update","value":"update"}, {"display":"Delete","value":"delete"}]'></oe-radio-group>
+                    <oe-input field-id="workflowBody.businessKey" label="Business Key" value={{vm.workflowBody.businessKey}}></oe-input>
+                    <oe-combo field-id="workflowBody.processDefinitionKey" required label="Process Name" 
                               value={{vm.workflowBody.processDefinitionKey}} 
-                              listdata={{workflowDefinitions.data}} displayproperty="name" valueproperty="id" allow-free-text></ev-combo>
-                    <ev-checkbox field-id="wfDependent" label="Workflow Dependent" value={{vm.wfDependent}}></ev-checkbox>
+                              listdata={{workflowDefinitions.data}} displayproperty="name" valueproperty="id" allow-free-text></oe-combo>
+                    <oe-checkbox field-id="wfDependent" label="Workflow Dependent" value={{vm.wfDependent}}></oe-checkbox>
                 </div>
-                <ev-data-table label="Workflow Variables" items={{vm.workflowBody.variables}} record-handling="local" editor-form-url="evf-designer/ui-designer/workflow-prop-form.html" columns='[{"key": "name","label": "Name","readOnly": true},{"key": "value","label": "Value","readOnly": true}]'></ev-data-table>
+                <oe-data-table label="Workflow Variables" items={{vm.workflowBody.variables}} record-handling="local" editor-form-url="oe-designer/ui-designer/workflow-prop-form.html" columns='[{"key": "name","label": "Name","readOnly": true},{"key": "value","label": "Value","readOnly": true}]'></oe-data-table>
             </div>
             <div class="dialog-footer flex horizontal layout end-justified">
                 <div class="layout horizontal center justified">

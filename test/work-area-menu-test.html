@@ -113,7 +113,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         myEl._viewChanged('basic');
 
         flush(function() {
-          myEl.addEventListener('ev-show-error', function(e) {
+          myEl.addEventListener('oe-show-error', function(e) {
             assert.equal(e.detail, "ModelDefinition model doesn't exist.")
             done();
           })
@@ -202,7 +202,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             'accessType': '*'
           }, {
             'principalType': 'ROLE',
-            'principalId': 'ev-admin',
+            'principalId': 'oe-admin',
             'permission': 'ALLOW',
             'accessType': '*'
           }, {
@@ -222,7 +222,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             'accessType': 'READ'
           }, {
             'principalType': 'ROLE',
-            'principalId': 'ev-read',
+            'principalId': 'oe-read',
             'permission': 'ALLOW',
             'accessType': 'READ'
           }],

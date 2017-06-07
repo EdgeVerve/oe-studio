@@ -139,7 +139,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
       test('Create new Tenant', function(done) {
 
-        myEl.addEventListener('ev-show-success', function() {
+        myEl.addEventListener('oe-show-success', function() {
           var id = tenantList.findIndex(function(m) {
             return m.tenantId == 'newTenantId'
           });
@@ -167,7 +167,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
       test('Create duplicate Tenant', function(done) {
 
-        myEl.addEventListener('ev-show-error', function() {
+        myEl.addEventListener('oe-show-error', function() {
           done();
         });
 
@@ -190,7 +190,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
 
       test('Edit Tenant', function(done) {
-        myEl.addEventListener('ev-show-success', function() {
+        myEl.addEventListener('oe-show-success', function() {
           var id = tenantList.findIndex(function(m) {
             return m.tenantName == 'Fin'
           });

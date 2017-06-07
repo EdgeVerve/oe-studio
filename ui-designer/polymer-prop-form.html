@@ -1,4 +1,4 @@
-<link rel="import" href="../../evf-ui/core/meta-polymer.html">
+<link rel="import" href="../../oe-ui/core/meta-polymer.html">
 <dom-module id="polymer-prop-form">
   <style>
      :host {
@@ -13,8 +13,8 @@
   </style>
   <template>
 		<div class="layout vertical panel">
-			<ev-input required field-id="propName" label="Name" value="{{vm.propName}}"></ev-input>
-			<ev-json-input required label="Definition" field-id="propDef"  value="{{vm.propDef}}"></ev-json-input>
+			<oe-input required field-id="propName" label="Name" value="{{vm.propName}}"></oe-input>
+			<oe-json-input required label="Definition" field-id="propDef"  value="{{vm.propDef}}"></oe-json-input>
 		</div>
 		<div class="layout horizontal center justified">
 			<paper-button raised primary on-tap="doSave">Save</paper-button>

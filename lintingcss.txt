@@ -1,5 +1,5 @@
 
-> oe-studio@0.0.1 lint:css D:\ev\evf-designer
+> oe-studio@0.0.1 lint:css D:\ev\oe-designer
 > stylelint **/*.html
 
 
@@ -13,7 +13,7 @@ elements/attach-workflow-dialog.html
  78:2  ×  Unexpected whitespace at end of line           no-eol-whitespace                
  81:3  ×  Expected empty line before declaration         declaration-empty-line-before    
 
-elements/attach-workflow-ev-workflow.html
+elements/attach-workflow-oe-workflow.html
  23:7  ×  Expected single space after ">"    selector-combinator-space-after 
  23:7  ×  Expected single space before ">"   selector-combinator-space-before
 
@@ -308,7 +308,7 @@ elements/workflow-designer.html
  25:3   ×  Unexpected duplicate "box-sizing"   declaration-block-no-duplicate-properties
  26:13  ×  Unexpected unit                     length-zero-no-unit                      
 
-evf-designer.html
+oe-designer.html
  13:35  ×  Expected single space after "+"    selector-combinator-space-after     
  13:35  ×  Expected single space before "+"   selector-combinator-space-before    
  26:14  ×  Expected a trailing semicolon      declaration-block-trailing-semicolon
@@ -490,7 +490,7 @@ styles/app-theme.html
  76:4   ×  Expected indentation of 2 spaces                          indentation                  
  77:4   ×  Expected indentation of 2 spaces                          indentation                  
 
-styles/evf-styles.html
+styles/oe-styles.html
  1863:38  ×  Missed semicolon   CssSyntaxError
 
 styles/shared-styles.html
@@ -544,7 +544,7 @@ templates/widgets-page.html
  20:5  ×  Expected indentation of 2 spaces       indentation      
  21:9  ×  Unexpected whitespace at end of line   no-eol-whitespace
 
-test/evf-css-parser-test.html
+test/oe-css-parser-test.html
  19:12  ×  Unexpected unit                          length-zero-no-unit     
  22:1   ×  Unexpected unknown type selector "tag"   selector-type-no-unknown
 

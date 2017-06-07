@@ -417,7 +417,7 @@
     <div class="list-cont">
       <div class="list-header">Pages</div>
       <div class="list-item" on-tap="showPageCreation">
-        <iron-icon icon="ev-designer-icons:add-page"></iron-icon><span>Add Component</span>
+        <iron-icon icon="oe-designer-icons:add-page"></iron-icon><span>Add Component</span>
       </div>
       <div class="list-item">
         <iron-icon icon="icons:file-download"></iron-icon><span>Export Component</span>
@@ -608,7 +608,7 @@
             self.makeAjaxCall('/designer/templates', 'get', null, null, null, function(
               err, res) {
               if (err) {
-                self.fire('ev-show-error', 'Error fetching Templates');
+                self.fire('oe-show-error', 'Error fetching Templates');
                 callback(err, null)
               } else {
                 callback(null, res)
@@ -619,7 +619,7 @@
             self.makeAjaxCall('/api/UIComponents', 'get', null, null, null, function(err,
               res) {
               if (err) {
-                self.fire('ev-show-error',
+                self.fire('oe-show-error',
                   'Error fetching UIComponents');
                 callback(err, null)
               } else {
@@ -694,7 +694,7 @@
         })
         this.set('activePage', {});
         this.splice('componentList', pageIndex, 1);
-        this.fire('ev-show-success', pageData.name + ' successfully deleted');
+        this.fire('oe-show-success', pageData.name + ' successfully deleted');
         this.closePageSettings();
       },
       newPageCreated: function(e) {
@@ -711,7 +711,7 @@
           handleAs: 'text'
         }, function(err, res) {
           if (err) {
-            self.fire('ev-show-error', 'Error fetching component');
+            self.fire('oe-show-error', 'Error fetching component');
           } else {
             self.downloadToFile(pageData.name + '.html', 'text/html', res);
           }

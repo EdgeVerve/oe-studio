@@ -200,13 +200,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     <template is="dom-if" if="{{stringSelected(propertyObj.type)}}">
 								<div class="layout vertical justified validation-block">
 									<label>Inclusion/Exclusion Validation</label>
-									<ev-paper-chip label="In" title="Use Enter , Space or ',' Key to seperate the values" value="{{propertyObj.in}}"></ev-paper-chip>
+									<oe-paper-chip label="In" title="Use Enter , Space or ',' Key to seperate the values" value="{{propertyObj.in}}"></oe-paper-chip>
 									<div class="validation-help-text">
 										Value for property to be in the specified array
 										<iron-icon icon="info" id="help"></iron-icon>
 										<paper-tooltip>Use Enter , Space or ',' Key to seperate the values</paper-tooltip>
 									</div>
-									<ev-paper-chip label="Not In" title="Use Enter , Space or ',' Key to seperate the values" value="{{propertyObj.notin}}"></ev-paper-chip>
+									<oe-paper-chip label="Not In" title="Use Enter , Space or ',' Key to seperate the values" value="{{propertyObj.notin}}"></oe-paper-chip>
 									<div class="validation-help-text">Value for property not to be in the specified array
 										<iron-icon icon="info" id="help"></iron-icon>
 										<paper-tooltip>Use Enter , Space or ',' Key to seperate the values</paper-tooltip>
@@ -216,12 +216,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     <template is="dom-if" if="{{numberSelected(propertyObj.type)}}">
 								<div class="layout vertical justified validation-block">
 									<label>Inclusion/Exclusion Validation</label>
-									<ev-paper-chip label="In" title="Use Enter , Space or ',' Key to seperate the values" value="{{propertyObj.in}}"></ev-paper-chip>
+									<oe-paper-chip label="In" title="Use Enter , Space or ',' Key to seperate the values" value="{{propertyObj.in}}"></oe-paper-chip>
 									<div class="validation-help-text">Value for property to be in the specified array
 										<iron-icon icon="info" id="help"></iron-icon>
 										<paper-tooltip>Use Enter , Space or ',' Key to seperate the values</paper-tooltip>
 									</div>
-									<ev-paper-chip label="Not In" title="Use Enter , Space or ',' Key to seperate the values" value="{{propertyObj.notin}}"></ev-paper-chip>
+									<oe-paper-chip label="Not In" title="Use Enter , Space or ',' Key to seperate the values" value="{{propertyObj.notin}}"></oe-paper-chip>
 									<div class="validation-help-text">Value for property not to be in the specified array
 										<iron-icon icon="info" id="help"></iron-icon>
 										<paper-tooltip>Use Enter , Space or ',' Key to seperate the values</paper-tooltip>
@@ -472,7 +472,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             }
           });
           if (prop.min != undefined && prop.max != undefined && parseInt(prop.max) < parseInt(prop.min)) {
-            this.fire('ev-show-error', 'Property minimum maximum validation failed');
+            this.fire('oe-show-error', 'Property minimum maximum validation failed');
             return;
           }
           this.fire('save-property', {

@@ -3,7 +3,7 @@ html{
 	overflow: auto;
 }
 
-.ev-drop-placeholder {
+.oe-drop-placeholder {
   display: inline-block;
 }
 
@@ -28,7 +28,7 @@ html{
   padding-bottom: 16px;
 }
 
-.ev-empty-container:not([ev-dom-handle="unclassified"]) {
+.oe-empty-container:not([oe-dom-handle="unclassified"]) {
   position: relative;
   outline: 1px dotted #00ebff;
   outline-offset: -1px;
@@ -39,7 +39,7 @@ html{
   display: inline-block;
 }
 
-.ev-empty-container:not([ev-dom-handle="unclassified"]):before {
+.oe-empty-container:not([oe-dom-handle="unclassified"]):before {
   content: "Drag components inside";
   position: absolute;
   text-align: center;
@@ -53,6 +53,6 @@ html{
 }
 
 
-/*[ev-id]:not([ev-ele-type="droppable"]):not([ev-ele-type="text"]) >*{
+/*[oe-id]:not([oe-ele-type="droppable"]):not([oe-ele-type="text"]) >*{
 	pointer-events: none;
 }*/

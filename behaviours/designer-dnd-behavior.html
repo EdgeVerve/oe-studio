@@ -88,8 +88,8 @@
           return e.tag === n.tagName.toLowerCase();
         })
         if (conf && conf.config) {
-          n.setAttribute('ev-id', EV.generateGuid());
-          n.setAttribute('ev-ele-type', conf.config.type);
+          n.setAttribute('oe-id', EV.generateGuid());
+          n.setAttribute('oe-ele-type', conf.config.type);
         }
       })
       return ele;
@@ -132,7 +132,7 @@
       var self = this;
       var config = element.config;
       var uiType = config.propDef.uitype || (EV.TypeMappings[config.propDef.type] && EV.TypeMappings[config.propDef.type]
-        .uiType) || 'ev-input';
+        .uiType) || 'oe-input';
       var ele = self.createNodeFromName(uiType);
       ele.classList.add('evfield');
       ele.setAttribute('field-id', config.propName);
@@ -233,7 +233,7 @@
         var config = JSON.parse(configStr);
 
         if (config && config.config.restrictDropOn === 'HTML' && !self._desigerconfig.isTruePolymer) {
-          self.fire('ev-show-error', 'This element can only be used within a Polymer element');
+          self.fire('oe-show-error', 'This element can only be used within a Polymer element');
           self.fire('clear-drop-focus');
           return;
         }
@@ -241,7 +241,7 @@
         if (config.name === 'form builder') {
           var prevForm = self.querySelector('[desg-handler="form-builder"]');
           if (prevForm) {
-            self.fire('ev-show-error', 'There can be only 1 form builder in a element');
+            self.fire('oe-show-error', 'There can be only 1 form builder in a element');
             self.fire('clear-drop-focus');
             return;
           }
@@ -607,8 +607,8 @@
             return;
           }
           var handler = document.createElement('div');
-          handler.classList.add('ev-resize-handler');
-          handler.classList.add('ev-resize-' + dir);
+          handler.classList.add('oe-resize-handler');
+          handler.classList.add('oe-resize-' + dir);
           handler.setAttribute('direction', dir);
           node.appendChild(handler);
           handler.addEventListener('track', resizeHandler);
@@ -617,7 +617,7 @@
     },
     disableResizable: function(node) {
       [].forEach.call(node.childNodes, function(child) {
-        if (child.classList && child.classList.contains('ev-resize-handler')) {
+        if (child.classList && child.classList.contains('oe-resize-handler')) {
           node.removeChild(child);
         }
       })

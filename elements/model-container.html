@@ -502,7 +502,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                   value="{{propertyObj.__name__}}"></paper-input>
               </div>
               <div>
-                <ev-combo listdata="[[validTypes]]" required class="customized" value="{{propertyObj.type}}" label="Property Type"></ev-combo>
+                <oe-combo listdata="[[validTypes]]" required class="customized" value="{{propertyObj.type}}" label="Property Type"></oe-combo>
                 <!--<paper-dropdown-menu label="Property Type" class="customized" vertical-align="bottom">
                   <paper-menu required class="dropdown-content" attr-for-selected="datavalue" selected="{{propertyObj.type}}">
                     <template is="dom-repeat" items="[[validTypes]]">
@@ -534,7 +534,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           </div>
         </div>
       </div>
-      <!--<ev-message-handler id="toast" fit-bottom duration=5000></ev-message-handler>-->
+      <!--<oe-message-handler id="toast" fit-bottom duration=5000></oe-message-handler>-->
     </div>
   </template>
 </dom-module>
@@ -634,7 +634,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           return;
         }.bind(this)
       }
-      this.fire('ev-show-confirm', data);
+      this.fire('oe-show-confirm', data);
     },
     _modelSelected: function () {
       this.fire('model-selected');
@@ -709,7 +709,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             }) == -1) {
             this.push('modelObj.properties', attr);
           } else {
-            this.fire('ev-show-error', 'Property name already exists');
+            this.fire('oe-show-error', 'Property name already exists');
             return;
           }
         } else {

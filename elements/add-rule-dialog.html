@@ -217,12 +217,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             if (err) {
               this.resolveError(err);
             } else if (response) {
-              this.fire('ev-show-success', 'Successfully saved !');
+              this.fire('oe-show-success', 'Successfully saved !');
               this.hideDialog();
             }
           }.bind(this));
         } else {
-          this.fire('ev-show-error', 'Enter valid Rule and scope')
+          this.fire('oe-show-error', 'Enter valid Rule and scope')
         }
       },
       prevStep: function () {

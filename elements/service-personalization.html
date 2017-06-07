@@ -221,7 +221,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           </div>
           <div class="rule-container">
             <div class="rule-type">
-              <iron-icon icon="ev-icons:ev-input-icon"></iron-icon> Field Replace</div>
+              <iron-icon icon="oe-icons:oe-input-icon"></iron-icon> Field Replace</div>
             <div class="table">
               <div class="table-header layout flex horizontal justified">
                 <div class="gridCol">Property name</div>
@@ -239,7 +239,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           </div>
           <div class="rule-container">
             <div class="rule-type">
-              <iron-icon icon="ev-icons:ev-input-icon"></iron-icon> Field Value Replace</div>
+              <iron-icon icon="oe-icons:oe-input-icon"></iron-icon> Field Value Replace</div>
             <div class="table">
               <div class="table-header layout flex horizontal justified">
                 <div class="gridCol">Property name</div>
@@ -407,7 +407,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             return;
           }
         }
-        this.fire('ev-show-confirm', data);
+        this.fire('oe-show-confirm', data);
       },
       _deleteRule: function () {
         var url = 'api/DesignerRules/' + this.selectedRule.id + '/' + this.selectedRule._version;
@@ -416,7 +416,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           if (err) {
             this.resolveError(err);
           } else if (response) {
-            this.fire('ev-show-success', 'Rule deleted successfully');
+            this.fire('oe-show-success', 'Rule deleted successfully');
             var ruleIndex = _.findIndex(this.rulesList, function (rule) {
               return rule.name === this.selectedRule.name;
             }.bind(this));

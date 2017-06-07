@@ -110,7 +110,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     				});
     			}
     			if (found.length > 1) {
-    				this.fire("ev-show-error", "item already exists");
+    				this.fire("oe-show-error", "item already exists");
     			} else {
     				delete obj.editable;
     				delete obj.newItem;
@@ -210,7 +210,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           return;
         }
       }
-      this.fire('ev-show-confirm', data);
+      this.fire('oe-show-confirm', data);
     },
     _checkAll: function() {
       this.setAll(this.allChecked);

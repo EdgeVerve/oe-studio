@@ -1494,10 +1494,10 @@
         this.set('accentColor', null);
         this.set('generatedTheme', null);
 
-        Polymer.Base.importHref('/evf-designer/ui-designer/custom-theme.tmpl', function(s) {
+        Polymer.Base.importHref('/oe-designer/ui-designer/custom-theme.tmpl', function(s) {
           self.set('customTmpl', s.target.import.querySelector('dom-module'));
         }, function() {
-          self.fire('ev-show-error', 'Error fetching custom theme template');
+          self.fire('oe-show-error', 'Error fetching custom theme template');
         });
       },
       behaviors: [
@@ -1596,7 +1596,7 @@
             if (!err) {
               var domMan = document.querySelector('ui-dom-manager');
               domMan.applyTheme(theme, true);
-              self.fire('ev-show-success', 'Theme Applied successfully');
+              self.fire('oe-show-success', 'Theme Applied successfully');
             } else {
               self.resolveError(err);
             }

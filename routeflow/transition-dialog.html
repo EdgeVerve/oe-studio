@@ -43,13 +43,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       <div class="dialog-header">Create transition</div>
       <div class="dialog-content">
         <form is="iron-form" id="form">
-          <ev-input required id="input" label="Enter the event name" value="{{transition.event}}"></ev-input>
+          <oe-input required id="input" label="Enter the event name" value="{{transition.event}}"></oe-input>
           <div class="layout vertical">
             <template is="dom-repeat" items="{{placeholders}}">
-              <ev-input pattern="^[a-zA-Z_][0-9A-Za-z_.]+[0-9a-z_A-Z]$" required label="{{item.label}}" value="{{item.value}}">
+              <oe-input pattern="^[a-zA-Z_][0-9A-Za-z_.]+[0-9a-z_A-Z]$" required label="{{item.label}}" value="{{item.value}}">
                 <div prefix>{{</div>
                 <div suffix>}}</div>
-              </ev-input>
+              </oe-input>
             </template>
           </div>
         </form>

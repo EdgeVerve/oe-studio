@@ -30,7 +30,7 @@
                 padding: 12px;
             }
             
-            ev-input.light-control {
+            oe-input.light-control {
                 --paper-input-container: {
                     background: rgba(38, 49, 56, 0.12);
                     padding: 2px 8px;
@@ -55,7 +55,7 @@
         </style>
         <div>
             <div class="add-selector-container" hidden$="{{cssRule.selectorText}}">
-                <ev-input no-label-float placeholder="Enter the selector" class="light-control" error-message="Enter valid class name" value="{{selectorText}}"></ev-input>
+                <oe-input no-label-float placeholder="Enter the selector" class="light-control" error-message="Enter valid class name" value="{{selectorText}}"></oe-input>
                 <div class="layout horizontal center end-justified">
                     <paper-button on-tap="closeRuleEditor">CANCEL</paper-button>
                     <paper-button secondary on-tap="addRule">CREATE</paper-button>

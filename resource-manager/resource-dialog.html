@@ -95,14 +95,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       <div class="dialog-content">
         <form is="iron-form" id="form">
           <label class="helper-text upload-title">Upload Resource File</label>
-          <ev-file-input show-clear value-type="binary" value={{resourceObj.content}} file-type={{resourceObj.type}} file-name={{resourceObj.name}}
+          <oe-file-input show-clear value-type="binary" value={{resourceObj.content}} file-type={{resourceObj.type}} file-name={{resourceObj.name}}
             file-size={{resourceObj.size}}>
-          </ev-file-input>
-          <ev-json-input no-label-float value="{{resourceObj.scope}}" placeholder="Scope"></ev-json-input>
+          </oe-file-input>
+          <oe-json-input no-label-float value="{{resourceObj.scope}}" placeholder="Scope"></oe-json-input>
 
           <div class="file-name layout center justified flex horizontal" hidden="{{!resourceObj.name}}">
             <div>
-              <iron-icon icon="ev-designer-icons:excel" class="file-icon"></iron-icon>
+              <iron-icon icon="oe-designer-icons:excel" class="file-icon"></iron-icon>
               <span>{{resourceObj.name}}</span>
               <span>&nbsp;{{resourceObj.size}} bytes</span>
             </div>
@@ -117,8 +117,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         <paper-button id="add" secondary on-tap="saveResource">SAVE</paper-button>
       </div>
     </paper-dialog>
-    <ev-ajax id="ajax" url="/api/UIResources" loading="{{isloading}}" content-type="application/json" handle-as="json" on-error="handleError"
-      on-response="handleResponse"></ev-ajax>
+    <oe-ajax id="ajax" url="/api/UIResources" loading="{{isloading}}" content-type="application/json" handle-as="json" on-error="handleError"
+      on-response="handleResponse"></oe-ajax>
   </template>
   <script>
     Polymer({
@@ -144,12 +144,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           var regexp = /(?:\.([^.]+))?$/;
           var type = regexp.exec(file.name)[1];
           if (type != 'xlsx' && type != 'xls') {
-            this.fire('ev-show-error', 'File type is not supported');
+            this.fire('oe-show-error', 'File type is not supported');
             this.$.fileInput.value = '';
             return;
           }
           if (!this.validateFileSize(file.size)) {
-            this.fire('ev-show-error', 'File size cannot exceed 5MB');
+            this.fire('oe-show-error', 'File size cannot exceed 5MB');
             this.$.fileInput.value = '';
             return false;
           }
@@ -183,7 +183,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         ajax.generateRequest();
       },
       handleError: function (event) {
-        this.fire('ev-show-error', EV.extractErrorMessage(event));
+        this.fire('oe-show-error', EV.extractErrorMessage(event));
       },
       handleResponse: function (event) {
         var resource = event.detail.response;

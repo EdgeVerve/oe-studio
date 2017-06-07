@@ -1,4 +1,5 @@
-<link rel="import" href="ui-bottom-panel.html">
+w<link rel="import" href="ui-bottom-panel.html">
+
 <link rel="import" href="ui-snippeter-dialog.html">
 <link rel="import" href="device-view.html">
 <link rel="import" href="../redux-store.html">
@@ -109,7 +110,7 @@
 		<div class="layout vertical container-panel">
 			<div class="flex layout horizontal center-center" hidden$="{{pageSelected}}">
 				<div hidden$="{{!iframeLoaded}}" class="empty-state">
-					<iron-icon icon="ev-designer-icons:ui-designer" class="empty-state-icon"></iron-icon>
+					<iron-icon icon="oe-designer-icons:ui-designer" class="empty-state-icon"></iron-icon>
 					<div class="main-label">Create, Edit & Configure Components/Pages</div>
 					<div class="sub-label">Drag elements from the left panel
 						<br>and start creating the pages and components</div>
@@ -313,13 +314,13 @@
       addHandler: function(evt) {
         var detailObj = evt.detail;
         var ele = this.createNodeFromConfig(detailObj.config);
-        this.dispatch('add', detailObj.parent.getAttribute('ev-id'), ele, detailObj.index);
+        this.dispatch('add', detailObj.parent.getAttribute('oe-id'), ele, detailObj.index);
       },
       deleteHandler: function(evt) {
         var element = evt.detail;
         var self = this;
         var child = this.findInDom(element);
-        this.fire('ev-show-confirm', {
+        this.fire('oe-show-confirm', {
           message: 'Do you want to delete the element?',
           ok: function() {
             self.dispatch('delete', child);
@@ -332,16 +333,16 @@
       moveHandler: function(evt) {
         var detailObj = evt.detail;
         var child = this.findInDom(detailObj.ele);
-        this.dispatch('move', detailObj.parent.getAttribute('ev-id'), child, detailObj.index);
+        this.dispatch('move', detailObj.parent.getAttribute('oe-id'), child, detailObj.index);
       },
       selectHandler: function(evt) {
         var element = evt.detail;
         var unattached = null;
         var attached = null;
         if (element && element.getAttribute) {
-          var evId = element.getAttribute('ev-id');
+          var evId = element.getAttribute('oe-id');
           unattached = this.findInDom(element);
-          attached = this.frameWindow.document.querySelector('[ev-id="' + evId + '"]');
+          attached = this.frameWindow.document.querySelector('[oe-id="' + evId + '"]');
         }
         this.dispatch('select', unattached, attached);
       },
@@ -357,8 +358,8 @@
         var target = this.findInDom(element);
 
         var linkEl = document.createElement('a');
-        linkEl.setAttribute('ev-id', EV.generateGuid());
-        linkEl.setAttribute('ev-ele-type', 'droppable');
+        linkEl.setAttribute('oe-id', EV.generateGuid());
+        linkEl.setAttribute('oe-ele-type', 'droppable');
         linkEl.setAttribute('href', '#');
 
         if (sel) {
@@ -444,7 +445,7 @@
         if (!element || !element.getAttribute) {
           return
         }
-        return this.dom.querySelector('[ev-id="' + element.getAttribute('ev-id') + '"]')
+        return this.dom.querySelector('[oe-id="' + element.getAttribute('oe-id') + '"]')
       },
       convertToSnippet: function(e) {
         var target = this.findInDom(e.detail);
@@ -481,22 +482,22 @@
       },
       attachDesignerConfig: function(dom) {
         this.traverseDom(dom, function(el) {
-          if (!el.hasAttribute('ev-id')) {
-            el.setAttribute('ev-id', EV.generateGuid());
+          if (!el.hasAttribute('oe-id')) {
+            el.setAttribute('oe-id', EV.generateGuid());
           }
-          if (!el.hasAttribute('ev-ele-type')) {
+          if (!el.hasAttribute('oe-ele-type')) {
             var tagName = el.nodeName.toLowerCase();
             var eleConfig = EV.designerData.elementList.find(function(e) {
               return e.tag == tagName
             });
             var elType = eleConfig && eleConfig.config && eleConfig.config.type;
             if (!elType) {
-              el.setAttribute('ev-dom-handle', 'unclassified')
+              el.setAttribute('oe-dom-handle', 'unclassified')
               elType = 'droppable'
             } else {
-              el.removeAttribute('ev-dom-handle')
+              el.removeAttribute('oe-dom-handle')
             }
-            el.setAttribute('ev-ele-type', elType);
+            el.setAttribute('oe-ele-type', elType);
           }
         });
       },

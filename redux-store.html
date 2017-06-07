@@ -42,12 +42,12 @@
   }
 
   var moveElement = function(dom, parentId, childElement, index) {
-    var parentEle = dom.querySelector('[ev-id="' + parentId + '"]') || dom;
+    var parentEle = dom.querySelector('[oe-id="' + parentId + '"]') || dom;
     insertNode(childElement, parentEle, index);
   }
 
   var updateElement = function(dom, element) {
-    var target = dom.querySelector('[ev-id="' + element.getAttribute('ev-id') + '"]');
+    var target = dom.querySelector('[oe-id="' + element.getAttribute('oe-id') + '"]');
     if (!target) {
       return
     }
@@ -55,7 +55,7 @@
   }
 
   var deleteElement = function(dom, element) {
-    var target = dom.querySelector('[ev-id="' + element.getAttribute('ev-id') + '"]');
+    var target = dom.querySelector('[oe-id="' + element.getAttribute('oe-id') + '"]');
     if (!target) {
       return
     }
