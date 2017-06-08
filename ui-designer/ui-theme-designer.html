@@ -1494,7 +1494,7 @@
         this.set('accentColor', null);
         this.set('generatedTheme', null);
 
-        Polymer.Base.importHref('/oe-designer/ui-designer/custom-theme.tmpl', function(s) {
+        Polymer.Base.importHref('bower_components/oe-studio/ui-designer/custom-theme.tmpl', function(s) {
           self.set('customTmpl', s.target.import.querySelector('dom-module'));
         }, function() {
           self.fire('oe-show-error', 'Error fetching custom theme template');

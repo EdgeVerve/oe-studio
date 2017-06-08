@@ -30,7 +30,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     <oe-combo field-id="workflowBody.workflowDefinitionName" required label="Process Name" value={{vm.workflowBody.workflowDefinitionName}} listurl="/api/WorkflowDefinitions" displayproperty="name" valueproperty="name" allow-free-text></oe-combo>
                     <oe-checkbox field-id="wfDependent" label="Workflow Dependent" value={{vm.wfDependent}}></oe-checkbox>
                 </div>
-                <oe-data-table label="Workflow Variables" items={{vm.workflowBody.variables}} record-handling="local" editor-form-url="oe-designer/ui-designer/workflow-prop-form.html" columns='[{"key": "name","label": "Name","readOnly": true},{"key": "value","label": "Value","readOnly": true}]'></oe-data-table>
+                <oe-data-table label="Workflow Variables" items={{vm.workflowBody.variables}} record-handling="local" editor-form-url="bower_components/oe-studio/ui-designer/workflow-prop-form.html" columns='[{"key": "name","label": "Name","readOnly": true},{"key": "value","label": "Value","readOnly": true}]'></oe-data-table>
 
             </div>
             <div class="dialog-footer flex horizontal layout end-justified">
