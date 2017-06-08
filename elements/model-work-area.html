@@ -936,15 +936,15 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               } else if (response) {
                 tempObj = response;
                 tempObj.checked = true;
-                item.set('modelObj', EV.clone(self.modelToArray(tempObj)));
+                item.set('modelObj', baseUtils.clone(self.modelToArray(tempObj)));
                 var updateModelIndex = self.modelList.findIndex(function (x) {
                   return x.id == tempObj.id;
                 })
                 //updating the main modelList
                 response.checked = true;
-                self.set('modelList.' + updateModelIndex, EV.clone(tempObj));
+                self.set('modelList.' + updateModelIndex, baseUtils.clone(tempObj));
                 //updating workspace models
-                self.push('workSpaceModelList', EV.clone(tempObj));
+                self.push('workSpaceModelList', baseUtils.clone(tempObj));
                 tempArray.push({
                   modelName: tempObj.name,
                   status: 'success'
@@ -1506,7 +1506,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
             [].map.call(modelNodes, function (model) {
               if (model.modelObj.id == e.detail.model.id) {
-                model.modelObj = EV.clone(e.detail.model);
+                model.modelObj = baseUtils.clone(e.detail.model);
               }
             });
 

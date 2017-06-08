@@ -83,7 +83,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       xhr.send();
     },
     resolveError: function(err) {
-      var errObj = EV.extractErrorMessage(err);
+      var errObj = baseUtils.extractErrorMessage(err);
       this.fire('oe-show-error', errObj);
       return errObj.code || errObj.message;
     },

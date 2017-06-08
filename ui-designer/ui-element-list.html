@@ -344,7 +344,7 @@
           } else {
             self.resolveError(err);
           }
-          EV.designerData.elementList = elementList;
+          baseUtils.designerData.elementList = elementList;
           groupedElements = _.groupBy(elementList, function(item) {
             return item.category;
           });

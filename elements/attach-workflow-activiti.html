@@ -47,7 +47,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
   <script>
     Polymer({
       is: 'attach-workflow-activiti',
-      behaviors: [CommonBehavior.EVAjaxBehavior, EV.ModelHandler, EV.FormValidationBehavior],
+      behaviors: [CommonBehavior.EVAjaxBehavior, baseUtils.ModelHandler, baseUtils.FormValidationBehavior],
       properties: {
         vm: {
           type: Object,

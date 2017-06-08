@@ -1,9 +1,9 @@
 (function() {
     'use strict';
-    window.EV = window.EV || {};
-    window.EV.designer = window.EV.designer || {};
+    window.baseUtils = window.baseUtils || {};
+    window.baseUtils.designer = window.baseUtils.designer || {};
 
-    window.EV.designer._getElementName = function(selector) {
+    window.baseUtils.designer._getElementName = function(selector) {
         var _elemName = '';
         var idx = selector.indexOf('.');
         if (idx > 0) {
@@ -12,7 +12,7 @@
         return _elemName;
     }
 
-    window.EV.snakeToCamel = function(s) {
+    window.baseUtils.snakeToCamel = function(s) {
         return s.replace(/(\-\w)/g, function(m) {
             return m[1].toUpperCase();
         });
@@ -36,7 +36,7 @@
                         if (regexp.test(selector) && rule.style.cssText.length > 0) {
                             var obj = {
                                 selector: selector,
-                                className: window.EV.designer._getClassName(selector),
+                                className: window.baseUtils.designer._getClassName(selector),
                                 elementName: null,
                                 mediaQuery: null,
                                 userdefined: false,
@@ -47,11 +47,11 @@
                             var classObj = JSON.parse(jsonStr);
                             var newObj = {};
                             Object.keys(classObj).forEach(function(k) {
-                                newObj[EV.snakeToCamel(k)] = classObj[k]
+                                newObj[baseUtils.snakeToCamel(k)] = classObj[k]
                             });
 
                             obj.classObject = newObj;
-                            var iselem = window.EV.designer._getElementName(selector);
+                            var iselem = window.baseUtils.designer._getElementName(selector);
                             if (iselem) {
                                 obj.elementName = iselem;
                             }
@@ -67,7 +67,7 @@
         }
     }
 
-    window.EV.designer._getClassName = function(selector) {
+    window.baseUtils.designer._getClassName = function(selector) {
         // only three scenarios are there to extract class names. ex: .a, div.a, .a.b
         var _className = '';
         if (/^\.[a-zA-Z0-9\-_]+$/.test(selector)) {
@@ -83,7 +83,7 @@
         return _className;
     }
 
-    window.EV.designer.xExtractCSS = function(xSourceFiles) {
+    window.baseUtils.designer.xExtractCSS = function(xSourceFiles) {
         var styles = [];
         for (var i = 0; i < xSourceFiles.length; i++) {
             var styleSheet = xSourceFiles[i];

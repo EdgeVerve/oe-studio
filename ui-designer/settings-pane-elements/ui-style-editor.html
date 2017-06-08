@@ -414,7 +414,7 @@
       _predefinedStylesChanged: function() {
         var styles = []
         if (this.predefinedStyles) {
-          styles = EV.designer.xExtractCSS([this.predefinedStyles]);
+          styles = baseUtils.designer.xExtractCSS([this.predefinedStyles]);
         }
         this.set('_predefinedStyles', styles);
       },

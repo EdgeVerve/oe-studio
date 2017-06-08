@@ -197,7 +197,7 @@ w<link rel="import" href="ui-bottom-panel.html">
       },
       loadSuccess: function() {
         this.set('frameWindow', this.$.framer.contentWindow);
-        EV.designerData.frameLoaded = true;
+        baseUtils.designerData.frameLoaded = true;
 
         var iframeWindow = this.frameWindow;
         iframeWindow.HTMLImports.whenReady(function() {
@@ -221,7 +221,7 @@ w<link rel="import" href="ui-bottom-panel.html">
         var self = this;
         this.set('iframeLoaded', false);
         var x = setInterval(function() {
-          if (EV.designerData.frameLoaded) {
+          if (baseUtils.designerData.frameLoaded) {
             self.set('iframeLoaded', true);
             self.fire('iframe-loaded');
             clearInterval(x);
@@ -358,7 +358,7 @@ w<link rel="import" href="ui-bottom-panel.html">
         var target = this.findInDom(element);
 
         var linkEl = document.createElement('a');
-        linkEl.setAttribute('oe-id', EV.generateGuid());
+        linkEl.setAttribute('oe-id', baseUtils.generateGuid());
         linkEl.setAttribute('oe-ele-type', 'droppable');
         linkEl.setAttribute('href', '#');
 
@@ -483,11 +483,11 @@ w<link rel="import" href="ui-bottom-panel.html">
       attachDesignerConfig: function(dom) {
         this.traverseDom(dom, function(el) {
           if (!el.hasAttribute('oe-id')) {
-            el.setAttribute('oe-id', EV.generateGuid());
+            el.setAttribute('oe-id', baseUtils.generateGuid());
           }
           if (!el.hasAttribute('oe-ele-type')) {
             var tagName = el.nodeName.toLowerCase();
-            var eleConfig = EV.designerData.elementList.find(function(e) {
+            var eleConfig = baseUtils.designerData.elementList.find(function(e) {
               return e.tag == tagName
             });
             var elType = eleConfig && eleConfig.config && eleConfig.config.type;

@@ -67,7 +67,7 @@
         var self = this;
 
         var x = setInterval(function() {
-          if (EV.designerData.frameLoaded) {
+          if (baseUtils.designerData.frameLoaded) {
             self.showPagePanel();
             clearInterval(x);
           }
@@ -92,9 +92,9 @@
             detail.component = component;
             var scrTag = (component.nodeName.toLowerCase() == 'script') ? component : component.querySelector('script');
             if (scrTag) {
-              var target = 'EV.metadataCache["' + detail.name + '"]';
+              var target = 'baseUtils.metadataCache["' + detail.name + '"]';
               var text = scrTag.textContent.split(target)[1];
-              text = 'window.EV.tempMeta ' + text;
+              text = 'window.baseUtils.tempMeta ' + text;
               self.customEval(text);
               if (scrTag.parentElement) {
                 scrTag.parentElement.removeChild(scrTag);
@@ -102,8 +102,8 @@
                 detail.component = null;
               }
             }
-            detail.modelMeta = window.EV.tempMeta;
-            window.EV.tempMeta = null;
+            detail.modelMeta = window.baseUtils.tempMeta;
+            window.baseUtils.tempMeta = null;
             self.processPage(detail);
           }
         })
@@ -149,8 +149,8 @@
           uimeta.content = pageDetail.uiComponent.content;
 
           //Meta transform for the files
-          if (EV.Metamorph) {
-            EV.Metamorph(polymerHtml, uimeta, pageDetail.polyConfig)
+          if (baseUtils.Metamorph) {
+            baseUtils.Metamorph(polymerHtml, uimeta, pageDetail.polyConfig)
           }
 
           pageDetail.userStyle = null;
@@ -248,16 +248,16 @@
       },
       getPolymerJSON: function(scriptTag) {
         var scriptText = scriptTag.textContent;
-        var text = scriptText.replace(/MetaPolymer|Polymer/, 'window.EV.tempPolyObj = ');
+        var text = scriptText.replace(/MetaPolymer|Polymer/, 'window.baseUtils.tempPolyObj = ');
         var res = this.customEval(text);
         if (!res) {
           return res
         }
-        if (window.EV.tempPolyObj && typeof window.EV.tempPolyObj == 'object') {
+        if (window.baseUtils.tempPolyObj && typeof window.baseUtils.tempPolyObj == 'object') {
 
           /*When behavior is not loaded, we have array of undefined values*/
           /*try extracting the names directly from string parsing */
-          var tempObject = window.EV.tempPolyObj;
+          var tempObject = window.baseUtils.tempPolyObj;
           if (tempObject.behaviors && tempObject.behaviors.length > 0 && tempObject.behaviors.indexOf(undefined) >= 0) {
             var behaviorLine = scriptText.match(/behaviors\s*:\s*\[.*\]/g);
             behaviorLine = behaviorLine && behaviorLine[0];
@@ -268,13 +268,13 @@
             })
           }
           var polyJson = this.polyObjectTopolyJson(tempObject);
-          window.EV.tempPolyObj = null;
+          window.baseUtils.tempPolyObj = null;
           return polyJson;
         } else {
           this.fire('oe-show-error', 'Error obtaining Polymer Object');
         }
         //document.head.removeChild(script);
-        window.EV.tempPolyObj = null;
+        window.baseUtils.tempPolyObj = null;
       },
       reFactorFromDesigner: function(node) {
         var self = this;
@@ -359,7 +359,7 @@
         }
         var dom = self.$.domManager.dom;
         var metadata = self.unMetaPolymer(dom);
-        var payload = EV.clone(self.element.uiComponent);
+        var payload = baseUtils.clone(self.element.uiComponent);
 
         if (payload.modelName) {
           if (metadata.validators) {
@@ -393,7 +393,7 @@
           '_type', '_version', 'scope'
         ]
         var payload = this._preparePayload();
-        var page = EV.clone(payload);
+        var page = baseUtils.clone(payload);
         if (event.detail.method == 'POST') {
           ignoreProps.forEach(function(prop) {
             delete page[prop];
@@ -731,7 +731,7 @@
           var parentEle = node.parentElement;
           if (parentEle) {
             if (!parentEle.hasAttribute('id')) {
-              parentEle.setAttribute('id', 'el_' + EV.generateGuid())
+              parentEle.setAttribute('id', 'el_' + baseUtils.generateGuid())
             }
             fieldObj.container = parentEle.getAttribute('id');
           }
@@ -884,7 +884,7 @@
       generateForm: function(event) {
         var detail = event.detail;
         var self = this;
-        var payload = EV.clone(self.element.uiComponent);
+        var payload = baseUtils.clone(self.element.uiComponent);
 
         var dom = this.$.domManager.dom;
         var metadata = this.unMetaPolymer(dom);
@@ -951,7 +951,7 @@
         }
         payload.content = this.getValidContentDom(metadata.dom);
         self.element.polyConfig.behaviours = self.element.polyConfig.behaviours || [];
-        ['EV.FormValidationBehavior', 'EV.ModelHandler', 'EV.FormMessagesBehavior'].forEach(function(v) {
+        ['baseUtils.FormValidationBehavior', 'baseUtils.ModelHandler', 'baseUtils.FormMessagesBehavior'].forEach(function(v) {
           if (self.element.polyConfig.behaviours.indexOf(v) == -1) {
             self.element.polyConfig.behaviours.push(v)
           }

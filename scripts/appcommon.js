@@ -4,10 +4,10 @@ The Program may contain/reference third party or open source components, the rig
 remain with the applicable third party licensors or the open source community as the case may be and nothing 
 here transfers the rights to the third party and open source components, except as expressly permitted. 
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. */
-  // EV.baseurl is used by ajax request calls to prepend the base url
-    window.EV = window.EV || {};
+  // baseUtils.baseurl is used by ajax request calls to prepend the base url
+    window.baseUtils = window.baseUtils || {};
     //var baseUrl = window.location.origin + window.location.pathname;
     var baseUrl = window.location.protocol;
     baseUrl = '//' + window.location.host;
-    window.EV.baseurl = baseUrl;
-    window.EV.uibaseroute = baseUrl;
+    window.baseUtils.baseurl = baseUrl;
+    window.baseUtils.uibaseroute = baseUrl;

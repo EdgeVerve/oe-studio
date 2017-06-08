@@ -48,17 +48,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       if (document.readyState === 'complete') {
         var elem = document.getElementById('evfcssparser');
         if (elem) {
-          EV.designerData.classList = window.EV.designer.xExtractCSS(elem.contentDocument.styleSheets);
-        }
-
-        if (!sessionStorage.auth_token) {
-          if (!localStorage.swagger_accessToken) {
-            //Redirect to login page
-            location.assign('/login');
-          } else {
-            //Clone auth token from localStorage
-            sessionStorage.auth_token = localStorage.swagger_accessToken
-          }
+          baseUtils.designerData.classList = window.baseUtils.designer.xExtractCSS(elem.contentDocument.styleSheets);
         }
       }
     }

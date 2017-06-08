@@ -282,7 +282,7 @@
       saveRuleMap: function() {
         this.extractRules();
         var method = this.modelRule.id ? 'PUT' : 'POST';
-        var payload = EV.clone(this.modelRule);
+        var payload = baseUtils.clone(this.modelRule);
         payload.modelName = this.modelName;
         payload.defaultRules = this.defaultRules;
         payload.validationRules = this.validationRules;
