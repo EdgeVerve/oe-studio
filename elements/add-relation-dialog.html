@@ -6,122 +6,105 @@ here transfers the rights to the third party and open source components, except 
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
 <link rel="import" href="../../polymer/polymer.html">
 <dom-module id="add-relation-dialog">
-  <style>
-    paper-dialog {
-      background: var(--paper-dialog-background-color);
-    }
-    
-    .dialog-content {
-      min-height: 150px;
-      overflow: auto;
-    }
-    
-    .text,
-    .relation-type {
-      font-style: italic;
-      color: var(--secondary-text-color);
-    }
-    
-    .text {
-      padding: 8px 0;
-    }
-    
-    .relation-type iron-icon {
-      width: 30px;
-      height: 30px;
-      color: var(--default-primary-color);
-    }
-    
-    .relation-type {
-      margin: 0 10px;
-    }
-    
-    .model-name {
-      font-size: 18px;
-      color: var(--default-primary-color);
-    }
-    
-    .pull-right {
-      float: right;
-    }
+	<style>
+		paper-dialog {
+			background: var(--paper-dialog-background-color);
+		}
 
-  </style>
-  <template>
-        <paper-dialog id="addRelationDialog" modal>
-            <div class="dialog-header layout horizontal center">
-                <iron-icon icon="icons:link"></iron-icon>
+		.dialog-content {
+			min-height: 150px;
+			overflow: auto;
+		}
+
+		.text,
+		.relation-type {
+			font-style: italic;
+			color: var(--secondary-text-color);
+		}
+
+		.text {
+			padding: 8px 0;
+		}
+
+		.relation-type iron-icon {
+			width: 30px;
+			height: 30px;
+			color: var(--default-primary-color);
+		}
+
+		.relation-type {
+			margin: 0 10px;
+		}
+
+		.model-name {
+			font-size: 18px;
+			color: var(--default-primary-color);
+		}
+
+		.pull-right {
+			float: right;
+		}
+
+	</style>
+	<template>
+		<paper-dialog id="addRelationDialog" modal>
+			<div class="dialog-header layout horizontal center">
+				<iron-icon icon="icons:link"></iron-icon>
 				<span>Create Relation</span></div>
-            <div class="dialog-content">
-                <div class="text">You have attempted for the following relation</div>
-                <div class="flex horizontal layout center justified">
-                    <div class="model-name">{{source.name}}</div>
-                    <div class="relation-type">
-                        <iron-icon icon="{{relation.icon}}"></iron-icon>
-                        <paper-dropdown-menu no-label-float>
-                            <paper-menu class="dropdown-content" attr-for-selected="datavalue" selected="{{relation.type}}" on-iron-select="setIcon">
-                                <template is="dom-repeat" items="{{relationTypes}}">
-                                    <paper-item icon="{{item.icon}}" datavalue="{{item.type}}">{{item.type}}</paper-item>
-                                </template>
-  </paper-menu>
-  </paper-dropdown-menu>
-  </div>
-  <div class="model-name">{{target.name}}</div>
-  </div>
-  <paper-input char-counter maxlength="30" label="Set a name for this relation" value="{{relationName}}"></paper-input>
-  </div>
-  <div class="dialog-footer layout horizontal end-justified">
-    <paper-button id="cancel" secondary on-tap="cancelRelation">Cancel</paper-button>
-    <paper-button id="add" secondary disabled="{{!validateName(relationName)}}" on-tap="saveRelation">Create</paper-button>
-  </div>
-  </paper-dialog>
-  </template>
-  <script>
-    Polymer({
-      is: 'add-relation-dialog',
-      properties: {
-        relation: {
-          type: Object,
-          notify: true
-        },
-        relationTypes: {
-          type: Array,
-          value: [{
-            type: 'hasMany',
-            icon: 'oe-icons:has-many'
-          }, {
-            type: 'belongsTo',
-            icon: 'oe-icons:belongs-to'
-          }, {
-            type: 'hasOne',
-            icon: 'oe-icons:has-one'
-          }]
-        }
-      },
-      setIcon: function(e) {
-        this.set('relation.icon', e.detail.item.icon);
-      },
-      openDialog: function() {
-        this.$.addRelationDialog.open();
-        this.relationName = '';
-      },
-      hideDialog: function() {
-        this.$.addRelationDialog.close();
-      },
-      validateName: function(name) {
-        return (name && name.trim().length > 0)
-      },
-      saveRelation: function() {
-        this.fire('add-relation', {
-          'relation': this.relation,
-          'name': this.relationName
-        });
-        this.$.addRelationDialog.close();
-      },
-      cancelRelation: function() {
-        this.fire('undo-relation');
-        this.$.addRelationDialog.close();
-      }
-    });
+			<div class="dialog-content">
+				<div class="text">You have attempted for the following relation</div>
+				<div class="flex horizontal layout center justified">
+					<div class="model-name">{{source.name}}</div>
+					<div class="relation-type">
+						<oe-combo invalid="{{invalidRelation}}"
+								  required
+								  label="Relation type" no-label-float value="{{relation.type}}"
+								  listdata="[[dropdownConst.relationTypes]]"
+								  valueproperty="value"
+								  displayproperty="label"></oe-combo>
+					</div>
+					<div class="model-name">{{target.name}}</div>
+				</div>
+				<paper-input char-counter maxlength="30" label="Set a name for this relation" value="{{relationName}}"></paper-input>
+			</div>
+			<div class="dialog-footer layout horizontal end-justified">
+				<paper-button id="cancel" secondary on-tap="cancelRelation">Cancel</paper-button>
+				<paper-button id="add" secondary disabled="{{!validateName(relationName,invalidRelation)}}" on-tap="saveRelation">Create</paper-button>
+			</div>
+		</paper-dialog>
+	</template>
+	<script>
+		Polymer({
+			is: 'add-relation-dialog',
+			properties: {
+				relation: {
+					type: Object,
+					notify: true
+				}
+			},
+			behaviors: [DesignerBehavior.ConstantBehavior],
+			openDialog: function() {
+				this.$.addRelationDialog.open();
+				this.relationName = '';
+			},
+			hideDialog: function() {
+				this.$.addRelationDialog.close();
+			},
+			validateName: function(name,invalid) {
+				return (name && name.trim().length > 0 && !invalid);
+			},
+			saveRelation: function() {
+				this.fire('add-relation', {
+					'relation': this.relation,
+					'name': this.relationName
+				});
+				this.$.addRelationDialog.close();
+			},
+			cancelRelation: function() {
+				this.fire('undo-relation');
+				this.$.addRelationDialog.close();
+			}
+		});
 
-  </script>
+	</script>
 </dom-module>

@@ -1,627 +1,389 @@
 <script>
-  window.baseUtils = window.baseUtils || {};
-  var EV = window.baseUtils;
-  baseUtils.clone = function(from, to) {
-    if (from === null || typeof from !== 'object') {
-      return from;
-    }
-    if (from.constructor !== Object && from.constructor !== Array) {
-      return from;
-    }
-    if (from.constructor === Date || from.constructor === RegExp || from.constructor === Function ||
-      from.constructor === String || from.constructor === Number || from.constructor === Boolean) {
-      return new from.constructor(from);
-    }
-    to = to || new from.constructor();
+	window.baseUtils = window.baseUtils || {};
+	var EV = window.baseUtils;
+	baseUtils.clone = function(from, to) {
+		if (from === null || typeof from !== 'object') {
+			return from;
+		}
+		if (from.constructor !== Object && from.constructor !== Array) {
+			return from;
+		}
+		if (from.constructor === Date || from.constructor === RegExp || from.constructor === Function ||
+			from.constructor === String || from.constructor === Number || from.constructor === Boolean) {
+			return new from.constructor(from);
+		}
+		to = to || new from.constructor();
 
-    for (var name in from) {
-      to[name] = typeof to[name] === 'undefined' ? baseUtils.clone(from[name], null) : to[name];
-    }
+		for (var name in from) {
+			to[name] = typeof to[name] === 'undefined' ? baseUtils.clone(from[name], null) : to[name];
+		}
 
-    return to;
-  }
+		return to;
+	}
 
-  baseUtils.designerData = baseUtils.designerData || {}
-  var DesignerBehavior = DesignerBehavior || {}
+	baseUtils.designerData = baseUtils.designerData || {}
+	var DesignerBehavior = DesignerBehavior || {}
 
-  DesignerBehavior.HTMLBehavior = {
-    attached: function() {
-      this.elementInfo = {
-        imports: [],
-        css: ''
-      }
-    },
-    traverseDom: function(node, cb) {
+	DesignerBehavior.HTMLBehavior = {
+		attached: function() {
+			this.elementInfo = {
+				imports: [],
+				css: ''
+			}
+		},
+		traverseDom: function(node, cb) {
 
-      var newNode = cb(node);
-      if (newNode) {
-        node = newNode;
-      }
-      var children = node.children;
-      if (node.nodeName.toLowerCase() === 'template') {
-        children = node.content.children;
-      }
+			var newNode = cb(node);
+			if (newNode) {
+				node = newNode;
+			}
+			var children = node.children;
+			if (node.nodeName.toLowerCase() === 'template') {
+				children = node.content.children;
+			}
 
-      if (children) {
-        for (var i = 0, len = children.length; i < len; i++) {
-          this.traverseDom(children[i], cb);
-        }
-      }
-    },
-    traverseDomAll: function(node, cb) {
-      var newNode = cb(node);
-      if (newNode) {
-        node = newNode;
-      }
+			if (children) {
+				for (var i = 0, len = children.length; i < len; i++) {
+					this.traverseDom(children[i], cb);
+				}
+			}
+		},
+		traverseDomAll: function(node, cb) {
+			var newNode = cb(node);
+			if (newNode) {
+				node = newNode;
+			}
 
-      var children = node.childNodes;
-      if (node.nodeName.toLowerCase() === 'template') {
-        children = node.content.childNodes;
-      }
-      if (children) {
-        for (var i = 0, len = children.length; i < len; i++) {
-          this.traverseDomAll(children[i], cb);
-        }
-      }
-    },
+			var children = node.childNodes;
+			if (node.nodeName.toLowerCase() === 'template') {
+				children = node.content.childNodes;
+			}
+			if (children) {
+				for (var i = 0, len = children.length; i < len; i++) {
+					this.traverseDomAll(children[i], cb);
+				}
+			}
+		},
+		createNodeFromConfig: function(config) {
+			var self = this;
+			var ele;
+			switch (config.config.type) {
+				case 'form-field':
+					ele = self.createNodeFromElement(config);
+					break;
+				case 'element':
+				case 'container':
+				case 'snippet':
+				default:
+					if (config.content && config.content.length > 0) {
+						ele = self.createNodeFromStr(config.content)
+					} else {
+						ele = self.createNodeFromName(config.name);
+					}
+					break;
+			}
+			this.traverseDom(ele, function(n) {
+				var conf = baseUtils.designerData.elementList.find(function(e) {
+					return e.tag === n.tagName.toLowerCase();
+				})
+				if (conf && conf.config) {
+					n.setAttribute('oe-id', baseUtils.generateGuid());
+					n.setAttribute('oe-ele-type', conf.config.type);
+				}
+			})
+			return ele;
+		},
+		throughClone: function(node) {
+			var temp = document.createElement('template');
+			temp.innerHTML = node.outerHTML;
+			return temp.content.querySelector(node.nodeName.toLowerCase()).cloneNode(true)
+		},
+		createNodeFromName: function(nodeType) {
+			var parser = new DOMParser();
+			var str = '<' + nodeType + '></' + nodeType + '>';
+			var doc = parser.parseFromString(str, 'text/html');
+			return doc.querySelector(nodeType);
+		},
+		createNodeFromStr: function(str) {
+			var template = document.createElement('template');
+			template.innerHTML = str;
+			var self = this;
+			var ele
+			if (template.content.children.length > 1) {
+				ele = document.createElement('div');
+				ele.classList.add('snippet-container');
+				ele.setAttribute('id', 'snippet-container');
+				[].forEach.call(template.content.children, function(el) {
+					ele.appendChild(self.throughClone(el));
+				});
+			} else {
+				ele = template.content.children[0]
+			}
+			return ele
+		},
+		createNodeFromElement: function(config) {
+			var self = this;
+			var ele = self.createNodeFromName(config.name);
+			ele.classList.add('evfield');
+			return ele;
+		},
+		createNodeFromProp: function(config) {
+			var self = this;
+			var config = element.config;
+			var uiType = config.propDef.uitype || (baseUtils.TypeMappings[config.propDef.type] && baseUtils.TypeMappings[config.propDef.type]
+				.uiType) || 'oe-input';
+			var ele = self.createNodeFromName(uiType);
+			ele.classList.add('evfield');
+			ele.setAttribute('field-id', config.propName);
+			Object.keys(config.propDef).forEach(function(k) {
+				if (k !== 'uitype' && k !== 'type' && k !== 'itemtype' && k !== 'evtype') {
+					ele.setAttribute(k, '[[_fieldsmeta.' + config.propName + '.' + k + ']]')
+				}
+			})
+			if (!ele.getAttribute('label')) {
+				ele.setAttribute('label', config.propName)
+			}
+			return ele;
+		}
+	}
 
-    createNodeFromConfig: function(config) {
-      var self = this;
-      var ele;
-      switch (config.config.type) {
-        case 'form-field':
-          ele = self.createNodeFromElement(config);
-          break;
-        case 'element':
-        case 'container':
-        case 'snippet':
-        default:
-          if (config.content && config.content.length > 0) {
-            ele = self.createNodeFromStr(config.content)
-          } else {
-            ele = self.createNodeFromName(config.name);
-          }
-          break;
-      }
-      this.traverseDom(ele, function(n) {
-        var conf = baseUtils.designerData.elementList.find(function(e) {
-          return e.tag === n.tagName.toLowerCase();
-        })
-        if (conf && conf.config) {
-          n.setAttribute('oe-id', baseUtils.generateGuid());
-          n.setAttribute('oe-ele-type', conf.config.type);
-        }
-      })
-      return ele;
-    },
-    throughClone: function(node) {
-      var temp = document.createElement('template');
-      temp.innerHTML = node.outerHTML;
-      return temp.content.querySelector(node.nodeName.toLowerCase()).cloneNode(true)
-    },
-    createNodeFromName: function(nodeType) {
-      var parser = new DOMParser();
-      var str = '<' + nodeType + '></' + nodeType + '>';
-      var doc = parser.parseFromString(str, 'text/html');
-      return doc.querySelector(nodeType);
-    },
-    createNodeFromStr: function(str) {
-      var template = document.createElement('template');
-      template.innerHTML = str;
-      var self = this;
-      var ele
-      if (template.content.children.length > 1) {
-        ele = document.createElement('div');
-        ele.classList.add('snippet-container');
-        ele.setAttribute('id', 'snippet-container');
-        [].forEach.call(template.content.children, function(el) {
-          ele.appendChild(self.throughClone(el));
-        });
-      } else {
-        ele = template.content.children[0]
-      }
-      return ele
-    },
-    createNodeFromElement: function(config) {
-      var self = this;
-      var ele = self.createNodeFromName(config.name);
-      ele.classList.add('evfield');
-      return ele;
-    },
-    createNodeFromProp: function(config) {
-      var self = this;
-      var config = element.config;
-      var uiType = config.propDef.uitype || (baseUtils.TypeMappings[config.propDef.type] && baseUtils.TypeMappings[config.propDef.type]
-        .uiType) || 'oe-input';
-      var ele = self.createNodeFromName(uiType);
-      ele.classList.add('evfield');
-      ele.setAttribute('field-id', config.propName);
-      Object.keys(config.propDef).forEach(function(k) {
-        if (k !== 'uitype' && k !== 'type' && k !== 'itemtype' && k !== 'evtype') {
-          ele.setAttribute(k, '[[_fieldsmeta.' + config.propName + '.' + k + ']]')
-        }
-      })
-      if (!ele.getAttribute('label')) {
-        ele.setAttribute('label', config.propName)
-      }
-      return ele;
-    }
-  }
+	DesignerBehavior.CommonBehavior = {
+		polyObjectTopolyJson: function(polyObj) {
+			var polyJson = {};
+			Object.keys(polyObj).forEach(function(key) {
+				var val = polyObj[key];
+				if (key === 'properties') {
+					polyJson.properties = polyJson.properties || {}
+					Object.keys(val).forEach(function(propName) {
+						var propVal = val[propName];
+						polyJson.properties[propName] = {};
+						Object.keys(propVal).forEach(function(propKey) {
+							if (propKey === 'type') {
+								polyJson.properties[propName].type = propVal[propKey].name;
+							} else if (typeof propVal[propKey] === 'function') {
+								polyJson.properties[propName][propKey] = propVal[propKey].toString();
+							} else {
+								polyJson.properties[propName][propKey] = propVal[propKey]
+							}
+						})
+					})
+				} else if (key === 'behaviors') {
+					polyJson.behaviors = polyJson.behaviors || []
+					var EVbehviorList = []
+					Object.keys(EV)
+						.filter(function() {
+							return typeof baseUtils.CaptchaBehavior === 'object'
+						})
+						.forEach(function(k) {
+							EVbehviorList.push({
+								'name': 'baseUtils.' + k,
+								'value': EV[k]
+							})
+						});
 
+					val.forEach(function(beh) {
+						var ev = EVbehviorList.find(function(b) {
+							return (b.value === beh)
+						});
+						if (ev) {
+							polyJson.behaviors.push(ev.name);
+						} else if (beh.behaviorName) {
+							polyJson.behaviors.push(beh.behaviorName);
+						}
+					})
+				} else {
+					if (typeof val === 'function') {
+						polyJson.functions = polyJson.functions || {};
+						polyJson.functions[key] = val.toString();
+					} else {
+						polyJson[key] = val
+					}
+				}
+			})
+			return polyJson;
+		},
+		polyJsonTopolyObject: function(polyJson) {
+			var polyObj = {};
+			Object.keys(polyJson).forEach(function(key) {
+				var val = polyJson[key];
+				if (key === 'properties') {
+					polyObj.properties = polyObj.properties || {}
+					Object.keys(val).forEach(function(propName) {
+						var propVal = val[propName];
+						polyObj.properties[propName] = {};
+						Object.keys(propVal).forEach(function(propKey) {
+							try {
+								polyObj.properties[propName][propKey] = eval(propVal[propKey]);
+							} catch (e) {
+								polyObj.properties[propName][propKey] = (propVal[propKey]);
+							}
+						})
+					})
+				} else if (key === 'behaviors') {
+					polyObj.behaviors = polyObj.behaviors || []
+					val.forEach(function(beh) {
+						try {
+							polyObj.behaviors.push(eval(beh))
+						} catch (e) {
 
-  DesignerBehavior.polyBehavior = {
-    attached: function() {
-      this.listen(this, 'drop', 'dropHandler');
-      this.listen(this, 'tap', 'tapHandler');
-      this.listen(this, 'mouseover', 'mouseOverHandler');
-      this.listen(this, 'mouseout', 'mouseOutHandler');
+						}
+					})
+				} else if (key === 'functions') {
+					Object.keys(val).forEach(function(fnName) {
+						polyObj[fnName] = new Function('return ' + val[fnName])()
+					})
+				} else {
+					polyObj[key] = val
+				}
+			})
+			return polyObj;
+		},
+		polyJsonTopolyStr: function(polyJson) {
+			var extraAttr = [];
+			var polyArr = []
+			Object.keys(polyJson).forEach(function(key) {
+				var val = polyJson[key];
+				switch (key) {
+					case 'properties':
+						var propStr = '"properties":' + JSON.stringify(val);
+						if (JSON.stringify(val).length > 2) {
+							polyArr.push(propStr);
+						}
+						break;
+					case 'behaviors':
+						var behStr = '"behaviors":[' + val.toString() + ']';
+						if (val.toString().length > 0) {
+							polyArr.push(behStr);
+						}
+						break;
+					case 'functions':
+						var k = JSON.stringify(val);
+						k = k.replace(/","/g, ',"').replace(/"function/g, 'function');
+						var funcStr = k.slice(1, -2);
 
-      var list = this.querySelectorAll('[designer-id]');
-      [].forEach.call(list, function(el) {
-        el.draggable = true;
-        this.listen(el, 'dragstart', 'dragStartHandler')
-        this.listen(el, 'dragover', 'dragOverHandler')
-      }.bind(this))
-    },
-    tapHandler: function(evt) {
-      evt.stopPropagation();
-      var target = this.findClosestDesignerElement(evt.target);
-      if (target) {
-        this.fire('focus-on-element', target)
-      }
-    },
-    mouseOutHandler: function() {
-      this.fire('clear-hover-focus')
-    },
-    mouseOverHandler: function(evt) {
-      evt.stopPropagation();
-      if (evt.target === this) {
-        return
-      }
-      var target = this.findClosestDesignerElement(evt.target);
-      if (target) {
-        this.fire('hover-on-element', target);
-      }
-    },
-    dragStartHandler: function(evt) {
-      evt.stopPropagation();
-      evt.dataTransfer.setData('action', 'move')
-      evt.dataTransfer.setData('eleId', evt.target.getAttribute('designer-id'));
-    },
-    dragOverHandler: function(evt) {
-      var self = this;
-      evt.preventDefault();
-      evt.stopPropagation();
-      var parent = self.findClosestDesignerContainer(evt.target);
-      var target = self.findClosestDesignerElement(evt.target);
-      if (!parent) {
-        self.fire('clear-drop-focus');
-        return;
-      }
-      self.fire('drop-zone-element', parent);
-      if (parent !== target) {
-        var dropClass = self.calculateDropIndex(evt);
-        target.classList.add('drop-target')
-        target.classList.add(dropClass)
-      } else {
-        var prev = self.querySelector('.drop-target');
-        if (prev) {
-          prev.classList.remove('drop-target')
-          prev.classList.remove('drop-after')
-          prev.classList.remove('drop-before')
-        }
-      }
-    },
-    dropHandler: function(evt) {
-      var self = this;
-      evt.stopPropagation();
-      var action = evt.dataTransfer.getData('action');
-      var parent = self.findClosestDesignerContainer(evt.target);
-      var target = self.findClosestDesignerElement(evt.target);
-      var index = -1;
-      if (parent !== target) {
-        var dropClass = self.calculateDropIndex(evt);
-        index = [].indexOf.call(target.parentNode.children, target);
-        if (dropClass === 'drop-after') {
-          index++;
-        }
-      }
-      var desgId = parent.getAttribute('designer-id');
-      var ele;
-      if (action === 'add') {
-        var configStr = evt.dataTransfer.getData('configStr');
-        var config = JSON.parse(configStr);
+						if (funcStr.length > 0) {
+							polyArr.push(funcStr);
+						}
 
-        if (config && config.config.restrictDropOn === 'HTML' && !self._desigerconfig.isTruePolymer) {
-          self.fire('oe-show-error', 'This element can only be used within a Polymer element');
-          self.fire('clear-drop-focus');
-          return;
-        }
+						break;
+					case 'listeners':
+						var listenerStr = '"listeners":' + JSON.stringify(val);
+						if (JSON.stringify(val).length > 2) {
+							polyArr.push(listenerStr);
+						}
+						break;
+					default:
+						if (typeof val === 'string') {
+							extraAttr.push(('"' + key + '":"' + val + '"'));
+						}
+				}
+			});
+			if (extraAttr.join(',\n').length > 0) {
+				polyArr.push(extraAttr.join(',\n'))
+			}
+			var PolyStr = 'MetaPolymer({\n' + polyArr.join(',\n') + '\n})'
+			return PolyStr
+		}
+	}
 
-        if (config.name === 'form builder') {
-          var prevForm = self.querySelector('[desg-handler="form-builder"]');
-          if (prevForm) {
-            self.fire('oe-show-error', 'There can be only 1 form builder in a element');
-            self.fire('clear-drop-focus');
-            return;
-          }
-        }
-          ele = self.createNodeFromConfig(config);
-         self.fire('add-node', {
-            'parentId': desgId,
-            'node': ele,
-            'index': index
-          });
-        } else {
-          var droppedId = evt.dataTransfer.getData('eleId');
-          ele = self.querySelector('[designer-id="' + droppedId + '"]');
-          if (!ele || ele.contains(parent)) {
-            self.fire('clear-drop-focus');
-            return;
-          }
-          self.fire('add-node', {
-            'parentId': desgId,
-            'node': ele,
-            'index': index
-          });
-      }
-    },
-    calculateDropIndex: function(evt) {
-      var self = this;
-      var target = self.findClosestDesignerElement(evt.target);
-      var mousePosition = {
-        top: evt.clientY,
-        left: evt.clientX
-      };
+	DesignerBehavior.ConstantBehavior = {
+		attached: function() {
 
-      var targetRect = target.getBoundingClientRect();
-      var targetMargin = {
-        top: parseInt(getComputedStyle(target).marginTop.slice(0, -2)),
-        bottom: parseInt(getComputedStyle(target).marginBottom.slice(0, -2)),
-        right: parseInt(getComputedStyle(target).marginRight.slice(0, -2)),
-        left: parseInt(getComputedStyle(target).marginLeft.slice(0, -2))
-      }
+			var relationTypes = [
+			{
+				value: 'belongsTo',
+				label: 'Belongs To',
+				icon: 'oe-icons:belongs-to'
+			}, {
+				value: 'hasOne',
+				label: 'Has One',
+				icon: 'oe-icons:has-one'
+			},{
+				value: 'hasMany',
+				label: 'Has Many',
+				icon: 'oe-icons:has-many'
+			},{
+				value: 'embedsOne',
+				label: 'Embeds One',
+				icon: 'oe-icons:embeds-one'
+			},{
+				value: 'embedsMany',
+				label: 'Embeds Many',
+				icon: 'oe-icons:embeds-many'
+			}];
+/*
+		Polymorphic currently not created from designer
+			{
+				value: 'polymorphic',
+				label: 'Polymorphic',
+				icon: 'oe-icons:polymorpic'
+			}
+*/
 
-      Object.keys(targetMargin).forEach(function(m) {
-        targetMargin[m] = isNaN(targetMargin[m]) ? 0 : targetMargin[m]
-      })
+			var readProperty = [{
+				value: 'exists',
+				label: 'Exists'
+			}, {
+				value: 'find',
+				label: 'Find'
+			}, {
+				value: 'findById',
+				label: 'Find By Id'
+			}, {
+				value: 'findOne',
+				label: 'Find One'
+			}, {
+				value: 'count',
+				label: 'Count'
+			}]
 
-      var targetPos = {
-        top: targetRect.top - targetMargin.top,
-        left: targetRect.left - targetMargin.left,
-        width: targetRect.width + targetMargin.left + targetMargin.right,
-        height: targetRect.height + targetMargin.top + targetMargin.bottom
-      };
-      var targetCenter = {
-        top: targetPos.top + targetPos.height / 2,
-        left: targetPos.left + targetPos.width / 2
-      }
-      var prev = self.querySelector('.drop-target');
-      if (prev) {
-        prev.classList.remove('drop-target')
-        prev.classList.remove('drop-after')
-        prev.classList.remove('drop-before')
-      }
+			var writeProperty = [{
+				value: 'create',
+				label: 'Create'
+			}, {
+				value: 'upsert',
+				label: 'Upsert'
+			}, {
+				value: 'destroyById',
+				label: 'Delete By Id'
+			}]
 
-      var dropClass = 'drop-before'
-      if (mousePosition.top > targetCenter.top) {
-        dropClass = 'drop-after';
-      }
-      return dropClass
-    },
-    findClosestDesignerElement: function(node) {
-      if (node) {
-        var pointer = node;
-        var isValid = pointer.getAttribute('designer-id');
-        while (!isValid && pointer && pointer.parentElement) {
+			var aclPropertyList = {
+				write: writeProperty,
+				read: readProperty,
+				all: writeProperty.concat(readProperty)
+			}
+			var aclAccessType = [{
+				value: '*',
+				label: 'All'
+			}, {
+				value: 'WRITE',
+				label: 'WRITE'
+			}, {
+				value: 'READ',
+				label: 'READ'
+			}, {
+				value: 'EXECUTE',
+				label: 'EXECUTE'
+			}]
 
-          pointer = pointer.parentElement;
+			var dropdownList = {
+				relationTypes: relationTypes,
+				acl: {
+					property: aclPropertyList,
+					access: aclAccessType
+				}
+			}
 
-          if (!this.contains(pointer)) {
-            pointer = null;
-          } else {
-            isValid = !!pointer.getAttribute('designer-id');
-          }
-        }
-        return pointer;
-      }
-    },
-    findClosestDesignerContainer: function(node) {
-      if (node) {
-        var pointer = node;
-        var isValid = pointer.hasAttribute('designer_container');
-        while (!isValid && pointer && pointer.parentElement) {
+			var regexObj = {
+				camelCase: "^([A-Z][a-z0-9]+)+",
+				dashCase: "^([a-zA-Z0-9]+)((-[a-zA-Z0-9]+)+)$",
+				polymerName: "^([a-z]+)((-[a-z0-9]+)+)$"
+			}
 
-          pointer = pointer.parentElement;
-
-          if (!this.contains(pointer)) {
-            pointer = null;
-          } else {
-            isValid = pointer.hasAttribute('designer_container');
-          }
-        }
-        return pointer;
-      }
-    }
-  }
-
-  DesignerBehavior.CommonBehavior = {
-    polyObjectTopolyJson: function(polyObj) {
-      var polyJson = {};
-      Object.keys(polyObj).forEach(function(key) {
-        var val = polyObj[key];
-        if (key === 'properties') {
-          polyJson.properties = polyJson.properties || {}
-          Object.keys(val).forEach(function(propName) {
-            var propVal = val[propName];
-            polyJson.properties[propName] = {};
-            Object.keys(propVal).forEach(function(propKey) {
-              if (propKey === 'type') {
-                polyJson.properties[propName].type = propVal[propKey].name;
-              } else if (typeof propVal[propKey] === 'function') {
-                polyJson.properties[propName][propKey] = propVal[propKey].toString();
-              } else {
-                polyJson.properties[propName][propKey] = propVal[propKey]
-              }
-            })
-          })
-        } else if (key === 'behaviors') {
-          polyJson.behaviors = polyJson.behaviors || []
-          var EVbehviorList = []
-          Object.keys(EV)
-            .filter(function() {
-              return typeof baseUtils.CaptchaBehavior === 'object'
-            })
-            .forEach(function(k) {
-              EVbehviorList.push({
-                'name': 'baseUtils.' + k,
-                'value': EV[k]
-              })
-            });
-
-          val.forEach(function(beh) {
-            var ev = EVbehviorList.find(function(b) {
-              return (b.value === beh)
-            });
-            if (ev) {
-              polyJson.behaviors.push(ev.name);
-            } else if (beh.behaviorName) {
-              polyJson.behaviors.push(beh.behaviorName);
-            }
-          })
-        } else {
-          if (typeof val === 'function') {
-            polyJson.functions = polyJson.functions || {};
-            polyJson.functions[key] = val.toString();
-          } else {
-            polyJson[key] = val
-          }
-        }
-      })
-      return polyJson;
-    },
-    polyJsonTopolyObject: function(polyJson) {
-      var polyObj = {};
-      Object.keys(polyJson).forEach(function(key) {
-        var val = polyJson[key];
-        if (key === 'properties') {
-          polyObj.properties = polyObj.properties || {}
-          Object.keys(val).forEach(function(propName) {
-            var propVal = val[propName];
-            polyObj.properties[propName] = {};
-            Object.keys(propVal).forEach(function(propKey) {
-              try {
-                polyObj.properties[propName][propKey] = eval(propVal[propKey]);
-              } catch (e) {
-                polyObj.properties[propName][propKey] = (propVal[propKey]);
-              }
-            })
-          })
-        } else if (key === 'behaviors') {
-          polyObj.behaviors = polyObj.behaviors || []
-          val.forEach(function(beh) {
-            try {
-              polyObj.behaviors.push(eval(beh))
-            }catch(e){
-              
-            }
-          })
-        } else if (key === 'functions') {
-          Object.keys(val).forEach(function(fnName) {
-            polyObj[fnName] = new Function('return ' + val[fnName])()
-          })
-        } else {
-          polyObj[key] = val
-        }
-      })
-      return polyObj;
-    },
-    polyJsonTopolyStr: function(polyJson) {
-      var extraAttr = [];
-      var polyArr = []
-      Object.keys(polyJson).forEach(function(key) {
-        var val = polyJson[key];
-        switch (key) {
-          case 'properties':
-            var propStr = '"properties":' + JSON.stringify(val);
-            if (JSON.stringify(val).length > 2) {
-              polyArr.push(propStr);
-            }
-            break;
-          case 'behaviors':
-            var behStr = '"behaviors":[' + val.toString() + ']';
-            if (val.toString().length > 0) {
-              polyArr.push(behStr);
-            }
-            break;
-          case 'functions':
-            var k = JSON.stringify(val);
-            k = k.replace(/","/g, ',"').replace(/"function/g, 'function');
-            var funcStr = k.slice(1, -2);
-
-            if (funcStr.length > 0) {
-              polyArr.push(funcStr);
-            }
-
-            break;
-          case 'listeners':
-            var listenerStr = '"listeners":' + JSON.stringify(val);
-            if (JSON.stringify(val).length > 2) {
-              polyArr.push(listenerStr);
-            }
-            break;
-          default:
-            if (typeof val === 'string') {
-              extraAttr.push(('"' + key + '":"' + val + '"'));
-            }
-        }
-      });
-      if (extraAttr.join(',\n').length > 0) {
-        polyArr.push(extraAttr.join(',\n'))
-      }
-      var PolyStr = 'MetaPolymer({\n' + polyArr.join(',\n') + '\n})'
-      return PolyStr
-    }
-  }
-
-  DesignerBehavior.StickyBehavior = {
-    makeSticky: function(node) {
-      this.listen(node, 'track', 'trackListener');
-    },
-    trackListener: function(e) {
-      var target = e.currentTarget;
-      var targetRect = target.getBoundingClientRect();
-      switch (e.detail.state) {
-        case 'start':
-          this.settingTracker = {
-            dx: (e.detail.x - targetRect.left),
-            dy: (e.detail.y - targetRect.top)
-          }
-          target.style.transition = 'none';
-          target.style.cursor = '-webkit-grabbing';
-          break;
-        case 'track':
-          target.style.left = (e.detail.x - this.settingTracker.dx) + 'px';
-          target.style.top = (e.detail.y - this.settingTracker.dy) + 'px';
-          break;
-        case 'end':
-          target.style.cursor = 'initial';
-          target.style.transition = '';
-          break;
-        default : 
-          break;
-      }
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  }
-
-  DesignerBehavior.ResizableBehavior = {
-    makeResizable: function(node, config) {
-      node.style.position = 'relative';
-      var resizeHandler = function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        var targetRect = node.getBoundingClientRect();
-        var computedStyle = getComputedStyle(node);
-
-        var nodeBorder = {
-          top: (parseInt(computedStyle.borderTopWidth.slice(0, -2)) || 0),
-          bottom: (parseInt(computedStyle.borderBottomWidth.slice(0, -2)) || 0),
-          right: (parseInt(computedStyle.borderRightWidth.slice(0, -2)) || 0),
-          left: (parseInt(computedStyle.borderLeftWidth.slice(0, -2)) || 0)
-        }
-        var nodeMargin = {
-          top: (parseInt(computedStyle.marginTop.slice(0, -2)) || 0),
-          bottom: (parseInt(computedStyle.marginBottom.slice(0, -2)) || 0),
-          right: (parseInt(computedStyle.marginRight.slice(0, -2)) || 0),
-          left: (parseInt(computedStyle.marginLeft.slice(0, -2)) || 0)
-        }
-        var targetDimension = {
-          width: targetRect.width - (nodeBorder.right + nodeBorder.left + nodeMargin.left + nodeMargin.right),
-          height: targetRect.height - (nodeBorder.top + nodeBorder.bottom + nodeMargin.top + nodeMargin.bottom)
-        }
-
-        var direction = event.target.getAttribute('direction');
-        switch (event.detail.state) {
-          case 'start':
-            if (typeof config.dragStart === 'function') {
-              config.dragStart(event);
-            }
-            document.body.style.userSelect = 'none';
-            break;
-          case 'track':
-            var valid = false;
-            var width;
-            var height;
-            switch (direction) {
-              case 'e':
-                width = targetDimension.width + event.detail.ddx;
-                if (width >= (config.minWidth || 0) && width <= (config.maxWidth || Infinity)) {
-                  valid = true;
-                  node.style.width = width + 'px';
-                }
-                break;
-              case 'w':
-                width = targetDimension.width - event.detail.ddx;
-                if (width >= (config.minWidth || 0) && width <= (config.maxWidth || Infinity)) {
-                  valid = true;
-                  node.style.width = width + 'px';
-                }
-                break;
-              case 'n':
-                height = targetDimension.height - event.detail.ddy;
-                if (height >= (config.minHeight || 0) && height <= (config.maxHeight || Infinity)) {
-                  valid = true;
-                  node.style.height = height + 'px';
-                }
-                break;
-              case 's':
-                height = targetDimension.height + event.detail.ddy;
-                if (height >= (config.minHeight || 0) && height <= (config.maxHeight || Infinity)) {
-                  valid = true;
-                  node.style.height = height + 'px';
-                }
-                break;
-              default : 
-                break;
-            }
-            if (typeof config.onDrag === 'function' && valid) {
-              config.onDrag(event);
-            }
-            break;
-          case 'end':
-            if (typeof config.dragEnd === 'function') {
-              config.dragEnd(event);
-            }
-            document.body.style.userSelect = '';
-            break;
-          default : 
-            break;
-        }
-
-      }
-      if (config.handler) {
-        config.handler.forEach(function(dir) {
-          if (['n', 'e', 'w', 's'].indexOf(dir) === -1) {
-            return;
-          }
-          var handler = document.createElement('div');
-          handler.classList.add('oe-resize-handler');
-          handler.classList.add('oe-resize-' + dir);
-          handler.setAttribute('direction', dir);
-          node.appendChild(handler);
-          handler.addEventListener('track', resizeHandler);
-        }.bind(this));
-      }
-    },
-    disableResizable: function(node) {
-      [].forEach.call(node.childNodes, function(child) {
-        if (child.classList && child.classList.contains('oe-resize-handler')) {
-          node.removeChild(child);
-        }
-      })
-    }
-  }
+			this.set('dropdownConst', dropdownList);
+			this.set('regexpConst', regexObj);
+		}
+	}
 
 </script>
