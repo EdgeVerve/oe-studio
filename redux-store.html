@@ -1,6 +1,9 @@
 <script src="scripts/redux.js"></script>
 <link rel="import" href="../polymer-redux/polymer-redux.html">
 <script>
+
+var reduxFactory = (function(){
+
   var initialState = {
     dom: null,
     selectedElement: null,
@@ -218,8 +221,12 @@
     }
     return modifiedState;
   }
+  return {
+	  reducer:reducer
+  }
+})()
 
-  var store = Redux.createStore(reducer);
+  var store = Redux.createStore(reduxFactory.reducer);
   var ReduxBehavior = PolymerRedux(store);
 
 </script>
