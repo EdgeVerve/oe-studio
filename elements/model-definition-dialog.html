@@ -430,11 +430,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             class: 'edit'
           }, {
             name: 'Properties',
-            optional: false,
+            optional: true,
             class: 'shownum'
           }, {
             name: 'Validations',
-            optional: false,
+            optional: true,
             class: 'shownum'
           }, {
             name: 'Relations',
@@ -442,7 +442,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             class: 'shownum'
           }, {
             name: "ACL's",
-            optional: false,
+            optional: true,
             class: 'shownum'
           }]
         },
@@ -873,20 +873,21 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }
 
         switch (tabindex) {
+
           case 5:
-            flags[4] = this.$.validationGrid.customValidation();
+            flags[4] = this.$.aclGrid.customValidation();
             if (flags[4]) {
-              this.$.validationGrid._setReadOnly();
-            }
-          case 4:
-            flags[3] = this.$.aclGrid.customValidation();
-            if (flags[3]) {
               this.$.aclGrid._setReadOnly();
             }
-          case 3:
-            flags[2] = this.$.relationGrid.customValidation();
-            if (flags[2]) {
+          case 4:
+            flags[3] = this.$.relationGrid.customValidation();
+            if (flags[3]) {
               this.$.relationGrid._setReadOnly();
+            }
+		case 3:
+            flags[2] = this.$.validationGrid.customValidation();
+            if (flags[2]) {
+              this.$.validationGrid._setReadOnly();
             }
           case 2:
             flags[1] = this.$.propertyGrid.customValidation();

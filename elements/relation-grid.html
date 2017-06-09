@@ -180,22 +180,18 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     <paper-input required label="Relation name" error-message="Please enter the relation name" no-label-float value="{{relation.__name__}}"></paper-input>
                   </div>
                   <div class="gridCol">
-                    <paper-dropdown-menu label="Relation type" no-label-float required error-message="Please select the relation type">
-                      <paper-menu class="dropdown-content" attr-for-selected="datavalue" selected="{{relation.type}}">
-                        <template is="dom-repeat" items="[[relationTypes]]" as="type">
-                          <paper-item datavalue="{{type}}">{{type}}</paper-item>
-                        </template>
-                      </paper-menu>
-                    </paper-dropdown-menu>
+					  <oe-combo label="Relation type" no-label-float required value="{{relation.type}}"
+								listdata="[[dropdownConst.relationTypes]]"
+								displayproperty="label"
+								valueproperty="value"
+								error-message="Please select the relation type"></oe-combo>
                   </div>
                   <div class="gridCol">
-                    <paper-dropdown-menu label="Relation model" no-label-float required error-message="Please select the model">
-                      <paper-menu class="dropdown-content" attr-for-selected="datavalue" selected="{{relation.model}}">
-                        <template is="dom-repeat" items="[[modelList]]" as="model">
-                          <paper-item datavalue="[[model.name]]">[[model.name]]</paper-item>
-                        </template>
-                      </paper-menu>
-                    </paper-dropdown-menu>
+					  <oe-combo label="Relation model" no-label-float required value="{{relation.model}}"
+								listdata="[[modelList]]"
+								displayproperty="name"
+								valueproperty="name"
+								error-message="Please select the model"></oe-combo>
                   </div>
                   <div class="gridCol">
                     <paper-input class$="{{_shouldDisplayForeignKey(relation.type)}}" label="Foreign key" no-label-float value="{{relation.foreignKey}}"></paper-input>
@@ -231,12 +227,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             return {}
           },
           notify: true
-        },
-        relationTypes: {
-          type: Array,
-          value: function () {
-            return ['hasMany', 'belongsTo', 'hasOne', 'hasAndBelongsToMany', 'embedsMany']
-          }
         },
         deleteMultiple: {
           type: Boolean,
@@ -287,7 +277,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }.bind(this));
       },
       observers: ['relationsChanged(relations.*)'],
-      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior],
+      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior,DesignerBehavior.ConstantBehavior],
       customValidation: function () {
         var valid = true;
         var isEmpty = this.isEditableEmpty();

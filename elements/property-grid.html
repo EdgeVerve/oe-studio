@@ -275,13 +275,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     <paper-input required label="Property name" error-message="Please enter the property name" no-label-float value="{{property.__name__}}"></paper-input>
                   </div>
                   <div class="gridCol prop-type">
-                    <paper-dropdown-menu required error-message="Please choose the type" label="Property type" no-label-float>
-                      <paper-menu class="dropdown-content" attr-for-selected="datavalue" selected="{{property.type}}">
-                        <template is="dom-repeat" items="[[propertyTypes]]" as="model">
-                          <paper-item datavalue="[[model]]">[[model]]</paper-item>
-                        </template>
-                      </paper-menu>
-                    </paper-dropdown-menu>
+					  <oe-combo label="Property type" no-label-float required value="{{property.type}}"
+								listdata="[[propertyTypes]]"
+								error-message="Please select the type"></oe-combo>
                   </div>
                   <div class="gridCol prop-required">
                     <paper-checkbox noink checked="{{property.required}}">

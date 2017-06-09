@@ -1356,13 +1356,16 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           self.addEventListener('add-relation', function (e) {
             self.relationName = e.detail.name;
             self.selectedRelation.type = e.detail.relation.type;
-            self.selectedRelation.icon = e.detail.relation.icon;
+              var pascalToCamel = function(str){
+				return str[0].toLowerCase() + str.substr(1)
+			  }
+
             //adding relations in the source model
             var relationObj = {
               '__name__': self.relationName,
               type: self.selectedRelation.type,
               model: self.currentConnection.target.modelObj.name,
-              foreignKey: self.relationName
+              foreignKey: pascalToCamel(self.currentConnection.source.modelObj.name) + "Id"
             };
             self.push('currentConnection.source.modelObj.relations',
               relationObj);

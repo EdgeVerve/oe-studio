@@ -233,23 +233,18 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     <paper-input required label="Validation name" error-message="Please enter the validation name" no-label-float value="{{validation.__name__}}"></paper-input>
                   </div>
                   <div class="gridCol">
-                    <paper-dropdown-menu required error-message="Please choose the type" label="Validation type" no-label-float>
-                      <paper-menu class="dropdown-content" attr-for-selected="datavalue" selected="{{validation.type}}">
-                        <template is="dom-repeat" items="[[validationTypes]]" as="model">
-                          <paper-item datavalue="[[model]]">[[model]]</paper-item>
-                        </template>
-                      </paper-menu>
-                    </paper-dropdown-menu>
+					  <oe-combo label="Validation type" no-label-float required value="{{validation.type}}"
+								listdata="[[validationTypes]]"
+								error-message="Please select the type"></oe-combo>
                   </div>
                   <div class="gridCol">
-                    <paper-dropdown-menu id="referenceModelDropDown" required error-message="Please choose the model" label="Referece model"
-                      no-label-float disabled="[[ifDisabled(validation.type,'custom')]]">
-                      <paper-menu class="dropdown-content" attr-for-selected="datavalue" selected="{{validation.refModel}}">
-                        <template is="dom-repeat" items="[[modelList]]" as="model">
-                          <paper-item datavalue="[[model.name]]">[[model.name]]</paper-item>
-                        </template>
-                      </paper-menu>
-                    </paper-dropdown-menu>
+					  <oe-combo id="referenceModelDropDown"
+								label="Referece model" no-label-float
+								disabled="[[ifDisabled(validation.type,'custom')]]"
+								required value="{{validation.refModel}}"
+								listdata="[[modelList]]"
+								displayproperty="name" valueproperty="name"
+								error-message="Please select the model"></oe-combo>
                   </div>
                   <div class="gridCol">
                     <paper-input required label="Reference" error-message="Please enter the reference" no-label-float value="{{validation.refWhere}}"

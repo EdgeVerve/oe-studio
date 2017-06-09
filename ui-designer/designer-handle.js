@@ -473,7 +473,7 @@ var designerController = (function () {
 		} else {
 			var link = document.createElement('link');
 			link.setAttribute('rel', 'import');
-			link.setAttribute('href', '/oe-designer/iframe-imports.html');
+			link.setAttribute('href', '/bower_components/oe-studio/iframe-imports.html');
 			link.onload = function () {
 				isElementsLoaded = true;
 				fireParent('oe-show-success', 'Initial Elements Loaded successfully');

@@ -14,10 +14,7 @@
     "test": "wct",
     "postinstall": "bower install"
   },
-  "pre-commit": [
-    "lint",
-    "test"
-  ],
+  "pre-commit": [],
   "keywords": [
     "bower",
     "git",
