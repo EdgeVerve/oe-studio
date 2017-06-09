@@ -36,5 +36,10 @@
     "stylelint-config-standard": "^16.0.0",
     "stylelint-processor-html": "^1.0.0",
     "web-component-tester": "^5.0.1"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-if": "^2.0.2",
+    "gulp-jshint": "^2.0.4"
   }
 }

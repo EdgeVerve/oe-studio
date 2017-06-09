@@ -1,0 +1,39 @@
+<script src="scripts/redux.js"></script>
+<link rel="import" href="../polymer-redux/polymer-redux.html">
+<link rel="import" href="behaviours/designer-wrapper-behaviors.html">
+<script>
+  var initialData = {
+    modelsList: [],
+    propertysList: [],
+    baseTypes : []
+  }
+
+  var setModelList = function(){
+    
+  }
+
+  var reducerFunction = function (state, action) {
+    if (!state) {
+      return initialData;
+    }
+    var modifiedState;
+    switch (action.type) {
+      case 'INIT':
+        debugger;
+        modifiedState = Object.assign({}, state, deepCopy(initialData));
+        break;
+      case 'UPDATE_MODELS_LIST':
+        break;
+      default:
+        modifiedState = Object.assign({}, state, deepCopy(initialData));
+    }
+    return modifiedState;
+  }
+
+  var deepCopy = function (data) {
+    return baseUtils.clone(data);
+  }
+
+  var reduxStore = Redux.createStore(reducerFunction);
+  var ModelReduxBehavior = PolymerRedux(reduxStore);
+</script>

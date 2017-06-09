@@ -9,7 +9,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 <link rel="import" href="../behaviours/designer-wrapper-behaviors.html">
 <dom-module id="model-definition-dialog">
   <style>
-    :host {
+     :host {
       color: var(--secondary-text-color);
       letter-spacing: 0.75px;
     }
@@ -70,7 +70,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       overflow-y: auto;
     }
 
-    .base-properties-list > div {
+    .base-properties-list>div {
       display: inline-block;
       background: #d8d8d8;
       font-size: 12px;
@@ -111,15 +111,15 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       margin-top: -2px;
     }
 
-    .stepper > iron-selector div.tab-edit {
+    .stepper>iron-selector div.tab-edit {
       background: var(--accent-color);
     }
 
-    .stepper > iron-selector div.tab-valid {
+    .stepper>iron-selector div.tab-valid {
       background: var(--accent-color);
     }
 
-    .stepper > iron-selector div.tab-invalid {
+    .stepper>iron-selector div.tab-invalid {
       color: var(--error-color);
       display: inline-block;
     }
@@ -134,19 +134,19 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       font-size: 12px;
     }
 
-    .stepper > iron-selector > div.iron-selected .tab-name .main-txt {
+    .stepper>iron-selector>div.iron-selected .tab-name .main-txt {
       font-weight: bold;
     }
 
-    .stepper > iron-selector .tab-name.invalid .main-txt {
+    .stepper>iron-selector .tab-name.invalid .main-txt {
       color: var(--error-color);
     }
 
-    .stepper > iron-selector .tab-name.invalid .alt-txt {
+    .stepper>iron-selector .tab-name.invalid .alt-txt {
       color: var(--error-color);
     }
 
-    .stepper > iron-selector > div + div:before {
+    .stepper>iron-selector>div+div:before {
       height: 1px;
       width: 60px;
       display: inline-block;
@@ -183,19 +183,19 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       justify-content: space-between;
     }
 
-    .toggle-btn-container:not(.custom) > * {
+    .toggle-btn-container:not(.custom)>* {
       flex: 1;
     }
 
-    .model-option > div:nth-child(1) {
+    .model-option>div:nth-child(1) {
       flex: 3;
     }
 
-    .model-option > *:nth-child(2) {
+    .model-option>*:nth-child(2) {
       flex: 6;
     }
 
-    iron-icon + span {
+    iron-icon+span {
       margin-right: 8px;
     }
 
@@ -220,7 +220,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       font-size: 14px;
     }
 
-    .mixin-listing > div {
+    .mixin-listing>div {
       height: 40px;
       padding: 4px 8px;
       box-sizing: border-box;
@@ -712,7 +712,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 var index = this.modelList.findIndex(function (x) {
                   return x.id == response.id;
                 });
-
                 this.set('modelList.' + index, this.vm);
                 this.fire('model-saved', {
                   'model': this.vm,

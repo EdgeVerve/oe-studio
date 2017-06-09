@@ -6,9 +6,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 <link rel="import" href="../behaviours/designer-dnd-behavior.html">
 <link rel="import" href="../behaviours/designer-tab-behaviours.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../model-redux-store.html">
 <dom-module id="model-work-area">
   <style>
-    :host {
+     :host {
       display: block;
       --dark-border-color: 1px solid rgba(0, 0, 0, 0.22);
     }
@@ -18,7 +19,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       transform: scale(0)
     }
 
-    :host.show-end-points .jtk-endpoint {
+     :host.show-end-points .jtk-endpoint {
       transform: scale(1)
     }
 
@@ -31,8 +32,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     ul,
     li {
       list-style: none;
-      padding: 0px;
-      margin: 0px;
+      padding: 0;
+      margin: 0;
     }
     /*workarea container styles*/
 
@@ -64,7 +65,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       height: calc(100vh - 40px);
       padding: 8px;
       box-sizing: border-box;
-      background: #DADADA;
+      background: #dadada;
       width: 100%;
       position: relative;
       overflow: auto;
@@ -84,14 +85,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       --paper-spinner-stroke-width: 1px;
       transform: scale(2);
     }
-    /*Tab styling*/
+    /* Tab styling */
 
     .tab-name.data-manager {
-      color: #DB8800;
+      color: #db8800;
     }
 
     .tab-name.model-detail {
-      color: #00B0BF;
+      color: #00b0Bf;
     }
 
     .tab-name iron-icon.dirty-flag {
@@ -129,6 +130,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     }
 
     .tab-name iron-icon:not(.dirty-flag) {
+
       --iron-icon-height: 16px;
       --iron-icon-width: 16px;
       border-radius: 50%;
@@ -136,12 +138,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
     .add-empty-tab {
       color: #fff;
-      background: #8E8E8E;
-      margin: 0px;
+      background: #8e8e8e;
+      margin: 0;
       height: 20px;
     }
 
     .add-empty-tab iron-icon {
+
       --iron-icon-height: 16px;
       --iron-icon-width: 16px;
     }
@@ -157,12 +160,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     }
 
     .custom-menu ul {
-      padding: 8px 0px;
-      margin: 0px;
+      padding: 8px 0;
+      margin: 0;
     }
 
     .custom-menu paper-button {
-      padding: 0px 12px !important;
+      padding: 0 12px !important;
       height: 35px !important;
     }
 
@@ -173,7 +176,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     }
 
     .custom-menu ul li {
-      padding: 0px 8px;
+      padding: 0 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -185,7 +188,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     }
 
     .custom-menu li.drop-down-list-item:hover {
-      background: #EEEEEE;
+      background: #eee;
     }
 
     .tab-header {
@@ -199,7 +202,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
     .tab-scroll-btn {
       height: 36px;
-      background: #EFEFEF;
+      background: #efefef;
       z-index: 1;
     }
 
@@ -214,7 +217,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     .tab-scroll-btn.hide-btn {
       display: none;
     }
-    /*tab action buttons styles*/
+    /* tab action buttons styles */
 
     .tab-buttons {
       position: absolute;
@@ -261,7 +264,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     }
 
     .tab-buttons>* {
-      margin: 0px 8px;
+      margin: 0 8px;
     }
 
     .empty-state {
@@ -375,13 +378,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     Polymer({
       'is': 'model-work-area',
       properties: {
-        allModelList: {
-          type: Array,
-          value: []
-        },
         modelList: {
           type: Array,
-          notify: true
+          notify: true,
+          statePath: 'modelsList'
         },
         viewList: {
           type: Array,
@@ -459,9 +459,20 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           this.fire('iron-resize');
         }
       },
-      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior, TabBehavior.TabBehavior,
-        DesignerBehavior.ResizableBehavior
+      behaviors: [
+        CommonBehavior.EVAjaxBehavior,
+        CommonBehavior.ModelBehavior,
+        TabBehavior.TabBehavior,
+        DesignerBehavior.ResizableBehavior,
+        ModelReduxBehavior
       ],
+      actions: {
+        updateModelsList: function() {
+          return {
+            type: 'UPDATE_MODELS_LIST'
+          }
+        }
+      },
       _isEmpty: function (state) {
         var isEmpty = false;
         switch (typeof state) {
@@ -493,6 +504,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.selectedView = null;
         this.set('workSpaceModelCount', 0);
         this.set('showGridBg', false);
+        this.dispatch('updateModelsList');
         document.addEventListener('toggle-bg', function (e) {
           this.showGridBg = e.detail;
           if (this.showGridBg) {
@@ -548,7 +560,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.$.dynamicAclDialog.openDialog(e.detail);
       },
 
-      /*=========TAB OPERATIONS START==========*/
+      /* =========TAB OPERATIONS START========== */
       _addEmptyTab: function () {
         if (this.untitledTab) {
           this.untitledTab++
@@ -564,7 +576,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         if (this._selectedTab) {
           this._selectedTab.models = this.getWorkSpaceContainers();
         }
-
         this._openTab(tab);
       },
       showTabIcon: function (tabType, type) {

@@ -6,7 +6,7 @@ here transfers the rights to the third party and open source components, except 
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
 <dom-module id="attach-workflow-dialog">
   <style>
-    :host {
+     :host {
       letter-spacing: 0.75px;
     }
 
@@ -28,8 +28,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       overflow: auto;
       border-bottom: 1px solid var(--divider-color);
     }
-
     /* Top panel styles */
+
     .dialog-header {
       border-bottom: 1px solid var(--divider-color);
     }
@@ -66,7 +66,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     }
 
     .step-item iron-icon {
-      
+
       --iron-icon-width: 24px;
       --iron-icon-height: 24px;
       background: var(--default-primary-color);
@@ -77,15 +77,15 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       margin-right: 8px;
     }
 
-    .fieldsbox > * {
+    .fieldsbox>* {
       width: calc(100% - 16px);
       box-sizing: border-box;
       padding-left: 8px;
       padding-right: 8px;
     }
-
     /* Bottom panel styles */
-    .customize-rule-page > * {
+
+    .customize-rule-page>* {
       margin: 0;
     }
   </style>
@@ -97,15 +97,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             <iron-icon icon="av:playlist-add" class="custom-icon"></iron-icon>
             <span>
                             [[workflowDef.modelName]] - Workflows
-                        </span>
+                            </span>
           </div>
           <iron-icon id="close-dialog" icon="icons:close" on-click="hideDialog"></iron-icon>
         </div>
       </div>
-
       <div class="dialog-content">
         <div class="vertical flex layout">
-
           <oe-ajax auto last-response={{workflowMappings}} url={{_getFetchUrl(workflowType,workflowDef.modelName)}} on-response="_onDataFetched"></oe-ajax>
           <div class="customize-rule-page">
             <oe-data-table id="maintable" items={{workflowMappings}} columns='[{"key": "operation","label": "Operation","readOnly": true},{"key":"workflowDefinitionName","valueGetter": "(row.workflowBody.workflowDefinitionName||row.workflowBody.processDefinitionKey)","label": "Workflow Definition","readOnly": true}]'

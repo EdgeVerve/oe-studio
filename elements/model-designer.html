@@ -35,11 +35,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         border-top: 1px solid var(--secondary-text-color);
       }
 
-      span + iron-icon {
+      span+iron-icon {
         margin-left: 8px;
       }
 
-      iron-icon + span {
+      iron-icon+span {
         margin-left: 8px;
       }
 
@@ -57,7 +57,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       }
     </style>
     <div class="module-container">
-      <model-work-area id="createmodel" view-list="{{viewList}}" model-list="{{workAreaModels}}"></model-work-area>
+      <model-work-area id="createmodel" view-list="{{viewList}}"></model-work-area>
     </div>
     <app-toolbar>
       <iron-icon src="../images/Logo.png" class="application-logo" on-tap="toggleLeftDrawer"></iron-icon>
@@ -104,7 +104,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
   <script>
     Polymer({
       is: 'model-designer',
-      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior],
+      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior,ModelReduxBehavior],
       properties: {
         toolBar: {
           type: Object,
@@ -137,10 +137,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }.bind(this))
       },
       getModelList: function () {
-        var self = this;
         this.fetchModels(function () {
-          self.set('workAreaModels', JSON.parse(JSON.stringify(self.modelList)));
-        });
+          this.set('workAreaModels', JSON.parse(JSON.stringify(this.modelList)));
+        }.bind(this));
       },
       uploadModelMetadata: function () {
         this.makeAjaxCall('/api/admin/upload', 'POST', {}, null, null, function (err, response) {
