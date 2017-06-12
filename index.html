@@ -44,15 +44,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
   <span id="browser-sync-binding"></span>
   <oe-designer></oe-designer>
   <script>
-    document.onreadystatechange = function() {
+    document.onreadystatechange = function () {
       if (document.readyState === 'complete') {
         var elem = document.getElementById('evfcssparser');
         if (elem) {
-          baseUtils.designerData.classList = window.baseUtils.designer.xExtractCSS(elem.contentDocument.styleSheets);
+          OEUtils.designerData.classList = window.OEUtils.designer.xExtractCSS(elem.contentDocument.styleSheets);
         }
       }
     }
-
   </script>
 </body>
 

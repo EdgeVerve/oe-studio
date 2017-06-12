@@ -512,7 +512,7 @@
         } else {
           props = this.selectedElement.attributes;
           this._generateAttributeList(props, 'attribute');
-          var config = baseUtils.designerData.elementList.find(function(obj) {
+          var config = OEUtils.designerData.elementList.find(function(obj) {
             return obj.tag == self.selectedElement.tagName.toLowerCase();
           });
 

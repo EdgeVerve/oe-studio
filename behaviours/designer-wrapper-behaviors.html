@@ -84,7 +84,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       xhr.send();
     },
     resolveError: function (err) {
-      var errObj = baseUtils.extractErrorMessage(err);
+      var errObj = OEUtils.extractErrorMessage(err);
       this.fire('oe-show-error', errObj);
       return errObj.code || errObj.message;
     },
@@ -296,8 +296,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         return;
       }
       this.getMixins();
-      this.dispatch('initializeBaseTypes',this.getBaseTypes(this.modelList));
-      this.dispatch('initializePropertyTypes',this.getPropertyTypes(this.modelList));
+      this.dispatch('initializeBaseTypes', this.getBaseTypes(this.modelList));
+      this.dispatch('initializePropertyTypes', this.getPropertyTypes(this.modelList));
       // this.set('baseTypes', this.getBaseTypes(this.modelList));
       // this.set('propertyTypes', this.getPropertyTypes(this.modelList));
       this.set('propertyArrayElemTypes', this.getPropertyArrayElemTypes(this.modelList));

@@ -311,7 +311,7 @@
             d.path = d.path.substr(7);
           }
           var obj = {
-            id: 'asset_' + baseUtils.generateGuid(),
+            id: 'asset_' + OEUtils.generateGuid(),
             size: this.getSize(d.size),
             name: d.file,
             path: d.path,
@@ -346,7 +346,7 @@
             d.path = d.path.substr(7);
           }
           var obj = {
-            id: 'asset_' + baseUtils.generateGuid(),
+            id: 'asset_' + OEUtils.generateGuid(),
             size: this.getSize(d.size),
             name: d.file,
             path: d.path,
@@ -373,7 +373,7 @@
       setAudios: function(items) {
         var audios = items.map(function(d) {
           var obj = {
-            id: 'asset_' + baseUtils.generateGuid(),
+            id: 'asset_' + OEUtils.generateGuid(),
             size: this.getSize(d.size),
             name: d.file,
             path: d.path,

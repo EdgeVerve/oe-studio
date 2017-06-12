@@ -200,11 +200,11 @@
           return;
         }
         var props = this._extractPropFromCssText(cssText);
-        var prev = baseUtils.clone(styleEditor.styleObj);
+        var prev = OEUtils.clone(styleEditor.styleObj);
         styleEditor.set('styleObj', {});
         props.forEach(function(d) {
-          //console.log('setting  ' + baseUtils.snakeToCamel(d.key) + '-- ' + d.value);
-          styleEditor.set('styleObj.' + baseUtils.snakeToCamel(d.key), d.value);
+          //console.log('setting  ' + OEUtils.snakeToCamel(d.key) + '-- ' + d.value);
+          styleEditor.set('styleObj.' + OEUtils.snakeToCamel(d.key), d.value);
         });
         this._showToastMessage(styleEditor.styleObj, prev);
       },

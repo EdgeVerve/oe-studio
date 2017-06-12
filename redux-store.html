@@ -72,7 +72,7 @@ var reduxFactory = (function(){
         state.undoStack.push({
           type: 'dom',
           'dom': deepCloneNode(obj),
-          'style': baseUtils.clone(state.styleObj)
+          'style': OEUtils.clone(state.styleObj)
         });
         state.stackSize = state.undoStack.length;
         state.current = state.stackSize - 1;
@@ -80,7 +80,7 @@ var reduxFactory = (function(){
         state.undoStack.push({
           type: 'dom',
           'dom': deepCloneNode(obj),
-          'style': baseUtils.clone(state.styleObj)
+          'style': OEUtils.clone(state.styleObj)
         });
         state.stackSize = state.undoStack.length;
         state.current++;
@@ -189,7 +189,7 @@ var reduxFactory = (function(){
           });
         } else if (obj.type === 'style') {
           modifiedState = Object.assign({}, state, {
-            styleObj: baseUtils.clone(previousState.style),
+            styleObj: OEUtils.clone(previousState.style),
             current: current,
             stackSize: state.undoStack.length
           });
@@ -206,7 +206,7 @@ var reduxFactory = (function(){
           });
         } else if (obj.type === 'style') {
           modifiedState = Object.assign({}, state, {
-            styleObj: baseUtils.clone(obj.style),
+            styleObj: OEUtils.clone(obj.style),
             current: current,
             stackSize: state.undoStack.length,
             dom: deepCloneNode(obj.dom)

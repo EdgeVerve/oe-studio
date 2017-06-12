@@ -700,7 +700,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             checked = this.vm.checked;
           }
           this.clearAdditionalFields();
-          this.set('modelObj', baseUtils.clone(this.vm));
+          this.set('modelObj', OEUtils.clone(this.vm));
           delete this.modelObj.checked;
           this.modelObj = this.modelToObject(this.modelObj);
           this.attachWorkFlowSetting();
