@@ -7,7 +7,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 <link rel="import" href="../../polymer/polymer.html">
 <dom-module id="relation-grid">
   <style>
-    :host {
+     :host {
       display: block;
     }
 
@@ -180,18 +180,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     <paper-input required label="Relation name" error-message="Please enter the relation name" no-label-float value="{{relation.__name__}}"></paper-input>
                   </div>
                   <div class="gridCol">
-					  <oe-combo label="Relation type" no-label-float required value="{{relation.type}}"
-								listdata="[[dropdownConst.relationTypes]]"
-								displayproperty="label"
-								valueproperty="value"
-								error-message="Please select the relation type"></oe-combo>
+                    <oe-combo label="Relation type" no-label-float required value="{{relation.type}}" listdata="[[dropdownConst.relationTypes]]"
+                      displayproperty="label" valueproperty="value" error-message="Please select the relation type"></oe-combo>
                   </div>
                   <div class="gridCol">
-					  <oe-combo label="Relation model" no-label-float required value="{{relation.model}}"
-								listdata="[[modelList]]"
-								displayproperty="name"
-								valueproperty="name"
-								error-message="Please select the model"></oe-combo>
+                    <oe-combo label="Relation model" no-label-float required value="{{relation.model}}" listdata="[[modelList]]" displayproperty="name"
+                      valueproperty="name" error-message="Please select the model"></oe-combo>
                   </div>
                   <div class="gridCol">
                     <paper-input class$="{{_shouldDisplayForeignKey(relation.type)}}" label="Foreign key" no-label-float value="{{relation.foreignKey}}"></paper-input>
@@ -234,9 +228,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         },
         modelList: {
           type: Array,
-          value: function () {
-            return []
-          }
+          statePath: 'modelList'
         },
         showRelations: {
           type: Boolean,
@@ -263,7 +255,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           var currInput = _.find(form.elements, function (ele) {
             var style = $(ele).closest('.table-row')[0].style.display;
             return (style == '')
-          })
+          });
           if (currInput) {
             currInput.focus();
           }
@@ -277,7 +269,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }.bind(this));
       },
       observers: ['relationsChanged(relations.*)'],
-      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior,DesignerBehavior.ConstantBehavior],
+      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior, DesignerBehavior.ConstantBehavior,ModelReduxBehavior],
       customValidation: function () {
         var valid = true;
         var isEmpty = this.isEditableEmpty();

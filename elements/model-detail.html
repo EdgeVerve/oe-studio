@@ -205,7 +205,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               </div>
             </div>
             <iron-collapse opened class="sub-content">
-              <validation-grid id="validationGrid" oe-validations="{{modelObj.evValidations}}" model-list="{{modelList}}" hide-add-btn="true"></validation-grid>
+              <validation-grid id="validationGrid" oe-validations="{{modelObj.evValidations}}" hide-add-btn="true"></validation-grid>
             </iron-collapse>
           </div>
           <div class="relations" id="relations" hidden$="{{!viewType.Relations}}">
@@ -248,10 +248,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         modelObj: {
           type: Object,
           observer: 'modelObjChanged'
-        },
-        modelList: {
-          type: Array,
-          notify: true
         },
         viewType: {
           type: Object,

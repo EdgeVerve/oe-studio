@@ -6,10 +6,11 @@ here transfers the rights to the third party and open source components, except 
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../behaviours/designer-wrapper-behaviors.html">
+<link rel="import" href="../model-redux-store.html">
 <dom-module id="model-sidebar">
   <template>
     <style>
-      :host {
+       :host {
         position: relative;
         display: block;
         background: var(--dark-primary-color);
@@ -319,7 +320,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         },
         modelList: {
           type: Array,
-          notify: true
+          statePath: 'modelList'
         },
         filterVal: {
           type: String,
@@ -334,7 +335,15 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       observers: [
         'calcCount(modelList.*)'
       ],
-      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior],
+      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior, ModelReduxBehavior],
+      actions: {
+        updateModelList: function (modelList) {
+          return {
+            type: "INITIALIZE_MODEL_LIST",
+            modelList: modelList
+          }
+        }
+      },
       calcCount: function () {
         this.modelCount = this.modelList.filter(function (model) {
           return !model.designerHiddenModel && model.public != false && model.name !=
@@ -354,22 +363,23 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       refreshModels: function () {
         this.fire('refresh-model-list');
       },
-      setAlreadyCheckedModels: function (models) {
-        var checkedModels = this.modelList.filter(function (d) {
-          return d.checked === true;
-        }).map(function (d) {
-          return d.name
-        });
+      // setAlreadyCheckedModels: function (models) {
+      //   var checkedModels = this.modelList.filter(function (d) {
+      //     return d.checked === true;
+      //   }).map(function (d) {
+      //     return d.name
+      //   });
 
-        if (checkedModels.length) {
-          models.forEach(function (d) {
-            if (checkedModels.indexOf(d.name) != -1) {
-              d.checked = true;
-            }
-          });
-        }
-        this.set('modelList', JSON.parse(JSON.stringify(models)));
-      },
+      //   if (checkedModels.length) {
+      //     models.forEach(function (d) {
+      //       if (checkedModels.indexOf(d.name) != -1) {
+      //         d.checked = true;
+      //       }
+      //     });
+      //   }
+      //   //this.set('modelList', JSON.parse(JSON.stringify(models)));
+      //   this.dispatch('updateModelList', models);
+      // },
       _modelListFilter: function (model, filterVal) {
         if (!filterVal || filterVal.length == 0) {
           return true;
@@ -479,9 +489,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this._checkAll();
       },
       _checkAll: function () {
-
-        /*var busyComp = document.querySelector("model-work-area #workSpaceStatus")
-              busyComp.hidden = false;*/
+        /* var busyComp = document.querySelector("model-work-area #workSpaceStatus")
+              busyComp.hidden = false; */
         if (this.checkAll) {
           _.forEach(this.modelList, function (model, i) {
             if (!model.checked && !model.designerHiddenModel && model.public != false) {

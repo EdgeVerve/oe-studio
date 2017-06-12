@@ -7,7 +7,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 <link rel="import" href="../../polymer/polymer.html">
 <dom-module id="validation-grid">
   <style>
-    :host {
+     :host {
       display: block;
     }
 
@@ -233,18 +233,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     <paper-input required label="Validation name" error-message="Please enter the validation name" no-label-float value="{{validation.__name__}}"></paper-input>
                   </div>
                   <div class="gridCol">
-					  <oe-combo label="Validation type" no-label-float required value="{{validation.type}}"
-								listdata="[[validationTypes]]"
-								error-message="Please select the type"></oe-combo>
+                    <oe-combo label="Validation type" no-label-float required value="{{validation.type}}" listdata="[[validationTypes]]" error-message="Please select the type"></oe-combo>
                   </div>
                   <div class="gridCol">
-					  <oe-combo id="referenceModelDropDown"
-								label="Referece model" no-label-float
-								disabled="[[ifDisabled(validation.type,'custom')]]"
-								required value="{{validation.refModel}}"
-								listdata="[[modelList]]"
-								displayproperty="name" valueproperty="name"
-								error-message="Please select the model"></oe-combo>
+                    <oe-combo id="referenceModelDropDown" label="Referece model" no-label-float disabled="[[ifDisabled(validation.type,'custom')]]"
+                      required value="{{validation.refModel}}" listdata="[[modelList]]" displayproperty="name" valueproperty="name"
+                      error-message="Please select the model"></oe-combo>
                   </div>
                   <div class="gridCol">
                     <paper-input required label="Reference" error-message="Please enter the reference" no-label-float value="{{validation.refWhere}}"
@@ -306,11 +300,16 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           type: Boolean,
           value: false,
           notify: true
-        }
+        },
+        modelList: {
+          type: Array,
+          statePath: 'modelList'
+        },
       },
       listeners: {
         'read-only': '_setReadOnly'
       },
+      behaviors: [ModelReduxBehavior],
       _setReadOnly: function () {
         this.evValidations.forEach(function (d, i) {
           var obj = JSON.parse(JSON.stringify(d));

@@ -49,7 +49,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       margin: 0;
     }
 
-    .stepper > li {
+    .stepper>li {
       display: inline-block;
     }
 
@@ -388,13 +388,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             </form>
           </div>
           <div class="add-properties-step">
-            <property-grid id="propertyGrid" property-list="{{vm.properties}}" property-types="{{propertyTypes}}"></property-grid>
+            <property-grid id="propertyGrid" property-list="{{vm.properties}}"></property-grid>
           </div>
           <div class="add-validations-step">
-            <validation-grid id="validationGrid" oe-validations="{{vm.evValidations}}" model-list="{{modelList}}"></validation-grid>
+            <validation-grid id="validationGrid" oe-validations="{{vm.evValidations}}"></validation-grid>
           </div>
           <div class="add-relations-step">
-            <relation-grid id="relationGrid" relations="{{vm.relations}}" model-list="{{modelList}}"></relation-grid>
+            <relation-grid id="relationGrid" relations="{{vm.relations}}"></relation-grid>
           </div>
           <div class="add-acls-step">
             <acl-grid id="aclGrid" acls="{{vm.acls}}"></acl-grid>
@@ -470,10 +470,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         },
         modelList: {
           type: Array,
-          value: function () {
-            return [];
-          },
-          notify: true
+          statePath: 'modelList'
+        },
+        baseTypes: {
+          type: Array,
+          statePath: 'baseTypes'
         },
         toggleIcon: {
           type: String,
@@ -497,11 +498,20 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       _calculateTabIndex: function (index) {
         return index + 1;
       },
-      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.HTMLHelper, CommonBehavior.ModelBehavior],
+      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.HTMLHelper, CommonBehavior.ModelBehavior, ModelReduxBehavior],
       observers: [
         'baseModelChanged(vm.base)',
         'modelNameChanged(vm.name)'
       ],
+      actions: {
+        updateModelList: function (modelObj, index) {
+          return {
+            type: 'UPDATE_MODEL_LIST',
+            index: index,
+            modelObj: modelObj
+          }
+        }
+      },
       modelNameChanged: function (name) {
 
         /*When editing the model, display the plural as is for the first time
@@ -541,9 +551,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         var baseModel = this.modelList.find(function (d) {
           return d.name === this.vm.base;
         }.bind(this)) || {
-          properties: [],
-          mixins: []
-        };
+            properties: [],
+            mixins: []
+          };
 
         /* Show the Properties of Base Model */
         this.set('baseProperties', baseModel.properties);
@@ -712,7 +722,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 var index = this.modelList.findIndex(function (x) {
                   return x.id == response.id;
                 });
-                this.set('modelList.' + index, this.vm);
+                //this.set('modelList.' + index, this.vm);
+                this.dispatch('updateModelList', this.vm, index);
                 this.fire('model-saved', {
                   'model': this.vm,
                   'newmodel': false
@@ -723,7 +734,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 } else {
                   this.set('vm.checked', false);
                 }
-                this.push('modelList', this.vm);
+                //this.push('modelList', this.vm);
+                this.dispatch('updateModelList', this.vm);
                 this.fire('model-saved', {
                   'model': this.vm,
                   'newmodel': true,
@@ -884,7 +896,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             if (flags[3]) {
               this.$.relationGrid._setReadOnly();
             }
-		case 3:
+          case 3:
             flags[2] = this.$.validationGrid.customValidation();
             if (flags[2]) {
               this.$.validationGrid._setReadOnly();
