@@ -222,7 +222,7 @@
         if (node.hasChild) {
           node.isCollapsed = collapseState || !node.hasChild;
         }
-        var elem = baseUtils.designerData.elementList.find(function(obj) {
+        var elem = OEUtils.designerData.elementList.find(function(obj) {
           return obj.tag == node.name;
         })
         node.icon = elem ? elem.icon : null;

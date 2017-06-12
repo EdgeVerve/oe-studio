@@ -6,9 +6,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 <link rel="import" href="../behaviours/designer-dnd-behavior.html">
 <link rel="import" href="../behaviours/designer-tab-behaviours.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../model-redux-store.html">
 <dom-module id="model-work-area">
   <style>
-    :host {
+     :host {
       display: block;
       --dark-border-color: 1px solid rgba(0, 0, 0, 0.22);
     }
@@ -18,7 +19,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       transform: scale(0)
     }
 
-    :host.show-end-points .jtk-endpoint {
+     :host.show-end-points .jtk-endpoint {
       transform: scale(1)
     }
 
@@ -31,8 +32,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     ul,
     li {
       list-style: none;
-      padding: 0px;
-      margin: 0px;
+      padding: 0;
+      margin: 0;
     }
     /*workarea container styles*/
 
@@ -64,7 +65,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       height: calc(100vh - 40px);
       padding: 8px;
       box-sizing: border-box;
-      background: #DADADA;
+      background: #dadada;
       width: 100%;
       position: relative;
       overflow: auto;
@@ -84,14 +85,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       --paper-spinner-stroke-width: 1px;
       transform: scale(2);
     }
-    /*Tab styling*/
+    /* Tab styling */
 
     .tab-name.data-manager {
-      color: #DB8800;
+      color: #db8800;
     }
 
     .tab-name.model-detail {
-      color: #00B0BF;
+      color: #00b0Bf;
     }
 
     .tab-name iron-icon.dirty-flag {
@@ -129,6 +130,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     }
 
     .tab-name iron-icon:not(.dirty-flag) {
+
       --iron-icon-height: 16px;
       --iron-icon-width: 16px;
       border-radius: 50%;
@@ -136,12 +138,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
     .add-empty-tab {
       color: #fff;
-      background: #8E8E8E;
-      margin: 0px;
+      background: #8e8e8e;
+      margin: 0;
       height: 20px;
     }
 
     .add-empty-tab iron-icon {
+
       --iron-icon-height: 16px;
       --iron-icon-width: 16px;
     }
@@ -157,12 +160,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     }
 
     .custom-menu ul {
-      padding: 8px 0px;
-      margin: 0px;
+      padding: 8px 0;
+      margin: 0;
     }
 
     .custom-menu paper-button {
-      padding: 0px 12px !important;
+      padding: 0 12px !important;
       height: 35px !important;
     }
 
@@ -173,7 +176,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     }
 
     .custom-menu ul li {
-      padding: 0px 8px;
+      padding: 0 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -185,7 +188,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     }
 
     .custom-menu li.drop-down-list-item:hover {
-      background: #EEEEEE;
+      background: #eee;
     }
 
     .tab-header {
@@ -199,7 +202,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
     .tab-scroll-btn {
       height: 36px;
-      background: #EFEFEF;
+      background: #efefef;
       z-index: 1;
     }
 
@@ -214,7 +217,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     .tab-scroll-btn.hide-btn {
       display: none;
     }
-    /*tab action buttons styles*/
+    /* tab action buttons styles */
 
     .tab-buttons {
       position: absolute;
@@ -261,7 +264,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     }
 
     .tab-buttons>* {
-      margin: 0px 8px;
+      margin: 0 8px;
     }
 
     .empty-state {
@@ -287,8 +290,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
   <template>
     <div class="flex horizontal layout">
       <iron-collapse id="expandBar" horizontal opened>
-        <model-sidebar id="model-side-nav" show-models={{showModels}} show-views={{showViews}} model-list="{{modelList}}" view-list="{{viewList}}"
-          on-render-view="_renderView"></model-sidebar>
+        <model-sidebar id="model-side-nav" show-models={{showModels}} show-views={{showViews}} view-list="{{viewList}}" on-render-view="_renderView"></model-sidebar>
       </iron-collapse>
       <div class="work-area">
         <div class="tab-header">
@@ -375,13 +377,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     Polymer({
       'is': 'model-work-area',
       properties: {
-        allModelList: {
-          type: Array,
-          value: []
-        },
         modelList: {
           type: Array,
-          notify: true
+          statePath: 'modelList'
         },
         viewList: {
           type: Array,
@@ -459,7 +457,33 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           this.fire('iron-resize');
         }
       },
-      behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior, TabBehavior.TabBehavior],
+      behaviors: [
+        CommonBehavior.EVAjaxBehavior,
+        CommonBehavior.ModelBehavior,
+        TabBehavior.TabBehavior,
+        DesignerBehavior.ResizableBehavior,
+        ModelReduxBehavior
+      ],
+      actions: {
+        initializeModelList: function () {
+          return {
+            type: 'INITIALIZE_MODEL_LIST'
+          }
+        },
+        deleteModel: function (index) {
+          return {
+            type: "DELETE_MODEL",
+            index: index
+          }
+        },
+        updateModelList: function (modelObj, index) {
+          return {
+            type: 'UPDATE_MODEL_LIST',
+            index: index,
+            modelObj: modelObj
+          }
+        }
+      },
       _isEmpty: function (state) {
         var isEmpty = false;
         switch (typeof state) {
@@ -546,7 +570,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.$.dynamicAclDialog.openDialog(e.detail);
       },
 
-      /*=========TAB OPERATIONS START==========*/
+      /* =========TAB OPERATIONS START========== */
       _addEmptyTab: function () {
         if (this.untitledTab) {
           this.untitledTab++
@@ -562,7 +586,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         if (this._selectedTab) {
           this._selectedTab.models = this.getWorkSpaceContainers();
         }
-
         this._openTab(tab);
       },
       showTabIcon: function (tabType, type) {
@@ -628,27 +651,26 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }
       },
       _renderTab: function (e) {
-        var self = this;
         var detail = e.detail
-        var model = detail.model || self._selectedTab.model;
+        var model = detail.model || this._selectedTab.model;
         var subType = detail.subType || 'model';
-        if (self._selectedTab.model && self._selectedTab.model.name !== model.name) {
-          self.set('_selectedTab.model', model);
-          self.set('_selectedTab.name', model.name + '-' + self._selectedTab.type);
+        if (this._selectedTab.model && this._selectedTab.model.name !== model.name) {
+          this.set('_selectedTab.model', model);
+          this.set('_selectedTab.name', model.name + '-' + this._selectedTab.type);
         }
         //unload all models
         this.clearWorkSpace();
         var sideNav = this.$['model-side-nav'];
         this.set('showButtons', true);
         //render data-manager tab
-        if (self._selectedTab && self._selectedTab.type === 'data-manager') {
+        if (this._selectedTab && this._selectedTab.type === 'data-manager') {
           this.set('listView', false);
           this.set('modelDefinition', false);
           this.set('dataManager', true);
           var dataManager = this.querySelector('#model-work-area-data-manager');
           dataManager._showData(model);
           this.set('showButtons', false);
-        } else if (self._selectedTab && self._selectedTab.type === 'model-detail') {
+        } else if (this._selectedTab && this._selectedTab.type === 'model-detail') {
           this.set('dataManager', false);
           this.set('modelDefinition', false);
           this.set('listView', true);
@@ -656,15 +678,15 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           modelListView.set('selectedPage', 0);
           var modelSideNav = this.querySelector('#model-side-nav');
           modelSideNav.showSelectedModel(model, subType);
-          modelListView.set('modelList', this.modelList);
+          //modelListView.set('modelList', this.modelList);
           this.set('showButtons', false);
         }
         //load tab models
-        else if (self._selectedTab && self._selectedTab.models && Array.isArray(self._selectedTab.models)) {
+        else if (this._selectedTab && this._selectedTab.models && Array.isArray(this._selectedTab.models)) {
           this.set('dataManager', false);
           this.set('listView', false);
           this.set('modelDefinition', true);
-          self._selectedTab.models.forEach(function (modelConfig) {
+          this._selectedTab.models.forEach(function (modelConfig) {
             var index = _.findIndex(sideNav.modelList, {
               'id': modelConfig.id
             });
@@ -672,7 +694,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             sideNav.fire('render-model', sideNav.modelList[index]);
           });
         }
-
       },
       _getTabName: function (index) {
         var tab = this._tabList[index];
@@ -779,10 +800,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }.bind(this))
       },
       _renderView: function (e) {
-        var self = this;
-
         var currView = e.detail;
-
         var tab = {
           name: currView.name,
           models: currView.models,
@@ -798,7 +816,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           return t.name == tab.name
         });
         if (index != -1) {
-          var difference = _.xor(tab.models, self._tabList[index].models);
+          var difference = _.xor(tab.models, this._tabList[index].models);
           if (difference.length > 0) {
             var data = {
               message: 'Do you want to reload view models?',
@@ -808,19 +826,17 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 this._openTab(tab);
               }.bind(this),
               cancel: function () {
-                tab = self._tabList[index];
-                self._openTab(tab);
+                tab = this._tabList[index];
+                this._openTab(tab);
               }
             }
             this.fire('oe-show-confirm', data);
           } else {
-            self._openTab(tab);
+            this._openTab(tab);
           }
         } else {
           this._openTab(tab);
         }
-
-
       },
       isWorkspaceDirty: function () {
         var workSpaceModels = this.getWorkSpaceModels('id');
@@ -934,15 +950,16 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               } else if (response) {
                 tempObj = response;
                 tempObj.checked = true;
-                item.set('modelObj', baseUtils.clone(self.modelToArray(tempObj)));
+                item.set('modelObj', OEUtils.clone(self.modelToArray(tempObj)));
                 var updateModelIndex = self.modelList.findIndex(function (x) {
                   return x.id == tempObj.id;
-                })
+                });
                 //updating the main modelList
                 response.checked = true;
-                self.set('modelList.' + updateModelIndex, baseUtils.clone(tempObj));
+                this.dispatch('updateModelList', tempObj, updateModelIndex);
+                // self.set('modelList.' + updateModelIndex, OEUtils.clone(tempObj));
                 //updating workspace models
-                self.push('workSpaceModelList', baseUtils.clone(tempObj));
+                self.push('workSpaceModelList', OEUtils.clone(tempObj));
                 tempArray.push({
                   modelName: tempObj.name,
                   status: 'success'
@@ -961,8 +978,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     return d.modelName;
                   }).join(', ');
 
-                  message = sModels +
-                    ' models saved successfully. ';
+                  message = sModels + ' models saved successfully. ';
                   if (fModels.length) {
                     message += fModels + ' failed to save. ';
                     self.fire('oe-show-error', message);
@@ -993,13 +1009,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           selectedModelIndex = this.workSpaceModelList.findIndex(function (x) {
             return x.id == modelObj.id;
           });
-
           //reverting back to the old state when it is removed from workarea
           var updateModelIndex = this.modelList.findIndex(function (x) {
             return x.id == modelObj.id;
-          })
+          });
           this.workSpaceModelList[selectedModelIndex].checked = false;
-          this.set('modelList.' + updateModelIndex, this.workSpaceModelList[selectedModelIndex]);
+          this.dispatch('updateModelList', this.workSpaceModelList[selectedModelIndex], updateModelIndex);
+          // this.set('modelList.' + updateModelIndex, this.workSpaceModelList[selectedModelIndex]);
           //deleting from workarea
           this.workAreaInstance.remove(modelNodes[selectedIndex]);
           //deleting from workspace array
@@ -1343,9 +1359,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           self.addEventListener('add-relation', function (e) {
             self.relationName = e.detail.name;
             self.selectedRelation.type = e.detail.relation.type;
-              var pascalToCamel = function(str){
-				return str[0].toLowerCase() + str.substr(1)
-			  }
+            var pascalToCamel = function (str) {
+              return str[0].toLowerCase() + str.substr(1)
+            }
 
             //adding relations in the source model
             var relationObj = {
@@ -1507,7 +1523,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
             [].map.call(modelNodes, function (model) {
               if (model.modelObj.id == e.detail.model.id) {
-                model.modelObj = baseUtils.clone(e.detail.model);
+                model.modelObj = OEUtils.clone(e.detail.model);
               }
             });
 

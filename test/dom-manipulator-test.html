@@ -39,8 +39,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       setup(function() {
         emptyStateEle = fixture('dom-manipulator');
         EV = EV || {};
-        baseUtils.designerData = baseUtils.designerData || {}
-        baseUtils.designerData.elementList = baseUtils.designerData.elementList || [{
+        OEUtils.designerData = OEUtils.designerData || {}
+        OEUtils.designerData.elementList = OEUtils.designerData.elementList || [{
           'name': 'Title-H1',
           'icon': 'oe-designer-icons:h1',
           'tag': 'h1',
@@ -155,7 +155,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       			var dropNode = document.createElement('div');
       			dropNode.textContent = "H2"
       			dropNode.setAttribute('draggable', true);
-      			dropNode.config = baseUtils.designerData.elementList.find(function(c) {
+      			dropNode.config = OEUtils.designerData.elementList.find(function(c) {
       				return c.tag == "h2"
       			})
       			dropNode.style.position = "absolute";

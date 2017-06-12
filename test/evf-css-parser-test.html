@@ -43,7 +43,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
 
       test('Test for CSS classification', function(done) {
-        var cssList = window.baseUtils.designer.xExtractCSS(document.styleSheets);
+        var cssList = window.OEUtils.designer.xExtractCSS(document.styleSheets);
         expect('test-simple-class').to.be.equal(cssList.find(function(css) {
           return !css.elementName && !css.className.match(' ')
         }).className);

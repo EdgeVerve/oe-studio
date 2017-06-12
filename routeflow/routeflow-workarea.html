@@ -520,7 +520,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         [].forEach.call(routeNodes, function (item) {
           (function (item) {
             var routeObj = item.routeObj;
-            var tempObj = baseUtils.clone(routeObj);
+            var tempObj = OEUtils.clone(routeObj);
             delete tempObj.checked;
             var url = 'api/UIRoutes';
             var method = 'put';

@@ -34,8 +34,8 @@ w<link rel="import" href="ui-bottom-panel.html">
     .main-wrapper {
       overflow: hidden
     }
-    /*breadcrumbs styles*/
     
+    /* breadcrumbs styles */
     .breadcrumb {
       overflow: hidden;
       height: 24px;
@@ -66,7 +66,7 @@ w<link rel="import" href="ui-bottom-panel.html">
       width: 24px;
       height: 24px;
       transform: scaleX(0.6) rotate(45deg);
-      border-radius: 0px 0px 0px 100%;
+      border-radius: 0 0 0 100%;
     }
     
     .breadcrumb .crumbs:first-child {
@@ -197,7 +197,7 @@ w<link rel="import" href="ui-bottom-panel.html">
       },
       loadSuccess: function() {
         this.set('frameWindow', this.$.framer.contentWindow);
-        baseUtils.designerData.frameLoaded = true;
+        OEUtils.designerData.frameLoaded = true;
 
         var iframeWindow = this.frameWindow;
         iframeWindow.HTMLImports.whenReady(function() {
@@ -221,7 +221,7 @@ w<link rel="import" href="ui-bottom-panel.html">
         var self = this;
         this.set('iframeLoaded', false);
         var x = setInterval(function() {
-          if (baseUtils.designerData.frameLoaded) {
+          if (OEUtils.designerData.frameLoaded) {
             self.set('iframeLoaded', true);
             self.fire('iframe-loaded');
             clearInterval(x);
@@ -357,7 +357,7 @@ w<link rel="import" href="ui-bottom-panel.html">
         var target = this.findInDom(element);
 
         var linkEl = document.createElement('a');
-        linkEl.setAttribute('oe-id', baseUtils.generateGuid());
+        linkEl.setAttribute('oe-id', OEUtils.generateGuid());
         linkEl.setAttribute('oe-ele-type', 'droppable');
         linkEl.setAttribute('href', '#');
 
@@ -482,11 +482,11 @@ w<link rel="import" href="ui-bottom-panel.html">
       attachDesignerConfig: function(dom) {
         this.traverseDom(dom, function(el) {
           if (!el.hasAttribute('oe-id')) {
-            el.setAttribute('oe-id', baseUtils.generateGuid());
+            el.setAttribute('oe-id', OEUtils.generateGuid());
           }
           if (!el.hasAttribute('oe-ele-type')) {
             var tagName = el.nodeName.toLowerCase();
-            var eleConfig = baseUtils.designerData.elementList.find(function(e) {
+            var eleConfig = OEUtils.designerData.elementList.find(function(e) {
               return e.tag == tagName
             });
             var elType = eleConfig && eleConfig.config && eleConfig.config.type;

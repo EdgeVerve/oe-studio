@@ -4,11 +4,12 @@ The Program may contain/reference third party or open source components, the rig
 remain with the applicable third party licensors or the open source community as the case may be and nothing here transfers the rights to the third party and open source components, except as expressly permitted.
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
 <!--<script src="../../Sortable/Sortable.js"></script>-->
+<link rel="import" href="../model-redux-store.html">
 <script>
   var CommonBehavior = CommonBehavior || {};
 
   CommonBehavior.EVAjaxBehavior = {
-    makeAjaxCall: function(url, method, body, header, params, ajaxProps, cb) {
+    makeAjaxCall: function (url, method, body, header, params, ajaxProps, cb) {
 
       ajaxProps = ajaxProps || {};
       if (!cb && typeof ajaxProps === 'function') {
@@ -39,7 +40,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       }
 
       if (header) {
-        Object.keys(header).forEach(function(k) {
+        Object.keys(header).forEach(function (k) {
           var val = header[k];
           if (Array.isArray(val)) {
             ajax.headers[k] = val[0]
@@ -50,13 +51,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         })
       }
 
-      ajax.addEventListener('response', function(event) {
+      ajax.addEventListener('response', function (event) {
         this.fire('end-spinner');
         if (cb) {
           cb(null, event.detail.response);
         }
       }.bind(this));
-      ajax.addEventListener('error', function(err) {
+      ajax.addEventListener('error', function (err) {
         this.fire('end-spinner');
         if (cb) {
           cb(err);
@@ -68,43 +69,43 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       });
       ajax.generateRequest();
     },
-    makeXhrCall: function(url, cb) {
+    makeXhrCall: function (url, cb) {
       var self = this;
       var xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = function () {
         if (xhr.status === 200 && xhr.readyState == 4 && xhr.response.length > 0) {
           cb(null, xhr.response)
         }
       }
-      xhr.onerror = function() {
+      xhr.onerror = function () {
         self.fire('oe-show-error', 'Error fetching data -' + xhr.status);
       };
       xhr.open('get', url, true);
       xhr.send();
     },
-    resolveError: function(err) {
-      var errObj = baseUtils.extractErrorMessage(err);
+    resolveError: function (err) {
+      var errObj = OEUtils.extractErrorMessage(err);
       this.fire('oe-show-error', errObj);
       return errObj.code || errObj.message;
     },
-    resolveErrors: function(err) {
-       function contructError(messages, codes) {
+    resolveErrors: function (err) {
+      function contructError(messages, codes) {
         var fields = Object.keys(messages);
         var messageArr = [];
-        fields.forEach(function(d) {
-            messages[d].forEach(function(e, j) {
-                var messageObj = {
-                    message: d + ' ' + e,
-                    code: codes[d][j],
-                    field: d
-                }
-                messageArr.push(messageObj);
-            });
+        fields.forEach(function (d) {
+          messages[d].forEach(function (e, j) {
+            var messageObj = {
+              message: d + ' ' + e,
+              code: codes[d][j],
+              field: d
+            }
+            messageArr.push(messageObj);
+          });
         });
         return messageArr;
-    }
-  
-    var extractErr = function(err) {
+      }
+
+      var extractErr = function (err) {
         var retErrorMsg;
         if (err && err.detail && err.detail.request && err.detail.request.response) {
           var errorObj = err.detail.request.response.error;
@@ -117,20 +118,23 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             };
           } else if (errorObj.details) {
             if (Array.isArray(errorObj.details)) {
-              errorMessages = errorObj.details.map(function(d) {
+              errorMessages = errorObj.details.map(function (d) {
                 if (d && d.details && d.details.messages) {
                   return contructError(d.details.messages, d.details.codes);
-                }else {return d;}
-              }).filter(function(d) {
+                } else {
+                  return d;
+                }
+              }).filter(function (d) {
                 return d !== undefined;
               });
             } else {
               errorMessages.push(contructError(errorObj.details.messages, errorObj.details.codes));
             }
             // flattening array of arrays to single array.
-            errorMessages = [].concat.apply([], errorMessages); 
+            errorMessages = [].concat.apply([], errorMessages);
             retErrorMsg = errorMessages;
-          } else if (errorObj.details && errorObj.details.messages && errorObj.details.messages.errs && errorObj.details.messages.errs.length > 0) {
+          } else if (errorObj.details && errorObj.details.messages && errorObj.details.messages.errs && errorObj.details
+            .messages.errs.length > 0) {
             retErrorMsg = errorObj.details.messages.errs;
           } else if (errorObj.errors && errorObj.errors.length > 0) {
             retErrorMsg = errorObj.errors;
@@ -165,13 +169,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             retErrorMsg.message = retErrorMsg.errMessage;
           }
         }
-
-
         return retErrorMsg;
       };
       var errObj = extractErr(err);
       if (Array.isArray(errObj)) {
-        this.fire('oe-show-error', errObj.map(function(e) {
+        this.fire('oe-show-error', errObj.map(function (e) {
           return e.message || e.code
         }).join(' , '));
         return errObj;
@@ -185,37 +187,27 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     properties: {
       modelList: {
         type: Array,
-        notify: true,
-        value: function() {
-          var val = [];
-          return val;
-        }
+        statePath: 'modelList'
       },
       baseTypes: {
         type: Array,
-        notify: true,
-        value: function() {
-          return [];
-        }
+        statePath: 'baseTypes',
       },
       propertyTypes: {
         type: Array,
-        notify: true,
-        value: function() {
-          return [];
-        }
+        statePath: 'propertyTypes',
       },
       propertyArrayElemTypes: {
         type: Array,
         notify: true,
-        value: function() {
+        value: function () {
           return [];
         }
       },
       primitiveTypes: {
         type: Array,
         notify: true,
-        value: function() {
+        value: function () {
           var val = ['string', 'boolean', 'date', 'number', 'object', 'array', 'any'];
           return val;
         }
@@ -223,27 +215,51 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       arrayElementTypes: {
         type: Array,
         notify: true,
-        value: function() {
+        value: function () {
           var val = ['number', 'string', 'object', 'boolean'];
           return val;
         }
       }
     },
+    behaviors: [
+      ModelReduxBehavior
+    ],
     listeners: {
       'fetch-models': 'fetchModels'
     },
-    fetchModels: function(cb) {
+    actions: {
+      initializeModelList: function (modelList) {
+        return {
+          type: "INITIALIZE_MODEL_LIST",
+          modelList: modelList
+        }
+      },
+      initializePropertyTypes: function (propertyTypes) {
+        return {
+          type: "INITIALIZE_PROPERTY_TYPES",
+          propertyTypes: propertyTypes
+        }
+      },
+      initializeBaseTypes: function (baseTypes) {
+        return {
+          type: "INITIALIZE_BASE_TYPES",
+          baseTypes: baseTypes
+        }
+      }
+    },
+    fetchModels: function (cb) {
       var url = 'api/ModelDefinitions';
       var method = 'GET';
-      this.makeAjaxCall(url, method, null, null, null, function(err, resp) {
+      this.makeAjaxCall(url, method, null, null, null, function (err, resp) {
         if (resp) {
-          //                    resp = this.appendWorkFlowModels(resp);
           resp = this.setHiddenModels(resp);
-          resp = resp.map(function(d) {
+          resp = resp.map(function (d) {
             d.checked = false;
             return this.modelToArray(d);
           }.bind(this));
-          this.set('modelList', this.sortIgnoreCase(resp, 'name'));
+          var modelList = this.sortIgnoreCase(resp, 'name');
+          this.dispatch('initializeModelList', modelList);
+          //this.set('modelList', modelList);
           this.refreshModelList();
           if (cb) {
             cb();
@@ -256,7 +272,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }
       }.bind(this));
     },
-    setHiddenModels: function(modelList) {
+    setHiddenModels: function (modelList) {
       var frameWorkModelLists = [
         'AppConfig',
         'AuthSession',
@@ -265,33 +281,35 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       ];
 
       _.chain(modelList)
-        .filter(function(d) {
+        .filter(function (d) {
           return (frameWorkModelLists.indexOf(d.name) != -1)
         })
-        .forEach(function(d) {
+        .forEach(function (d) {
           d.designerHiddenModel = true;
         }).value();
 
       return modelList;
     },
 
-    refreshModelList: function() {
+    refreshModelList: function () {
       if (!this.modelList || !this.primitiveTypes || !this.arrayElementTypes) {
         return;
       }
       this.getMixins();
-      this.set('baseTypes', this.getBaseTypes(this.modelList));
-      this.set('propertyTypes', this.getPropertyTypes(this.modelList));
+      this.dispatch('initializeBaseTypes', this.getBaseTypes(this.modelList));
+      this.dispatch('initializePropertyTypes', this.getPropertyTypes(this.modelList));
+      // this.set('baseTypes', this.getBaseTypes(this.modelList));
+      // this.set('propertyTypes', this.getPropertyTypes(this.modelList));
       this.set('propertyArrayElemTypes', this.getPropertyArrayElemTypes(this.modelList));
     },
-    getMixins: function() {
-      var base = this.modelList.find(function(m) {
+    getMixins: function () {
+      var base = this.modelList.find(function (m) {
         return m.name == 'BaseEntity'
       });
       var mixins = [];
       if (base) {
         var wordReg = /($[a-z])|[A-Z][^A-Z]+/g;
-        Object.keys(base.mixins).forEach(function(k) {
+        Object.keys(base.mixins).forEach(function (k) {
           var arr = k.match(wordReg);
           arr.pop();
           var name = arr.join(' ');
@@ -299,33 +317,33 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             'label': name,
             'key': k,
             'value': base.mixins[k]
-          })
-        })
+          });
+        });
       }
       this.set('mixinsList', mixins);
     },
-    getPropertyTypes: function(modelList) {
-      return this.primitiveTypes.concat(this.getBaseTypes(modelList).map(function(d) {
+    getPropertyTypes: function (modelList) {
+      return this.primitiveTypes.concat(this.getBaseTypes(modelList).map(function (d) {
         return d.name;
       }));
     },
-    getPropertyArrayElemTypes: function(modelList) {
-      return this.arrayElementTypes.concat(this.getBaseTypes(modelList).map(function(d) {
+    getPropertyArrayElemTypes: function (modelList) {
+      return this.arrayElementTypes.concat(this.getBaseTypes(modelList).map(function (d) {
         return d.name;
       }));
     },
-    getBaseTypes: function(modelList) {
-      modelList = modelList.filter(function(d) {
+    getBaseTypes: function (modelList) {
+      modelList = modelList.filter(function (d) {
         return d.base;
       });
-      var baseTypes = modelList.map(function(d) {
+      var baseTypes = modelList.map(function (d) {
         return {
           'name': d.base,
           'properties': []
         };
       });
       baseTypes = this.findUnique(baseTypes);
-      var modelNames = modelList.map(function(d) {
+      var modelNames = modelList.map(function (d) {
         return {
           'name': d.name,
           'properties': d.properties
@@ -334,30 +352,30 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       baseTypes = this.concatBaseTypes(modelNames, baseTypes);
       return this.sortIgnoreCase(baseTypes, 'name');
     },
-    modelToObject: function(data) {
+    modelToObject: function (data) {
       data.properties = this.propertyToObject(data.properties, '__name__');
       data.relations = this.relationToObject(data.relations, '__name__');
       data.evValidations = this.evValidationsToObject(data.evValidations, '__name__');
       return data;
     },
-    modelToArray: function(data) {
+    modelToArray: function (data) {
       data.properties = this.propertyToArray(data.properties, '__name__');
       data.relations = this.relationToArray(data.relations, '__name__');
       data.evValidations = this.evValidationsToArray(data.evValidations, '__name__');
       return data;
     },
-    propertyToObject: function(data, nameProp) {
+    propertyToObject: function (data, nameProp) {
       var obj = {};
       if (!Array.isArray(data) && typeof data === 'object') {
         return data;
       }
-      data.forEach(function(d) {
+      data.forEach(function (d) {
         obj[d[nameProp]] = d;
         delete d[nameProp];
       });
       return obj;
     },
-    propertyToArray: function(data, nameProp) {
+    propertyToArray: function (data, nameProp) {
       var arr = [];
       var key;
       if (Array.isArray(data)) {
@@ -371,14 +389,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       }
       return arr;
     },
-    relationToObject: function(data, nameProp) {
+    relationToObject: function (data, nameProp) {
       return this.propertyToObject(data, nameProp);
     },
-    relationToArray: function(data, nameProp) {
+    relationToArray: function (data, nameProp) {
       return this.propertyToArray(data, nameProp);
     },
-    evValidationsToObject: function(model, nameProp) {
-      model.forEach(function(d) {
+    evValidationsToObject: function (model, nameProp) {
+      model.forEach(function (d) {
         delete d.newProp;
         delete d.editable;
         if (d.validateWhen) {
@@ -391,22 +409,22 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       });
       return this.propertyToObject(model, nameProp);
     },
-    evValidationsToArray: function(model, nameProp) {
+    evValidationsToArray: function (model, nameProp) {
       var items = this.propertyToArray(model, nameProp);
-      items.forEach(function(d) {
+      items.forEach(function (d) {
         d.validateWhen = JSON.stringify(d.validateWhen);
       });
       return items;
     },
-    sortIgnoreCase: function(arr, prop) {
-      return arr.sort(function(a, b) {
+    sortIgnoreCase: function (arr, prop) {
+      return arr.sort(function (a, b) {
         return a[prop].toLowerCase().localeCompare(b[prop].toLowerCase());
       });
     },
-    findUnique: function(baseTypes) {
+    findUnique: function (baseTypes) {
       var result = [];
-      baseTypes.forEach(function(base) {
-        var index = result.map(function(model) {
+      baseTypes.forEach(function (base) {
+        var index = result.map(function (model) {
           return model.name;
         }).indexOf(base.name);
         if (index == -1) {
@@ -415,10 +433,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       });
       return result;
     },
-    concatBaseTypes: function(modelNames, baseTypes) {
+    concatBaseTypes: function (modelNames, baseTypes) {
       var result = modelNames;
-      baseTypes.forEach(function(base) {
-        var index = modelNames.map(function(model) {
+      baseTypes.forEach(function (base) {
+        var index = modelNames.map(function (model) {
           return model.name;
         }).indexOf(base.name);
         if (index === -1) {
@@ -427,16 +445,16 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       });
       return result;
     },
-    getModelIndex: function(list, data, property) {
+    getModelIndex: function (list, data, property) {
       property = property || 'name';
-      return list.map(function(d) {
+      return list.map(function (d) {
         return d[property];
       }).indexOf(data[property]);
     },
-    isPropertyExist: function(model, property, value) {
+    isPropertyExist: function (model, property, value) {
       var status = false;
       if (Array.isArray(model)) {
-        model.forEach(function(d) {
+        model.forEach(function (d) {
           if (d[property] === value) {
             status = true;
           }
@@ -446,12 +464,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       }
       return status;
     }
-
   }
 
   CommonBehavior.HTMLHelper = {
 
-    downloadToFile: function(fileName, type, content) {
+    downloadToFile: function (fileName, type, content) {
       if (type === 'application/json' && typeof content === 'object') {
         content = JSON.stringify(content, null, 2);
       }
@@ -462,18 +479,18 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       dl.click();
     },
 
-    toCamel: function(word) {
-      return word.replace(/(\-[a-z])/g, function($1) {
+    toCamel: function (word) {
+      return word.replace(/(\-[a-z])/g, function ($1) {
         return $1.toUpperCase().replace('-', '');
       });
     },
-    toDash: function(word) {
-      return word.replace(/([A-Z])/g, function($1) {
+    toDash: function (word) {
+      return word.replace(/([A-Z])/g, function ($1) {
         return '-' + $1.toLowerCase();
       });
     },
-    toLabelStyle: function(word) {
-      var test = word.replace(/([A-Z])/g, function($1) {
+    toLabelStyle: function (word) {
+      var test = word.replace(/([A-Z])/g, function ($1) {
         return ' ' + $1.toUpperCase();
       });
       test = test.substring(0, 1).toUpperCase() + test.substring(1)

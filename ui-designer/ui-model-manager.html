@@ -16,14 +16,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       color: var(--dark-primary-color);
       letter-spacing: 0;
     }
-    
+
     .add-button iron-icon {
       color: var(--accent-color);
       width: 18px;
       height: 18px;
       padding-right: 2px;
     }
-    
+
     .header {
       text-transform: capitalize;
       height: 34px;
@@ -34,21 +34,21 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       letter-spacing: 0.5px;
       padding-left: 10px;
     }
-    
+
     .search-panel {
       background: var(--light-primary-color);
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.38);
     }
-    
+
     paper-button {
       color: #000;
     }
-    
+
     .propertyList {
       max-height: 350px;
       overflow: auto;
     }
-    
+
     .propertyList div {
       background: #263238;
       border-radius: 2px;
@@ -61,18 +61,18 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       padding: 8px;
       box-sizing: border-box;
     }
-    
+
     paper-checkbox {
       --paper-checkbox-checked-color: #fff;
       --paper-checkbox-unchecked-color: #fff;
       --paper-checkbox-checkmark-color: #000;
     }
-    
+
     .title {
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.38);
       height: 44px;
     }
-    
+
     .title div {
       background: var(--accent-color);
       border-radius: 2px;
@@ -84,14 +84,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       padding: 8px;
       box-sizing: border-box;
     }
-    
+
     .title iron-icon {
       height: 18px;
       width: 18px;
       border-left: 1px solid rgba(255, 255, 255, 0.12);
       margin-left: 4px;
     }
-    
+
     oe-typeahead {
       --paper-input-container-input: {
         color: rgba(255, 255, 255, 0.54);
@@ -118,14 +118,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         color: green;
       }
     }
-    
+
     .search-icon {
       width: 20px;
       height: 24px;
       padding: 6px;
       padding-left: 16px;
     }
-    
+
     .generate-button {
       width: 209px;
       margin: auto;
@@ -138,25 +138,25 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       border-bottom: 1px solid #292D2F;
       margin-bottom: 8px;
     }
-    
+
     .more-props {
       margin-left: 16px;
       border-bottom: 1px solid #292D2F;
       width: 88%;
       padding-bottom: 10px;
     }
-    
+
     .more-props paper-checkbox {
       --paper-checkbox-label-color: #fff;
     }
-    
+
     paper-toggle-button {
       height: 18px;
       --paper-toggle-button-checked-button-color: var(--accent-color);
       --paper-toggle-button-unchecked-bar-color: rgba(255, 255, 255, 0.26);
       --paper-toggle-button-unchecked-button-color: #fff;
     }
-    
+
     .message {
       opacity: 0.5;
       font-family: Roboto;
@@ -165,12 +165,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       line-height: 16px;
       font-style: italic;
     }
-    
+
     .toggle-block {
       margin-bottom: 16px;
       margin-top: 16px;
     }
-    
+
     .toggle-block div {
       display: inline-block;
       font-family: Roboto-Regular;
@@ -178,7 +178,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       color: #ffffff;
       margin-right: 8px;
     }
-    
+
     .section-header {
       font-family: Roboto-Medium;
       font-size: 12px;
@@ -187,59 +187,58 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       padding: 12px;
       box-sizing: border-box;
     }
-
   </style>
   <template>
-        <div class="section-header layout horizontal center">
-            Attach Model
+    <div class="section-header layout horizontal center">
+      Attach Model
+    </div>
+    <div class="main-container">
+      <iron-pages selected="[[selectedPage]]">
+        <div>Not a dynamic page.</div>
+        <div class="add-button layout center-center horizontal" on-tap="addModel">
+          <iron-icon icon="icons:add-box"></iron-icon>
+          <div> Add Model </div>
         </div>
-        <div class="main-container">
-            <iron-pages selected="[[selectedPage]]">
-                <div>Not a dynamic page.</div>
-                <div class="add-button layout center-center horizontal" on-tap="addModel">
-                    <iron-icon icon="icons:add-box"></iron-icon>
-                    <div> Add Model </div>
-                </div>
-                <div class="search-panel">
-                    <oe-typeahead id="typeahead" no-label-float="true" on-pt-item-confirmed="_modelChanged" label="Search Model...
+        <div class="search-panel">
+          <oe-typeahead id="typeahead" no-label-float="true" on-pt-item-confirmed="_modelChanged" label="Search Model...
            " displayproperty="name" valueproperty="name" searchurl="api/ModelDefinitions?filter[where][name][regexp]=/^SEARCH_STRING/i&filter[limit]=10"
-                        dataurl="api/ModelDefinitions/findOne?filter[where][name][regexp]=/^VALUE_STRING/i" value="{{selectedModel}}">
-                        <div prefix>
-                            <iron-icon class="search-icon" icon="search"></iron-icon>
-                        </div>
-                    </oe-typeahead>
+            dataurl="api/ModelDefinitions/findOne?filter[where][name][regexp]=/^VALUE_STRING/i" value="{{selectedModel}}">
+            <div prefix>
+              <iron-icon class="search-icon" icon="search"></iron-icon>
+            </div>
+          </oe-typeahead>
+        </div>
+        <div>
+          <div class="title layout center horizontal">
+            <div class="layout center horizontal">
+              [[selectedModelName]]
+              <iron-icon icon="icons:close" on-tap="addModel"></iron-icon>
+            </div>
+          </div>
+          <div class="header layout center horizontal" on-tap="collapse" index='0'>PROPERTIES ([[getLength(modelProperties)]])</div>
+          <div on-tap="generateForm" class="generate-button layout center horizontal end-justified">GENERATE</div>
+          <div class="more-props">
+            <div class="toggle-block center horizontal layout">
+              <div>Auto Inject Fields</div>
+              <paper-toggle-button checked="{{autoInjectFields}}"></paper-toggle-button>
+            </div>
+            <div class="message">Properties updated in the model will be injected in the form automatically</div>
+          </div>
+          <iron-collapse>
+            <div class="propertyList">
+              <div class="layout center horizontal">
+                <paper-checkbox checked="{{checkAll}}" on-change="_checkAll"></paper-checkbox><i>Select All</i>
+              </div>
+              <template is="dom-repeat" items="{{modelProperties}}">
+                <div class="layout center horizontal">
+                  <paper-checkbox checked="{{item.checked}}" on-change="_check"></paper-checkbox>[[item.name]]
                 </div>
-                <div>
-                    <div class="title layout center horizontal">
-                        <div class="layout center horizontal">
-                            [[selectedModelName]]
-                            <iron-icon icon="icons:close" on-tap="addModel"></iron-icon>
-                        </div>
-                    </div>
-                    <div class="header layout center horizontal" on-tap="collapse" index='0'>PROPERTIES ([[getLength(modelProperties)]])</div>
-                    <div on-tap="generateForm" class="generate-button layout center horizontal end-justified">GENERATE</div>
-                    <div class="more-props">
-                        <div class="toggle-block center horizontal layout">
-                            <div>Auto Inject Fields</div>
-                            <paper-toggle-button checked="{{autoInjectFields}}"></paper-toggle-button>
-                        </div>
-                        <div class="message">Properties updated in the model will be injected in the form automatically</div>
-                    </div>
-                    <iron-collapse>
-                        <div class="propertyList">
-                            <div class="layout center horizontal">
-                                <paper-checkbox checked="{{checkAll}}" on-change="_checkAll"></paper-checkbox><i>Select All</i>
-                            </div>
-                            <template is="dom-repeat" items="{{modelProperties}}">
-                                <div class="layout center horizontal">
-                                    <paper-checkbox checked="{{item.checked}}" on-change="_check"></paper-checkbox>[[item.name]]
-                                </div>
-                            </template>
-  </div>
-  </iron-collapse>
-  </div>
-  </iron-pages>
-  </div>
+              </template>
+            </div>
+          </iron-collapse>
+        </div>
+      </iron-pages>
+    </div>
   </template>
   <script>
     Polymer({
@@ -252,7 +251,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         },
         selectedModel: {
           type: Object,
-          value: function() {
+          value: function () {
             return {};
           }
         },
@@ -262,17 +261,17 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           observer: '_elementChanged'
         }
       },
-      _modelChanged: function() {
+      _modelChanged: function () {
         var model = this.selectedModel;
         this.set('selectedModelName', model);
         var url = 'api/ModelDefinitions/modelmeta/' + model;
-        this.makeAjaxCall(url, 'get', null, null, null, function(err, resp) {
+        this.makeAjaxCall(url, 'get', null, null, null, function (err, resp) {
           if (resp) {
             this.convertToArray(resp);
           }
         }.bind(this));
       },
-      addModel: function() {
+      addModel: function () {
         this.set('selectedPage', 2);
         var typeahead = this.$.typeahead;
         if (typeahead) {
@@ -281,7 +280,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           this.$.typeahead.focus();
         }
       },
-      convertToArray: function(data) {
+      convertToArray: function (data) {
         data = data[this.selectedModelName];
         if (data) {
           var arr = this.getProperties(data.properties);
@@ -291,28 +290,28 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.toggleIronCollapse(0, true);
         this.set('selectedPage', 3);
       },
-      getProperties: function(properties) {
+      getProperties: function (properties) {
         var names = Object.keys(properties);
-        return names.map(function(d) {
+        return names.map(function (d) {
           var obj = properties[d];
           obj.name = d;
           obj.checked = true;
           return obj;
         });
       },
-      filterProps: function(list) {
-        return list.filter(function(d) {
+      filterProps: function (list) {
+        return list.filter(function (d) {
           return d.name.indexOf('_') == -1;
         });
       },
-      getLength: function(list) {
+      getLength: function (list) {
         return list.length;
       },
-      collapse: function(e) {
+      collapse: function (e) {
         var index = e.currentTarget.getAttribute('index');
         this.toggleIronCollapse(index);
       },
-      toggleIronCollapse: function(index, flag) {
+      toggleIronCollapse: function (index, flag) {
         var ironCollapse = this.querySelectorAll('iron-collapse');
         if (flag) {
           ironCollapse[index].show();
@@ -320,7 +319,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           ironCollapse[index].toggle();
         }
       },
-      generateForm: function() {
+      generateForm: function () {
         var obj = {};
         obj.model = this.selectedModelName;
         obj.allProperties = this.modelProperties;
@@ -328,16 +327,16 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         obj.autoInjectFields = this.autoInjectFields;
         this.fire('generate-form', obj);
       },
-      _elementChanged: function() {
+      _elementChanged: function () {
         var element = this.element;
         if (!element.isPolymerElement) {
           this.set('selectedPage', 0);
         } else if (element && element.modelMeta && element.modelMeta.modelName) {
           var ifAllCheked = true;
           var properties = this.getProperties(element.modelMeta.metadata.properties);
-          properties.forEach(function(d) {
+          properties.forEach(function (d) {
             if (element.modelMeta.excludeFields && element.modelMeta.excludeFields.indexOf(
-                d.name) !== -1) {
+              d.name) !== -1) {
               d.checked = false;
               ifAllCheked = false;
             }
@@ -353,20 +352,19 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           this.set('selectedPage', 1);
         }
       },
-      _check: function() {
-        var temp = this.modelProperties.reduce(function(a, b) {
+      _check: function () {
+        var temp = this.modelProperties.reduce(function (a, b) {
           return {
             checked: a.checked && b.checked
           }
         });
         this.set('checkAll', temp.checked);
       },
-      _checkAll: function() {
-        this.modelProperties.forEach(function(d, i) {
+      _checkAll: function () {
+        this.modelProperties.forEach(function (d, i) {
           this.set('modelProperties.' + i + '.checked', this.checkAll);
         }.bind(this));
       }
     });
-
   </script>
 </dom-module>

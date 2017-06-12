@@ -50,7 +50,10 @@
         "allowPattern": "^[a-z]+(-[a-z]+)+$"
       }
     ],
-    "radix": ["error", "as-needed"], // http://eslint.org/docs/rules/radix
+    "radix": [
+      "error",
+      "as-needed"
+    ], // http://eslint.org/docs/rules/radix
     /*
      * Variables - http: //eslint.org/docs/rules/#variables
      */
@@ -72,7 +75,7 @@
         "beforeBlockComment": true
       }
     ],
-    "curly":"error",
+    "curly": "error",
     "no-inline-comments": "error", // http://eslint.org/docs/rules/no-inline-comments
     "no-nested-ternary": "off", // http://eslint.org/docs/rules/no-nested-ternary
     "quotes": [ // http://eslint.org/docs/rules/quotes
@@ -101,7 +104,7 @@
     "fixture": true,
     "sinon": true,
     "page": true,
-    "baseUtils": true,
+    "OEUtils": true,
     "HTMLImports": true,
     "ev_navigate_to": true,
     "I18nMsg": true,
@@ -112,18 +115,18 @@
     "forceXIfStamp": true,
     "assert": true,
     "flush": true,
-    "_" : true,
-    "$":true,
-    "EV":true,
-    "require":true,
-    "jsPlumb":true,
-    "CommonBehavior":true,
-    "DesignerBehavior":true,
-    "ReduxBehavior":true,
-    "StyleBehavior":true,
-    "MetaPolymer":true,
-    "PolymerRedux":true,
-    "Redux":true,
-    "WCT":true
+    "_": true,
+    "$": true,
+    "EV": true,
+    "require": true,
+    "jsPlumb": true,
+    "CommonBehavior": true,
+    "DesignerBehavior": true,
+    "ReduxBehavior": true,
+    "StyleBehavior": true,
+    "MetaPolymer": true,
+    "PolymerRedux": true,
+    "Redux": true,
+    "WCT": true
   }
 }

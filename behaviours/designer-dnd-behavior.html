@@ -1,7 +1,7 @@
 <script>
-	window.baseUtils = window.baseUtils || {};
-	var EV = window.baseUtils;
-	baseUtils.clone = function(from, to) {
+	window.OEUtils = window.OEUtils || {};
+	var EV = window.OEUtils;
+	OEUtils.clone = function(from, to) {
 		if (from === null || typeof from !== 'object') {
 			return from;
 		}
@@ -15,13 +15,13 @@
 		to = to || new from.constructor();
 
 		for (var name in from) {
-			to[name] = typeof to[name] === 'undefined' ? baseUtils.clone(from[name], null) : to[name];
+			to[name] = typeof to[name] === 'undefined' ? OEUtils.clone(from[name], null) : to[name];
 		}
 
 		return to;
 	}
 
-	baseUtils.prettify = (function() {
+	OEUtils.prettify = (function() {
 
 		function generatePrettyDom(dom) {
 			var domtree = createDOMObject(dom);
@@ -118,7 +118,8 @@
 		}
 	})()
 
-	baseUtils.designerData = baseUtils.designerData || {}
+	OEUtils.designerData = OEUtils.designerData || {}
+
 	var DesignerBehavior = DesignerBehavior || {}
 
 	DesignerBehavior.HTMLBehavior = {
@@ -180,11 +181,11 @@
 					break;
 			}
 			this.traverseDom(ele, function(n) {
-				var conf = baseUtils.designerData.elementList.find(function(e) {
+				var conf = OEUtils.designerData.elementList.find(function(e) {
 					return e.tag === n.tagName.toLowerCase();
 				})
 				if (conf && conf.config) {
-					n.setAttribute('oe-id', baseUtils.generateGuid());
+					n.setAttribute('oe-id', OEUtils.generateGuid());
 					n.setAttribute('oe-ele-type', conf.config.type);
 				}
 			})
@@ -227,7 +228,7 @@
 		createNodeFromProp: function(config) {
 			var self = this;
 			var config = element.config;
-			var uiType = config.propDef.uitype || (baseUtils.TypeMappings[config.propDef.type] && baseUtils.TypeMappings[config.propDef.type]
+			var uiType = config.propDef.uitype || (OEUtils.TypeMappings[config.propDef.type] && OEUtils.TypeMappings[config.propDef.type]
 				.uiType) || 'oe-input';
 			var ele = self.createNodeFromName(uiType);
 			ele.classList.add('evfield');
@@ -269,11 +270,11 @@
 					var EVbehviorList = []
 					Object.keys(EV)
 						.filter(function() {
-							return typeof baseUtils.CaptchaBehavior === 'object'
+							return typeof OEUtils.CaptchaBehavior === 'object'
 						})
 						.forEach(function(k) {
 							EVbehviorList.push({
-								'name': 'baseUtils.' + k,
+								'name': 'OEUtils.' + k,
 								'value': EV[k]
 							})
 						});
