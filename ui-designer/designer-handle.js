@@ -428,7 +428,9 @@ var designerController = (function () {
 			return;
 		}
 		var target = cont.querySelector('[oe-id="' + element.getAttribute('oe-id') + '"]');
-		target.click();
+		if(target){
+			target.click();
+		}
 	}
 
 	function fireParent(eventName, detail) {
@@ -489,7 +491,10 @@ var designerController = (function () {
 			GLOBAL_ISOLATED_DOM = dom.cloneNode(true);
 			if (reRendered) {
 				cont.innerHTML = '<template is="dom-bind">' + dom.innerHTML + '</template>';
-				attachHandlers(cont);
+				Polymer.dom.flush();
+				Polymer.Base.async(function(){
+					attachHandlers(cont);
+				},300)
 			}
 
 			removeContext('drop');

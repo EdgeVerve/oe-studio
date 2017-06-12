@@ -259,7 +259,7 @@
           /*try extracting the names directly from string parsing */
           var tempObject = window.baseUtils.tempPolyObj;
           if (tempObject.behaviors && tempObject.behaviors.length > 0 && tempObject.behaviors.indexOf(undefined) >= 0) {
-            var behaviorLine = scriptText.match(/behaviors\s*:\s*\[.*\]/g);
+            var behaviorLine = scriptText.match(/behaviors\s*:\s*\[\s*.*\s*\]/);
             behaviorLine = behaviorLine && behaviorLine[0];
             tempObject.behaviors = behaviorLine.split('[')[1].split(']')[0].split(',').map(function(b) {
               return {
@@ -435,119 +435,29 @@
         })
       },
       exportComponent: function() {
-        var self = this;
-        var dom = self.getSanitizedDom();
-        if (self.element.isPolymerElement) {
-          self.$.domManager.querySelector('#user-poly-config').SaveElementConfig()
-        }
-
-        function formatHTMLStr(str, prevPadding) {
-          if (!prevPadding) {
-            prevPadding = '';
-          }
-          str = str.replace(/>(\s|\s+|\r|\n|\r\n)</gm, '><');
-          var strArr = str.split('><');
-          var fullMap = strArr.map(function(s, i) {
-            if (i == 0) {
-              return s + '>'
-            }
-            if (i == (strArr.length - 1)) {
-              return '<' + s;
-            }
-            return '<' + s + '>'
-          })
-          var Level = -1;
-          var spaceGap = '';
-          var formattedArr = fullMap.map(function(s) {
-            if (s[1] == '/') {
-              if (Level < 1) {
-                Level = 1;
-              }
-              spaceGap = new Array(Level--).fill('\t').join('');
-            } else {
-              spaceGap = new Array(++Level).fill('\t').join('');
-              if (s.match('<\/')) {
-                Level--;
-              }
-            }
-            return spaceGap + s;
-          })
-          return prevPadding + formattedArr.join('\n' + prevPadding);
+        var dom = this.getSanitizedDom();
+        if (this.element.isPolymerElement) {
+          this.$.domManager.querySelector('#user-poly-config').SaveElementConfig()
         }
 
         var moduleStr = '';
 
-        if (self.element.isPolymerElement) {
-          moduleStr += '<dom-module id="' + self.element.polyConfig.is + '">';
-          moduleStr += '\n\t<template id="' + self.element.polyConfig.is + '">';
-          moduleStr += '\n\t' + formatHTMLStr(dom.innerHTML, '\t');
-          moduleStr += '\n\t</template>';
-          moduleStr += '\n\t<script>';
-          moduleStr += '\n\t\tMetaPolymer({';
-          moduleStr += '\n\t\t\tis:"' + self.element.polyConfig.is + '"';
-
-          if (self.element.polyConfig.behaviors) {
-            moduleStr += ',\n\t\t\tbehaviors:[' + self.element.polyConfig.behaviors.join(', ') + ']';
-          }
-          if (self.element.polyConfig.listeners) {
-            moduleStr += ',\n\t\t\tlisteners:' + JSON.stringify(self.element.polyConfig.listeners);
-          }
-          if (self.element.polyConfig.properties) {
-            moduleStr += ',\n\t\t\tproperties:{';
-            Object.keys(self.element.polyConfig.properties).forEach(function(pName) {
-              var pConfig = self.element.polyConfig.properties[pName];
-              if (pConfig) {
-                moduleStr += ('\n\t\t\t\t' + pName + ':{');
-                if (pConfig.type) {
-                  moduleStr += ('\n\t\t\t\t\ttype:' + pConfig.type);
-                } else {
-                  moduleStr += ('\n\t\t\t\t\ttype: Object');
-                }
-                if (pConfig.value != undefined) {
-                  moduleStr += ',\n\t\t\t\t\tvalue:';
-                  if (typeof pConfig.value === 'function') {
-                    moduleStr += pConfig.value.toString();
-                  } else if (typeof pConfig.value === 'object') {
-                    moduleStr += JSON.stringify(pConfig.value);
-                  } else if (typeof pConfig.value === 'string') {
-                    moduleStr += '"' + pConfig.value + '"';
-                  } else {
-                    moduleStr += pConfig.value;
-                  }
-                }
-                if (pConfig.notify != undefined) {
-                  moduleStr += (',\n\t\t\t\t\tnotify:' + pConfig.notify);
-                }
-              }
-              moduleStr += '\n\t\t\t\t},'
-            });
-            moduleStr += '\n\t\t\t}'
-          }
-
-          if (self.element.polyConfig.functions) {
-            Object.keys(self.element.polyConfig.functions).forEach(function(fName) {
-              var fText = self.element.polyConfig.functions[fName];
-              if (fText) {
-                moduleStr += (',\n\t\t\t' + fName + ':' + fText);
-              }
-            });
-          }
-
-          moduleStr += '\n\t\t});'
-          moduleStr += '\n\t<\/script>';
-          moduleStr += '\n</dom-module>';
+        if (this.element.isPolymerElement) {
+          moduleStr += '<dom-module id="' + this.element.polyConfig.is + '">';
+          moduleStr += '<template>'+ dom.innerHTML + '</template>';
+		  moduleStr += '<script>'+this.polyObjectToString(this.element.polyConfig) + '<\/script>';
+          moduleStr += '</dom-module>';
         } else {
-          moduleStr += formatHTMLStr(dom.innerHTML);
+          moduleStr += dom.innerHTML;
         }
 
-
-        if (self.element.isFile) {
-          moduleStr = self.handleFileMerge(self.element, moduleStr);
+        if (this.element.isFile) {
+          moduleStr = this.handleFileMerge(this.element, moduleStr);
         }
 
+		moduleStr = baseUtils.prettify.domString(moduleStr);
 
-
-        self.downloadToFile(self.element.name + '.html', 'text/html', moduleStr);
+        this.downloadToFile(this.element.name + '.html', 'text/html', moduleStr);
 
         //              //Code below for saving server delivered Polymer component definition
         //              var payload = self._preparePayload();
@@ -613,6 +523,7 @@
           el.removeAttribute('template-item')
           el.removeAttribute('oe-id')
           el.removeAttribute('oe-ele-type')
+          el.removeAttribute('oe-dom-handle')
           el.removeAttribute('desg-tree-collapse')
         });
         var styleDom = this.throughClone(self.$.domManager.getCustomStyle());
@@ -633,6 +544,7 @@
           el.removeAttribute('template-item')
           el.removeAttribute('oe-id')
           el.removeAttribute('oe-ele-type')
+		   el.removeAttribute('oe-dom-handle')
         });
 
         [].forEach.call(modDom, function(node) {
@@ -681,37 +593,11 @@
           return isEqual
         }
 
-        // function dashToCamel(s) {
-        //   return s.replace(/(\-\w)/g, function(m) {
-        //     return m[1].toUpperCase();
-        //   });
-        // }
-
-        function camelToDash(s) {
+		  function camelToDash(s) {
           return s.replace(/([A-Z])/g, function($1) {
             return '-' + $1.toLowerCase();
           });
         }
-
-        // function typeCaster(str, type) {
-        //   var val = null;
-        //   switch (type) {
-        //     case 'number':
-        //       val = parseInt(str);
-        //       break;
-        //     case 'object':
-        //       val =  JSON.parse(str);
-        //       break;
-        //     case 'boolean':
-        //       val =  (str != undefined);
-        //       break;
-        //     case 'string':
-        //     case 'undefined':
-        //     default:
-        //       val =  str;
-        //   }
-        //   return val;
-        // }
 
         //Handle properties
         var evFields = dom.querySelectorAll('[fieldid]');
