@@ -125,7 +125,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         <div class="vertical flex layout">
           <iron-pages selected="{{selectedMenu}}" class="flex">
             <div class="create-rule-page">
-              <service-personalization-rule rule="{{selectedRule}}"></service-personalization-rule>
+              <service-personalization-rule id="spRule" rule="{{selectedRule}}"></service-personalization-rule>
             </div>
             <div class="customize-rule-page">
               <service-personalization-filter filter="{{selectedRule.personalizationRule.filter}}" rule-definition property-list="{{modelProperties}}"></service-personalization-filter>
@@ -139,8 +139,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       </div>
       <div class="dialog-footer flex horizontal layout end-justified">
         <div class="layout horizontal center justified">
-          <paper-button id="nextbtn" secondary on-tap="nextStep" hidden={{!isFirstStep(selectedMenu)}}>Next</paper-button>
-          <paper-button id="savebtn" secondary on-tap="saveRule" hidden={{isFirstStep(selectedMenu)}}>Save</paper-button>
+          <paper-button id="nextbtn" secondary on-tap="nextStep" hidden={{!_isEqual(selectedMenu,0)}}>Next</paper-button>
+          <paper-button id="savebtn" secondary on-tap="saveRule" hidden={{_isEqual(selectedMenu,0)}}>Save</paper-button>
         </div>
       </div>
     </paper-dialog>
@@ -171,12 +171,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.isEditMode = false;
       },
       hideDialog: function () {
-        var ruledef = this.querySelector('service-personalization-rule');
-        ruledef.$['rule-name'].reset();
+        this.$.spRule.reset();
         this.$.addRuleDialog.close();
       },
       openDialog: function () {
-        this.querySelector('service-personalization-rule').editIndex = -1;
+        this.$.spRule.editIndex = -1;
         this.$.addRuleDialog.open();
         if (!this.isEditMode) {
           var tempObj = {
@@ -208,10 +207,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       saveRule: function () {
         if (this._validityCheck()) {
           this.getRuleDefinitions();
-          var url = 'api/DesignerRules';
+          var url = 'api/PersonalizationRules';
           var body = this.selectedRule;
-          body.customScope = body.scope;
-          delete body.scope;
+          //body.customScope = body.scope;
+          //delete body.scope;
           var method = this.selectedRule.id ? 'PUT' : 'POST';
           this.makeAjaxCall(url, method, body, null, null, function (err, response) {
             if (err) {
@@ -236,15 +235,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }
       },
       _isEqual: function (selected, curr) {
-        return selected == curr
-      },
-      isFirstStep: function (selected) {
-        return selected == 0;
+        return selected === curr
       },
       _validityCheck: function () {
         var isValid = true;
         var scope = {};
-        var ruledef = this.querySelector('service-personalization-rule');
+        var ruledef = this.$.spRule;
         ruledef.customValidate();
         ruledef.scopeList.forEach(function (k) {
           if (!k.value) {
@@ -260,11 +256,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           }
         })
         this.selectedRule.scope = scope;
-        ruledef.$['rule-name'].validate();
+        ruledef.validate();
         isValid = isValid && this.selectedRule.name && (this.selectedRule.name.trim().length > 0) && (Object.keys(
             scope)
           .length > 0);
-        return isValid
+        return isValid;
       },
       setRuleDefinitions: function () {
         var rule = {

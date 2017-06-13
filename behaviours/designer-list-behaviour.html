@@ -187,7 +187,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       var form = this.$.itemform;
       if (form && form.elements) {
         var currInput = _.find(form.elements, function(ele) {
-          var style = $(ele).closest('.table-row')[0].style.display;
+          var style = ele.closest('.table-row').style.display;
           return (style == '')
         })
         if (currInput) {

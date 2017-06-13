@@ -85,7 +85,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
   <template>
     <div class="parent-container">
       <div class="heading">
-        <form is="iron-form" id="rule-name">
+        <form is="iron-form" id="ruleForm">
           <paper-input value="{{rule.name}}" label="Rule Name" autofocus required error-message="Rule name is mandatory"></paper-input>
         </form>
       </div>
@@ -103,7 +103,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             </paper-dropdown-menu>
             <oe-paper-chip required label="Enter scope values followed by Enter" title="Use Enter , Space or ',' Key to seperate the values"
               value="{{scope.value}}"></oe-paper-chip>
-            <paper-button on-tap="_addScope" id="addscope" secondary raised>{{btnText}}</paper-button>
+            <paper-button on-tap="_addScope" id="addscope" secondary raised>{{_getButtonLabel(editIndex)}}</paper-button>
           </div>
         </form>
         <template is="dom-repeat" items="{{scopeList}}" as="scope">
@@ -140,10 +140,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         },
         editIndex: {
           type: Number
-        },
-        btnText: {
-          type: String,
-          value: 'ADD SCOPE'
         }
       },
       listeners: {
@@ -175,8 +171,17 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.scopeList = [];
         this.editIndex = -1;
       },
+      _getButtonLabel: function(editIndex){
+        return editIndex < 0 ? 'ADD SCOPE' : 'SAVE SCOPE';
+      },
+      reset: function(){
+        this.$.ruleForm.reset();
+      },
+      validate: function(){
+        this.$.ruleForm.validate();        
+      },
       customValidate: function () {
-        if (this.scope.name && this.scope.value.length > 0) {
+        if (this.scope.name && this.scope.value && this.scope.value.length > 0) {
           this.push('scopeList', JSON.parse(JSON.stringify(this.scope)));
           this.set('scope', {});
         }
@@ -210,15 +215,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           this.push('scopeList', JSON.parse(JSON.stringify(this.scope)));
         }
         this.set('scope', {});
-        this.btnText = 'ADD SCOPE';
+        this.set('editIndex',-1);
       },
       deleteScope: function (e) {
         this.splice('scopeList', e.model.index, 1);
       },
       editScope: function (e) {
         this.set('scope', e.model.scope);
-        this.editIndex = e.model.index;
-        this.btnText = 'SAVE SCOPE';
+        this.set('editIndex', e.model.index);
       }
     });
   </script>
