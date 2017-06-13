@@ -101,20 +101,20 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         </div>
         <div class="top-panel layout horizontal center">
           <div class="step-item layout horizontal center" on-tap="prevStep">
-            <template is="dom-if" if="[[_selectedStep(selectedMenu,0)]]">
+            <template is="dom-if" if="[[_isEqual(selectedMenu,0)]]">
               <iron-icon icon="create"></iron-icon>
             </template>
-            <template is="dom-if" if="[[!_selectedStep(selectedMenu,0)]]">
+            <template is="dom-if" if="[[!_isEqual(selectedMenu,0)]]">
               <div class="step-number">1</div>
             </template>
             <label id="setrule">Set rule name &amp; scope</label>
           </div>
           <div class="step-item line-line"></div>
           <div class="step-item layout horizontal center" on-tap="nextStep">
-            <template is="dom-if" if="[[_selectedStep(selectedMenu,1)]]">
+            <template is="dom-if" if="[[_isEqual(selectedMenu,1)]]">
               <iron-icon icon="create"></iron-icon>
             </template>
-            <template is="dom-if" if="[[!_selectedStep(selectedMenu,1)]]">
+            <template is="dom-if" if="[[!_isEqual(selectedMenu,1)]]">
               <div class="step-number">2</div>
             </template>
             <label id="definescope">Define Transformation rules</label>
@@ -235,7 +235,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           this.set('selectedMenu', 1)
         }
       },
-      _selectedStep: function (selected, curr) {
+      _isEqual: function (selected, curr) {
         return selected == curr
       },
       isFirstStep: function (selected) {

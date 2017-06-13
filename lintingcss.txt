@@ -220,7 +220,7 @@ elements/service-personalization-field-value-replace.html
  39:4  ×  Expected indentation of 2 spaces   indentation
  40:2  ×  Expected indentation of 0 spaces   indentation
 
-elements/service-personalization-rule-name.html
+elements/service-personalization-rule.html
  36:3   ×  Expected empty line before custom property   custom-property-empty-line-before
  48:12  ×  Expected single space after ">"              selector-combinator-space-after  
  48:12  ×  Expected single space before ">"             selector-combinator-space-before 
