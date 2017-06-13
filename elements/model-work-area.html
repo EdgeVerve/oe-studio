@@ -956,7 +956,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 });
                 //updating the main modelList
                 response.checked = true;
-                this.dispatch('updateModelList', tempObj, updateModelIndex);
+                self.dispatch('updateModelList', tempObj, updateModelIndex);
                 // self.set('modelList.' + updateModelIndex, OEUtils.clone(tempObj));
                 //updating workspace models
                 self.push('workSpaceModelList', OEUtils.clone(tempObj));
