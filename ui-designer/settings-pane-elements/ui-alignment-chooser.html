@@ -376,10 +376,8 @@
 						var classList = this.element.classList;
 						this.set('isLayoutCollapsed', false);
 						this.set('isAlignmentCollapsed', false);
-						alignmentConfig.layout = (classList.contains('layout') ? (classList.contains(
-								'horizontal') ?
-							'horizontal' : (classList.contains('vertical') ? 'vertical' :
-								'')) : '');
+						if(classList.contains('layout')){
+							alignmentConfig.layout =(classList.contains('horizontal')?'horizontal' : (classList.contains('vertical') ? 'vertical' :''));
 
 						var chLayoutlist = ['oe-rl-25-75', 'oe-rl-2eq', 'oe-rl-75-25',
 							'oe-rl-3eq', 'oe-rl-343', 'oe-rl-4eq'
@@ -400,6 +398,7 @@
 						alignmentConfig.childrenLayout = chLayoutlist.find(function(css) {
 							return classList.contains(css)
 						});
+						}
 						this.set('alignmentConfig', alignmentConfig);
 						this.$['alignment-body'].show();
 					}, 100);

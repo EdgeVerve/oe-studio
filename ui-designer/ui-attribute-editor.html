@@ -555,7 +555,7 @@
           this.set('showMore', true);
         }
         this.set('tempAttributeList', _.cloneDeep(this.attributeList));
-        this.set('listdata', _.concat(this.attributeList, this.propertyList))
+        this.set('listdata', [].concat.call(this.attributeList, this.propertyList))
       }
       var c1 = this.querySelector('.attribute-container');
       c1 && (c1.scrollTop = 0);

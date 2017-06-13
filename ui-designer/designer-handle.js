@@ -485,12 +485,30 @@ var designerController = (function () {
 		}
 	}
 
+	function removeTextBinding(dom){
+		var walker = document.createTreeWalker(dom,NodeFilter.SHOW_TEXT,null,false);
+		var readBind = new RegExp(/\[\[([\S]*)\]\]/g);
+		var doubleBind = new RegExp(/\{\{([\S]*)\}\}/g);
+		while(walker.nextNode()){
+			var cNodeTxt = walker.currentNode.nodeValue;
+			if(cNodeTxt.match(readBind))
+				//cNodeTxt = cNodeTxt.replace(readBind,'&#91;&#91;$1&#93;&#93;');
+				cNodeTxt = cNodeTxt.replace(readBind,'[ [$1] ]');
+			if(cNodeTxt.match(doubleBind))
+				//cNodeTxt = cNodeTxt.replace(doubleBind,'&#123;&#123;$1&#125;&#125;');
+				cNodeTxt = cNodeTxt.replace(doubleBind,'{ {$1} }');
+			walker.currentNode.nodeValue = cNodeTxt;
+		}
+		return dom;
+	}
+
 	function renderNewPage(dom) {
 		checkElementsImport(function () {
 			var reRendered = handleDomMutation(dom);
 			GLOBAL_ISOLATED_DOM = dom.cloneNode(true);
 			if (reRendered) {
-				cont.innerHTML = '<template is="dom-bind">' + dom.innerHTML + '</template>';
+				var newDom = removeTextBinding(dom.cloneNode(true))
+				cont.innerHTML = '<template is="dom-bind">' + newDom.innerHTML + '</template>';
 				Polymer.dom.flush();
 				Polymer.Base.async(function(){
 					attachHandlers(cont);

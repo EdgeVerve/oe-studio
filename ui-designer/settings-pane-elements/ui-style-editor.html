@@ -437,11 +437,11 @@
           //Add new layout classes
           if (config.layout == 'horizontal' || config.layout == 'vertical') {
             classList.push('layout');
-            classList.push('wrap');
             classList.push(config.layout);
           }
          if (config.childrenLayout) {
-              classList.push(config.childrenLayout);
+             classList.push(config.childrenLayout);
+			 classList.push('wrap');
             }
             var layoutMap = {
               'top-left': 'justified start',
