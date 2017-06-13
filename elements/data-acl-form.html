@@ -77,7 +77,7 @@
               <oe-input field-id="property" label="Property" value="{{vm.property}}"></oe-input>
             </template>
             <template restamp is="dom-if" if="[[!isCustomFunc(vm.accessType)]]">
-              <oe-combo field-id="property" label="Property" value="{{vm.property}}" listdata='[[_computePropertyList(vm.accessType)]]'></oe-combo>
+              <oe-combo field-id="property" label="Property" value="{{vm.property}}" displayproperty="label" valueproperty="value" listdata='[[_computePropertyList(vm.accessType)]]'></oe-combo>
             </template>
             <iron-icon icon="info-outline" on-tap="toggleInfoPanel"></iron-icon>
             <iron-collapse>
@@ -178,6 +178,7 @@
           value: 'api/DataACLs'
         }
       },
+      behaviors: [OEUtils.FormValidationBehavior, OEUtils.ModelHandler, DesignerBehavior.ConstantBehavior],
       attached: function () {
         this.use('preInsert', function (headers, model, cb) {
           model.model = this.modelNameToSave;
@@ -192,12 +193,12 @@
           }
           cb();
         }.bind(this));
-        var readProperty = ['exists', 'find', 'findById', 'findOne', 'count'];
-        var writeProperty = ['create', 'upsert', 'destroyById'];
+        //var readProperty = ['exists', 'find', 'findById', 'findOne', 'count'];
+        //var writeProperty = ['create', 'upsert', 'destroyById'];
         this.set('propertyLists', {
-          write: writeProperty,
-          read: readProperty,
-          '*': writeProperty.concat(readProperty)
+          write: this.dropdownConst.acl.property.write,
+          read: this.dropdownConst.acl.property.read,
+          '*': this.dropdownConst.acl.property.all
         });
         this.set('principalList', {});
       },
@@ -208,6 +209,7 @@
         if (!type) {
           return;
         }
+        this.set('vm.property', null);
         return this.propertyLists[type.toLowerCase()]
       },
       _computePrincipalList: function (type) {
@@ -218,8 +220,7 @@
       },
       toggleInfoPanel: function (e) {
         e.currentTarget.nextElementSibling.toggle();
-      },
-      behaviors: [OEUtils.FormValidationBehavior, OEUtils.ModelHandler]
+      }
     })
   </script>
 </dom-module>

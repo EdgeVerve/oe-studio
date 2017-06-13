@@ -26,7 +26,7 @@
         modifiedState = Object.assign({}, state, { baseTypes: deepCopy(action.baseTypes) });
         break;
       case 'UPDATE_MODEL_LIST':
-        if (action.index) {
+        if (typeof action.index !== 'undefined') {
           state.modelList[action.index] = action.modelObj;
         } else {
           state.modelList.push(action.modelObj);
