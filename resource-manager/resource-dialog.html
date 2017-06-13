@@ -183,7 +183,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         ajax.generateRequest();
       },
       handleError: function (event) {
-        this.fire('oe-show-error', baseUtils.extractErrorMessage(event));
+        this.fire('oe-show-error', OEUtils.extractErrorMessage(event));
       },
       handleResponse: function (event) {
         var resource = event.detail.response;

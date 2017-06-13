@@ -1,7 +1,7 @@
 <script>
-	window.baseUtils = window.baseUtils || {};
-	var EV = window.baseUtils;
-	baseUtils.clone = function(from, to) {
+	window.OEUtils = window.OEUtils || {};
+	var EV = window.OEUtils;
+	OEUtils.clone = function(from, to) {
 		if (from === null || typeof from !== 'object') {
 			return from;
 		}
@@ -15,13 +15,111 @@
 		to = to || new from.constructor();
 
 		for (var name in from) {
-			to[name] = typeof to[name] === 'undefined' ? baseUtils.clone(from[name], null) : to[name];
+			to[name] = typeof to[name] === 'undefined' ? OEUtils.clone(from[name], null) : to[name];
 		}
 
 		return to;
 	}
 
-	baseUtils.designerData = baseUtils.designerData || {}
+	OEUtils.prettify = (function() {
+
+		function generatePrettyDom(dom) {
+			var domtree = createDOMObject(dom);
+			return createElementStr(domtree)
+		}
+
+		function generatePrettyString(str){
+			var temp = document.createElement('template');
+			temp.innerHTML = str;
+			var lines = generatePrettyDom(temp).replace(/\n\t/g,'\n').split('\n');
+			var newStr = lines.slice(1,lines.length -2 ).join('\n');
+			return newStr;
+		}
+
+		function createSpace(level) {
+			return new Array(level).fill('\t').join('');
+		}
+
+		function createElementStr(obj, level) {
+			if (!level) {
+				level = 0;
+			}
+			if (obj.isTextNode) {
+				return createSpace(level) + obj.textContent.replace(/\n/g, '\n' + createSpace(level + 1)) + '\n';
+			}
+			var startTag = createSpace(level) + '<' + obj.tag;
+			startTag += obj.attributes.map(function(attr) {
+				if (attr.value.length == 0) {
+					return ' ' + attr.key;
+				}
+				if (attr.value.indexOf('"') !== -1) {
+					return " " + attr.key + "='" + attr.value + "'";
+				}
+				return ' ' + attr.key + '="' + attr.value + '"';
+			}).join('');
+			if (obj.isSelfEnding) {
+				startTag += '/>\n'
+				return startTag;
+			} else {
+				startTag += '>'
+			}
+			if (obj.hasChildren) {
+				startTag += '\n'
+			}
+			startTag += obj.childrens.map(function(n) {
+				return createElementStr(n, level + 1);
+			}).join('');
+
+			if (obj.hasChildren) {
+				startTag += createSpace(level) + '</' + obj.tag + '>\n';
+			} else {
+				startTag += '</' + obj.tag + '>\n';
+			}
+			return startTag;
+		}
+
+		function createDOMObject(node) {
+			var obj = {
+				tag: node.nodeName.toLowerCase(),
+				childrens: [],
+				isTextNode: false
+			}
+			if (node.nodeName == '#text') {
+				if (node.textContent.trim().length == 0) {
+					return null;
+				};
+				obj.textContent = node.textContent.trim();
+				obj.isTextNode = true;
+				return obj;
+			}
+			if (obj.tag == 'link') {
+				obj.isSelfEnding = true;
+			}
+
+			obj.attributes = [].map.call(node.attributes, function(a) {
+				return {
+					key: a.nodeName,
+					value: a.nodeValue
+				}
+			})
+			var children = obj.tag == "template" ? node.content.childNodes : node.childNodes;
+			[].forEach.call(children, function(a) {
+				var y = createDOMObject(a)
+				if (y) {
+					obj.childrens.push(y)
+				}
+			});
+			obj.hasChildren = obj.childrens.length !== 0;
+			return obj;
+		}
+		return {
+			dom: generatePrettyDom,
+			domString: generatePrettyString
+		}
+	})()
+
+	OEUtils.designerData = OEUtils.designerData || {}
+
 	var DesignerBehavior = DesignerBehavior || {}
 
 	DesignerBehavior.HTMLBehavior = {
@@ -83,11 +181,11 @@
 					break;
 			}
 			this.traverseDom(ele, function(n) {
-				var conf = baseUtils.designerData.elementList.find(function(e) {
+				var conf = OEUtils.designerData.elementList.find(function(e) {
 					return e.tag === n.tagName.toLowerCase();
 				})
 				if (conf && conf.config) {
-					n.setAttribute('oe-id', baseUtils.generateGuid());
+					n.setAttribute('oe-id', OEUtils.generateGuid());
 					n.setAttribute('oe-ele-type', conf.config.type);
 				}
 			})
@@ -130,7 +228,7 @@
 		createNodeFromProp: function(config) {
 			var self = this;
 			var config = element.config;
-			var uiType = config.propDef.uitype || (baseUtils.TypeMappings[config.propDef.type] && baseUtils.TypeMappings[config.propDef.type]
+			var uiType = config.propDef.uitype || (OEUtils.TypeMappings[config.propDef.type] && OEUtils.TypeMappings[config.propDef.type]
 				.uiType) || 'oe-input';
 			var ele = self.createNodeFromName(uiType);
 			ele.classList.add('evfield');
@@ -172,11 +270,11 @@
 					var EVbehviorList = []
 					Object.keys(EV)
 						.filter(function() {
-							return typeof baseUtils.CaptchaBehavior === 'object'
+							return typeof OEUtils.CaptchaBehavior === 'object'
 						})
 						.forEach(function(k) {
 							EVbehviorList.push({
-								'name': 'baseUtils.' + k,
+								'name': 'OEUtils.' + k,
 								'value': EV[k]
 							})
 						});
@@ -283,14 +381,63 @@
 			}
 			var PolyStr = 'MetaPolymer({\n' + polyArr.join(',\n') + '\n})'
 			return PolyStr
+		},
+		polyObjectToString:function(polyObj){
+			var spaceLevels = ['\n','\n\t','\n\t\t','\n\t\t\t'];
+	var scriptStr = spaceLevels[0] + 'MetaPolymer({';
+	scriptStr += spaceLevels[1] + 'is:"'+polyObj.is +'"';
+	if(polyObj.behaviors){
+		scriptStr += ','+spaceLevels[1] + 'behaviors:[' + polyObj.behaviors.join(', ') + ']';
+	}
+	if(polyObj.listeners){
+		scriptStr += ','+spaceLevels[1] + 'listeners:' + JSON.stringify(polyObj.listeners);
+	}
+	if(polyObj.properties){
+		scriptStr += ','+spaceLevels[1] + 'properties:{';
+		scriptStr += Object.keys(polyObj.properties).map(function(pName) {
+			var ppolyObj = polyObj.properties[pName];
+			if (ppolyObj) {
+				var propStr = spaceLevels[2] + pName + ':{'
+				if (ppolyObj.type) {
+					propStr += (spaceLevels[3] + 'type:' + ppolyObj.type);
+				} else {
+					propStr += (spaceLevels[3] + 'type: Object');
+				}
+				if (ppolyObj.value != undefined) {
+					propStr += ','+spaceLevels[3]+'value:';
+					if (!!ppolyObj.value.match('function')) {
+						propStr += ppolyObj.value.replace(/\n/g,spaceLevels[2]);
+					} else if (typeof ppolyObj.value === 'object') {
+						propStr += JSON.stringify(ppolyObj.value);
+					} else if (typeof ppolyObj.value === 'string') {
+						propStr += '"' + ppolyObj.value + '"';
+					} else {
+						propStr += ppolyObj.value;
+					}
+				}
+				if (ppolyObj.notify != undefined) {
+					propStr += (','+spaceLevels[3]+'notify:' + ppolyObj.notify);
+				}
+				propStr += spaceLevels[2] + '}'
+				return propStr
+			}
+		}).join(',');
+		scriptStr += spaceLevels[1] + '}'
+	}
+	if (polyObj.functions) {
+		scriptStr += ',' + Object.keys(polyObj.functions).map(function(fn){
+				return spaceLevels[1] + fn + ':'+polyObj.functions[fn].replace(/\n/g,spaceLevels[1])
+			}).join(',')
+	}
+	scriptStr += spaceLevels[0] + '});'
+	return scriptStr
 		}
 	}
 
 	DesignerBehavior.ConstantBehavior = {
 		attached: function() {
 
-			var relationTypes = [
-			{
+			var relationTypes = [{
 				value: 'belongsTo',
 				label: 'Belongs To',
 				icon: 'oe-icons:belongs-to'
@@ -298,27 +445,27 @@
 				value: 'hasOne',
 				label: 'Has One',
 				icon: 'oe-icons:has-one'
-			},{
+			}, {
 				value: 'hasMany',
 				label: 'Has Many',
 				icon: 'oe-icons:has-many'
-			},{
+			}, {
 				value: 'embedsOne',
 				label: 'Embeds One',
 				icon: 'oe-icons:embeds-one'
-			},{
+			}, {
 				value: 'embedsMany',
 				label: 'Embeds Many',
 				icon: 'oe-icons:embeds-many'
 			}];
-/*
-		Polymorphic currently not created from designer
-			{
-				value: 'polymorphic',
-				label: 'Polymorphic',
-				icon: 'oe-icons:polymorpic'
-			}
-*/
+			/*
+					Polymorphic currently not created from designer
+						{
+							value: 'polymorphic',
+							label: 'Polymorphic',
+							icon: 'oe-icons:polymorpic'
+						}
+			*/
 
 			var readProperty = [{
 				value: 'exists',

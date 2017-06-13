@@ -84,7 +84,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       xhr.send();
     },
     resolveError: function (err) {
-      var errObj = baseUtils.extractErrorMessage(err);
+      var errObj = OEUtils.extractErrorMessage(err);
       this.fire('oe-show-error', errObj);
       return errObj.code || errObj.message;
     },
@@ -187,25 +187,15 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     properties: {
       modelList: {
         type: Array,
-        notify: true,
-        value: function () {
-          var val = [];
-          return val;
-        }
+        statePath: 'modelList'
       },
       baseTypes: {
         type: Array,
-        notify: true,
-        value: function () {
-          return [];
-        }
+        statePath: 'baseTypes',
       },
       propertyTypes: {
         type: Array,
-        notify: true,
-        value: function () {
-          return [];
-        }
+        statePath: 'propertyTypes',
       },
       propertyArrayElemTypes: {
         type: Array,
@@ -238,10 +228,22 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       'fetch-models': 'fetchModels'
     },
     actions: {
-      init: function (modelsList) {
+      initializeModelList: function (modelList) {
         return {
-          type: "INIT",
-          modelsList: modelsList
+          type: "INITIALIZE_MODEL_LIST",
+          modelList: modelList
+        }
+      },
+      initializePropertyTypes: function (propertyTypes) {
+        return {
+          type: "INITIALIZE_PROPERTY_TYPES",
+          propertyTypes: propertyTypes
+        }
+      },
+      initializeBaseTypes: function (baseTypes) {
+        return {
+          type: "INITIALIZE_BASE_TYPES",
+          baseTypes: baseTypes
         }
       }
     },
@@ -256,8 +258,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             return this.modelToArray(d);
           }.bind(this));
           var modelList = this.sortIgnoreCase(resp, 'name');
-          this.dispatch('init', modelList);
-          this.set('modelList', modelList);
+          this.dispatch('initializeModelList', modelList);
+          //this.set('modelList', modelList);
           this.refreshModelList();
           if (cb) {
             cb();
@@ -294,8 +296,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         return;
       }
       this.getMixins();
-      this.set('baseTypes', this.getBaseTypes(this.modelList));
-      this.set('propertyTypes', this.getPropertyTypes(this.modelList));
+      this.dispatch('initializeBaseTypes', this.getBaseTypes(this.modelList));
+      this.dispatch('initializePropertyTypes', this.getPropertyTypes(this.modelList));
+      // this.set('baseTypes', this.getBaseTypes(this.modelList));
+      // this.set('propertyTypes', this.getPropertyTypes(this.modelList));
       this.set('propertyArrayElemTypes', this.getPropertyArrayElemTypes(this.modelList));
     },
     getMixins: function () {
@@ -493,4 +497,5 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       return test
     }
   }
+
 </script>

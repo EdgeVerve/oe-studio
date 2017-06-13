@@ -7,7 +7,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 <link rel="import" href="../../polymer/polymer.html">
 <dom-module id="property-grid">
   <style>
-    :host {
+     :host {
       display: block;
     }
     /*Property Grid Styles*/
@@ -275,9 +275,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     <paper-input required label="Property name" error-message="Please enter the property name" no-label-float value="{{property.__name__}}"></paper-input>
                   </div>
                   <div class="gridCol prop-type">
-					  <oe-combo label="Property type" no-label-float required value="{{property.type}}"
-								listdata="[[propertyTypes]]"
-								error-message="Please select the type"></oe-combo>
+                    <oe-combo label="Property type" no-label-float required value="{{property.type}}" listdata="[[propertyTypes]]" error-message="Please select the type"></oe-combo>
                   </div>
                   <div class="gridCol prop-required">
                     <paper-checkbox noink checked="{{property.required}}">
@@ -323,9 +321,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         },
         propertyTypes: {
           type: Array,
-          value: function () {
-            return [];
-          }
+          statePath : 'propertyTypes'
         },
         deleteMultiple: {
           type: Boolean,
@@ -368,6 +364,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       listeners: {
         'read-only': '_setReadOnly'
       },
+      behaviors: [ModelReduxBehavior],
       _setReadOnly: function () {
         if (this.showValidation && !this.readOnly) {
           var validationForm = this.querySelector('#validationForm');

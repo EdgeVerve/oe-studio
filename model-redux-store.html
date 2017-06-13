@@ -1,39 +1,56 @@
 <script src="scripts/redux.js"></script>
 <link rel="import" href="../polymer-redux/polymer-redux.html">
-<link rel="import" href="behaviours/designer-wrapper-behaviors.html">
 <script>
   var initialData = {
-    modelsList: [],
-    propertysList: [],
-    baseTypes : []
+    modelList: [],
+    propertyTypes: [],
+    baseTypes: []
   }
 
-  var setModelList = function(){
-    
+  var sortIgnoreCase = function (arr, prop) {
+    return arr.sort(function (a, b) {
+      return a[prop].toLowerCase().localeCompare(b[prop].toLowerCase());
+    });
   }
 
   var reducerFunction = function (state, action) {
-    if (!state) {
-      return initialData;
-    }
     var modifiedState;
     switch (action.type) {
-      case 'INIT':
-        debugger;
-        modifiedState = Object.assign({}, state, deepCopy(initialData));
+      case 'INITIALIZE_MODEL_LIST':
+        modifiedState = Object.assign({}, state, { modelList: deepCopy(action.modelList) });
         break;
-      case 'UPDATE_MODELS_LIST':
+      case 'INITIALIZE_PROPERTY_TYPES':
+        modifiedState = Object.assign({}, state, { propertyTypes: deepCopy(action.propertyTypes) });
+        break;
+      case 'INITIALIZE_BASE_TYPES':
+        modifiedState = Object.assign({}, state, { baseTypes: deepCopy(action.baseTypes) });
+        break;
+      case 'UPDATE_MODEL_LIST':
+        if (action.index) {
+          state.modelList[action.index] = action.modelObj;
+        } else {
+          state.modelList.push(action.modelObj);
+          state.modelList = sortIgnoreCase(state.modelList, 'name');
+        }
+        modifiedState = Object.assign({}, state, { modelList: deepCopy(state.modelList) });
+        break;
+      case 'UPDATE_PROPERTY_LIST':
+        modifiedState = Object.assign({}, state, { propertyTypes: deepCopy(action.propertyTypes) });
+        break;
+      case 'UPDATE_BASE_TYPES':
+        modifiedState = Object.assign({}, state, { baseTypes: deepCopy(action.baseTypes) });
         break;
       default:
-        modifiedState = Object.assign({}, state, deepCopy(initialData));
+        modifiedState = Object.assign({}, state, initialData);
     }
     return modifiedState;
   }
 
   var deepCopy = function (data) {
-    return baseUtils.clone(data);
+    return JSON.parse(JSON.stringify(data));
   }
 
   var reduxStore = Redux.createStore(reducerFunction);
   var ModelReduxBehavior = PolymerRedux(reduxStore);
+
 </script>

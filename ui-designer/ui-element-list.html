@@ -344,7 +344,7 @@
           } else {
             self.resolveError(err);
           }
-          baseUtils.designerData.elementList = elementList;
+          OEUtils.designerData.elementList = elementList;
           groupedElements = _.groupBy(elementList, function(item) {
             return item.category;
           });

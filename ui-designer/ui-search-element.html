@@ -221,7 +221,7 @@
       _searchElement: function() {
         var searchKey = this.searchKey;
         if (searchKey.length) {
-          var result = baseUtils.designerData.elementList.filter(function(d) {
+          var result = OEUtils.designerData.elementList.filter(function(d) {
             return this.ifMatch(d.name, searchKey);
           }.bind(this));
           this.set('searchResults', this.categorize(result));
