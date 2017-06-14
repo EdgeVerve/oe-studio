@@ -173,7 +173,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         <div class="rule-list">
           <iron-selector on-iron-select="showRuleDetail" selected="{{ruleSelected}}">
             <template is="dom-repeat" items="{{rulesList}}" as="rule">
-              <div class="rule" rule="{{rule}}">{{rule.name}}</div>
+              <div class="rule" rule="{{rule}}">{{rule.ruleName}}</div>
             </template>
           </iron-selector>
         </div>
@@ -382,14 +382,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       _fetchRules: function () {
         var modelName = this.modelObj.name;
-        var url = 'api/DesignerRules?filter[where][modelName]=' + modelName;
+        var url = 'api/PersonalizationRules?filter[where][modelName]=' + modelName;
         this.makeAjaxCall(url, 'GET', null, null, null, function (err, response) {
           if (err) {
             this.resolveError(err);
           } else if (response) {
-            response.forEach(function (data) {
-              data.scope = data.customScope;
-            })
+//            response.forEach(function (data) {
+//              data.scope = data.customScope;
+//            })
             this.set('rulesList', response);
             if (this.rulesList.length != 0) {
               this.ruleSelected = 0;
@@ -410,7 +410,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.fire('oe-show-confirm', data);
       },
       _deleteRule: function () {
-        var url = 'api/DesignerRules/' + this.selectedRule.id + '/' + this.selectedRule._version;
+        var url = 'api/PersonalizationRules/' + this.selectedRule.id + '/' + this.selectedRule._version;
         var body = this.selectedRule;
         this.makeAjaxCall(url, 'DELETE', body, null, null, function (err, response) {
           if (err) {

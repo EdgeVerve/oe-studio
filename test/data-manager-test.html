@@ -403,7 +403,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             'Content-Type': 'application/json'
           }, JSON.stringify(resp))
         });
-        server.respondWith('GET', /api\/DesignerRules/, function(req) {
+        server.respondWith('GET', /api\/PersonalizationRules/, function(req) {
           var list = [];
           req.respond(200, {
             'Content-Type': 'application/json'

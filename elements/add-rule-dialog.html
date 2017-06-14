@@ -90,7 +90,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             <iron-icon icon="av:playlist-add" class="custom-icon"></iron-icon>
             <span>
 					<template is="dom-if" if="[[isEditMode]]">
-						Edit Rule ([[selectedRule.name]]) for - [[modelObj.name]]
+						Edit Rule ([[selectedRule.ruleName]]) for - [[modelObj.name]]
 					</template>
   <template is="dom-if" if="[[!isEditMode]]">
 						Create Personalization Rule for - [[modelObj.name]]
@@ -180,7 +180,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         if (!this.isEditMode) {
           var tempObj = {
             modelName: this.modelObj.name,
-            name: '',
+            ruleName: '',
             personalizationRule: {
               filter: {},
               sort: [],
@@ -257,7 +257,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         })
         this.selectedRule.scope = scope;
         ruledef.validate();
-        isValid = isValid && this.selectedRule.name && (this.selectedRule.name.trim().length > 0) && (Object.keys(
+        isValid = isValid && this.selectedRule.ruleName && (this.selectedRule.ruleName.trim().length > 0) && (Object.keys(
             scope)
           .length > 0);
         return isValid;

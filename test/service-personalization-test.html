@@ -156,7 +156,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         server.autoRespond = true;
         server.respondImmediately = true;
 
-        server.respondWith('GET', /api\/DesignerRules/, function(req) {
+        server.respondWith('GET', /api\/PersonalizationRules/, function(req) {
           var modelName = req.url.split('=')[1];
           var list = PersonalizationRules.filter(function(d) {
             return d.modelName == modelName;
@@ -177,7 +177,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         });
 
 
-        server.respondWith('DELETE', /api\/DesignerRules/, function(req) {
+        server.respondWith('DELETE', /api\/PersonalizationRules/, function(req) {
           var dataToUpdate = JSON.parse(req.requestBody);
           var id = dataToUpdate.id;
           var status = false;
