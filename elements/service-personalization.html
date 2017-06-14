@@ -382,8 +382,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       _fetchRules: function () {
         var modelName = this.modelObj.name;
-        var url = 'api/PersonalizationRules?filter[where][modelName]=' + modelName;
-        this.makeAjaxCall(url, 'GET', null, null, null, function (err, response) {
+        var filter = {
+          where : {modelName: modelName}  
+        };
+        var url = 'api/PersonalizationRules';
+        this.makeAjaxCall(url, 'GET', null, null, {filter: filter}, function (err, response) {
           if (err) {
             this.resolveError(err);
           } else if (response) {
