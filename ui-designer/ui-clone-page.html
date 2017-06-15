@@ -111,6 +111,9 @@
       return 'CLONE NODE';
     },
     _activePageChanged: function() {
+		if(!this.activePage){
+			return;
+		}
       this.set('scope', '');
       this.set('pageName', this.activePage.name);
       var tmpl = this.templateList.find(function(obj) {
@@ -172,7 +175,7 @@
       return description.trim().substring('@description'.length, description.length).trim();
     },
     _filterTemplates: function(list, activePage) {
-      if (!activePage.isPolymerElement) {
+      if (!activePage || !activePage.isPolymerElement) {
         return false;
       }
       if (activePage.isPolymerElement) {

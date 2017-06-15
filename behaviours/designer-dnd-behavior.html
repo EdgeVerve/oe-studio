@@ -1,7 +1,7 @@
 <script>
 	window.OEUtils = window.OEUtils || {};
 	var EV = window.OEUtils;
-	OEUtils.clone = function (from, to) {
+	OEUtils.clone = function(from, to) {
 		if (from === null || typeof from !== 'object') {
 			return from;
 		}
@@ -21,7 +21,7 @@
 		return to;
 	}
 
-	OEUtils.prettify = (function () {
+	OEUtils.prettify = (function() {
 
 		function generatePrettyDom(dom) {
 			var domtree = createDOMObject(dom);
@@ -48,7 +48,7 @@
 				return createSpace(level) + obj.textContent.replace(/\n/g, '\n' + createSpace(level + 1)) + '\n';
 			}
 			var startTag = createSpace(level) + '<' + obj.tag;
-			startTag += obj.attributes.map(function (attr) {
+			startTag += obj.attributes.map(function(attr) {
 				if (attr.value.length == 0) {
 					return ' ' + attr.key;
 				}
@@ -66,7 +66,7 @@
 			if (obj.hasChildren) {
 				startTag += '\n'
 			}
-			startTag += obj.childrens.map(function (n) {
+			startTag += obj.childrens.map(function(n) {
 				return createElementStr(n, level + 1);
 			}).join('');
 
@@ -96,14 +96,14 @@
 				obj.isSelfEnding = true;
 			}
 
-			obj.attributes = [].map.call(node.attributes, function (a) {
+			obj.attributes = (node.attributes && node.attributes.length !== 0) ? ([].map.call(node.attributes, function(a) {
 				return {
 					key: a.nodeName,
 					value: a.nodeValue
 				}
-			})
+			})):[];
 			var children = obj.tag == "template" ? node.content.childNodes : node.childNodes;
-			[].forEach.call(children, function (a) {
+			[].forEach.call(children, function(a) {
 				var y = createDOMObject(a)
 				if (y) {
 					obj.childrens.push(y)
@@ -123,13 +123,13 @@
 	var DesignerBehavior = DesignerBehavior || {}
 
 	DesignerBehavior.HTMLBehavior = {
-		attached: function () {
+		attached: function() {
 			this.elementInfo = {
 				imports: [],
 				css: ''
 			}
 		},
-		traverseDom: function (node, cb) {
+		traverseDom: function(node, cb) {
 
 			var newNode = cb(node);
 			if (newNode) {
@@ -146,7 +146,7 @@
 				}
 			}
 		},
-		traverseDomAll: function (node, cb) {
+		traverseDomAll: function(node, cb) {
 			var newNode = cb(node);
 			if (newNode) {
 				node = newNode;
@@ -162,7 +162,7 @@
 				}
 			}
 		},
-		createNodeFromConfig: function (config) {
+		createNodeFromConfig: function(config) {
 			var self = this;
 			var ele;
 			switch (config.config.type) {
@@ -180,8 +180,8 @@
 					}
 					break;
 			}
-			this.traverseDom(ele, function (n) {
-				var conf = OEUtils.designerData.elementList.find(function (e) {
+			this.traverseDom(ele, function(n) {
+				var conf = OEUtils.designerData.elementList.find(function(e) {
 					return e.tag === n.tagName.toLowerCase();
 				})
 				if (conf && conf.config) {
@@ -191,18 +191,18 @@
 			})
 			return ele;
 		},
-		throughClone: function (node) {
+		throughClone: function(node) {
 			var temp = document.createElement('template');
 			temp.innerHTML = node.outerHTML;
 			return temp.content.querySelector(node.nodeName.toLowerCase()).cloneNode(true)
 		},
-		createNodeFromName: function (nodeType) {
+		createNodeFromName: function(nodeType) {
 			var parser = new DOMParser();
 			var str = '<' + nodeType + '></' + nodeType + '>';
 			var doc = parser.parseFromString(str, 'text/html');
 			return doc.querySelector(nodeType);
 		},
-		createNodeFromStr: function (str) {
+		createNodeFromStr: function(str) {
 			var template = document.createElement('template');
 			template.innerHTML = str;
 			var self = this;
@@ -211,7 +211,7 @@
 				ele = document.createElement('div');
 				ele.classList.add('snippet-container');
 				ele.setAttribute('id', 'snippet-container');
-				[].forEach.call(template.content.children, function (el) {
+				[].forEach.call(template.content.children, function(el) {
 					ele.appendChild(self.throughClone(el));
 				});
 			} else {
@@ -219,13 +219,13 @@
 			}
 			return ele
 		},
-		createNodeFromElement: function (config) {
+		createNodeFromElement: function(config) {
 			var self = this;
 			var ele = self.createNodeFromName(config.name);
 			ele.classList.add('evfield');
 			return ele;
 		},
-		createNodeFromProp: function (config) {
+		createNodeFromProp: function(config) {
 			var self = this;
 			var config = element.config;
 			var uiType = config.propDef.uitype || (OEUtils.TypeMappings[config.propDef.type] && OEUtils.TypeMappings[config.propDef.type]
@@ -233,7 +233,7 @@
 			var ele = self.createNodeFromName(uiType);
 			ele.classList.add('evfield');
 			ele.setAttribute('field-id', config.propName);
-			Object.keys(config.propDef).forEach(function (k) {
+			Object.keys(config.propDef).forEach(function(k) {
 				if (k !== 'uitype' && k !== 'type' && k !== 'itemtype' && k !== 'evtype') {
 					ele.setAttribute(k, '[[_fieldsmeta.' + config.propName + '.' + k + ']]')
 				}
@@ -246,16 +246,16 @@
 	}
 
 	DesignerBehavior.CommonBehavior = {
-		polyObjectTopolyJson: function (polyObj) {
+		polyObjectTopolyJson: function(polyObj) {
 			var polyJson = {};
-			Object.keys(polyObj).forEach(function (key) {
+			Object.keys(polyObj).forEach(function(key) {
 				var val = polyObj[key];
 				if (key === 'properties') {
 					polyJson.properties = polyJson.properties || {}
-					Object.keys(val).forEach(function (propName) {
+					Object.keys(val).forEach(function(propName) {
 						var propVal = val[propName];
 						polyJson.properties[propName] = {};
-						Object.keys(propVal).forEach(function (propKey) {
+						Object.keys(propVal).forEach(function(propKey) {
 							if (propKey === 'type') {
 								polyJson.properties[propName].type = propVal[propKey].name;
 							} else if (typeof propVal[propKey] === 'function') {
@@ -269,18 +269,18 @@
 					polyJson.behaviors = polyJson.behaviors || []
 					var EVbehviorList = []
 					Object.keys(EV)
-						.filter(function () {
+						.filter(function() {
 							return typeof OEUtils.CaptchaBehavior === 'object'
 						})
-						.forEach(function (k) {
+						.forEach(function(k) {
 							EVbehviorList.push({
 								'name': 'OEUtils.' + k,
 								'value': EV[k]
 							})
 						});
 
-					val.forEach(function (beh) {
-						var ev = EVbehviorList.find(function (b) {
+					val.forEach(function(beh) {
+						var ev = EVbehviorList.find(function(b) {
 							return (b.value === beh)
 						});
 						if (ev) {
@@ -300,16 +300,16 @@
 			})
 			return polyJson;
 		},
-		polyJsonTopolyObject: function (polyJson) {
+		polyJsonTopolyObject: function(polyJson) {
 			var polyObj = {};
-			Object.keys(polyJson).forEach(function (key) {
+			Object.keys(polyJson).forEach(function(key) {
 				var val = polyJson[key];
 				if (key === 'properties') {
 					polyObj.properties = polyObj.properties || {}
-					Object.keys(val).forEach(function (propName) {
+					Object.keys(val).forEach(function(propName) {
 						var propVal = val[propName];
 						polyObj.properties[propName] = {};
-						Object.keys(propVal).forEach(function (propKey) {
+						Object.keys(propVal).forEach(function(propKey) {
 							try {
 								polyObj.properties[propName][propKey] = eval(propVal[propKey]);
 							} catch (e) {
@@ -319,7 +319,7 @@
 					})
 				} else if (key === 'behaviors') {
 					polyObj.behaviors = polyObj.behaviors || []
-					val.forEach(function (beh) {
+					val.forEach(function(beh) {
 						try {
 							polyObj.behaviors.push(eval(beh))
 						} catch (e) {
@@ -327,7 +327,7 @@
 						}
 					})
 				} else if (key === 'functions') {
-					Object.keys(val).forEach(function (fnName) {
+					Object.keys(val).forEach(function(fnName) {
 						polyObj[fnName] = new Function('return ' + val[fnName])()
 					})
 				} else {
@@ -336,10 +336,10 @@
 			})
 			return polyObj;
 		},
-		polyJsonTopolyStr: function (polyJson) {
+		polyJsonTopolyStr: function(polyJson) {
 			var extraAttr = [];
 			var polyArr = []
-			Object.keys(polyJson).forEach(function (key) {
+			Object.keys(polyJson).forEach(function(key) {
 				var val = polyJson[key];
 				switch (key) {
 					case 'properties':
@@ -382,9 +382,14 @@
 			var PolyStr = 'MetaPolymer({\n' + polyArr.join(',\n') + '\n})'
 			return PolyStr
 		},
-		polyObjectToString: function (polyObj) {
+		polyObjectToString: function(polyObj) {
 			var spaceLevels = ['\n', '\n\t', '\n\t\t', '\n\t\t\t'];
-			var scriptStr = spaceLevels[0] + 'MetaPolymer({';
+			var scriptStr
+			if (polyObj.isMeta) {
+				scriptStr = spaceLevels[0] + 'MetaPolymer({';
+			} else {
+				scriptStr = spaceLevels[0] + 'Polymer({';
+			}
 			scriptStr += spaceLevels[1] + 'is:"' + polyObj.is + '"';
 			if (polyObj.behaviors) {
 				scriptStr += ',' + spaceLevels[1] + 'behaviors:[' + polyObj.behaviors.join(', ') + ']';
@@ -394,7 +399,7 @@
 			}
 			if (polyObj.properties) {
 				scriptStr += ',' + spaceLevels[1] + 'properties:{';
-				scriptStr += Object.keys(polyObj.properties).map(function (pName) {
+				scriptStr += Object.keys(polyObj.properties).map(function(pName) {
 					var ppolyObj = polyObj.properties[pName];
 					if (ppolyObj) {
 						var propStr = spaceLevels[2] + pName + ':{'
@@ -405,12 +410,14 @@
 						}
 						if (ppolyObj.value != undefined) {
 							propStr += ',' + spaceLevels[3] + 'value:';
-							if (!!ppolyObj.value.match('function')) {
-								propStr += ppolyObj.value.replace(/\n/g, spaceLevels[2]);
-							} else if (typeof ppolyObj.value === 'object') {
+							if (typeof ppolyObj.value === 'object') {
 								propStr += JSON.stringify(ppolyObj.value);
 							} else if (typeof ppolyObj.value === 'string') {
-								propStr += '"' + ppolyObj.value + '"';
+								if (!!ppolyObj.value.match('function')) {
+									propStr += ppolyObj.value.replace(/\n/g, spaceLevels[2]);
+								} else {
+									propStr += '"' + ppolyObj.value + '"';
+								}
 							} else {
 								propStr += ppolyObj.value;
 							}
@@ -425,7 +432,7 @@
 				scriptStr += spaceLevels[1] + '}'
 			}
 			if (polyObj.functions) {
-				scriptStr += ',' + Object.keys(polyObj.functions).map(function (fn) {
+				scriptStr += ',' + Object.keys(polyObj.functions).map(function(fn) {
 					return spaceLevels[1] + fn + ':' + polyObj.functions[fn].replace(/\n/g, spaceLevels[1])
 				}).join(',')
 			}
@@ -435,7 +442,7 @@
 	}
 
 	DesignerBehavior.ConstantBehavior = {
-		attached: function () {
+		attached: function() {
 
 			var relationTypes = [{
 				value: 'belongsTo',

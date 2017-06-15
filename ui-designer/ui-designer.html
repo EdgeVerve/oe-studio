@@ -111,6 +111,8 @@
       customEval: function(str) {
         var script = document.createElement('script');
         script.type = 'text/javascript';
+		//Clear all content before Polymer invocation.
+		str = str.replace(/(.*\n)*.*window\.OEUtils/,'window.OEUtils');
         script.textContent = 'try{\n' + str + '\n}catch(e){ window.ev_parseFailed = true}'
         document.head.appendChild(script);
         document.head.removeChild(script);
@@ -145,7 +147,7 @@
             self.set('pageSelected', false);
             return;
           }
-
+		  pageDetail.polyConfig.is = pageDetail.templateConfig.is;
           uimeta.content = pageDetail.uiComponent.content;
 
           //Meta transform for the files
@@ -208,7 +210,7 @@
             component.querySelector('template').content.querySelector('style:not([is])');
           payload.userStyle = style && style.parentNode.removeChild(style);
           var polymerHtml = component.querySelector('template');
-          var polymerScript = component.querySelector('script');
+          var polymerScript = component.querySelector('script') || docFrag.querySelector('script');
           payload.polyConfig = self.getPolymerJSON(polymerScript);
           if (!payload.polyConfig) {
             this.fire('oe-show-error', 'Error obtaining Polymer Object');
@@ -269,6 +271,7 @@
           }
           var polyJson = this.polyObjectTopolyJson(tempObject);
           window.OEUtils.tempPolyObj = null;
+		  polyJson.isMeta = !scriptText.match(/Polymer\(/);
           return polyJson;
         } else {
           this.fire('oe-show-error', 'Error obtaining Polymer Object');
