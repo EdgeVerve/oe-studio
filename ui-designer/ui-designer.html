@@ -21,7 +21,7 @@
 	</style>
 	<template>
 		<div class="module-container layout horizontal">
-			<ui-element-list id="elemList" on-update-widget="_handleAddWidget" on-delete-widget="_handleDeleteWidget"></ui-element-list>
+			<ui-element-list id="elemList" on-update-widget="_handleUpdateWidget" on-delete-widget="_handleDeleteWidget"></ui-element-list>
 			<ui-dom-manager id="domManager" class="flex" page-selected="{{pageSelected}}" element="{{element}}" on-iframe-loaded="showPagePanel" on-snippet-added="handleSnippetAdd" show-code-pane={{showCodePane}} style-sheet={{styleSheet}} predefined-styles={{predefinedStyles}}></ui-dom-manager>
 			<ui-right-panel hidden="[[!pageSelected]]" style-sheet={{styleSheet}} element="{{element}}" predefined-styles={{predefinedStyles}} on-generate-form="generateForm"></ui-right-panel>
 		</div>
@@ -856,40 +856,10 @@
 			_toggleCodePanel: function() {
 				this.set('showCodePane', !this.showCodePane);
 			},
-			_handleAddWidget: function(e) {
+			_handleUpdateWidget: function(e) {
 				var config = e.detail;
-				this.$.addWidgetDialog.launch(config);
-			},
-			_handleDeleteWidget: function(e) {
-				var config = e.detail;
-
-				this.fire('oe-show-confirm', {
-					message: 'Widget ' + config.name + ' will be permanently removed. Are you sure?',
-					ok: function() {
-						this.makeAjaxCall('/api/DesignerElements/' + config.id, 'delete', null, null, null, function(err, res) {
-							if (!err) {
-								this.fire('oe-show-success', 'Widget deleted successfully');
-								this.$.elemList.populateElementList();
-							} else {
-								this.resolveError(err);
-							}
-						}.bind(this));
-					}.bind(this),
-					cancel: null
-				});
-			},
-			_saveWidget: function(e) {
-				var config = e.detail;
-				var method = config.id ? 'put' : 'post';
-				delete config._userDefined;
-				this.makeAjaxCall('/api/DesignerElements/', method, config, null, null, function(err, res) {
-					if (!err) {
-						this.$.elemList.populateElementList();
-						this.fire('oe-show-success', 'Widget successfully added');
-					} else {
-						this.resolveError(err);
-					}
-				}.bind(this))
+				var elementList = this.$.elemList;
+				this.$.addWidgetDialog.launch(config,elementList);
 			}
 		})
 

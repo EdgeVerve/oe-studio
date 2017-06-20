@@ -208,8 +208,7 @@
 									<iron-icon icon="[[item.icon]]"></iron-icon>
 									<label>[[item.name]]</label>
 									<div class="ele-actions" hidden="[[!item._userDefined]]">
-										<iron-icon icon="create" on-tap="_editElement"></iron-icon>
-										<iron-icon icon="delete" on-tap="_deleteElement"></iron-icon>
+										<iron-icon icon="more-vert" on-tap="_editElement"></iron-icon>
 									</div>
 								</div>
 							</template>
@@ -226,8 +225,8 @@
 									<iron-icon icon="[[item.icon]]"></iron-icon>
 									<label>[[item.name]]</label>
 									<div class="ele-actions" hidden="[[!item._userDefined]]">
-										<iron-icon icon="create" on-tap="_editElement"></iron-icon>
-										<iron-icon icon="delete" on-tap="_deleteElement"></iron-icon>
+										<iron-icon icon="more-vert" on-tap="_editElement"></iron-icon>
+
 									</div>
 								</div>
 							</template>
@@ -244,8 +243,8 @@
 									<iron-icon icon="[[item.icon]]"></iron-icon>
 									<label>[[item.name]]</label>
 									<div class="ele-actions" hidden="[[!item._userDefined]]">
-										<iron-icon icon="create" on-tap="_editElement"></iron-icon>
-										<iron-icon icon="delete" on-tap="_deleteElement"></iron-icon>
+										<iron-icon icon="more-vert" on-tap="_editElement"></iron-icon>
+
 									</div>
 								</div>
 							</template>
@@ -262,8 +261,8 @@
 									<iron-icon icon="[[item.icon]]"></iron-icon>
 									<label>[[item.name]]</label>
 									<div class="ele-actions" hidden="[[!item._userDefined]]">
-										<iron-icon icon="create" on-tap="_editElement"></iron-icon>
-										<iron-icon icon="delete" on-tap="_deleteElement"></iron-icon>
+										<iron-icon icon="more-vert" on-tap="_editElement"></iron-icon>
+
 									</div>
 								</div>
 							</template>
@@ -280,8 +279,7 @@
 									<iron-icon icon="[[item.icon]]"></iron-icon>
 									<label>[[item.name]]</label>
 									<div class="ele-actions" hidden="[[!item._userDefined]]">
-										<iron-icon icon="create" on-tap="_editElement"></iron-icon>
-										<iron-icon icon="delete" on-tap="_deleteElement"></iron-icon>
+										<iron-icon icon="more-vert" on-tap="_editElement"></iron-icon>
 									</div>
 								</div>
 							</template>
@@ -298,8 +296,8 @@
 									<iron-icon icon="[[item.icon]]"></iron-icon>
 									<label>[[item.name]]</label>
 									<div class="ele-actions" hidden="[[!item._userDefined]]">
-										<iron-icon icon="create" on-tap="_editElement"></iron-icon>
-										<iron-icon icon="delete" on-tap="_deleteElement"></iron-icon>
+										<iron-icon icon="more-vert" on-tap="_editElement"></iron-icon>
+
 									</div>
 								</div>
 							</template>
@@ -316,8 +314,8 @@
 									<iron-icon icon="[[item.icon]]"></iron-icon>
 									<label>[[item.name]]</label>
 									<div class="ele-actions" hidden="[[!item._userDefined]]">
-										<iron-icon icon="create" on-tap="_editElement"></iron-icon>
-										<iron-icon icon="delete" on-tap="_deleteElement"></iron-icon>
+										<iron-icon icon="more-vert" on-tap="_editElement"></iron-icon>
+
 									</div>
 								</div>
 							</template>
@@ -454,10 +452,6 @@
 			_editElement: function(e) {
 				var config = e.model.__data__.item;
 				this.fire('update-widget', config);
-			},
-			_deleteElement: function(e) {
-				var config = e.model.__data__.item;
-				this.fire('delete-widget', config);
 			}
 		})
 
