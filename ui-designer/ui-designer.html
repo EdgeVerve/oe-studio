@@ -26,7 +26,9 @@
 			<ui-right-panel hidden="[[!pageSelected]]" style-sheet={{styleSheet}} element="{{element}}" predefined-styles={{predefinedStyles}} on-generate-form="generateForm"></ui-right-panel>
 		</div>
 		<ui-theme-designer id="theme-designer"></ui-theme-designer>
-		<ui-toolbar on-page-selected="pageSelectedHandle" on-clear-workspace="clearWorkSpace" on-toggle-code-panel="_toggleCodePanel" on-save-page="savePage" on-load-file-success="loadFilePage" on-toggle-theme-panel="toggleThemePanel" on-export-component="exportComponent" id="toolbar"></ui-toolbar>
+		<ui-toolbar on-page-selected="pageSelectedHandle"
+					on-update-widget="_handleUpdateWidget"
+					on-clear-workspace="clearWorkSpace" on-toggle-code-panel="_toggleCodePanel" on-save-page="savePage" on-load-file-success="loadFilePage" on-toggle-theme-panel="toggleThemePanel" on-export-component="exportComponent" id="toolbar"></ui-toolbar>
 		<ui-add-widget-dialog id="addWidgetDialog" on-save-widget="_saveWidget"></ui-add-widget-dialog>
 	</template>
 	<script>

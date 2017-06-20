@@ -326,8 +326,8 @@
 			<div class="recent-container">
 				<template is="dom-repeat" items="[[recentComponents]]">
 					<div class="recent-element layout vertical center" draggable="true" on-dragstart="dragStartHandle" config="[[item]]">
-						<iron-icon id$=[[item.id]] icon="[[item.icon]]"></iron-icon>
-						<paper-tooltip for="[[item.id]]" position="right">[[item.name]]</paper-tooltip>
+						<iron-icon id$="el-[[item.id]]" icon="[[item.icon]]"></iron-icon>
+						<paper-tooltip for="el-[[item.id]]" position="right">[[item.name]]</paper-tooltip>
 					</div>
 				</template>
 			</div>

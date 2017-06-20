@@ -326,6 +326,7 @@
 																<span class="flex page-name">[[page.name]]</span>
 																<template is="dom-if" if="{{page.scope}}"><span class="scope-text">{ ... }</span></template>
   <div class="options">
+	  <iron-icon icon="star-border" on-tap="_exportAsComponent"></iron-icon>
     <iron-icon icon="file-download" on-tap="_downloadComponent"></iron-icon>
     <iron-icon icon="delete" on-tap="_deleteComponent"></iron-icon>
   </div>
@@ -734,6 +735,28 @@
           }
         })
       },
+		_exportAsComponent:function(e){
+			var componentData = e.model.page;
+			e.stopPropagation();
+			e.stopImmediatePropagation();
+
+			var config = {
+  "name": "",
+  "tag": componentData.name,
+  "icon": "icons:polymer",
+  "description": componentData.name,
+  "content": "<"+componentData.name+"></"+componentData.name+">",
+  "category": "polymerElements",
+  "config": {
+    "domType": "Polymer",
+    "importUrl": "api/UIComponents/component/"+componentData.name
+  },
+  "previewImg": ""
+}
+			config.name = OEUtils.camelCaseToLabel(OEUtils.snakeToCamel(componentData.name));
+			this.fire('update-widget',config);
+			this.$.pageSelectMenu.close();
+		},
       updateComponentList: function(pageData) {
         var pageIndex = this.componentList.findIndex(function(p) {
           return p.id == pageData.id;

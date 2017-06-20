@@ -52,7 +52,9 @@ html{
   box-sizing: border-box;
 }
 
-
+*{
+	box-sizing: border-box;
+}
 /*[oe-id]:not([oe-ele-type="droppable"]):not([oe-ele-type="text"]) >*{
 	pointer-events: none;
 }*/

@@ -32,7 +32,7 @@
   </style>
 
   <style>
-    #content {
+    body > #content {
       padding: 16px;
       min-height: 100%;
     }
@@ -43,9 +43,9 @@
 <body>
 
   <div id="content"></div>
-  <context-box id="focusContext" class="focus-context"></context-box>
-  <context-box id="dropContext" class="drop-context"></context-box>
-  <context-box id="hoverContext" class="hover-context"></context-box>
+  <context-box id="focusContext" class="focus-context" hidden></context-box>
+  <context-box id="dropContext" class="drop-context" hidden></context-box>
+  <context-box id="hoverContext" class="hover-context" hidden></context-box>
   <script src="/bower_components/oe-studio/ui-designer/designer-handle.js" type="text/javascript"></script>
 </body>
 
