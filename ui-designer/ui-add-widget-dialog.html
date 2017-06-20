@@ -1,0 +1,51 @@
+<dom-module id="ui-add-widget-dialog">
+	<template>
+		<style>
+			#dialog {
+				min-width: 300px;
+			}
+
+		</style>
+
+		<paper-dialog id="dialog" modal>
+			<div class="dialog-header">[[header]]</div>
+			<div class="dialog-content">
+				<form is="iron-form" id="form">
+					<label class="helper-text">Widget Name</label>
+					<oe-input no-label-float value="{{config.name}}" required></oe-input>
+					<label class="helper-text">Widget Description</label>
+					<oe-textarea no-label-float value="{{config.description}}" required></oe-textarea>
+					<icon-picker selected-icon="{{config.icon}}"></icon-picker>
+					<oe-combo required listdata="[[types]]" value="{{config.category}}" label="Category"></oe-combo>
+				</form>
+			</div>
+			<div class="dialog-footer layout horizontal end-justified">
+				<paper-button id="cancel" on-tap="hide">CANCEL</paper-button>
+				<paper-button id="add" secondary on-tap="saveWidget" disabled="[[!validateForm(config.*)]]">SAVE WIDGET</paper-button>
+			</div>
+		</paper-dialog>
+	</template>
+	<script>
+		Polymer({
+			is: "ui-add-widget-dialog",
+			validateForm: function() {
+				return this.$.form.validate();
+			},
+			launch: function(config) {
+				var types = Object.keys(_.groupBy(OEUtils.designerData.elementList, 'category'));
+				this.set('types', types);
+				this.set('header', (config.id === undefined ? "Add Widget" : "Edit Widget"));
+				this.set('config', config);
+				this.$.dialog.open();
+			},
+			saveWidget: function() {
+				this.fire('save-widget', this.config);
+				this.hide();
+			},
+			hide: function() {
+				this.$.dialog.close();
+			}
+		})
+
+	</script>
+</dom-module>

@@ -8,857 +8,890 @@
 <link rel="import" href="ui-asset-manager.html">
 <link rel="import" href="ui-model-manager.html">
 <link rel="import" href="search-input.html">
+<link rel="import" href="ui-add-widget-dialog.html">
 
 <dom-module id="ui-designer">
-  <style>
-    #theme-designer {
-      position: fixed;
-      top: 0px;
-      right: 0px;
-    }
+	<style>
+		#theme-designer {
+			position: fixed;
+			top: 0px;
+			right: 0px;
+		}
 
-  </style>
-  <template>
+	</style>
+	<template>
 		<div class="module-container layout horizontal">
-			<ui-element-list id="elemList"></ui-element-list>
-			<ui-dom-manager id="domManager" class="flex" page-selected="{{pageSelected}}" element="{{element}}" on-iframe-loaded="showPagePanel"
-			  on-snippet-added="handleSnippetAdd" show-code-pane={{showCodePane}} style-sheet={{styleSheet}} predefined-styles={{predefinedStyles}}></ui-dom-manager>
-			<ui-right-panel hidden="[[!pageSelected]]" style-sheet={{styleSheet}} element="{{element}}" predefined-styles={{predefinedStyles}}
-			  on-generate-form="generateForm"></ui-right-panel>
+			<ui-element-list id="elemList" on-update-widget="_handleAddWidget" on-delete-widget="_handleDeleteWidget"></ui-element-list>
+			<ui-dom-manager id="domManager" class="flex" page-selected="{{pageSelected}}" element="{{element}}" on-iframe-loaded="showPagePanel" on-snippet-added="handleSnippetAdd" show-code-pane={{showCodePane}} style-sheet={{styleSheet}} predefined-styles={{predefinedStyles}}></ui-dom-manager>
+			<ui-right-panel hidden="[[!pageSelected]]" style-sheet={{styleSheet}} element="{{element}}" predefined-styles={{predefinedStyles}} on-generate-form="generateForm"></ui-right-panel>
 		</div>
 		<ui-theme-designer id="theme-designer"></ui-theme-designer>
-		<ui-toolbar on-page-selected="pageSelectedHandle" on-clear-workspace="clearWorkSpace" on-toggle-code-panel="_toggleCodePanel"
-		  on-save-page="savePage" on-load-file-success="loadFilePage" on-toggle-theme-panel="toggleThemePanel" on-export-component="exportComponent"
-		  id="toolbar"></ui-toolbar>
+		<ui-toolbar on-page-selected="pageSelectedHandle" on-clear-workspace="clearWorkSpace" on-toggle-code-panel="_toggleCodePanel" on-save-page="savePage" on-load-file-success="loadFilePage" on-toggle-theme-panel="toggleThemePanel" on-export-component="exportComponent" id="toolbar"></ui-toolbar>
+		<ui-add-widget-dialog id="addWidgetDialog" on-save-widget="_saveWidget"></ui-add-widget-dialog>
 	</template>
-  <script>
-    Polymer({
-      is: 'ui-designer',
-      properties: {
-        showCodePane: {
-          type: Boolean,
-          value: false
-        },
-        styleSheet: {
-          type: Object,
-          notify: true
-        },
-        predefinedStyles: {
-          type: Object,
-          notify: true
-        }
-      },
-      showPagePanel: function() {
-        this.$.toolbar.set('hidePagePanel', false);
-      },
-      toggleThemePanel: function() {
-        this.$['theme-designer'].togglePanel();
-      },
-      behaviors: [
-        CommonBehavior.EVAjaxBehavior,
-        DesignerBehavior.HTMLBehavior,
-        CommonBehavior.HTMLHelper,
-        DesignerBehavior.CommonBehavior
-      ],
-      listeners: {
-        'clone-page': 'clonePage'
-      },
-      attached: function() {
-        var self = this;
+	<script>
+		Polymer({
+			is: 'ui-designer',
+			properties: {
+				showCodePane: {
+					type: Boolean,
+					value: false
+				},
+				styleSheet: {
+					type: Object,
+					notify: true
+				},
+				predefinedStyles: {
+					type: Object,
+					notify: true
+				}
+			},
+			showPagePanel: function() {
+				this.$.toolbar.set('hidePagePanel', false);
+			},
+			toggleThemePanel: function() {
+				this.$['theme-designer'].togglePanel();
+			},
+			behaviors: [
+				CommonBehavior.EVAjaxBehavior,
+				DesignerBehavior.HTMLBehavior,
+				CommonBehavior.HTMLHelper,
+				DesignerBehavior.CommonBehavior
+			],
+			listeners: {
+				'clone-page': 'clonePage'
+			},
+			attached: function() {
+				var self = this;
 
-        var x = setInterval(function() {
-          if (OEUtils.designerData.frameLoaded) {
-            self.showPagePanel();
-            clearInterval(x);
-          }
-        }, 1000);
+				var x = setInterval(function() {
+					if (OEUtils.designerData.frameLoaded) {
+						self.showPagePanel();
+						clearInterval(x);
+					}
+				}, 1000);
 
-      },
-      clearWorkSpace: function() {
-        this.set('pageSelected', false);
-      },
-      handleSnippetAdd: function(e) {
-        var detail = e.detail;
-        this.$.elemList.appendNewElement('snippet', detail);
-      },
-      pageSelectedHandle: function(e) {
-        var self = this;
-        var detail = e.detail;
-        self.makeXhrCall(('/api/UIComponents/component/' + detail.name), function(err, res) {
-          if (err) {
-            self.fire('oe-show-error', 'Error fetching uicomponent')
-          } else {
-            var component = self.createNodeFromStr(res);
-            detail.component = component;
-            var scrTag = (component.nodeName.toLowerCase() == 'script') ? component : component.querySelector('script');
-            if (scrTag) {
-              var target = 'OEUtils.metadataCache["' + detail.name + '"]';
-              var text = scrTag.textContent.split(target)[1];
-              text = 'window.OEUtils.tempMeta ' + text;
-              self.customEval(text);
-              if (scrTag.parentElement) {
-                scrTag.parentElement.removeChild(scrTag);
-              } else {
-                detail.component = null;
-              }
-            }
-            detail.modelMeta = window.OEUtils.tempMeta;
-            window.OEUtils.tempMeta = null;
-            self.processPage(detail);
-          }
-        })
-      },
-      customEval: function(str) {
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-		//Clear all content before Polymer invocation.
-		str = str.replace(/(.*\n)*.*window\.OEUtils/,'window.OEUtils');
-        script.textContent = 'try{\n' + str + '\n}catch(e){ window.ev_parseFailed = true}'
-        document.head.appendChild(script);
-        document.head.removeChild(script);
-        if (window.ev_parseFailed) {
-          window.ev_parseFailed = false;
-          return null
-        }
-        return true
-      },
-      processPage: function(pageDetail) {
-        var self = this;
-        var component = pageDetail.component;
-        var uimeta = pageDetail.modelMeta;
-        var dom,userStyle;
-        if (pageDetail.isPolymerElement) {
-          var polymerHtml = component.querySelector('dom-module > template');
-          var polymerStyle = component.querySelector('dom-module > style');
-          var polymerScript = component.querySelector('dom-module > script');
-
-
-          self.traverseDom(polymerHtml, function(el) {
-            el.setAttribute('template-item', '')
-          });
-
-          pageDetail.polyConfig = pageDetail.uiComponent.polymerConfig || {};
-
-          pageDetail.templateConfig = self.getPolymerJSON(polymerScript)
-
-          if (!pageDetail.polyConfig) {
-            this.fire('oe-show-error', 'Error obtaining Polymer Object');
-            this.$.toolbar.fire('reset-page-selection');
-            self.set('pageSelected', false);
-            return;
-          }
-		  pageDetail.polyConfig.is = pageDetail.templateConfig.is;
-          uimeta.content = pageDetail.uiComponent.content;
-
-          //Meta transform for the files
-          if (OEUtils.Metamorph) {
-            OEUtils.Metamorph(polymerHtml, uimeta, pageDetail.polyConfig)
-          }
-
-          pageDetail.userStyle = null;
-          userStyle = polymerHtml.content.querySelector('#user-defined-style');
-          if (userStyle) {
-            userStyle.parentNode.removeChild(userStyle);
-            pageDetail.userStyle = userStyle;
-          }
-
-          dom = document.createElement('div');
-          var generated = polymerHtml.content.cloneNode(true);
-          if (polymerStyle) {
-            var sty = polymerStyle.cloneNode(true);
-            sty.setAttribute('template-item', '');
-            dom.appendChild(sty);
-          }
-          for (var i = 0, len = generated.children.length; i < len; i++) {
-            var ele = generated.children[i];
-            dom.appendChild(ele.cloneNode(true));
-          }
-          pageDetail.dom = dom;
-          self.reFactorToDesigner(pageDetail.dom);
-          self.set('element', pageDetail);
-          self.set('pageSelected', true);
-        } else {
-          dom = document.createElement('div');
-          pageDetail.dom = self.throughClone(component);
-          userStyle = pageDetail.dom.querySelector('#user-defined-style');
-          if (userStyle) {
-            userStyle.parentNode.removeChild(userStyle);
-            pageDetail.userStyle = userStyle;
-          }
-          self.reFactorToDesigner(pageDetail.dom);
-          self.set('element', pageDetail);
-          self.set('pageSelected', true);
-        }
-      },
-      loadFilePage: function(e) {
-        var self = this;
-        var dom,style,i,len,ele;
-        var payload = e.detail;
-        var fileDom = document.createElement('div');
-        [].forEach.call(payload.fileDoc.children, function(n) {
-          fileDom.appendChild(this.throughClone(n))
-        }.bind(this))
-        payload.fileDoc = fileDom;
-        var docFrag = payload.fileDoc;
-        payload.isFile = true;
-        payload.linkImports = docFrag.querySelectorAll('link[rel="import"]')
-        if (payload.isPolymerElement) {
-          var component = docFrag.querySelector('dom-module');
-          style = component.querySelector('#user-defined-style') ||
-            component.querySelector('template').content.querySelector('#user-defined-style') ||
-            component.querySelector('style:not([is])') ||
-            component.querySelector('template').content.querySelector('style:not([is])');
-          payload.userStyle = style && style.parentNode.removeChild(style);
-          var polymerHtml = component.querySelector('template');
-          var polymerScript = component.querySelector('script') || docFrag.querySelector('script');
-          payload.polyConfig = self.getPolymerJSON(polymerScript);
-          if (!payload.polyConfig) {
-            this.fire('oe-show-error', 'Error obtaining Polymer Object');
-            this.$.toolbar.fire('reset-page-selection');
-            self.set('pageSelected', false);
-            return;
-          }
-          dom = document.createElement('div');
-          dom.setAttribute('file-segment', 'dom-module')
-          var generated = polymerHtml.content.cloneNode(true);
-          for (i = 0, len = generated.children.length; i < len; i++) {
-            ele = generated.children[i];
-            dom.appendChild(ele.cloneNode(true));
-          }
-          payload.dom = dom;
-
-        } else {
-          //Needs more work
-          style = docFrag.querySelector('#user-defined-style') || docFrag.querySelector('style:not([is])');
-          payload.userStyle = style && style.parentNode.removeChild(style);
-          dom = document.createElement('div');
-          var target = docFrag.querySelector('e-v-body');
-          dom.setAttribute('file-segment', 'e-v-body')
-          if (!target) {
-            target = docFrag;
-            dom.setAttribute('file-segment', 'document')
-          }
-          for (i = 0, len = target.children.length; i < len; i++) {
-            ele = target.children[i];
-            dom.appendChild(ele.cloneNode(true));
-          }
-          payload.dom = self.throughClone(dom);
-        }
-        self.reFactorToDesigner(payload.dom);
-        self.set('element', payload);
-        self.set('pageSelected', true);
-      },
-      getPolymerJSON: function(scriptTag) {
-        var scriptText = scriptTag.textContent;
-        var text = scriptText.replace(/MetaPolymer|Polymer/, 'window.OEUtils.tempPolyObj = ');
-        var res = this.customEval(text);
-        if (!res) {
-          return res
-        }
-        if (window.OEUtils.tempPolyObj && typeof window.OEUtils.tempPolyObj == 'object') {
-
-          /*When behavior is not loaded, we have array of undefined values*/
-          /*try extracting the names directly from string parsing */
-          var tempObject = window.OEUtils.tempPolyObj;
-          if (tempObject.behaviors && tempObject.behaviors.length > 0 && tempObject.behaviors.indexOf(undefined) >= 0) {
-            var behaviorLine = scriptText.match(/behaviors\s*:\s*\[\s*.*\s*\]/);
-            behaviorLine = behaviorLine && behaviorLine[0];
-            tempObject.behaviors = behaviorLine.split('[')[1].split(']')[0].split(',').map(function(b) {
-              return {
-                behaviorName: b.trim()
-              };
-            })
-          }
-          var polyJson = this.polyObjectTopolyJson(tempObject);
-          window.OEUtils.tempPolyObj = null;
-		  polyJson.isMeta = !scriptText.match(/Polymer\(/);
-          return polyJson;
-        } else {
-          this.fire('oe-show-error', 'Error obtaining Polymer Object');
-        }
-        //document.head.removeChild(script);
-        window.OEUtils.tempPolyObj = null;
-      },
-      reFactorFromDesigner: function(node) {
-        var self = this;
-        var fromMap = {
-          'dom-bind-element': {
-            name: 'template',
-            attrs: {
-              is: 'dom-bind'
-            }
-          },
-          'dom-if-element': {
-            name: 'template',
-            attrs: {
-              is: 'dom-if'
-            }
-          },
-          'dom-repeat-element': {
-            name: 'template',
-            attrs: {
-              is: 'dom-repeat'
-            }
-          },
-          'page-selector-element': {
-            name: 'neon-animated-pages'
-          }
-        }
-        self.traverseDom(node, function(el) {
-          var name = el.nodeName.toLowerCase();
-          var mapDefn = fromMap[name];
-          if (mapDefn) {
-            var n = self.replaceTag(el, name, mapDefn.name);
-            for (var attrName in mapDefn.attrs) {
-              n.setAttribute(attrName, mapDefn.attrs[attrName]);
-            }
-            el.parentElement.replaceChild(n, el);
-            return n;
-          }
-        });
-      },
-      reFactorToDesigner: function(node) {
-        var self = this;
-        var toMap = {
-          'dom-bind': 'dom-bind-element',
-          'dom-if': 'dom-if-element',
-          'dom-repeat': 'dom-repeat-element',
-          'neon-animated-pages': 'page-selector-element'
-        }
-        self.traverseDom(node, function(el) {
-          var name = el.nodeName.toLowerCase();
-          var n;
-          if (name == 'template') {
-            var type = el.getAttribute('is');
-            if (toMap[type]) {
-              n = self.replaceTag(el, name, toMap[type]);
-              el.parentElement.replaceChild(n, el);
-              return n;
-            }
-          } else if (toMap[name]) {
-            var mappedType = toMap[name];
-            n = self.replaceTag(el, name, mappedType);
-            el.parentElement.replaceChild(n, el);
-            return n;
-          }
-
-        });
-      },
-      replaceTag: function(Element, fromTag, toTag) {
-        var template = document.createElement('template');
-        var strArr = Element.outerHTML.split(fromTag);
-        if (strArr.length > 0) {
-          var newStr = strArr[0] + toTag + strArr.slice(1, strArr.length - 1).join(fromTag) + toTag + strArr[strArr.length -
-            1];
-        }
-        template.innerHTML = newStr;
-        return template.content.removeChild(template.content.children[0]);
-      },
-      _preparePayload: function() {
-
-        var self = this;
-        if (self.element.isPolymerElement) {
-          self.$.domManager.querySelector('#user-poly-config').SaveElementConfig()
-        }
-        var dom = self.$.domManager.dom;
-        var metadata = self.unMetaPolymer(dom);
-        var payload = OEUtils.clone(self.element.uiComponent);
-
-        if (payload.modelName) {
-          if (metadata.validators) {
-            payload.validators = metadata.validators;
-          } else {
-            delete payload.validators
-          }
-
-          if (metadata.data) {
-            payload.fields = metadata.data;
-          } else {
-            delete payload.fields
-          }
-
-          if (payload.autoInjectFields) {
-            payload.excludeFields = metadata.excludeFields
-          } else {
-            delete payload.excludeFields
-          }
-
-        }
-
-        payload.content = this.getValidContentDom(metadata.dom);
-        if (this.element.polyConfig) {
-          payload.polymerConfig = this.element.polyConfig;
-        }
-        return payload;
-      },
-      clonePage: function(event) {
-        var ignoreProps = ['id', '_createdBy', '_createdOn', '_isDeleted', '_modifiedBy', '_modifiedOn', '_oldVersion',
-          '_type', '_version', 'scope'
-        ]
-        var payload = this._preparePayload();
-        var page = OEUtils.clone(payload);
-        if (event.detail.method == 'POST') {
-          ignoreProps.forEach(function(prop) {
-            delete page[prop];
-          });
-        }
-        if (event.detail.scope) {
-          page.scope = event.detail.scope;
-        }
-        if (event.detail.template) {
-          page.templateName = event.detail.template.file;
-        }
-        if (event.detail.pageName) {
-          page.name = event.detail.pageName;
-        }
-        this.makeAjaxCall('/api/UIComponents/', event.detail.method, page, null, null, function(err, res) {
-          if (!err) {
-            this.fire('oe-show-success', 'Element successfully created');
-            this.fire('launch-page', res);
-          } else {
-            this.resolveError(err);
-          }
-        }.bind(this));
-      },
-      savePage: function() {
-        var self = this;
-        if (this.element.isFile) {
-          this.fire('oe-show-error', 'Cannot save File as UIComponent,Try downloading the file');
-          return;
-        }
-        var payload = self._preparePayload();
-        self.makeAjaxCall('/api/UIComponents/', 'put', payload, null, null, function(err, res) {
-
-          if (!err) {
-            self.$.toolbar.fire('update-component', res);
-            self.fire('oe-show-success', 'Element successfully created');
-          } else {
-            self.resolveError(err);
-          }
-        })
-      },
-      exportComponent: function() {
-        var dom = this.getSanitizedDom();
-        if (this.element.isPolymerElement) {
-          this.$.domManager.querySelector('#user-poly-config').SaveElementConfig()
-        }
-
-        var moduleStr = '';
-
-        if (this.element.isPolymerElement) {
-          moduleStr += '<dom-module id="' + this.element.polyConfig.is + '">';
-          moduleStr += '<template>'+ dom.innerHTML + '</template>';
-		  moduleStr += '<script>'+this.polyObjectToString(this.element.polyConfig) + '<\/script>';
-          moduleStr += '</dom-module>';
-        } else {
-          moduleStr += dom.innerHTML;
-        }
-
-        if (this.element.isFile) {
-          moduleStr = this.handleFileMerge(this.element, moduleStr);
-        }
-
-		moduleStr = OEUtils.prettify.domString(moduleStr);
-
-        this.downloadToFile(this.element.name + '.html', 'text/html', moduleStr);
-
-        //              //Code below for saving server delivered Polymer component definition
-        //              var payload = self._preparePayload();
-        //				self.makeAjaxCall('/api/UIComponents/simulate', 'post', payload, null, {
-        //					handleAs: "text"
-        //
-        //				}, function(err, res) {
-        //
-        //					if (!err) {
-        //						var dl = document.createElement('a');
-        //						dl.setAttribute('href', 'data:text/html;charset=utf-8,' + escape(res));
-        //						dl.setAttribute('download', payload.name + '.html');
-        //						dl.click();
-        //					} else {
-        //						self.resolveError(err);
-        //					}
-        //				});
-      },
-      handleFileMerge: function(element, htmlStr) {
-        htmlStr = '\n' + htmlStr + '\n';
-        var target;
-        var targetSect = element.dom.getAttribute('file-segment');
-        var fileDom = document.createElement('div');
-        [].forEach.call(element.fileDoc.children, function(n) {
-          fileDom.appendChild(this.throughClone(n))
-        }.bind(this))
-        switch (targetSect) {
-          case 'dom-module':
-            target = fileDom.querySelector(targetSect);
-            target.outerHTML = htmlStr;
-            break;
-          case 'e-v-body':
-            target = fileDom.querySelector(targetSect);
-            target.innerHTML = htmlStr;
-            break;
-          case 'document':
-            fileDom.innerHTML = htmlStr;
-            break;
-          default:
-            fileDom.innerHTML = htmlStr;
-        }
-        htmlStr = fileDom.innerHTML
-        var maped = {
-          'e-v-html': 'html',
-          'e-v-body': 'body',
-          'e-v-head': 'head'
-        }
-        Object.keys(maped).forEach(function(k) {
-          var reg = new RegExp('<' + k + '(>| )')
-          htmlStr = htmlStr.replace(reg, function(n) {
-            return n.replace(k, maped[k])
-          })
-          htmlStr = htmlStr.replace('<\/' + k + '>', '<\/' + maped[k] + '>')
-        })
-        return htmlStr
-      },
-      getSanitizedDom: function() {
-        var self = this;
-        var dom = this.throughClone(self.$.domManager.dom);
-        dom.setAttribute('template-item', '');
-        this.reFactorFromDesigner(dom);
-        self.traverseDom(dom, function(el) {
-          el.removeAttribute('template-item')
-          el.removeAttribute('oe-id')
-          el.removeAttribute('oe-ele-type')
-          el.removeAttribute('oe-dom-handle')
-          el.removeAttribute('desg-tree-collapse')
-        });
-        var styleDom = this.throughClone(self.$.domManager.getCustomStyle());
-        dom.appendChild(styleDom);
-        return dom;
-      },
-      getValidContentDom: function(dom) {
-
-        var contentStr = '';
-        dom.setAttribute('template-item', '');
-        var styleDom = this.$.domManager.getCustomStyle();
-        this.reFactorFromDesigner(dom);
-        contentStr += styleDom.outerHTML + '\n';
-        var modDom = dom.querySelectorAll('[template-item] > *:not([template-item])');
-
-        this.traverseDom(dom, function(el) {
-
-          el.removeAttribute('template-item')
-          el.removeAttribute('oe-id')
-          el.removeAttribute('oe-ele-type')
-		   el.removeAttribute('oe-dom-handle')
-        });
-
-        [].forEach.call(modDom, function(node) {
-
-          var parentId = node.parentElement.getAttribute('id');
-          if (parentId) {
-            node.setAttribute('oe-container', parentId);
-          }
-          contentStr += node.outerHTML + '\n';
-        })
-        return contentStr;
-      },
-      unMetaPolymer: function(orgDom) {
-
-        var self = this;
-        var dom = this.throughClone(orgDom)
-        var modelProperties = self.element.modelMeta.metadata.properties;
-        var allModels = self.element.modelMeta.metadata.models;
-
-        var ignoreFromPropList = ['fieldId', 'container', 'type', 'uitype']
-        var ignoreFromAttrList = ['oe-id', 'oe-ele-type', 'fieldid', 'container', 'field-id', 'value'];
-
-        function customEqual(strVal, actVal) {
-          var isEqual = false;
-
-          if (typeof strVal != 'string') {
-            strVal = JSON.stringify(strVal);
-          }
-
-          switch (typeof actVal) {
-            case 'string':
-              isEqual = (strVal == actVal);
-              break;
-            case 'number':
-              isEqual = (parseInt(strVal) == actVal);
-              break;
-            case 'object':
-              isEqual = (strVal == JSON.stringify(actVal));
-              break;
-            case 'boolean':
-              isEqual = ((strVal != undefined) == actVal);
-              break;
-            default:
-              isEqual = (strVal == actVal)
-          }
-          return isEqual
-        }
-
-		  function camelToDash(s) {
-          return s.replace(/([A-Z])/g, function($1) {
-            return '-' + $1.toLowerCase();
-          });
-        }
-
-        //Handle properties
-        var evFields = dom.querySelectorAll('[fieldid]');
-        var data = [].map.call(evFields, function(node) {
-          var fieldObj = {
-            fieldId: node.getAttribute('fieldid')
-          }
-          for (var i = 0, atts = node.attributes, n = atts.length; i < n; i++) {
-            var attr = atts[i];
-            var name = attr.nodeName;
-            name = ((name == 'minlength') ? 'min' : ((name == 'maxlength') ? 'max' : name))
-
-            if (ignoreFromAttrList.indexOf(name) == -1) {
-              fieldObj[name] = attr.nodeValue;
-            }
-          }
-          var parentEle = node.parentElement;
-          if (parentEle) {
-            if (!parentEle.hasAttribute('id')) {
-              parentEle.setAttribute('id', 'el_' + OEUtils.generateGuid())
-            }
-            fieldObj.container = parentEle.getAttribute('id');
-          }
-
-          var placeHolder = document.createElement('oe-field');
-          placeHolder.setAttribute('field-id', fieldObj.fieldId)
-          parentEle.replaceChild(placeHolder, node);
-          return fieldObj;
-        });
-
-        var fieldIds = data.map(function(s) {
-          return s.fieldId
-        })
-        if (modelProperties) {
-          var excludeFields = Object.keys(modelProperties).filter(function(s) {
-            return fieldIds.indexOf(s) == -1
-          })
-        }
+			},
+			clearWorkSpace: function() {
+				this.set('pageSelected', false);
+			},
+			handleSnippetAdd: function(e) {
+				var detail = e.detail;
+				this.$.elemList.appendNewElement('snippet', detail);
+			},
+			pageSelectedHandle: function(e) {
+				var self = this;
+				var detail = e.detail;
+				self.makeXhrCall(('/api/UIComponents/component/' + detail.name), function(err, res) {
+					if (err) {
+						self.fire('oe-show-error', 'Error fetching uicomponent')
+					} else {
+						var component = self.createNodeFromStr(res);
+						detail.component = component;
+						var scrTag = (component.nodeName.toLowerCase() == 'script') ? component : component.querySelector('script');
+						if (scrTag) {
+							var target = 'OEUtils.metadataCache["' + detail.name + '"]';
+							var text = scrTag.textContent.split(target)[1];
+							text = 'window.OEUtils.tempMeta ' + text;
+							self.customEval(text);
+							if (scrTag.parentElement) {
+								scrTag.parentElement.removeChild(scrTag);
+							} else {
+								detail.component = null;
+							}
+						}
+						detail.modelMeta = window.OEUtils.tempMeta;
+						window.OEUtils.tempMeta = null;
+						self.processPage(detail);
+					}
+				})
+			},
+			customEval: function(str) {
+				var script = document.createElement('script');
+				script.type = 'text/javascript';
+				//Clear all content before Polymer invocation.
+				str = str.replace(/(.*\n)*.*window\.OEUtils/, 'window.OEUtils');
+				script.textContent = 'try{\n' + str + '\n}catch(e){ window.ev_parseFailed = true}'
+				document.head.appendChild(script);
+				document.head.removeChild(script);
+				if (window.ev_parseFailed) {
+					window.ev_parseFailed = false;
+					return null
+				}
+				return true
+			},
+			processPage: function(pageDetail) {
+				var self = this;
+				var component = pageDetail.component;
+				var uimeta = pageDetail.modelMeta;
+				var dom, userStyle;
+				if (pageDetail.isPolymerElement) {
+					var polymerHtml = component.querySelector('dom-module > template');
+					var polymerStyle = component.querySelector('dom-module > style');
+					var polymerScript = component.querySelector('dom-module > script');
 
 
-        //Handle Validators
-        var validators = [];
-        //Handle async validator
-        var evAsyncValidators = dom.querySelectorAll('oe-async-validator');
-        [].forEach.call(evAsyncValidators, function(node) {
-          var k = node.getAttribute('fields');
-          var fields = k.substring(2, k.length - 2);
-          var ensure = node.getAttribute('ensure');
-          var error = node.getAttribute('error');
-          if (fields.split(',').length == 1) {
-            var fieldId = fields;
-            if (error == (fieldId + '-not-unique')) {
-              var target = data.find(function(n) {
-                return n.fieldId == fieldId
-              })
-              if (target) {
-                target.unique = (ensure == 'absent')
-              }
-            }
-          } else {
+					self.traverseDom(polymerHtml, function(el) {
+						el.setAttribute('template-item', '')
+					});
 
-            var validationObj = {
-              type: 'oe-async-validator',
-              fields: fields.split(',')
-            }
-            if (error) {
-              validationObj.error = error
-            }
+					pageDetail.polyConfig = pageDetail.uiComponent.polymerConfig || {};
 
-            validators.push(validationObj);
-          }
+					pageDetail.templateConfig = self.getPolymerJSON(polymerScript)
 
-          node.parentElement.removeChild(node);
+					if (!pageDetail.polyConfig) {
+						this.fire('oe-show-error', 'Error obtaining Polymer Object');
+						this.$.toolbar.fire('reset-page-selection');
+						self.set('pageSelected', false);
+						return;
+					}
+					pageDetail.polyConfig.is = pageDetail.templateConfig.is;
+					uimeta.content = pageDetail.uiComponent.content;
 
-        })
+					//Meta transform for the files
+					if (OEUtils.Metamorph) {
+						OEUtils.Metamorph(polymerHtml, uimeta, pageDetail.polyConfig)
+					}
 
-        var evCombinationValidators = dom.querySelectorAll('oe-combination-validator');
-        [].forEach.call(evCombinationValidators, function(node) {
-          var k = node.getAttribute('fields');
-          var fields = k.substring(2, k.length - 2);
-          var ensure = node.getAttribute('ensure');
-          var error = node.getAttribute('error');
-          var combination = null;
-          if (node.getAttribute('combinations')) {
-            combination = JSON.parse(node.getAttribute('combinations'));
-          }
-          if (fields.split(',').length == 1) {
-            var fieldId = fields;
-            var target = data.find(function(n) {
-              return n.fieldId == fieldId
-            })
-            if (target && combination) {
-              if (ensure == 'absent') {
-                target.notin = combination
-              } else {
-                target.in = combination
-              }
+					pageDetail.userStyle = null;
+					userStyle = polymerHtml.content.querySelector('#user-defined-style');
+					if (userStyle) {
+						userStyle.parentNode.removeChild(userStyle);
+						pageDetail.userStyle = userStyle;
+					}
 
-            }
-          } else {
-            var validationObj = {
-              type: 'oe-combination-validator',
-              fields: fields.split(',')
-            }
-            if (error) {
-              validationObj.error = error
-            }
-            if (combination) {
-              validationObj.combination = combination
-            }
-            validators.push(validationObj);
-          }
-          node.parentElement.removeChild(node);
-        });
+					dom = document.createElement('div');
+					var generated = polymerHtml.content.cloneNode(true);
+					if (polymerStyle) {
+						var sty = polymerStyle.cloneNode(true);
+						sty.setAttribute('template-item', '');
+						dom.appendChild(sty);
+					}
+					for (var i = 0, len = generated.children.length; i < len; i++) {
+						var ele = generated.children[i];
+						dom.appendChild(ele.cloneNode(true));
+					}
+					pageDetail.dom = dom;
+					self.reFactorToDesigner(pageDetail.dom);
+					self.set('element', pageDetail);
+					self.set('pageSelected', true);
+				} else {
+					dom = document.createElement('div');
+					pageDetail.dom = self.throughClone(component);
+					userStyle = pageDetail.dom.querySelector('#user-defined-style');
+					if (userStyle) {
+						userStyle.parentNode.removeChild(userStyle);
+						pageDetail.userStyle = userStyle;
+					}
+					self.reFactorToDesigner(pageDetail.dom);
+					self.set('element', pageDetail);
+					self.set('pageSelected', true);
+				}
+			},
+			loadFilePage: function(e) {
+				var self = this;
+				var dom, style, i, len, ele;
+				var payload = e.detail;
+				var fileDom = document.createElement('div');
+				[].forEach.call(payload.fileDoc.children, function(n) {
+					fileDom.appendChild(this.throughClone(n))
+				}.bind(this))
+				payload.fileDoc = fileDom;
+				var docFrag = payload.fileDoc;
+				payload.isFile = true;
+				payload.linkImports = docFrag.querySelectorAll('link[rel="import"]')
+				if (payload.isPolymerElement) {
+					var component = docFrag.querySelector('dom-module');
+					style = component.querySelector('#user-defined-style') ||
+						component.querySelector('template').content.querySelector('#user-defined-style') ||
+						component.querySelector('style:not([is])') ||
+						component.querySelector('template').content.querySelector('style:not([is])');
+					payload.userStyle = style && style.parentNode.removeChild(style);
+					var polymerHtml = component.querySelector('template');
+					var polymerScript = component.querySelector('script') || docFrag.querySelector('script');
+					payload.polyConfig = self.getPolymerJSON(polymerScript);
+					if (!payload.polyConfig) {
+						this.fire('oe-show-error', 'Error obtaining Polymer Object');
+						this.$.toolbar.fire('reset-page-selection');
+						self.set('pageSelected', false);
+						return;
+					}
+					dom = document.createElement('div');
+					dom.setAttribute('file-segment', 'dom-module')
+					var generated = polymerHtml.content.cloneNode(true);
+					for (i = 0, len = generated.children.length; i < len; i++) {
+						ele = generated.children[i];
+						dom.appendChild(ele.cloneNode(true));
+					}
+					payload.dom = dom;
 
-        var evExpressionValidators = dom.querySelectorAll('oe-expression-validator');
-        [].forEach.call(evExpressionValidators, function(node) {
-          var k = node.getAttribute('fields');
-          var fields = k.substring(2, k.length - 2);
-          var error = node.getAttribute('error');
-          var expression = node.getAttribute('expression');
-          var validationObj = {
-            type: 'oe-expression-validator',
-            fields: fields.split(',')
-          }
-          if (error) {
-            validationObj.error = error
-          }
-          if (expression) {
-            validationObj.expression = expression
-          }
+				} else {
+					//Needs more work
+					style = docFrag.querySelector('#user-defined-style') || docFrag.querySelector('style:not([is])');
+					payload.userStyle = style && style.parentNode.removeChild(style);
+					dom = document.createElement('div');
+					var target = docFrag.querySelector('e-v-body');
+					dom.setAttribute('file-segment', 'e-v-body')
+					if (!target) {
+						target = docFrag;
+						dom.setAttribute('file-segment', 'document')
+					}
+					for (i = 0, len = target.children.length; i < len; i++) {
+						ele = target.children[i];
+						dom.appendChild(ele.cloneNode(true));
+					}
+					payload.dom = self.throughClone(dom);
+				}
+				self.reFactorToDesigner(payload.dom);
+				self.set('element', payload);
+				self.set('pageSelected', true);
+			},
+			getPolymerJSON: function(scriptTag) {
+				var scriptText = scriptTag.textContent;
+				var text = scriptText.replace(/MetaPolymer|Polymer/, 'window.OEUtils.tempPolyObj = ');
+				var res = this.customEval(text);
+				if (!res) {
+					return res
+				}
+				if (window.OEUtils.tempPolyObj && typeof window.OEUtils.tempPolyObj == 'object') {
 
-          validators.push(validationObj);
-          node.parentElement.removeChild(node);
-        });
+					/*When behavior is not loaded, we have array of undefined values*/
+					/*try extracting the names directly from string parsing */
+					var tempObject = window.OEUtils.tempPolyObj;
+					if (tempObject.behaviors && tempObject.behaviors.length > 0 && tempObject.behaviors.indexOf(undefined) >= 0) {
+						var behaviorLine = scriptText.match(/behaviors\s*:\s*\[\s*.*\s*\]/);
+						behaviorLine = behaviorLine && behaviorLine[0];
+						tempObject.behaviors = behaviorLine.split('[')[1].split(']')[0].split(',').map(function(b) {
+							return {
+								behaviorName: b.trim()
+							};
+						})
+					}
+					var polyJson = this.polyObjectTopolyJson(tempObject);
+					window.OEUtils.tempPolyObj = null;
+					polyJson.isMeta = !scriptText.match(/Polymer\(/);
+					return polyJson;
+				} else {
+					this.fire('oe-show-error', 'Error obtaining Polymer Object');
+				}
+				//document.head.removeChild(script);
+				window.OEUtils.tempPolyObj = null;
+			},
+			reFactorFromDesigner: function(node) {
+				var self = this;
+				var fromMap = {
+					'dom-bind-element': {
+						name: 'template',
+						attrs: {
+							is: 'dom-bind'
+						}
+					},
+					'dom-if-element': {
+						name: 'template',
+						attrs: {
+							is: 'dom-if'
+						}
+					},
+					'dom-repeat-element': {
+						name: 'template',
+						attrs: {
+							is: 'dom-repeat'
+						}
+					},
+					'page-selector-element': {
+						name: 'neon-animated-pages'
+					}
+				}
+				self.traverseDom(node, function(el) {
+					var name = el.nodeName.toLowerCase();
+					var mapDefn = fromMap[name];
+					if (mapDefn) {
+						var n = self.replaceTag(el, name, mapDefn.name);
+						for (var attrName in mapDefn.attrs) {
+							n.setAttribute(attrName, mapDefn.attrs[attrName]);
+						}
+						el.parentElement.replaceChild(n, el);
+						return n;
+					}
+				});
+			},
+			reFactorToDesigner: function(node) {
+				var self = this;
+				var toMap = {
+					'dom-bind': 'dom-bind-element',
+					'dom-if': 'dom-if-element',
+					'dom-repeat': 'dom-repeat-element',
+					'neon-animated-pages': 'page-selector-element'
+				}
+				self.traverseDom(node, function(el) {
+					var name = el.nodeName.toLowerCase();
+					var n;
+					if (name == 'template') {
+						var type = el.getAttribute('is');
+						if (toMap[type]) {
+							n = self.replaceTag(el, name, toMap[type]);
+							el.parentElement.replaceChild(n, el);
+							return n;
+						}
+					} else if (toMap[name]) {
+						var mappedType = toMap[name];
+						n = self.replaceTag(el, name, mappedType);
+						el.parentElement.replaceChild(n, el);
+						return n;
+					}
 
-        data.forEach(function(field) {
-          var propValue = modelProperties[field.fieldId];
-          if (!propValue && field.fieldId.indexOf('.') > 0) {
-            var fldParts = field.fieldId.split('.');
-            var compositeProperty = modelProperties[fldParts.shift()];
-            if (compositeProperty && compositeProperty.modeltype && allModels[compositeProperty.modeltype]) {
-              propValue = allModels[compositeProperty.modeltype].properties[fldParts.shift()];
-            }
-          }
-          if (propValue) {
-            Object.keys(propValue).filter(function(k) {
-              return ignoreFromPropList.indexOf(k) == -1
-            }).forEach(function(k) {
-              var val = propValue[k];
-              var attrName = camelToDash(k);
-              var v = field[attrName]
-              if (v && customEqual(v, val)) {
-                delete field[attrName]
-              }
-            });
-          } else {
-            console.warn(field.fieldId, ' not found in model properties');
-          }
+				});
+			},
+			replaceTag: function(Element, fromTag, toTag) {
+				var template = document.createElement('template');
+				var strArr = Element.outerHTML.split(fromTag);
+				if (strArr.length > 0) {
+					var newStr = strArr[0] + toTag + strArr.slice(1, strArr.length - 1).join(fromTag) + toTag + strArr[strArr.length -
+						1];
+				}
+				template.innerHTML = newStr;
+				return template.content.removeChild(template.content.children[0]);
+			},
+			_preparePayload: function() {
 
-        })
+				var self = this;
+				if (self.element.isPolymerElement) {
+					self.$.domManager.querySelector('#user-poly-config').SaveElementConfig()
+				}
+				var dom = self.$.domManager.dom;
+				var metadata = self.unMetaPolymer(dom);
+				var payload = OEUtils.clone(self.element.uiComponent);
 
-        return {
-          data: data,
-          excludeFields: excludeFields,
-          validators: validators,
-          dom: dom
-        };
-      },
-      generateForm: function(event) {
-        var detail = event.detail;
-        var self = this;
-        var payload = OEUtils.clone(self.element.uiComponent);
+				if (payload.modelName) {
+					if (metadata.validators) {
+						payload.validators = metadata.validators;
+					} else {
+						delete payload.validators
+					}
 
-        var dom = this.$.domManager.dom;
-        var metadata = this.unMetaPolymer(dom);
-        var prevEvFields = metadata.dom.querySelectorAll('oe-field');
+					if (metadata.data) {
+						payload.fields = metadata.data;
+					} else {
+						delete payload.fields
+					}
 
-        var includedFields = detail.allProperties.filter(function(p) {
-          return p.checked
-        }).map(function(p) {
-          return {
-            'fieldId': p.name,
-            'container': 'form-builder'
-          }
-        });
-        var excludedFields = detail.allProperties.filter(function(p) {
-          return !p.checked
-        }).map(function(p) {
-          return p.name
-        })
+					if (payload.autoInjectFields) {
+						payload.excludeFields = metadata.excludeFields
+					} else {
+						delete payload.excludeFields
+					}
 
-        if (detail.model != payload.modelName) {
-          [].forEach.call(prevEvFields, function(node) {
-            node.parentNode.removeChild(node);
-          })
-          payload.fields = includedFields;
-          payload.validators = [];
-          payload.modelName = detail.model;
-        } else {
-          [].forEach.call(prevEvFields, function(node) {
-            var fieldId = node.getAttribute('field-id');
-            if (excludedFields.indexOf(fieldId) != -1) {
-              node.parentNode.removeChild(node);
-            }
-          })
+				}
 
-          payload.fields = payload.fields.filter(function(field) {
-            return (excludedFields.indexOf(field.fieldId) == -1);
-          })
+				payload.content = this.getValidContentDom(metadata.dom);
+				if (this.element.polyConfig) {
+					payload.polymerConfig = this.element.polyConfig;
+				}
+				return payload;
+			},
+			clonePage: function(event) {
+				var ignoreProps = ['id', '_createdBy', '_createdOn', '_isDeleted', '_modifiedBy', '_modifiedOn', '_oldVersion',
+					'_type', '_version', 'scope'
+				]
+				var payload = this._preparePayload();
+				var page = OEUtils.clone(payload);
+				if (event.detail.method == 'POST') {
+					ignoreProps.forEach(function(prop) {
+						delete page[prop];
+					});
+				}
+				if (event.detail.scope) {
+					page.scope = event.detail.scope;
+				}
+				if (event.detail.template) {
+					page.templateName = event.detail.template.file;
+				}
+				if (event.detail.pageName) {
+					page.name = event.detail.pageName;
+				}
+				this.makeAjaxCall('/api/UIComponents/', event.detail.method, page, null, null, function(err, res) {
+					if (!err) {
+						this.fire('oe-show-success', 'Element successfully created');
+						this.fire('launch-page', res);
+					} else {
+						this.resolveError(err);
+					}
+				}.bind(this));
+			},
+			savePage: function() {
+				var self = this;
+				if (this.element.isFile) {
+					this.fire('oe-show-error', 'Cannot save File as UIComponent,Try downloading the file');
+					return;
+				}
+				var payload = self._preparePayload();
+				self.makeAjaxCall('/api/UIComponents/', 'put', payload, null, null, function(err, res) {
 
-          var diffIncl = _.differenceWith(includedFields, payload.fields, function(v, x) {
-            return v.fieldId == x.fieldId
-          })
-          payload.fields = payload.fields.concat(diffIncl);
+					if (!err) {
+						self.$.toolbar.fire('update-component', res);
+						self.fire('oe-show-success', 'Element successfully created');
+					} else {
+						self.resolveError(err);
+					}
+				})
+			},
+			exportComponent: function() {
+				var dom = this.getSanitizedDom();
+				if (this.element.isPolymerElement) {
+					this.$.domManager.querySelector('#user-poly-config').SaveElementConfig()
+				}
+
+				var moduleStr = '';
+
+				if (this.element.isPolymerElement) {
+					moduleStr += '<dom-module id="' + this.element.polyConfig.is + '">';
+					moduleStr += '<template>' + dom.innerHTML + '</template>';
+					moduleStr += '<script>' + this.polyObjectToString(this.element.polyConfig) + '<\/script>';
+					moduleStr += '</dom-module>';
+				} else {
+					moduleStr += dom.innerHTML;
+				}
+
+				if (this.element.isFile) {
+					moduleStr = this.handleFileMerge(this.element, moduleStr);
+				}
+
+				moduleStr = OEUtils.prettify.domString(moduleStr);
+
+				this.downloadToFile(this.element.name + '.html', 'text/html', moduleStr);
+
+				//              //Code below for saving server delivered Polymer component definition
+				//              var payload = self._preparePayload();
+				//				self.makeAjaxCall('/api/UIComponents/simulate', 'post', payload, null, {
+				//					handleAs: "text"
+				//
+				//				}, function(err, res) {
+				//
+				//					if (!err) {
+				//						var dl = document.createElement('a');
+				//						dl.setAttribute('href', 'data:text/html;charset=utf-8,' + escape(res));
+				//						dl.setAttribute('download', payload.name + '.html');
+				//						dl.click();
+				//					} else {
+				//						self.resolveError(err);
+				//					}
+				//				});
+			},
+			handleFileMerge: function(element, htmlStr) {
+				htmlStr = '\n' + htmlStr + '\n';
+				var target;
+				var targetSect = element.dom.getAttribute('file-segment');
+				var fileDom = document.createElement('div');
+				[].forEach.call(element.fileDoc.children, function(n) {
+					fileDom.appendChild(this.throughClone(n))
+				}.bind(this))
+				switch (targetSect) {
+					case 'dom-module':
+						target = fileDom.querySelector(targetSect);
+						target.outerHTML = htmlStr;
+						break;
+					case 'e-v-body':
+						target = fileDom.querySelector(targetSect);
+						target.innerHTML = htmlStr;
+						break;
+					case 'document':
+						fileDom.innerHTML = htmlStr;
+						break;
+					default:
+						fileDom.innerHTML = htmlStr;
+				}
+				htmlStr = fileDom.innerHTML
+				var maped = {
+					'e-v-html': 'html',
+					'e-v-body': 'body',
+					'e-v-head': 'head'
+				}
+				Object.keys(maped).forEach(function(k) {
+					var reg = new RegExp('<' + k + '(>| )')
+					htmlStr = htmlStr.replace(reg, function(n) {
+						return n.replace(k, maped[k])
+					})
+					htmlStr = htmlStr.replace('<\/' + k + '>', '<\/' + maped[k] + '>')
+				})
+				return htmlStr
+			},
+			getSanitizedDom: function() {
+				var self = this;
+				var dom = this.throughClone(self.$.domManager.dom);
+				dom.setAttribute('template-item', '');
+				this.reFactorFromDesigner(dom);
+				self.traverseDom(dom, function(el) {
+					el.removeAttribute('template-item')
+					el.removeAttribute('oe-id')
+					el.removeAttribute('oe-ele-type')
+					el.removeAttribute('oe-dom-handle')
+					el.removeAttribute('desg-tree-collapse')
+				});
+				var styleDom = this.throughClone(self.$.domManager.getCustomStyle());
+				dom.appendChild(styleDom);
+				return dom;
+			},
+			getValidContentDom: function(dom) {
+
+				var contentStr = '';
+				dom.setAttribute('template-item', '');
+				var styleDom = this.$.domManager.getCustomStyle();
+				this.reFactorFromDesigner(dom);
+				contentStr += styleDom.outerHTML + '\n';
+				var modDom = dom.querySelectorAll('[template-item] > *:not([template-item])');
+
+				this.traverseDom(dom, function(el) {
+
+					el.removeAttribute('template-item')
+					el.removeAttribute('oe-id')
+					el.removeAttribute('oe-ele-type')
+					el.removeAttribute('oe-dom-handle')
+				});
+
+				[].forEach.call(modDom, function(node) {
+
+					var parentId = node.parentElement.getAttribute('id');
+					if (parentId) {
+						node.setAttribute('oe-container', parentId);
+					}
+					contentStr += node.outerHTML + '\n';
+				})
+				return contentStr;
+			},
+			unMetaPolymer: function(orgDom) {
+
+				var self = this;
+				var dom = this.throughClone(orgDom)
+				var modelProperties = self.element.modelMeta.metadata.properties;
+				var allModels = self.element.modelMeta.metadata.models;
+
+				var ignoreFromPropList = ['fieldId', 'container', 'type', 'uitype']
+				var ignoreFromAttrList = ['oe-id', 'oe-ele-type', 'fieldid', 'container', 'field-id', 'value'];
+
+				function customEqual(strVal, actVal) {
+					var isEqual = false;
+
+					if (typeof strVal != 'string') {
+						strVal = JSON.stringify(strVal);
+					}
+
+					switch (typeof actVal) {
+						case 'string':
+							isEqual = (strVal == actVal);
+							break;
+						case 'number':
+							isEqual = (parseInt(strVal) == actVal);
+							break;
+						case 'object':
+							isEqual = (strVal == JSON.stringify(actVal));
+							break;
+						case 'boolean':
+							isEqual = ((strVal != undefined) == actVal);
+							break;
+						default:
+							isEqual = (strVal == actVal)
+					}
+					return isEqual
+				}
+
+				function camelToDash(s) {
+					return s.replace(/([A-Z])/g, function($1) {
+						return '-' + $1.toLowerCase();
+					});
+				}
+
+				//Handle properties
+				var evFields = dom.querySelectorAll('[fieldid]');
+				var data = [].map.call(evFields, function(node) {
+					var fieldObj = {
+						fieldId: node.getAttribute('fieldid')
+					}
+					for (var i = 0, atts = node.attributes, n = atts.length; i < n; i++) {
+						var attr = atts[i];
+						var name = attr.nodeName;
+						name = ((name == 'minlength') ? 'min' : ((name == 'maxlength') ? 'max' : name))
+
+						if (ignoreFromAttrList.indexOf(name) == -1) {
+							fieldObj[name] = attr.nodeValue;
+						}
+					}
+					var parentEle = node.parentElement;
+					if (parentEle) {
+						if (!parentEle.hasAttribute('id')) {
+							parentEle.setAttribute('id', 'el_' + OEUtils.generateGuid())
+						}
+						fieldObj.container = parentEle.getAttribute('id');
+					}
+
+					var placeHolder = document.createElement('oe-field');
+					placeHolder.setAttribute('field-id', fieldObj.fieldId)
+					parentEle.replaceChild(placeHolder, node);
+					return fieldObj;
+				});
+
+				var fieldIds = data.map(function(s) {
+					return s.fieldId
+				})
+				if (modelProperties) {
+					var excludeFields = Object.keys(modelProperties).filter(function(s) {
+						return fieldIds.indexOf(s) == -1
+					})
+				}
 
 
-          if (metadata.validators) {
-            payload.validators = metadata.validators;
-          } else {
-            delete payload.validators
-          }
+				//Handle Validators
+				var validators = [];
+				//Handle async validator
+				var evAsyncValidators = dom.querySelectorAll('oe-async-validator');
+				[].forEach.call(evAsyncValidators, function(node) {
+					var k = node.getAttribute('fields');
+					var fields = k.substring(2, k.length - 2);
+					var ensure = node.getAttribute('ensure');
+					var error = node.getAttribute('error');
+					if (fields.split(',').length == 1) {
+						var fieldId = fields;
+						if (error == (fieldId + '-not-unique')) {
+							var target = data.find(function(n) {
+								return n.fieldId == fieldId
+							})
+							if (target) {
+								target.unique = (ensure == 'absent')
+							}
+						}
+					} else {
 
-        }
-        payload.autoInjectFields = detail.autoInjectFields
-        payload.excludeFields = excludedFields
-        var container = metadata.dom.querySelector('#form-builder');
-        if (!container) {
-          container = document.createElement('div');
-          container.setAttribute('id', 'form-builder');
-          container.classList.add('layout');
-          container.classList.add('horizontal');
-          container.classList.add('wrap');
-          container.classList.add(detail.layout ? detail.layout : 'oe-rl-2eq');
-          var parentEl = metadata.dom.querySelector('[oe-ele-type="droppable"][id][template-item]')
-          parentEl.appendChild(container);
-        }
-        payload.content = this.getValidContentDom(metadata.dom);
-        self.element.polyConfig.behaviours = self.element.polyConfig.behaviours || [];
-        ['OEUtils.FormValidationBehavior', 'OEUtils.ModelHandler', 'OEUtils.FormMessagesBehavior'].forEach(function(v) {
-          if (self.element.polyConfig.behaviours.indexOf(v) == -1) {
-            self.element.polyConfig.behaviours.push(v)
-          }
-        })
-        payload.polymerConfig = self.element.polyConfig;
-        self.makeAjaxCall('/api/UIComponents/', 'put', payload, null, null, function(err, res) {
-          if (!err) {
-            self.$.toolbar.fire('update-component', res);
-            self.fire('oe-show-success', 'Element successfully created');
-          } else {
-            self.resolveError(err);
-          }
-        })
-      },
-      _toggleCodePanel: function() {
-        this.set('showCodePane', !this.showCodePane);
-      }
-    })
+						var validationObj = {
+							type: 'oe-async-validator',
+							fields: fields.split(',')
+						}
+						if (error) {
+							validationObj.error = error
+						}
 
-  </script>
+						validators.push(validationObj);
+					}
+
+					node.parentElement.removeChild(node);
+
+				})
+
+				var evCombinationValidators = dom.querySelectorAll('oe-combination-validator');
+				[].forEach.call(evCombinationValidators, function(node) {
+					var k = node.getAttribute('fields');
+					var fields = k.substring(2, k.length - 2);
+					var ensure = node.getAttribute('ensure');
+					var error = node.getAttribute('error');
+					var combination = null;
+					if (node.getAttribute('combinations')) {
+						combination = JSON.parse(node.getAttribute('combinations'));
+					}
+					if (fields.split(',').length == 1) {
+						var fieldId = fields;
+						var target = data.find(function(n) {
+							return n.fieldId == fieldId
+						})
+						if (target && combination) {
+							if (ensure == 'absent') {
+								target.notin = combination
+							} else {
+								target.in = combination
+							}
+
+						}
+					} else {
+						var validationObj = {
+							type: 'oe-combination-validator',
+							fields: fields.split(',')
+						}
+						if (error) {
+							validationObj.error = error
+						}
+						if (combination) {
+							validationObj.combination = combination
+						}
+						validators.push(validationObj);
+					}
+					node.parentElement.removeChild(node);
+				});
+
+				var evExpressionValidators = dom.querySelectorAll('oe-expression-validator');
+				[].forEach.call(evExpressionValidators, function(node) {
+					var k = node.getAttribute('fields');
+					var fields = k.substring(2, k.length - 2);
+					var error = node.getAttribute('error');
+					var expression = node.getAttribute('expression');
+					var validationObj = {
+						type: 'oe-expression-validator',
+						fields: fields.split(',')
+					}
+					if (error) {
+						validationObj.error = error
+					}
+					if (expression) {
+						validationObj.expression = expression
+					}
+
+					validators.push(validationObj);
+					node.parentElement.removeChild(node);
+				});
+
+				data.forEach(function(field) {
+					var propValue = modelProperties[field.fieldId];
+					if (!propValue && field.fieldId.indexOf('.') > 0) {
+						var fldParts = field.fieldId.split('.');
+						var compositeProperty = modelProperties[fldParts.shift()];
+						if (compositeProperty && compositeProperty.modeltype && allModels[compositeProperty.modeltype]) {
+							propValue = allModels[compositeProperty.modeltype].properties[fldParts.shift()];
+						}
+					}
+					if (propValue) {
+						Object.keys(propValue).filter(function(k) {
+							return ignoreFromPropList.indexOf(k) == -1
+						}).forEach(function(k) {
+							var val = propValue[k];
+							var attrName = camelToDash(k);
+							var v = field[attrName]
+							if (v && customEqual(v, val)) {
+								delete field[attrName]
+							}
+						});
+					} else {
+						console.warn(field.fieldId, ' not found in model properties');
+					}
+
+				})
+
+				return {
+					data: data,
+					excludeFields: excludeFields,
+					validators: validators,
+					dom: dom
+				};
+			},
+			generateForm: function(event) {
+				var detail = event.detail;
+				var self = this;
+				var payload = OEUtils.clone(self.element.uiComponent);
+
+				var dom = this.$.domManager.dom;
+				var metadata = this.unMetaPolymer(dom);
+				var prevEvFields = metadata.dom.querySelectorAll('oe-field');
+
+				var includedFields = detail.allProperties.filter(function(p) {
+					return p.checked
+				}).map(function(p) {
+					return {
+						'fieldId': p.name,
+						'container': 'form-builder'
+					}
+				});
+				var excludedFields = detail.allProperties.filter(function(p) {
+					return !p.checked
+				}).map(function(p) {
+					return p.name
+				})
+
+				if (detail.model != payload.modelName) {
+					[].forEach.call(prevEvFields, function(node) {
+						node.parentNode.removeChild(node);
+					})
+					payload.fields = includedFields;
+					payload.validators = [];
+					payload.modelName = detail.model;
+				} else {
+					[].forEach.call(prevEvFields, function(node) {
+						var fieldId = node.getAttribute('field-id');
+						if (excludedFields.indexOf(fieldId) != -1) {
+							node.parentNode.removeChild(node);
+						}
+					})
+
+					payload.fields = payload.fields.filter(function(field) {
+						return (excludedFields.indexOf(field.fieldId) == -1);
+					})
+
+					var diffIncl = _.differenceWith(includedFields, payload.fields, function(v, x) {
+						return v.fieldId == x.fieldId
+					})
+					payload.fields = payload.fields.concat(diffIncl);
+
+
+					if (metadata.validators) {
+						payload.validators = metadata.validators;
+					} else {
+						delete payload.validators
+					}
+
+				}
+				payload.autoInjectFields = detail.autoInjectFields
+				payload.excludeFields = excludedFields
+				var container = metadata.dom.querySelector('#form-builder');
+				if (!container) {
+					container = document.createElement('div');
+					container.setAttribute('id', 'form-builder');
+					container.classList.add('layout');
+					container.classList.add('horizontal');
+					container.classList.add('wrap');
+					container.classList.add(detail.layout ? detail.layout : 'oe-rl-2eq');
+					var parentEl = metadata.dom.querySelector('[oe-ele-type="droppable"][id][template-item]')
+					parentEl.appendChild(container);
+				}
+				payload.content = this.getValidContentDom(metadata.dom);
+				self.element.polyConfig.behaviours = self.element.polyConfig.behaviours || [];
+				['OEUtils.FormValidationBehavior', 'OEUtils.ModelHandler', 'OEUtils.FormMessagesBehavior'].forEach(function(v) {
+					if (self.element.polyConfig.behaviours.indexOf(v) == -1) {
+						self.element.polyConfig.behaviours.push(v)
+					}
+				})
+				payload.polymerConfig = self.element.polyConfig;
+				self.makeAjaxCall('/api/UIComponents/', 'put', payload, null, null, function(err, res) {
+					if (!err) {
+						self.$.toolbar.fire('update-component', res);
+						self.fire('oe-show-success', 'Element successfully created');
+					} else {
+						self.resolveError(err);
+					}
+				})
+			},
+			_toggleCodePanel: function() {
+				this.set('showCodePane', !this.showCodePane);
+			},
+			_handleAddWidget: function(e) {
+				var config = e.detail;
+				this.$.addWidgetDialog.launch(config);
+			},
+			_handleDeleteWidget: function(e) {
+				var config = e.detail;
+
+				this.fire('oe-show-confirm', {
+					message: 'Widget ' + config.name + ' will be permanently removed. Are you sure?',
+					ok: function() {
+						this.makeAjaxCall('/api/DesignerElements/' + config.id, 'delete', null, null, null, function(err, res) {
+							if (!err) {
+								this.fire('oe-show-success', 'Widget deleted successfully');
+								this.$.elemList.populateElementList();
+							} else {
+								this.resolveError(err);
+							}
+						}.bind(this));
+					}.bind(this),
+					cancel: null
+				});
+			},
+			_saveWidget: function(e) {
+				var config = e.detail;
+				var method = config.id ? 'put' : 'post';
+				delete config._userDefined;
+				this.makeAjaxCall('/api/DesignerElements/', method, config, null, null, function(err, res) {
+					if (!err) {
+						this.$.elemList.populateElementList();
+						this.fire('oe-show-success', 'Widget successfully added');
+					} else {
+						this.resolveError(err);
+					}
+				}.bind(this))
+			}
+		})
+
+	</script>
 </dom-module>

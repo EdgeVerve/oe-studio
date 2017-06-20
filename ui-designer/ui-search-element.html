@@ -1,6 +1,6 @@
 <link rel="import" href="../behaviours/default-element-list.html">
 <dom-module id="ui-search-element">
-  <template>
+	<template>
 		<style>
 			:host {
 				display: none;
@@ -106,10 +106,12 @@
 			.item {
 				padding: 8px 12px;
 			}
-			.item iron-icon{
+
+			.item iron-icon {
 				width: 20px;
 				height: 20px;
 			}
+
 		</style>
 		<oe-ajax url="/designer/elements" auto last-response={{prospectElements}}></oe-ajax>
 
@@ -127,174 +129,181 @@
 							<label>[[list.name]]</label>
 						</div>
 					</template>
-  </template>
-  <template is="dom-if" if=[[!searchResults.length]]>
+				</template>
+				<template is="dom-if" if=[[!searchResults.length]]>
 					<label class="server-label">Showing results from server</label>
 					<template is="dom-repeat" items="[[filteredProspectElements]]">
 						<div class="category">[[normalize(item.category)]]</div>
 						<template is="dom-repeat" items="[[item.list]]" as="list">
-							<div class="item layout horizontal" draggable="true" on-dragstart="dragStartHandle" config="[[list]]">
-								<iron-icon icon="[[list.icon]]"></iron-icon>
-								<label>[[list.name]]</label>
+							<div class="item layout horizontal justified" draggable="true" on-dragstart="dragStartHandle" config="[[list]]">
+								<div class="layout horizontal">
+									<iron-icon icon="[[list.icon]]"></iron-icon>
+									<label>[[list.name]]</label>
+								</div>
+								<iron-icon icon="icons:star" on-tap="addToElements"></iron-icon>
 							</div>
 						</template>
-  </template>
-  </template>
-  </iron-collapse>
-  </div>
-  </template>
-  <script>
-    Polymer({
-      is: 'ui-search-element',
-      behaviors: [
-        Polymer.NeonAnimationRunnerBehavior
-      ],
-      properties: {
-        serverElements: {
-          type: Array,
-          value: function() {
-            return [];
-          },
-          notify: true
-        },
-        opened: {
-          type: Boolean
-        },
-        searchKey: {
-          type: 'String',
-          value: '',
-          observer: '_searchElement'
-        },
-        animationConfig: {
-          value: function() {
-            return {
-              'entry': {
-                name: 'slide-from-left-animation',
-                node: this,
-                timing: {
-                  duration: 500
-                }
-              },
-              'exit': {
-                name: 'slide-left-animation',
-                node: this,
-                timing: {
-                  duration: 500
-                }
-              }
-            }
-          }
-        }
-      },
-      listeners: {
-        'neon-animation-finish': '_onNeonAnimationFinish'
-      },
-      dragStartHandle: function(e) {
-        var selectedComponent = e.currentTarget.config;
-        e.dataTransfer.setData('action', 'add');
-        e.dataTransfer.setData('configStr', JSON.stringify(selectedComponent));
-        e.dataTransfer.effectAllowed = 'copy';
-        this.fire('set-recent', selectedComponent);
-        this.hide();
-      },
-      dragServerElements: function(e) {
-        var selectedComponent = e.currentTarget.config;
-        this.saveToLocalStorage(selectedComponent);
-        this.dragStartHandle(e);
-      },
-      saveToLocalStorage: function(item) {
-        var localStorageElems = window.localStorage.designerElements;
-        if (!localStorageElems) {
-          localStorageElems = [item];
-        } else {
-          localStorageElems = JSON.parse(localStorageElems);
-          var exist = localStorageElems.find(function(d) {
-            return d.name == item.name;
-          });
-          if (!exist) {
-            localStorageElems.push(item);
-          }
-          this.fire('server-element-list-added', item);
-        }
-        window.localStorage.setItem('designerElements', JSON.stringify(localStorageElems));
-      },
-      _searchElement: function() {
-        var searchKey = this.searchKey;
-        if (searchKey.length) {
-          var result = OEUtils.designerData.elementList.filter(function(d) {
-            return this.ifMatch(d.name, searchKey);
-          }.bind(this));
-          this.set('searchResults', this.categorize(result));
-          this.set('showSearchResult', true);
+					</template>
+				</template>
+			</iron-collapse>
+		</div>
+	</template>
+	<script>
+		Polymer({
+			is: 'ui-search-element',
+			behaviors: [
+				Polymer.NeonAnimationRunnerBehavior
+			],
+			properties: {
+				serverElements: {
+					type: Array,
+					value: function() {
+						return [];
+					},
+					notify: true
+				},
+				opened: {
+					type: Boolean
+				},
+				searchKey: {
+					type: 'String',
+					value: '',
+					observer: '_searchElement'
+				},
+				animationConfig: {
+					value: function() {
+						return {
+							'entry': {
+								name: 'slide-from-left-animation',
+								node: this,
+								timing: {
+									duration: 500
+								}
+							},
+							'exit': {
+								name: 'slide-left-animation',
+								node: this,
+								timing: {
+									duration: 500
+								}
+							}
+						}
+					}
+				}
+			},
+			listeners: {
+				'neon-animation-finish': '_onNeonAnimationFinish'
+			},
+			addToElements: function(e) {
+				var eleConfig = e.model.__data__.list;
+				this.fire('update-widget', eleConfig);
+			},
+			dragStartHandle: function(e) {
+				var selectedComponent = e.currentTarget.config;
+				e.dataTransfer.setData('action', 'add');
+				e.dataTransfer.setData('configStr', JSON.stringify(selectedComponent));
+				e.dataTransfer.effectAllowed = 'copy';
+				this.fire('set-recent', selectedComponent);
+				this.hide();
+			},
+			dragServerElements: function(e) {
+				var selectedComponent = e.currentTarget.config;
+				this.saveToLocalStorage(selectedComponent);
+				this.dragStartHandle(e);
+			},
+			saveToLocalStorage: function(item) {
+				var localStorageElems = window.localStorage.designerElements;
+				if (!localStorageElems) {
+					localStorageElems = [item];
+				} else {
+					localStorageElems = JSON.parse(localStorageElems);
+					var exist = localStorageElems.find(function(d) {
+						return d.name == item.name;
+					});
+					if (!exist) {
+						localStorageElems.push(item);
+					}
+					this.fire('server-element-list-added', item);
+				}
+				window.localStorage.setItem('designerElements', JSON.stringify(localStorageElems));
+			},
+			_searchElement: function() {
+				var searchKey = this.searchKey;
+				if (searchKey.length) {
+					var result = OEUtils.designerData.elementList.filter(function(d) {
+						return this.ifMatch(d.name, searchKey);
+					}.bind(this));
+					this.set('searchResults', this.categorize(result));
+					this.set('showSearchResult', true);
 
-          if (result.length === 0 && this.prospectElements && this.prospectElements.length > 0) {
-            result = this.prospectElements.filter(function(d) {
-              return this.ifMatch(d.name, searchKey);
-            }.bind(this));
-            result = this.categorize(result);
-            this.set('filteredProspectElements', result);
-          } else {
-            this.set('filteredProspectElements', []);
-          }
-        } else {
-          this.set('showSearchResult', false);
-          this.set('searchResults', []);
-        }
-      },
-      categorize: function(result) {
-        var searchResults = _.groupBy(result, function(d) {
-          return d.category
-        });
-        searchResults = _.keys(searchResults).map(function(d) {
-          return {
-            category: d,
-            list: searchResults[d]
-          };
-        });
-        return searchResults;
-      },
-      ifMatch: function(str, pattern) {
-        if (str && pattern) {
-          str = str.toLowerCase().replace(/[^A-Z0-9]/ig, '');
-          pattern = pattern.toLowerCase().replace(/[^A-Z0-9]/ig, '');
-          return str.indexOf(pattern) !== -1;
-        }
-        return -1;
-      },
-      attached: function() {
-        var self = this;
-        this.addEventListener('tap', function(event) {
-          event.stopPropagation();
-          self.hide();
-        });
-        this.$.searchContainer.addEventListener('tap', function(event) {
-          event.stopPropagation();
-        });
-      },
-      open: function() {
-        this.opened = true;
-        this.set('searchKey', '');
-        this.style.display = 'block';
-        this.playAnimation('entry');
-        this.async(function() {
-          this.$.input.focus();
-        })
-      },
-      hide: function() {
-        this.opened = false;
-        this.playAnimation('exit');
-      },
-      _onNeonAnimationFinish: function() {
-        if (!this.opened) {
-          this.style.display = 'none';
-        }
-      },
-      normalize: function(name) {
-        if (name) {
-          return _.startCase(name).toUpperCase();
-        }
-      }
-    });
+					if (result.length === 0 && this.prospectElements && this.prospectElements.length > 0) {
+						result = this.prospectElements.filter(function(d) {
+							return this.ifMatch(d.name, searchKey);
+						}.bind(this));
+						result = this.categorize(result);
+						this.set('filteredProspectElements', result);
+					} else {
+						this.set('filteredProspectElements', []);
+					}
+				} else {
+					this.set('showSearchResult', false);
+					this.set('searchResults', []);
+				}
+			},
+			categorize: function(result) {
+				var searchResults = _.groupBy(result, function(d) {
+					return d.category
+				});
+				searchResults = _.keys(searchResults).map(function(d) {
+					return {
+						category: d,
+						list: searchResults[d]
+					};
+				});
+				return searchResults;
+			},
+			ifMatch: function(str, pattern) {
+				if (str && pattern) {
+					str = str.toLowerCase().replace(/[^A-Z0-9]/ig, '');
+					pattern = pattern.toLowerCase().replace(/[^A-Z0-9]/ig, '');
+					return str.indexOf(pattern) !== -1;
+				}
+				return -1;
+			},
+			attached: function() {
+				var self = this;
+				this.addEventListener('tap', function(event) {
+					event.stopPropagation();
+					self.hide();
+				});
+				this.$.searchContainer.addEventListener('tap', function(event) {
+					event.stopPropagation();
+				});
+			},
+			open: function() {
+				this.opened = true;
+				this.set('searchKey', '');
+				this.style.display = 'block';
+				this.playAnimation('entry');
+				this.async(function() {
+					this.$.input.focus();
+				})
+			},
+			hide: function() {
+				this.opened = false;
+				this.playAnimation('exit');
+			},
+			_onNeonAnimationFinish: function() {
+				if (!this.opened) {
+					this.style.display = 'none';
+				}
+			},
+			normalize: function(name) {
+				if (name) {
+					return _.startCase(name).toUpperCase();
+				}
+			}
+		});
 
-  </script>
+	</script>
 </dom-module>
