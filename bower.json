@@ -23,7 +23,8 @@
     "paper-elements": "PolymerElements/paper-elements#^1.0.1",
     "marked-element": "PolymerElements/marked-element#^1.0.0",
     "polymer-redux": "^0.4.0",
-    "jsPlumb": "https://github.com/jsplumb/jsPlumb.git"
+    "jsPlumb": "https://github.com/jsplumb/jsPlumb.git",
+    "oe-widget-container": "http://10.73.97.24/oecloud.io/oe-widget-container.git"
   },
   "devDependencies": {
     "web-component-tester": "*",
