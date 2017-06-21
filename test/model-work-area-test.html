@@ -301,7 +301,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           assert.equal(workArea.workSpaceModelList.length, 0);
           var sideBar = Polymer.dom(workArea.root).querySelector('#model-side-nav');
           var modelItem = Polymer.dom(sideBar.root).querySelectorAll('.model-list-item');
-          modelItem[0].querySelector('.cluster').click();
+          modelItem[0].querySelector('.modelview').click();
           flush(function() {
             expect(workArea._tabList.length).to.be.equal(2);
             assert.equal(workArea.workSpaceModelList.length, 1);
@@ -763,7 +763,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             expect(workArea._activeTabIndex).to.be.equal(0);
             expect(workArea._tabList.length).to.be.equal(1);
             assert.equal(workArea.workSpaceModelList.length, 1);
-            modelItem[0].querySelector('.cluster').click();
+            modelItem[0].querySelector('.modelview').click();
             flush(function() {
               expect(workArea._activeTabIndex).to.be.equal(1);
               expect(workArea._tabList.length).to.be.equal(2);
