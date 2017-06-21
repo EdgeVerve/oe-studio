@@ -33,30 +33,32 @@
 		Polymer({
 			is: "ui-add-widget-dialog",
 			behaviors:[CommonBehavior.EVAjaxBehavior],
+			attached:function(){
+				this.listComponent = document.querySelector('ui-element-list');
+				this.uiListComponent = document.querySelector('ui-page-list');
+			},
 			validateForm: function() {
 				return this.$.form.validate();
 			},
-			launch: function(config,elementList) {
+			launch: function(config) {
 				var types = Object.keys(_.groupBy(OEUtils.designerData.elementList, 'category'));
 				this.set('display',{
 					heading : (config.id === undefined ? "Add Widget" : "Edit Widget"),
 					isEditMode : config.id !== undefined,
 					widgetTypes:types
 				})
-				this.set('listComponent',elementList);
 				this.set('config', config);
 				this.$.dialog.open();
-			},
-			saveWidget: function() {
-				this.fire('save-widget', this.config);
-				this.hide();
 			},
 			hide: function() {
 				this.$.dialog.close();
 			},
-			refreshElementList:function(){
+			refreshElementList:function(payload){
 				if(this.listComponent){
-					this.listComponent.populateElementList();
+					this.listComponent.handleWidgetUpdate(payload);
+				}
+				if(this.uiListComponent){
+					this.uiListComponent.handleWidgetUpdate(payload);
 				}
 				this.hide();
 			},
@@ -67,7 +69,7 @@
 				this.makeAjaxCall('/api/DesignerElements/', method, config, null, null, function(err, res) {
 					if (!err) {
 						this.fire('oe-show-success', 'Widget successfully added');
-						this.refreshElementList();
+						this.refreshElementList({"type":"update","value":res});
 					} else {
 						this.resolveError(err);
 					}
@@ -80,7 +82,7 @@
 						this.makeAjaxCall('/api/DesignerElements/' + this.config.id, 'delete', null, null, null, function(err, res) {
 							if (!err) {
 								this.fire('oe-show-success', 'Widget deleted successfully');
-								this.refreshElementList();
+								this.refreshElementList({"type":"delete","value":this.config});
 							} else {
 								this.resolveError(err);
 							}

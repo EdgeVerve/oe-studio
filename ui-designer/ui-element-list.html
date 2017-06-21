@@ -452,8 +452,32 @@
 			_editElement: function(e) {
 				var config = e.model.__data__.item;
 				this.fire('update-widget', config);
+			},
+			handleWidgetUpdate:function(data){
+				var config = data.value;
+				var index = OEUtils.designerData.elementList.findIndex(function(ele){return ele.id === config.id});
+				if(data.type == "update"){
+					if(index === -1){
+						config._userDefined = true;
+						OEUtils.designerData.elementList.push(config);
+					}else{
+						OEUtils.designerData.elementList[index] = config;
+					}
+				}else{
+					OEUtils.designerData.elementList.splice(index,1);
+				}
+				var groupedElements = _.groupBy(OEUtils.designerData.elementList, function(item) {
+						return item.category;
+					});
+				this.set('components', groupedElements);
+				this.set('elementList', Object.keys(groupedElements).map(function(grpName) {
+					return {
+						name: grpName,
+						list: groupedElements[grpName]
+					}
+				}));
+				this.$.elementSearcher.hide();
 			}
 		})
-
 	</script>
 </dom-module>
