@@ -237,7 +237,7 @@ var designerController = (function () {
 					placeHolder.style.height = '50px';
 					addInside(element, placeHolder);
 					break;
-				default:
+				default:break;
 			}
 		}
 
@@ -715,7 +715,7 @@ var designerController = (function () {
 							return true;
 						}
 						break;
-					default:
+					default:break;
 				}
 			}
 			return false;

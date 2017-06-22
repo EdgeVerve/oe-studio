@@ -884,34 +884,35 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           }
         }
 
-        switch (tabindex) {
-
-          case 5:
-            flags[4] = this.$.aclGrid.customValidation();
+		if(tabindex == 5){
+			 flags[4] = this.$.aclGrid.customValidation();
             if (flags[4]) {
               this.$.aclGrid._setReadOnly();
             }
-          case 4:
-            flags[3] = this.$.relationGrid.customValidation();
+		}
+		if(tabindex >= 4){
+			flags[3] = this.$.relationGrid.customValidation();
             if (flags[3]) {
               this.$.relationGrid._setReadOnly();
             }
-          case 3:
-            flags[2] = this.$.validationGrid.customValidation();
+		}
+		if(tabindex >= 3){
+			flags[2] = this.$.validationGrid.customValidation();
             if (flags[2]) {
               this.$.validationGrid._setReadOnly();
             }
-          case 2:
-            flags[1] = this.$.propertyGrid.customValidation();
+		}
+		if(tabindex >= 2){
+			flags[1] = this.$.propertyGrid.customValidation();
             if (flags[1]) {
               this.$.propertyGrid._setReadOnly();
             }
-          case 1:
-            flags[0] = this.$.basicform.validate();
-            break;
-          default:
-            break;
-        }
+		}
+		if(tabindex >= 1){
+			flags[0] = this.$.basicform.validate();
+		  }
+
+
 
         flags.forEach(function (val, index) {
           if (index <= tabindex - 1) {
