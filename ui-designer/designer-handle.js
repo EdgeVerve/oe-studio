@@ -525,6 +525,7 @@ var designerController = (function () {
 						newSel.click();
 					}
 				}
+				fireParent('end-spinner');
 			}, 100);
 		})
 	}

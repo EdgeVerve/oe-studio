@@ -786,6 +786,9 @@
           } else {
             page.templateData = null
           }
+		  this.fire('start-spinner', {
+        		url: page.name
+      		});
           this.fire('page-selected', page);
           this.$.pageSelectMenu.close();
         }.bind(this));

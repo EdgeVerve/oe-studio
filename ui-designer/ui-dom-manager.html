@@ -122,7 +122,7 @@ w<link rel="import" href="ui-bottom-panel.html">
 			<div class="flex main-wrapper" hidden$="{{!pageSelected}}">
 				<div class="frame-wrapper">
 					<device-view>
-						<iframe src="iframe-content.html" id="framer" class="flex-2" frame-border=0 on-load="loadSuccess"></iframe>
+						<iframe src="iframe-content.html" sandbox="allow-scripts allow-same-origin allow-forms" id="framer" class="flex-2" frame-border=0 on-load="loadSuccess"></iframe>
 					</device-view>
 				</div>
 			</div>
