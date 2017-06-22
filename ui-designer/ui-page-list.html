@@ -326,7 +326,7 @@
 																<span class="flex page-name">[[page.name]]</span>
 																<template is="dom-if" if="{{page.scope}}"><span class="scope-text">{ ... }</span></template>
   <div class="options">
-	  <iron-icon icon="star-border" on-tap="_exportAsComponent"></iron-icon>
+	  <iron-icon icon="star-border" on-tap="_exportAsComponent" hidden="[[page._isWidget]]"></iron-icon>
     <iron-icon icon="file-download" on-tap="_downloadComponent"></iron-icon>
     <iron-icon icon="delete" on-tap="_deleteComponent"></iron-icon>
   </div>
@@ -664,6 +664,9 @@
         var list = this.componentList.filter(function(obj) {
           if (!obj.filePath && obj.templateName) {
             obj.isPolymerElement = true;
+			obj._isWidget = !!OEUtils.designerData.elementList.find(function(n){
+				  return n.tag === obj.name
+			});
             return true;
           }
           return false
@@ -735,7 +738,7 @@
           }
         })
       },
-		_exportAsComponent:function(e){
+	  _exportAsComponent:function(e){
 			var componentData = e.model.page;
 			e.stopPropagation();
 			e.stopImmediatePropagation();
@@ -749,7 +752,8 @@
   "category": "polymerElements",
   "config": {
     "domType": "Polymer",
-    "importUrl": "api/UIComponents/component/"+componentData.name
+    "importUrl": "api/UIComponents/component/"+componentData.name,
+	  "type":"uneditable"
   },
   "previewImg": ""
 }
@@ -789,7 +793,17 @@
       _editPage: function(e) {
         var pageData = e.model.page;
         this._handleEditLaunch(pageData);
-      }
+      },
+	   handleWidgetUpdate:function(data){
+			var compIndex = this.componentList.findIndex(function(comp){return comp.name == data.value.tag});
+		   	var changedComponent = this.componentList[compIndex];
+		    changedComponent._isWidget = (data.type === "update");
+		   var list = OEUtils.clone(this.componentList);
+		   this.set('componentList',[]);
+		   Polymer.dom.flush();
+		   this.set('componentList',list);
+		   Polymer.dom.flush();
+		}
     })
 
   </script>
