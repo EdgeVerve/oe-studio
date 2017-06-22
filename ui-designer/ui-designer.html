@@ -261,9 +261,10 @@
 					/*try extracting the names directly from string parsing */
 					var tempObject = window.OEUtils.tempPolyObj;
 					if (tempObject.behaviors && tempObject.behaviors.length > 0 && tempObject.behaviors.indexOf(undefined) >= 0) {
-						var behaviorLine = scriptText.match(/behaviors\s*:\s*\[\s*.*\s*\]/);
-						behaviorLine = behaviorLine && behaviorLine[0];
-						tempObject.behaviors = behaviorLine.split('[')[1].split(']')[0].split(',').map(function(b) {
+						var behaviorLine = scriptText.match(/behaviors\s*:\s*\[\s*(.*)\s*\]/);
+						behaviorLine = behaviorLine && behaviorLine[1]; //the capture group inside [...]
+            
+						tempObject.behaviors = behaviorLine.split(',').map(function(b) {
 							return {
 								behaviorName: b.trim()
 							};
