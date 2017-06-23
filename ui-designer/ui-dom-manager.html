@@ -430,6 +430,9 @@ w<link rel="import" href="ui-bottom-panel.html">
         styleTag.textContent = '\n' + result + '\n';
         return styleTag;
       },
+	  getImportLinks:function(){
+		  return this.frameWindow.designerController.getImports();
+	  },
       removeLink: function(e) {
         var element = e.detail;
         var target = this.findInDom(element);
@@ -467,16 +470,10 @@ w<link rel="import" href="ui-bottom-panel.html">
 
           //Handling Imported Element Import Files
           //Assume that elements are served from the server e.g:localhost:3000
-          /*var prevImports = this.frameWindow.document.querySelectorAll('link[rel="import"][dynamic]');
-          prevImports.forEach(function(n) {
-            n.parentElement.removeChild(n);
-          })
-          var newImports = this.element.linkImports || [];
-          newImports.forEach(function(n) {
-            var link = n.cloneNode(true);
-            link.setAttribute('dynamic', '');
-            this.frameWindow.document.head.appendChild(link);
-          }.bind(this))*/
+
+			if(this.element.uiComponent && this.element.uiComponent.importUrls){
+				this.frameWindow.designerController.addImports(this.element.uiComponent.importUrls)
+			}
         }
       },
       attachDesignerConfig: function(dom) {

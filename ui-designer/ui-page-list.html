@@ -752,7 +752,7 @@
   "category": "polymerElements",
   "config": {
     "domType": "Polymer",
-    "importUrl": "api/UIComponents/component/"+componentData.name,
+    "importUrl": "/api/UIComponents/component/"+componentData.name,
 	  "type":"uneditable"
   },
   "previewImg": ""
@@ -799,6 +799,9 @@
       },
 	   handleWidgetUpdate:function(data){
 			var compIndex = this.componentList.findIndex(function(comp){return comp.name == data.value.tag});
+		   if(compIndex === -1){
+			   return;
+		   }
 		   	var changedComponent = this.componentList[compIndex];
 		    changedComponent._isWidget = (data.type === "update");
 		   var list = OEUtils.clone(this.componentList);

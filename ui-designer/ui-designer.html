@@ -390,6 +390,7 @@
 				if (this.element.polyConfig) {
 					payload.polymerConfig = this.element.polyConfig;
 				}
+				payload.importUrls = this.$.domManager.getImportLinks();
 				return payload;
 			},
 			clonePage: function(event) {

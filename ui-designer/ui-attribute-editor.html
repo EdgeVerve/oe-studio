@@ -594,7 +594,13 @@
         }
       }
       var self = this;
-      var changedAttributeList = _.differenceWith(this.attributeList, this.tempAttributeList, _.isEqual);
+      var changedAttributeList
+	  if(_.differenceWith){
+		  changedAttributeList = _.differenceWith(this.attributeList, this.tempAttributeList, _.isEqual);
+	  }else{
+		  changedAttributeList = _.difference(this.attributeList, this.tempAttributeList, _.isEqual);
+	  }
+
       changedAttributeList.forEach(function (attr) {
         if (attr.type == 'Boolean' && !attr.value) {
           self.selectedElement.removeAttribute(attr.name);

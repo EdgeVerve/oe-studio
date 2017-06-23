@@ -10,7 +10,7 @@ var designerController = (function () {
 		dragOverData: {},
 		hoverElement: null,
 		selectedElement: null,
-		importedData: {},
+		importedLinks: [],
 		droppedElements: {}
 	};
 	var GLOBAL_ISOLATED_DOM;
@@ -113,10 +113,9 @@ var designerController = (function () {
 				var str = event.dataTransfer.getData('configstr');
 				var config = JSON.parse(str);
 				if (config.config.importUrl) {
-					var tempEle = document.createElement(config.tag);
-					if (!tempEle.set) {
+					if (GLOBAL_STATIC_ELEMENTS.importedLinks.indexOf(config.config.importUrl) === -1) {
 						Polymer.Base.importHref(config.config.importUrl, function handleDynamicImport() {
-
+							GLOBAL_STATIC_ELEMENTS.importedLinks.push(config.config.importUrl);
 						}, function handleImportError() {
 							fireParent('oe-show-error', 'Error in importing element from ' + config.config.importUrl);
 						});
@@ -467,6 +466,24 @@ var designerController = (function () {
 		}
 	}
 
+	function addImports(links){
+		var prevLinks = document.querySelectorAll('link[rel="import"][dynamic]');
+		[].forEach.call(prevLinks,function(e){
+			e.parentElement.removeChild(e);
+		});
+		links.forEach(function(url){
+			var link = document.createElement('link');
+			link.setAttribute('rel','import');
+			link.setAttribute('dynamic','');
+			link.setAttribute('href',url);
+			document.head.appendChild(link);
+		})
+		GLOBAL_STATIC_ELEMENTS.importedLinks = links;
+	}
+
+	function getImports(){
+		return GLOBAL_STATIC_ELEMENTS.importedLinks
+	}
 
 	function checkElementsImport(cb) {
 		if (isElementsLoaded) {
@@ -544,7 +561,6 @@ var designerController = (function () {
 			createContextHandlers(node);
 		});
 	}
-
 
 	function setContext(element, type) {
 		if (!element) {
@@ -790,7 +806,9 @@ var designerController = (function () {
 		initiliaze: init,
 		render: renderNewPage,
 		focusElement: FocusElement,
-		applyTheme: applyTheme
+		applyTheme: applyTheme,
+		addImports:addImports,
+		getImports:getImports
 	}
 
 })()
