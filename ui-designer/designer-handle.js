@@ -236,7 +236,8 @@ var designerController = (function () {
 					placeHolder.style.height = '50px';
 					addInside(element, placeHolder);
 					break;
-				default:break;
+				default:
+					break;
 			}
 		}
 
@@ -427,7 +428,7 @@ var designerController = (function () {
 			return;
 		}
 		var target = cont.querySelector('[oe-id="' + element.getAttribute('oe-id') + '"]');
-		if(target){
+		if (target) {
 			target.click();
 		}
 	}
@@ -442,12 +443,28 @@ var designerController = (function () {
 		GLOBAL_CONTEXT = {
 			'drop': document.getElementById('dropContext'),
 			'focus': document.getElementById('focusContext'),
-			'hover':document.getElementById('hoverContext')
+			'hover': document.getElementById('hoverContext')
 		};
 		// console.clear();
 		window.addEventListener('resize', function resizeHandler() {
 			setContext(GLOBAL_STATIC_ELEMENTS.selectedElement, 'focus');
 			setContext(GLOBAL_STATIC_ELEMENTS.hoverElement, 'hover');
+		});
+
+		window.addEventListener('widget-resize-stop', widgetContainerHandler);
+		window.addEventListener('widget-drag-stop', widgetContainerHandler);
+	}
+
+	function widgetContainerHandler(event) {
+		var widgetContainer = event.detail.target;
+		var gridSter = widgetContainer.$.container.querySelector('.gridster');
+		var widgets = gridSter.querySelectorAll("[oe-id].widget-element");
+		[].forEach.call(widgets, function updateAttribute(node, index) {
+			fireParent('move-element', {
+				ele: node,
+				parent: widgetContainer,
+				index: index
+			});
 		});
 	}
 
@@ -466,22 +483,22 @@ var designerController = (function () {
 		}
 	}
 
-	function addImports(links){
+	function addImports(links) {
 		var prevLinks = document.querySelectorAll('link[rel="import"][dynamic]');
-		[].forEach.call(prevLinks,function(e){
+		[].forEach.call(prevLinks, function (e) {
 			e.parentElement.removeChild(e);
 		});
-		links.forEach(function(url){
+		links.forEach(function (url) {
 			var link = document.createElement('link');
-			link.setAttribute('rel','import');
-			link.setAttribute('dynamic','');
-			link.setAttribute('href',url);
+			link.setAttribute('rel', 'import');
+			link.setAttribute('dynamic', '');
+			link.setAttribute('href', url);
 			document.head.appendChild(link);
 		})
 		GLOBAL_STATIC_ELEMENTS.importedLinks = links;
 	}
 
-	function getImports(){
+	function getImports() {
 		return GLOBAL_STATIC_ELEMENTS.importedLinks
 	}
 
@@ -502,18 +519,18 @@ var designerController = (function () {
 		}
 	}
 
-	function removeTextBinding(dom){
-		var walker = document.createTreeWalker(dom,NodeFilter.SHOW_TEXT,null,false);
+	function removeTextBinding(dom) {
+		var walker = document.createTreeWalker(dom, NodeFilter.SHOW_TEXT, null, false);
 		var readBind = new RegExp(/\[\[([\S]*)\]\]/g);
 		var doubleBind = new RegExp(/\{\{([\S]*)\}\}/g);
-		while(walker.nextNode()){
+		while (walker.nextNode()) {
 			var cNodeTxt = walker.currentNode.nodeValue;
-			if(cNodeTxt.match(readBind))
+			if (cNodeTxt.match(readBind))
 				//cNodeTxt = cNodeTxt.replace(readBind,'&#91;&#91;$1&#93;&#93;');
-				cNodeTxt = cNodeTxt.replace(readBind,'[ [$1] ]');
-			if(cNodeTxt.match(doubleBind))
+				cNodeTxt = cNodeTxt.replace(readBind, '[ [$1] ]');
+			if (cNodeTxt.match(doubleBind))
 				//cNodeTxt = cNodeTxt.replace(doubleBind,'&#123;&#123;$1&#125;&#125;');
-				cNodeTxt = cNodeTxt.replace(doubleBind,'{ {$1} }');
+				cNodeTxt = cNodeTxt.replace(doubleBind, '{ {$1} }');
 			walker.currentNode.nodeValue = cNodeTxt;
 		}
 		return dom;
@@ -527,9 +544,9 @@ var designerController = (function () {
 				var newDom = removeTextBinding(dom.cloneNode(true))
 				cont.innerHTML = '<template is="dom-bind">' + newDom.innerHTML + '</template>';
 				Polymer.dom.flush();
-				Polymer.Base.async(function(){
+				Polymer.Base.async(function () {
 					attachHandlers(cont);
-				},300)
+				}, 300)
 			}
 
 			removeContext('drop');
@@ -575,8 +592,8 @@ var designerController = (function () {
 	function delayedExec(condFn, cb, timeInt) {
 		var recurser = setInterval(function () {
 			if (condFn()) {
-					clearInterval(recurser);
-					cb();
+				clearInterval(recurser);
+				cb();
 			}
 		}, timeInt);
 	}
@@ -732,7 +749,8 @@ var designerController = (function () {
 							return true;
 						}
 						break;
-					default:break;
+					default:
+						break;
 				}
 			}
 			return false;
@@ -741,7 +759,7 @@ var designerController = (function () {
 	}
 
 
-// Testing Design Patterns
+	// Testing Design Patterns
 
 
 	// function findDesignerElement(element){
@@ -795,7 +813,7 @@ var designerController = (function () {
 	// 	cont.setAttribute('droppable', true);
 	// }
 	//createGlobalHandling();
-//
+	//
 	attachContextContainers();
 
 	createAsContainer(cont);
@@ -807,8 +825,8 @@ var designerController = (function () {
 		render: renderNewPage,
 		focusElement: FocusElement,
 		applyTheme: applyTheme,
-		addImports:addImports,
-		getImports:getImports
+		addImports: addImports,
+		getImports: getImports
 	}
 
 })()
