@@ -8,8 +8,8 @@
     "jquery": "^2.2.0",
     "lodash": "^4.3.0",
     "jquery-ui": "^1.11.4",
-    "oe-ui": "http://10.73.97.24/oecloud.io/oe-ui.git#master",
-    "oe-charts": "http://10.73.97.24/oecloud.io/oe-charts.git#master",
+    "oe-ui": "http://evgit/oecloud.io/oe-ui.git#master",
+    "oe-charts": "http://evgit/oecloud.io/oe-charts.git#master",
     "roboto-fontface": "^0.4.5",
     "inflection": "^1.10.0",
     "materialize": "#0.97.7",
@@ -25,7 +25,9 @@
     "marked-element": "PolymerElements/marked-element#^1.0.0",
     "polymer-redux": "^0.4.0",
     "jsPlumb": "https://github.com/jsplumb/jsPlumb.git",
-    "oe-widget-container": "http://10.73.97.24/oecloud.io/oe-widget-container.git"
+    "oe-widget-container": "http://evgit/oecloud.io/oe-widget-container.git",
+    "oe-workflow-modeler": "http://evgit/oecloud.io/oe-workflow-modeler.git"
+
   },
   "devDependencies": {
     "web-component-tester": "*",
