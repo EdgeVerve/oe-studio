@@ -1,0 +1,89 @@
+<dom-module id="acl-principal-combo">
+	<template>
+		<oe-combo label="Principal Id" listdata="[[listData]]" required displayproperty="[[comboProperty.display]]"
+				  no-label-float=[[noLabelFloat]]
+				  valueproperty="[[comboProperty.value]]" value="{{value}}"></oe-combo>
+	</template>
+	<script>
+		Polymer({
+			is: "acl-principal-combo",
+			behaviors: [CommonBehavior.EVAjaxBehavior],
+			attached: function() {
+				this.set('additionalRoles', [{
+					"id": "$everyone",
+					"name": "Everyone"
+				}, {
+					"id": "$owner",
+					"name": "Owner"
+				}, {
+					"id": "$authenticated",
+					"name": "Authenticated"
+				}, {
+					"id": "$unauthenticated",
+					"name": "Unauthenticated"
+				}])
+			},
+			properties: {
+				principalType: {
+					type: String,
+					value: "",
+					observer: "_principalTypeChanged"
+				},
+				value: {
+					type: String,
+					value: "",
+					notify: true
+				},
+				noLabelFloat:{
+					type:Boolean
+				},
+				comboProperty: {
+					type: Object,
+					value: function() {
+						return {
+							display: "",
+							value: ""
+						}
+					}
+				}
+			},
+			_principalTypeChanged: function() {
+				if (this.principalType && this.principalType.length > 0) {
+					var type = this.principalType.toLowerCase();
+					switch (type) {
+						case "role":
+							this.populateRoleList();
+							break;
+						case "user":
+							this.populateUserList();
+							break;
+						default:
+							this.set('value', null);
+							this.set('listData', []);
+							break;
+					}
+				}
+			},
+			populateRoleList: function() {
+				this.makeAjaxCall('api/BaseRoles', 'GET', null, null, null, null, function(err, res) {
+					res = res.concat(this.additionalRoles);
+					this.set('comboProperty', {
+						display: "name",
+						value: "id"
+					})
+					this.set('listData', res)
+				}.bind(this));
+			},
+			populateUserList: function() {
+				this.makeAjaxCall('api/BaseUsers', 'GET', null, null, null, null, function(err, res) {
+					this.set('comboProperty', {
+						display: "username",
+						value: "id"
+					})
+					this.set('listData', res)
+				}.bind(this));
+			}
+		})
+
+	</script>
+</dom-module>

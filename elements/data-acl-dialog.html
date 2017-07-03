@@ -55,6 +55,15 @@
           key: 'property',
           label: 'Property',
           type: 'string',
+			formatter: function(value,row) {
+			  if(!value){
+				  return ""
+			  }
+			var predef = this.dropdownConst.acl.property.all.find(function(k){
+				  return k.value === value
+			});
+            return predef ? predef.label : 'fn('+value+')';
+          }.bind(this),
           readOnly: true
         }, {
           key: 'principalId',
@@ -92,75 +101,28 @@
           readOnly: true
         }]);
       },
-      behaviors: [CommonBehavior.EVAjaxBehavior],
+      behaviors: [CommonBehavior.EVAjaxBehavior,DesignerBehavior.ConstantBehavior],
       fetchData: function(formElement) {
-        async.parallel({
-          dataAcl: function(callback) {
-            var params = {
+		  var params = {
               filter: {
                 where: {
                   model: this.modelObj.name
                 }
               }
             }
-            this.makeAjaxCall('api/DataACLs', 'GET', null, null, params, null, function(err, resp) {
-              if (err) {
-                this.fire('oe-show-error', 'Error fetching Data ACLs');
-                callback(err, null)
+
+		   this.makeAjaxCall('api/DataACLs', 'GET', null, null, params, null, function(err, resp) {
+              if (!err) {
+				this.set('dataAcls', resp);
+            	formElement.set('modelNameToSave', this.modelObj.name);
               } else {
-                callback(null, resp)
+                 this.fire('oe-show-error', 'Error fetching Data ACLs');
               }
             }.bind(this));
-          }.bind(this),
-          usersList: function(callback) {
-            this.makeAjaxCall('api/Users', 'get', null, null, null, function(err, res) {
-              if (err) {
-                this.fire('oe-show-error', 'Error fetching UserData');
-                callback(err, null)
-              } else {
-                callback(null, res)
-              }
-            }.bind(this))
-          }.bind(this),
-          roleList: function(callback) {
-            this.makeAjaxCall('api/BaseRoles', 'get', null, null, null, function(err, res) {
-              if (err) {
-                this.fire('oe-show-error', 'Error fetching BaseRoles');
-                callback(err, null)
-              } else {
-                callback(null, res)
-              }
-            }.bind(this))
-          }.bind(this)
-        }, function(err, result) {
-          if (!err) {
-            this.set('dataAcls', result.dataAcl);
-            var predefRoles = ['$everyone', '$owner', '$related', '$authenticated', '$unauthenticated'].map(function(r) {
-              return {
-                disp: r,
-                value: r
-              }
-            })
-            formElement.set('modelNameToSave', this.modelObj.name);
-            formElement.set('principalList.user', result.usersList.map(function(u) {
-              return {
-                disp: u.username,
-                value: u.id
-              }
-            }));
-            var roles = predefRoles.concat(result.roleList.map(function(r) {
-              return {
-                disp: r.name,
-                value: r.id
-              }
-            }))
-            formElement.set('principalList.role', roles);
-          }
-        }.bind(this));
-        this.set('dataAcls', []);
       },
       openDialog: function(modelObj) {
         this.set('modelObj', modelObj);
+		   this.set('dataAcls', []);
         var table = this.querySelector('oe-data-table');
         var formElement = table.$['form-component'].element;
         if (formElement) {

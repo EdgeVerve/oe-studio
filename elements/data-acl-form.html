@@ -101,8 +101,8 @@
             </iron-collapse>
           </div>
           <div class="segment-block">
-            <oe-combo required field-id="principalId" displayproperty="disp" valueproperty="value" listdata='[[_computePrincipalList(vm.principalType)]]'
-              label="Principal Id" value="{{vm.principalId}}"></oe-combo>
+			  <acl-principal-combo required principal-type="[[vm.principalType]]" value="{{vm.principalId}}">
+			  </acl-principal-combo>
             <iron-icon icon="info-outline" on-tap="toggleInfoPanel"></iron-icon>
             <iron-collapse>
               <div class="segment-input-helper">
@@ -193,14 +193,11 @@
           }
           cb();
         }.bind(this));
-        //var readProperty = ['exists', 'find', 'findById', 'findOne', 'count'];
-        //var writeProperty = ['create', 'upsert', 'destroyById'];
         this.set('propertyLists', {
           write: this.dropdownConst.acl.property.write,
           read: this.dropdownConst.acl.property.read,
           '*': this.dropdownConst.acl.property.all
         });
-        this.set('principalList', {});
       },
       isCustomFunc: function (type) {
         return type === 'EXECUTE'
@@ -209,14 +206,7 @@
         if (!type) {
           return;
         }
-        this.set('vm.property', null);
         return this.propertyLists[type.toLowerCase()]
-      },
-      _computePrincipalList: function (type) {
-        if (!type) {
-          return;
-        }
-        return this.principalList[type.toLowerCase()]
       },
       toggleInfoPanel: function (e) {
         e.currentTarget.nextElementSibling.toggle();

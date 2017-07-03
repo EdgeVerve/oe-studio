@@ -63,7 +63,7 @@
         <label class="segment-header">Model Access Control</label>
         <div class="segment-controls-panel">
           <div class="segment-block">
-            <oe-combo field-id="accessType" label="Access Type" value="{{vm.accessType}}" listdata='["*","write","read","execute"]'></oe-combo>
+            <oe-combo field-id="accessType" label="Access Type" value="{{vm.accessType}}" listdata='["*","WRITE","READ","EXECUTE"]'></oe-combo>
             <iron-icon icon="info-outline" on-tap="toggleInfoPanel"></iron-icon>
             <iron-collapse>
               <div class="segment-input-helper">
@@ -76,7 +76,9 @@
               <oe-input field-id="property" label="Property" value="{{vm.property}}"></oe-input>
             </template>
             <template restamp is="dom-if" if="[[!isCustomFunc(vm.accessType)]]">
-              <oe-combo field-id="property" label="Property" value="{{vm.property}}" listdata='[[_computePropertyList(vm.accessType)]]'></oe-combo>
+              <oe-combo field-id="property" label="Property"
+						displayproperty="label" valueproperty="value"
+						value="{{vm.property}}" listdata='[[_computePropertyList(vm.accessType)]]'></oe-combo>
             </template>
             <iron-icon icon="info-outline" on-tap="toggleInfoPanel"></iron-icon>
             <iron-collapse>
@@ -91,7 +93,7 @@
         <label class="segment-header">User Authentication Control</label>
         <div class="segment-controls-panel">
           <div class="segment-block">
-            <oe-combo required field-id="principalType" label="Principal Type" value="{{vm.principalType}}" listdata='["role","user"]'></oe-combo>
+            <oe-combo required field-id="principalType" label="Principal Type" value="{{vm.principalType}}" listdata='["ROLE","USER"]'></oe-combo>
             <iron-icon icon="info-outline" on-tap="toggleInfoPanel"></iron-icon>
             <iron-collapse>
               <div class="segment-input-helper">
@@ -100,7 +102,9 @@
             </iron-collapse>
           </div>
           <div class="segment-block">
-            <oe-combo required field-id="principalId" listdata='[[_computePrincipalList(vm.principalType)]]' label="Principal Id" value="{{vm.principalId}}"></oe-combo>
+			  <acl-principal-combo required principal-type="[[vm.principalType]]" value="{{vm.principalId}}">
+			  </acl-principal-combo>
+            <!--<oe-combo required field-id="principalId" listdata='[[_computePrincipalList(vm.principalType)]]' label="Principal Id" value="{{vm.principalId}}"></oe-combo>-->
             <iron-icon icon="info-outline" on-tap="toggleInfoPanel"></iron-icon>
             <iron-collapse>
               <div class="segment-input-helper">
@@ -157,6 +161,7 @@
           value: 'api/BaseACLs'
         }
       },
+		behaviors: [OEUtils.FormValidationBehavior, OEUtils.ModelHandler, DesignerBehavior.ConstantBehavior],
       attached: function () {
         this.use('preInsert', function (headers, model, cb) {
           model.model = this.modelNameToSave;
@@ -171,34 +176,26 @@
           }
           cb();
         }.bind(this));
-        var readProperty = ['exists', 'find', 'findById', 'findOne', 'count'];
-        var writeProperty = ['create', 'upsert', 'destroyById'];
+
         this.set('propertyLists', {
-          write: writeProperty,
-          read: readProperty,
-          '*': writeProperty.concat(readProperty)
+          write: this.dropdownConst.acl.property.write,
+          read: this.dropdownConst.acl.property.read,
+          '*': this.dropdownConst.acl.property.all
         });
         this.set('principalList', {});
       },
       isCustomFunc: function (type) {
-        return type === 'execute'
+        return type === 'EXECUTE'
       },
       _computePropertyList: function (type) {
         if (!type) {
           return;
         }
-        return this.propertyLists[type]
-      },
-      _computePrincipalList: function (type) {
-        if (!type) {
-          return;
-        }
-        return this.principalList[type]
+        return this.propertyLists[type.toLowerCase()]
       },
       toggleInfoPanel: function (e) {
         e.currentTarget.nextElementSibling.toggle();
-      },
-      behaviors: [OEUtils.FormValidationBehavior, OEUtils.ModelHandler]
+      }
     })
   </script>
 </dom-module>
