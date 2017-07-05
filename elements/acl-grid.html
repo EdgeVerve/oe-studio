@@ -197,8 +197,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     </paper-checkbox>
                   </div>
                   <div class="gridCol">
-					<oe-combo label="Principal type" no-label-float required error-message="Please select the principal type" listdata="[[accessPrincipals]]" value="{{acl.principalType}}"
-							  displayproperty="display" valueproperty="value"></oe-combo>
+					<oe-combo label="Principal type" no-label-float required error-message="Please select the principal type" listdata="[[accessPrincipals]]" value="{{acl.principalType}}"></oe-combo>
                   </div>
                   <div class="gridCol">
 					<acl-principal-combo required
@@ -206,14 +205,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 										 principal-type="[[acl.principalType]]"
 										 value="{{acl.principalId}}">
 			  		</acl-principal-combo>
-<!--
-					<oe-combo label="Principal Id" no-label-float required error-message="Please select the principal Id" listdata="[[accessRole]]" value="{{acl.principalId}}"
-							  displayproperty="display" valueproperty="value"></oe-combo>
--->
                   </div>
                   <div class="gridCol">
-					  <oe-combo label="Permission" no-label-float required error-message="Please select the permission" listdata="[[accessPermission]]" value="{{acl.permission}}"
-							  displayproperty="display" valueproperty="value"></oe-combo>
+					  <oe-combo label="Permission" no-label-float required error-message="Please select the permission" listdata="[[accessPermission]]" value="{{acl.permission}}"></oe-combo>
                   </div>
                   <div class="gridCol acl-property">
 					<div class="acl-property-container layout horizontal center ">
@@ -374,32 +368,20 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       clearValues: function () {
         this.aclObj = {};
-        this.accessPrincipals = [{
-          display: 'ROLE',
-          value: 'role'
-        },{
-          display: 'USER',
-          value: 'user'
-        }]
-        this.accessPermission = [{
-          display: 'ALLOW',
-          value: 'allow'
-        }, {
-          display: 'DENY',
-          value: 'deny'
-        }]
+        this.accessPrincipals = ['ROLE','USER']
+        this.accessPermission = ['ALLOW','DENY']
         this.accessType = [{
           display: 'Execute',
-          value: 'execute'
+          value: 'Execute'
         }, {
           display: 'All',
           value: '*'
         },{
           display: 'READ',
-          value: 'read'
+          value: 'READ'
         },{
           display: 'WRITE',
-          value: 'write'
+          value: 'WRITE'
         }];
       },
       _isCustomFunction: function (accessType) {

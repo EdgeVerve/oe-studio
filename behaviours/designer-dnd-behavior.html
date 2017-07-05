@@ -507,6 +507,11 @@
 				read: readProperty,
 				all: writeProperty.concat(readProperty)
 			}
+
+			aclPropertyList.write.push({label:'All',value:'*'});
+			aclPropertyList.read.push({label:'All',value:'*'});
+			aclPropertyList.all.push({label:'All',value:'*'});
+
 			var aclAccessType = [{
 				value: '*',
 				label: 'All'
