@@ -281,8 +281,9 @@
 				window.OEUtils.tempPolyObj = null;
 			},
 			reFactorFromDesigner: function(node) {
+              //handle here
 				var self = this;
-				var fromMap = {
+				/*var fromMap = {
 					'dom-bind-element': {
 						name: 'template',
 						attrs: {
@@ -304,45 +305,47 @@
 					'page-selector-element': {
 						name: 'neon-animated-pages'
 					}
-				}
+				}*/
 				self.traverseDom(node, function(el) {
 					var name = el.nodeName.toLowerCase();
-					var mapDefn = fromMap[name];
-					if (mapDefn) {
-						var n = self.replaceTag(el, name, mapDefn.name);
-						for (var attrName in mapDefn.attrs) {
-							n.setAttribute(attrName, mapDefn.attrs[attrName]);
+
+					if(name === "dynamic-dom-element"){
+						var polyType = el.getAttribute('poly-type');
+						var config = OEUtils.designerData.designerMap.find(function(mappedObj){
+							return polyType == mappedObj.is;
+						})
+						if(config){
+							var n = self.replaceTag(el, name, config.map.tagName);
+							if(Array.isArray(config.map.attributes)){
+								config.map.attributes.forEach(function(attr){
+									n.setAttribute(attr.key, attr.value);
+								})
+							}
+							n.removeAttribute('poly-type');
+							n.removeAttribute('paged');
+							el.parentElement.replaceChild(n, el);
+							return n;
 						}
-						el.parentElement.replaceChild(n, el);
-						return n;
 					}
 				});
 			},
 			reFactorToDesigner: function(node) {
 				var self = this;
-				var toMap = {
-					'dom-bind': 'dom-bind-element',
-					'dom-if': 'dom-if-element',
-					'dom-repeat': 'dom-repeat-element',
-					'neon-animated-pages': 'page-selector-element'
-				}
+
 				self.traverseDom(node, function(el) {
-					var name = el.nodeName.toLowerCase();
-					var n;
-					if (name == 'template') {
-						var type = el.getAttribute('is');
-						if (toMap[type]) {
-							n = self.replaceTag(el, name, toMap[type]);
-							el.parentElement.replaceChild(n, el);
-							return n;
+					var isMapped = OEUtils.designerData.designerMap.find(function(mapObj){
+						return el.matches(mapObj.query);
+					})
+					if(isMapped){
+						var name = el.nodeName.toLowerCase();
+						n = self.replaceTag(el, name, 'dynamic-dom-element');
+						n.setAttribute('poly-type',isMapped.is);
+						if(isMapped.map.paged){
+							n.setAttribute('paged','');
 						}
-					} else if (toMap[name]) {
-						var mappedType = toMap[name];
-						n = self.replaceTag(el, name, mappedType);
 						el.parentElement.replaceChild(n, el);
 						return n;
 					}
-
 				});
 			},
 			replaceTag: function(Element, fromTag, toTag) {
@@ -430,7 +433,6 @@
 				}
 				var payload = self._preparePayload();
 				self.makeAjaxCall('/api/UIComponents/', 'put', payload, null, null, function(err, res) {
-
 					if (!err) {
 						self.$.toolbar.fire('update-component', res);
 						self.fire('oe-show-success', 'Element successfully created');

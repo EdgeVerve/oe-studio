@@ -131,7 +131,11 @@
         this.set('element', ele);
         if (ele) {
           this.$.menuBtn.close();
-          this.set('nodeName', ele.tagName.toUpperCase());
+		  if(ele.tagName.toLowerCase() === "dynamic-dom-element"){
+				this.set('nodeName', ele.getAttribute('poly-type').toUpperCase());
+	   	  }else{
+				this.set('nodeName', ele.tagName.toUpperCase());
+	      }
           this.set('isTextNode', ele.getAttribute('oe-ele-type') == 'text')
           this.set('isContainer', ele.getAttribute('oe-ele-type') == 'droppable')
           this.set('isLinkNode', ele.tagName.toLowerCase() == 'a')

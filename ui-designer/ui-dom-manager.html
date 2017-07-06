@@ -243,8 +243,9 @@
         }
         var pointer = selected;
         while (pointer != dom) {
+			var name = (pointer.nodeName.toLowerCase() == "dynamic-dom-element"?pointer.nodeName.toLowerCase():pointer.getAttribute('poly-type'));
           parent.push({
-            tagName: pointer.nodeName.toLowerCase(),
+            tagName: name,
             ele: pointer
           });
           pointer = pointer.parent || pointer.parentElement

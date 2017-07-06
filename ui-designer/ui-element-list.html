@@ -386,7 +386,8 @@
 						self.resolveError(err);
 					}
 					OEUtils.designerData.elementList = elementList;
-					groupedElements = _.groupBy(elementList, function(item) {
+                    OEUtils.designerData.generateMap();
+                    groupedElements = _.groupBy(elementList, function(item) {
 						return item.category;
 					});
 					self.set('components', groupedElements);

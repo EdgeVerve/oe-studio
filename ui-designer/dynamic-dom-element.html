@@ -1,0 +1,86 @@
+<dom-module id="dynamic-dom-element">
+	<template>
+		<style>
+			:host {
+				position: relative;
+				display: block;
+			}
+
+			#iron-page-container {
+				position: relative;
+				border:5px solid transparent;
+			}
+
+			#front-arrow,
+			#back-arrow {
+				position: absolute;
+				top: calc(50% - 12px);
+				color: black;
+				z-index: 200;
+			}
+
+			#back-arrow {
+				left: 8px;
+			}
+
+			#front-arrow {
+				right: 8px;
+			}
+
+		</style>
+
+
+		<template is="dom-if" if="[[!paged]]">
+			<content></content>
+		</template>
+		<template is="dom-if" if="[[paged]]">
+			<div id="iron-page-container">
+				<iron-icon icon="arrow-forward" id="front-arrow" hidden="[[!_showNextBtn(selectedPage)]]" on-tap="_nextPage"></iron-icon>
+				<iron-icon icon="arrow-back" id="back-arrow" hidden="[[!_showPrevBtn(selectedPage)]]" on-tap="_prevPage"></iron-icon>
+				<iron-pages selected="[[selectedPage]]">
+					<content></content>
+				</iron-pages>
+			</div>
+		</template>
+
+	</template>
+	<script>
+		Polymer({
+			is: "dynamic-dom-element",
+			properties: {
+				polyType: {
+					type: String
+				},
+				paged: {
+					type: Boolean,
+					value:false
+				}
+			},
+			attached: function() {
+				this.polyConfig = {};
+				if (this.polyType) {
+					var config = Polymer.telemetry.registrations.find(function(e) {
+						return e.is == this.polyType
+					}.bind(this));
+					if (config) {
+						this.set('polyConfig', config);
+					}
+				}
+				this.set('selectedPage', 0)
+			},
+			_showNextBtn: function(page) {
+				return page < (this.getEffectiveChildren().length - 1)
+			},
+			_showPrevBtn: function(page) {
+				return page !== 0
+			},
+			_nextPage: function() {
+				this.set('selectedPage', this.selectedPage + 1);
+			},
+			_prevPage: function() {
+				this.set('selectedPage', this.selectedPage - 1);
+			},
+		})
+
+	</script>
+</dom-module>

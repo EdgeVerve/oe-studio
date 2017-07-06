@@ -2,7 +2,7 @@
 <dom-module id="ui-attribute-editor">
   <template>
     <style>
-       :host {
+      :host {
         display: block;
         position: relative;
       }
@@ -166,6 +166,7 @@
         border-radius: 4px;
         background: var(--default-primary-color);
       }
+
     </style>
     <template is="dom-if" if="[[selectedElement]]">
       <div>
@@ -197,8 +198,7 @@
                       <div class="info-box layout horizontal center">
                         <div class="info-label">Attribute: </div>
                         <div class="info-value">
-                          <oe-combo allow-free-text class="light-control" listdata="{{listdata}}" displayproperty="name" pattern="^[a-z][0-9a-z-]+[0-9a-z]$"
-                            required no-label-float value="{{attributeObj}}"></oe-combo>
+                          <oe-combo allow-free-text class="light-control" listdata="{{listdata}}" displayproperty="name" pattern="^[a-z][0-9a-z-]+[0-9a-z]$" required no-label-float value="{{attributeObj}}"></oe-combo>
                         </div>
                       </div>
                       <template is="dom-if" if="{{!isString(attributeObj.type)}}">
@@ -272,13 +272,13 @@
       },
       attributeList: {
         type: Array,
-        value: function () {
+        value: function() {
           return [];
         }
       },
       tempAttributeList: {
         type: Array,
-        value: function () {
+        value: function() {
           return [];
         }
       },
@@ -291,36 +291,36 @@
     behaviors: [
       ReduxBehavior
     ],
-    attached: function () {
+    attached: function() {
       this.initialize();
     },
     actions: {
-      update: function (element) {
+      update: function(element) {
         return {
           type: 'UPDATE_ELEMENT',
           element: element
         }
       }
     },
-    isString: function (type) {
+    isString: function(type) {
       return (!type || type == 'String' || type == 'string');
     },
-    generateText: function (flag) {
+    generateText: function(flag) {
       return (flag ? 'Collapse All' : 'Expand All');
     },
-    _getElementName: function (elem) {
+    _getElementName: function(elem) {
       return elem && elem.tagName.toUpperCase();
     },
-    _generateLabel: function (flag) {
+    _generateLabel: function(flag) {
       return (flag ? 'Bind value' : 'Custom');
     },
-    _filterAttribute: function (val) {
+    _filterAttribute: function(val) {
       if (!val) {
         this.set('showMore', false);
       } else {
         this.set('showMore', true);
       }
-      return function (model) {
+      return function(model) {
         if (!val) {
           return true;
         }
@@ -330,12 +330,12 @@
         return (model.name.toLowerCase().indexOf(val.toLowerCase()) != -1);
       }
     },
-    initialize: function () {
+    initialize: function() {
       this.set('searchKey', '');
       this.set('showAddAttribute', false);
       this.set('isCustom', true);
       this.set('showAttributes', true);
-      this.set('showMore', false);
+      //this.set('showMore', false);
       this.set('attributeObj', {});
       this.set('attributeObj.isBindedValue', false);
       this.set('attributeObj.type', 'String');
@@ -344,14 +344,14 @@
       this.set('propertyList', []);
       this.set('tempAttributeList', []);
     },
-    showAttribute: function (event) {
+    showAttribute: function(event) {
       event.stopPropagation();
       this.set('attributeObj', {});
       this.set('attributeObj.isBindedValue', false);
       this.set('attributeObj.type', 'String');
       this.set('showAddAttribute', true);
       this.set('showAttributes', true);
-      this.async(function () {
+      this.async(function() {
         this.$$('#addAttrContainer').scrollIntoView({
           block: 'start',
           behavior: 'smooth'
@@ -359,16 +359,16 @@
       }, 300)
 
     },
-    cancelAction: function () {
+    cancelAction: function() {
       this.set('showAddAttribute', false);
     },
-    deleteAttribute: function (event) {
+    deleteAttribute: function(event) {
       var index = event.model.index;
       this.splice('attributeList', index, 1);
       this.selectedElement.removeAttribute(event.model.item.name);
       this.dispatch('update', this.selectedElement);
     },
-    addAttribute: function () {
+    addAttribute: function() {
       if (!this.$$('#addAttributeForm').validate()) {
         return;
       }
@@ -379,13 +379,13 @@
       } else {
         obj.isBindedValue = false;
       }
-      var index = this.attributeList.findIndex(function (attr) {
+      var index = this.attributeList.findIndex(function(attr) {
         return attr.name == obj.name;
       })
       if (index >= 0) {
         this.set('attributeList.' + index, obj);
       } else {
-        var found = this.propertyList.findIndex(function (attr) {
+        var found = this.propertyList.findIndex(function(attr) {
           return attr.name == obj.name;
         })
         if (found >= 0) {
@@ -398,8 +398,8 @@
       this.set('attributeObj.type', String);
       this.saveAttrConfiguration();
     },
-    _showControl: function (type, attrName) {
-      var attribute = this.listdata.find(function (attr) {
+    _showControl: function(type, attrName) {
+      var attribute = this.listdata.find(function(attr) {
         return attr.name == attrName
       })
       if (!attribute) {
@@ -410,12 +410,12 @@
       }
       return false;
     },
-    _toggleCollaspe: function (event) {
+    _toggleCollaspe: function(event) {
       var target = event.currentTarget.getAttribute('collapse-target');
       var collapseTarget = this.querySelector('#' + target);
       collapseTarget.toggle();
       Polymer.dom.flush();
-      this.async(function () {
+      this.async(function() {
         if (target == 'attribute-list' && collapseTarget.opened) {
           collapseTarget.scrollIntoView({
             block: 'start',
@@ -424,7 +424,7 @@
         }
       }, 300);
     },
-    _generateAttributeList: function (props, type) {
+    _generateAttributeList: function(props, type) {
       var self = this;
       if (!type) {
         type = 'property';
@@ -433,14 +433,14 @@
       if (!props) {
         return;
       }
-      Object.keys(props).forEach(function (key) {
+      Object.keys(props).forEach(function(key) {
         var obj = {
           value: props[key].value || null,
           type: props[key].type ? (props[key].type.name || props[key].type) : 'String'
         }
         obj.isBindedValue = false;
         var index;
-        if (obj.value && (typeof (obj.value) == 'string')) {
+        if (obj.value && (typeof(obj.value) == 'string')) {
           obj.isBindedValue = regexp.test(obj.value);
         }
         if (type == 'property') {
@@ -453,7 +453,7 @@
             return;
           }
           if (obj.type != 'Function' && typeof obj.value != 'function') {
-            index = self.propertyList.findIndex(function (attr) {
+            index = self.propertyList.findIndex(function(attr) {
               return attr.name == obj.name;
             })
             if (index >= 0) {
@@ -464,24 +464,24 @@
           }
         } else {
           obj.name = props[key].name;
-          if (obj.name == 'oe-id' || obj.name == 'oe-ele-type') {
+          if (obj.name == 'oe-id' || obj.name == 'oe-ele-type' || obj.name === 'draggable') {
             return;
           }
-          index = self.propertyList.findIndex(function (attr) {
+          index = self.propertyList.findIndex(function(attr) {
             return attr.name == obj.name;
           })
           if (index >= 0) {
             obj.type = self.propertyList[index].type;
             self.splice('propertyList', index, 1);
           }
-          if (obj.value && (typeof (obj.value) == 'string')) {
+          if (obj.value && (typeof(obj.value) == 'string')) {
             obj.isBindedValue = regexp.test(obj.value);
           }
           if (obj.type == 'Boolean' && !obj.isBindedValue) {
             obj.value = true;
           }
           if (obj.type != 'Function' && typeof obj.value != 'function') {
-            index = self.attributeList.findIndex(function (attr) {
+            index = self.attributeList.findIndex(function(attr) {
               return attr.name == obj.name;
             })
             if (index >= 0) {
@@ -493,28 +493,36 @@
         }
       })
     },
-    elementSelected: function (el, polyEl) {
+    elementSelected: function(el, polyEl) {
       if (!el || !polyEl || el.tagName != polyEl.tagName) {
         return;
       }
       var self = this;
       this.initialize();
+      if (this.prevEleId !== el.getAttribute('oe-id')) {
+        this.prevEleId = el.getAttribute('oe-id');
+        this.set('showMore', false);
+      }
       Polymer.dom.flush();
       if (this.selectedElement) {
         var props;
         if (this.selectedPolymerElement.set) {
-          props = this.selectedPolymerElement.properties;
+		  var isDynamic = (this.selectedPolymerElement.is === "dynamic-dom-element");
+          var ele = isDynamic?this.selectedPolymerElement.polyConfig:this.selectedPolymerElement;
+
+		  props = ele.properties;
           this._generateAttributeList(props, 'property');
-          this.selectedPolymerElement.behaviors.forEach(function (behavior) {
+          ele.behaviors.forEach(function(behavior) {
             var props = behavior.properties;
             self._generateAttributeList(props, 'property');
           });
-          props = this.selectedElement.attributes;
-          this._generateAttributeList(props, 'attribute');
+
+			//If not dynamic extract attributes
+			isDynamic || this._generateAttributeList(ele.attributes, 'attribute');
         } else {
           props = this.selectedElement.attributes;
           this._generateAttributeList(props, 'attribute');
-          var config = OEUtils.designerData.elementList.find(function (obj) {
+          var config = OEUtils.designerData.elementList.find(function(obj) {
             return obj.tag == self.selectedElement.tagName.toLowerCase();
           });
 
@@ -523,7 +531,7 @@
            * then iterate over the actual selected element atributes property so that the type in attr config will not be overwritten
            */
           if (config) {
-            config.config.attributes.forEach(function (attr) {
+            config.config.attributes.forEach(function(attr) {
               var obj = {};
               if (typeof attr === 'string') {
                 obj = {
@@ -540,7 +548,7 @@
                   isBindedValue: false
                 }
               }
-              var index = self.attributeList.findIndex(function (attr) {
+              var index = self.attributeList.findIndex(function(attr) {
                 return attr.name == obj.name;
               })
               if (index >= 0) {
@@ -562,29 +570,29 @@
       var c1 = this.querySelector('.attribute-container');
       c1 && (c1.scrollTop = 0);
     },
-    _convertToPascalCase: function (str) {
-      return str.replace(/\w\S*/g, function (txt) {
+    _convertToPascalCase: function(str) {
+      return str.replace(/\w\S*/g, function(txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
       });
     },
-    _convertToCamelCase: function (myString) {
-      return myString.replace(/-([a-z])/g, function (g) {
+    _convertToCamelCase: function(myString) {
+      return myString.replace(/-([a-z])/g, function(g) {
         return g[1].toUpperCase();
       });
     },
-    _convertToKebabCase: function (myString) {
+    _convertToKebabCase: function(myString) {
       return myString.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
     },
-    _sort: function (a, b) {
+    _sort: function(a, b) {
       if (a.name.toLowerCase() === b.name.toLowerCase()) {
         return 0;
       }
       return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
     },
-    saveAttrConfiguration: function (event) {
+    saveAttrConfiguration: function(event) {
       if (event) {
         var obj = event.model.item;
-        var index = this.attributeList.findIndex(function (attr) {
+        var index = this.attributeList.findIndex(function(attr) {
           return attr.name == obj.name
         })
         if (index != -1) {
@@ -595,13 +603,13 @@
       }
       var self = this;
       var changedAttributeList
-	  if(_.differenceWith){
-		  changedAttributeList = _.differenceWith(this.attributeList, this.tempAttributeList, _.isEqual);
-	  }else{
-		  changedAttributeList = _.difference(this.attributeList, this.tempAttributeList, _.isEqual);
-	  }
+      if (_.differenceWith) {
+        changedAttributeList = _.differenceWith(this.attributeList, this.tempAttributeList, _.isEqual);
+      } else {
+        changedAttributeList = _.difference(this.attributeList, this.tempAttributeList, _.isEqual);
+      }
 
-      changedAttributeList.forEach(function (attr) {
+      changedAttributeList.forEach(function(attr) {
         if (attr.type == 'Boolean' && !attr.value) {
           self.selectedElement.removeAttribute(attr.name);
         } else if (!attr.isBindedValue && (attr.type == 'Object' || attr.type == 'Array')) {

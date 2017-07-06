@@ -476,13 +476,16 @@
       description: 'An element that supports creating dialog boxes',
       tag: 'paper-dialog',
       category: 'container',
-      content: '<paper-dialog></paper-dialog>',
+      content: '<dynamic-dom-element poly-type="paper-dialog"></dynamic-dom-element>',
       icon: 'icons:aspect-ratio',
       config: {
         domType: 'Polymer',
         attributes: [],
         importUrl: '/bower_components/paper-dialog/paper-dialog.html',
-        type: 'droppable'
+        type: 'droppable',
+        mapWith:{
+          tagName:'paper-dialog'
+        }
       },
       previewImg: ''
     }, {
@@ -501,54 +504,83 @@
       previewImg: ''
     }, {
       name: 'Dom If',
-      tag: 'dom-if-element',
+      tag: 'dom-if',
       icon: 'image:grid-on',
       description: 'DOM consditional element',
-      content: '<dom-if-element></dom-if-element>',
+      content: '<dynamic-dom-element poly-type="dom-if"></dynamic-dom-element>',
       category: 'container',
       config: {
         domType: 'Polymer',
-        importUrl: '/bower_components/oe-studio/designer-elements/dom-if-element.html',
-        type: 'droppable'
+        type: 'droppable',
+        mapWith:{
+          tagName:'template',
+          attributes:[{"key":"is","value":"dom-if"}]
+        }
       },
       previewImg: ''
     }, {
       name: 'Dom Repeat',
-      tag: 'dom-repeat-element',
+      tag: 'dom-repeat',
       icon: 'image:grid-on',
       description: 'DOM looping element',
-      content: '<dom-repeat-element></dom-repeat-element>',
+      content: '<dynamic-dom-element poly-type="dom-repeat"></dynamic-dom-element>',
       category: 'container',
       config: {
         domType: 'Polymer',
-        importUrl: '/bower_components/oe-studio/designer-elements/dom-repeat-element.html',
-        type: 'droppable'
+        type: 'droppable',
+        mapWith:{
+          tagName:'template',
+          attributes:[{"key":"is","value":"dom-repeat"}]
+        }
       },
       previewImg: ''
     }, {
       name: 'Dom Bind',
-      tag: 'dom-bind-element',
+      tag: 'dom-bind',
       icon: 'image:grid-on',
       description: 'DOM bind element',
-      content: '<dom-bind-element></dom-bind-element>',
+      content: '<dynamic-dom-element poly-type="dom-bind"></dynamic-dom-element>',
       category: 'container',
       config: {
         domType: 'Polymer',
-        importUrl: '/bower_components/oe-studio/designer-elements/dom-bind-element.html',
-        type: 'droppable'
+        type: 'droppable',
+        mapWith:{
+          tagName:'template',
+          attributes:[{"key":"is","value":"dom-bind"}]
+        }
       },
       previewImg: ''
     }, {
-      name: 'Page Selector',
-      tag: 'page-selector-element',
+      name: 'Neon animated Page',
+      tag: 'neon-animated-pages',
       icon: 'image:grid-on',
-      description: 'Page Selector Element',
-      content: '<page-selector-element></page-selector-element>',
+      description: 'Neon animated Page',
+      content: '<dynamic-dom-element poly-type="neon-animated-pages" paged></dynamic-dom-element>',
       category: 'container',
       config: {
         domType: 'Polymer',
-        importUrl: '/bower_components/oe-studio/elements/page-selector-element.html',
-        type: 'droppable'
+        type: 'droppable',
+		mapWith:{
+          tagName:'neon-animated-pages',
+			paged:true
+        }
+      },
+      previewImg: ''
+    },
+	{
+      name: 'Iron Page',
+      tag: 'iron-pages',
+      icon: 'image:grid-on',
+      description: 'Iron Page',
+      content: '<dynamic-dom-element poly-type="iron-pages" paged></dynamic-dom-element>',
+      category: 'container',
+      config: {
+        domType: 'Polymer',
+        type: 'droppable',
+		mapWith:{
+          tagName:'iron-pages',
+			paged:true
+        }
       },
       previewImg: ''
     }]

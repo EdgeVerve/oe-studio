@@ -274,19 +274,24 @@ var designerController = (function () {
 		if (element.id === 'content') {
 			element.addEventListener('dragleave', dragLeave);
 		} else {
-			var isEmpty = (element.children.length === 0);
-			if (element.childNodes.length !== element.children.length) {
-				var validNodes = [].filter.call(element.childNodes, function filterEmptyTextNode(n) {
-					if (n.nodeName === '#text') {
-						return (n.textContent.trim().length > 0);
-					}
-					return true;
-				});
-				isEmpty = (validNodes.length === 0);
+			var originalElement = GLOBAL_ISOLATED_DOM.querySelector('[oe-id="' + element.getAttribute('oe-id') + '"]');
+			if(originalElement){
+				var isEmpty = originalElement.children.length === 0;
+				if (isEmpty) {
+					element.classList.add('oe-empty-container');
+				}
 			}
-			if (isEmpty) {
-				element.classList.add('oe-empty-container');
-			}
+//			var isEmpty = (element.children.length === 0);
+//			if (element.childNodes.length !== element.children.length) {
+//				var validNodes = [].filter.call(element.childNodes, function filterEmptyTextNode(n) {
+//					if (n.nodeName === '#text') {
+//						return (n.textContent.trim().length > 0);
+//					}
+//					return true;
+//				});
+//				isEmpty = (validNodes.length === 0);
+//			}
+
 		}
 	}
 
@@ -544,9 +549,12 @@ var designerController = (function () {
 				var newDom = removeTextBinding(dom.cloneNode(true))
 				cont.innerHTML = '<template is="dom-bind">' + newDom.innerHTML + '</template>';
 				Polymer.dom.flush();
-				Polymer.Base.async(function () {
-					attachHandlers(cont);
-				}, 300)
+				var targetTemp = cont.querySelector('template');
+				var invoker = function(){
+					Polymer.async(function(){attachHandlers(cont)},1000);
+					targetTemp.removeEventListener('dom-change',invoker);
+				}
+				targetTemp.addEventListener('dom-change',invoker);
 			}
 
 			removeContext('drop');

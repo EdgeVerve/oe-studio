@@ -101,7 +101,7 @@
 					key: a.nodeName,
 					value: a.nodeValue
 				}
-			})):[];
+			})) : [];
 			var children = obj.tag == "template" ? node.content.childNodes : node.childNodes;
 			[].forEach.call(children, function(a) {
 				var y = createDOMObject(a)
@@ -119,6 +119,31 @@
 	})()
 
 	OEUtils.designerData = OEUtils.designerData || {}
+
+	OEUtils.designerData.generateMap = function() {
+		OEUtils.designerData.designerMap = [];
+		if (!Array.isArray(OEUtils.designerData.elementList)) {
+			return;
+		}
+		var mappable = OEUtils.designerData.elementList.filter(function(ele) {
+			return ele.config && ele.config.mapWith
+		});
+		mappable.forEach(function(ele) {
+			var query = ele.config.mapWith.tagName;
+			if (ele.config.mapWith.attributes) {
+				query += ele.config.mapWith.attributes.map(function(att) {
+					return '[' + att.key + '="' + att.value + '"]'
+				}).join('')
+			}
+			if (query) {
+				OEUtils.designerData.designerMap.push({
+					query: query,
+					map: ele.config.mapWith,
+					is:ele.tag
+				})
+			}
+		})
+	}
 
 	var DesignerBehavior = DesignerBehavior || {}
 
@@ -508,9 +533,18 @@
 				all: writeProperty.concat(readProperty)
 			}
 
-			aclPropertyList.write.push({label:'All',value:'*'});
-			aclPropertyList.read.push({label:'All',value:'*'});
-			aclPropertyList.all.push({label:'All',value:'*'});
+			aclPropertyList.write.push({
+				label: 'All',
+				value: '*'
+			});
+			aclPropertyList.read.push({
+				label: 'All',
+				value: '*'
+			});
+			aclPropertyList.all.push({
+				label: 'All',
+				value: '*'
+			});
 
 			var aclAccessType = [{
 				value: '*',
