@@ -548,13 +548,14 @@ var designerController = (function () {
 			if (reRendered) {
 				var newDom = removeTextBinding(dom.cloneNode(true))
 				cont.innerHTML = '<template is="dom-bind">' + newDom.innerHTML + '</template>';
-				Polymer.dom.flush();
 				var targetTemp = cont.querySelector('template');
-				var invoker = function(){
-					Polymer.async(function(){attachHandlers(cont)},1000);
-					targetTemp.removeEventListener('dom-change',invoker);
-				}
-				targetTemp.addEventListener('dom-change',invoker);
+				targetTemp.addEventListener('dom-change',function(){
+					setTimeout(function(){
+						attachHandlers(cont)
+					},1000);
+				});
+				Polymer.dom.flush();
+				targetTemp.render();
 			}
 
 			removeContext('drop');
