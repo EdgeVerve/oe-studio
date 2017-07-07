@@ -289,7 +289,8 @@
           } else if (event.clientY < (midPoint - 10)) {
             dropBelow = false;
           } else {
-            if (element.dom.getAttribute('oe-ele-type') !== 'droppable') {
+            if (element.dom.getAttribute('oe-ele-type') !== 'droppable'
+				|| element.dom.getAttribute('oe-dom-handle') !== 'unclassified') {
               return;
             }
             if (node.children.length == 0) {
@@ -326,7 +327,8 @@
             } else if (event.clientY < (midPoint - 10)) {
               element.style.borderTop = '1px dashed red';
             } else {
-              if (element.dom.getAttribute('oe-ele-type') !== 'droppable') {
+              if (element.dom.getAttribute('oe-ele-type') !== 'droppable'
+				  || element.dom.getAttribute('oe-dom-handle') !== 'unclassified') {
                 return;
               }
               if (node.children.length == 0) {
