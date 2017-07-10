@@ -519,18 +519,18 @@
 
 			//If not dynamic extract attributes
 			isDynamic || this._generateAttributeList(ele.attributes, 'attribute');
-        } else {
-          props = this.selectedElement.attributes;
-          this._generateAttributeList(props, 'attribute');
-          var config = OEUtils.designerData.elementList.find(function(obj) {
-            return obj.tag == self.selectedElement.tagName.toLowerCase();
-          });
+        }
+		  props = this.selectedElement.attributes;
+		  this._generateAttributeList(props, 'attribute');
+		  var config = OEUtils.designerData.elementList.find(function(obj) {
+			return obj.tag == self.selectedElement.tagName.toLowerCase();
+		  });
 
           /*
            * fetch attr config from designer elem list
            * then iterate over the actual selected element atributes property so that the type in attr config will not be overwritten
            */
-          if (config) {
+        if (config) {
             config.config.attributes.forEach(function(attr) {
               var obj = {};
               if (typeof attr === 'string') {
@@ -560,7 +560,6 @@
               }
             })
           }
-        }
         if (this.attributeList.length == 0) {
           this.set('showMore', true);
         }
