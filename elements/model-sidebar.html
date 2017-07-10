@@ -386,7 +386,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }
         var modelName = model.name.toLowerCase();
         return (model && !model.designerHiddenModel && model.public &&
-          modelName != 'baseentity' && modelName.indexOf(filterVal) != -1)
+          modelName != 'baseentity' && modelName.toLowerCase().indexOf(filterVal.toLowerCase()) != -1)
       },
       _filter: function (val) {
         return function (model) {
