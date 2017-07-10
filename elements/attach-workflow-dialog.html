@@ -109,7 +109,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             <oe-data-table id="maintable" items={{workflowMappings}} columns='[{"key": "operation","label": "Operation","readOnly": true},{"key":"workflowDefinitionName","valueGetter": "(row.workflowBody.workflowDefinitionName||row.workflowBody.processDefinitionKey)","label": "Workflow Definition","readOnly": true}]'
               editor-form-url="bower_components/oe-studio/elements/attach-workflow-{{workflowType}}.html" default-record={{workflowDef}}>
               <div header-title class="layout horizontal center">
-                <oe-radio-group value={{workflowType}} displayproperty="display" valueproperty="value" listdata='[{"display":"Activiti","value":"activiti"},{"display":"Symphony","value":"oe-workflow"} ]'></oe-radio-group>
+                <oe-radio-group value={{workflowType}} displayproperty="display" valueproperty="value" listdata='[{"display":"Activiti","value":"activiti"},{"display":"OE Workflow","value":"oe-workflow"} ]'></oe-radio-group>
               </div>
             </oe-data-table>
           </div>

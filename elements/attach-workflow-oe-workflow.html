@@ -1,8 +1,8 @@
 <!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
 The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
-The Program may contain/reference third party or open source components, the rights to which continue to 
-remain with the applicable third party licensors or the open source community as the case may be and nothing 
-here transfers the rights to the third party and open source components, except as expressly permitted. 
+The Program may contain/reference third party or open source components, the rights to which continue to
+remain with the applicable third party licensors or the open source community as the case may be and nothing
+here transfers the rights to the third party and open source components, except as expressly permitted.
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
 <dom-module id="attach-workflow-oe-workflow">
   <style>
@@ -10,7 +10,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       --iron-icon-width: 20px;
       --iron-icon-height: 20px;
     }
-    
+
     .col-2>* {
       width: calc(50% - 16px);
       box-sizing: border-box;
@@ -23,7 +23,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         <div class="vertical flex layout">
             <div class="layout horizontal col-2">
                 <div class="vertical flex layout">
-                    <oe-radio-group field-id="operation" required label="Operations" value={{vm.operation}} 
+                    <oe-radio-group field-id="operation" required label="Operations" value={{vm.operation}}
                                     displayproperty="display"
                                     valueproperty="value"
                                     listdata='[{"display":"Create","value":"create"}, {"display":"Update","value":"update"}, {"display":"Delete","value":"delete"}]'></oe-radio-group>
