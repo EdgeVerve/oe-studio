@@ -134,6 +134,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         font-size: 12px;
         position: relative;
         overflow: hidden;
+		  cursor: pointer;
       }
 
       .pull-right {
@@ -472,7 +473,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           <div class="property-listing layout vertical justified">
             <div class="listing">
               <template is="dom-repeat" items="{{modelObj.properties}}" as="property">
-                <div class="list-item">
+                <div class="list-item" on-tap="_launchEditProp">
                   <div class="property-name pull-left" title="{{property.__name__}}"><span class="required" hidden$="{{!property.required}}">|</span>{{property.__name__}}</div>
                   <div class$="property-validation pull-right has-validation-[[hasValidation(property)]]">
                     <iron-icon id="validate-icon" icon="icons:done-all" on-tap="_addPropValidation"></iron-icon>
@@ -480,7 +481,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                   <div class="property-type pull-right">
                     <div class="options">
                       <iron-icon class="small" icon="create" id="edit-icon" on-tap="_launchEditProp"></iron-icon>
-                      <iron-icon class="small" icon="delete" id="delete-icon" on-tap="_deleteProperty"></iron-icon>
+<!--                      <iron-icon class="small" icon="delete" id="delete-icon" on-tap="_deleteProperty"></iron-icon>-->
                     </div>
                     {{property.type}}
                   </div>
@@ -503,13 +504,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               </div>
               <div>
                 <oe-combo listdata="[[validTypes]]" required class="customized" value="{{propertyObj.type}}" label="Property Type"></oe-combo>
-                <!--<paper-dropdown-menu label="Property Type" class="customized" vertical-align="bottom">
-                  <paper-menu required class="dropdown-content" attr-for-selected="datavalue" selected="{{propertyObj.type}}">
-                    <template is="dom-repeat" items="[[validTypes]]">
-                      <paper-item datavalue="[[item]]">[[item]]</paper-item>
-                    </template>
-                  </paper-menu>
-                </paper-dropdown-menu>-->
               </div>
               <div>
                 <div class="field-label">
@@ -522,14 +516,17 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             </div>
           </form>
           <div class="prop-actions">
-            <paper-button on-tap="_addNewPropValidations" id="validate-prop-btn">
-              Validate
+            <paper-button on-tap="_deleteEditableProp" id="delete-prop-btn" hidden="[[!editProperty]]">
+              Delete
             </paper-button>
-            <paper-button on-tap="_cancelNewProp" id="cancel-add-prop">
-              Cancel
+			<paper-button on-tap="_addNewPropValidations" id="validate-prop-btn">
+              Validate
             </paper-button>
             <paper-button on-tap="_addNewProp" id="add-prop-btn">
               Save
+            </paper-button>
+            <paper-button on-tap="_cancelNewProp" id="cancel-add-prop">
+              Cancel
             </paper-button>
           </div>
         </div>
@@ -624,18 +621,18 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       this.$.optionsMenu.close();
       this.fire('attach-workflow', this.modelObj);
     },
-    _deleteProperty: function (e) {
-      var data = {
+	_deleteEditableProp:function(){
+	  var data = {
         message: 'Do you want to delete the property ?',
         ok: function () {
-          this.splice('modelObj.properties', e.model.index, 1);
+          this.splice('modelObj.properties', this.propertyIndex, 1);
         }.bind(this),
         cancel: function () {
           return;
         }.bind(this)
       }
       this.fire('oe-show-confirm', data);
-    },
+	},
     _modelSelected: function () {
       this.fire('model-selected');
     },
