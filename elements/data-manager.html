@@ -38,12 +38,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       color: var(--default-primary-color);
     }
 
-    .options + .options {
+    .options+.options {
       border-left: 1px solid var(--divider-color);
       margin-left: 8px;
     }
 
-    .json-view-options > div {
+    .json-view-options>div {
       padding: 0 16px;
       font-size: 14px;
     }
@@ -628,11 +628,30 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.set('isSpinnerActive', flag);
       },
       getDefaultValues: function () {
+        var obj = this.getModelProps(this.modelDataObj.model);
+        obj = Object.assign(obj, this.getAllBaseModelProps(this.modelDataObj.model, {}));
+        return JSON.stringify(obj, null, 2);
+      },
+      getAllBaseModelProps: function (model, obj) {
+        var baseModelName = model.base;
+        if (baseModelName && (baseModelName.toLowerCase() === 'persistedmodel' || baseModelName.toLowerCase ===
+            'model')) {
+          return obj;
+        } else {
+          var baseModel = this.domHost.modelList.find(function (d) {
+            return d.name === baseModelName;
+          });
+          var baseModelProps = this.getModelProps(baseModel);
+          obj = Object.assign(obj, baseModelProps);
+          return this.getAllBaseModelProps(baseModel, obj);
+        }
+      },
+      getModelProps: function (model) {
         var obj = {};
-        this.modelDataObj.model.properties.forEach(function (d) {
+        model.properties.forEach(function (d) {
           obj[d.__name__] = this.getType(d.type, d.format);
         }.bind(this));
-        return JSON.stringify(obj, null, 2);
+        return obj;
       },
       getType: function (type, format) {
         var obj = {
