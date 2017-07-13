@@ -641,6 +641,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           var baseModel = this.domHost.modelList.find(function (d) {
             return d.name === baseModelName;
           });
+          if (!baseModel)
+            return obj;
           var baseModelProps = this.getModelProps(baseModel);
           obj = Object.assign(obj, baseModelProps);
           return this.getAllBaseModelProps(baseModel, obj);
