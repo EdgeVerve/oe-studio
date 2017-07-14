@@ -547,8 +547,8 @@ var designerController = (function () {
 			GLOBAL_ISOLATED_DOM = dom.cloneNode(true);
 			if (reRendered) {
 				var newDom = removeTextBinding(dom.cloneNode(true))
-				cont.innerHTML = '<template is="dom-bind">' + newDom.innerHTML + '</template>';
-				var targetTemp = cont.querySelector('template');
+				cont.innerHTML = '<template is="dom-bind" id="build">' + newDom.innerHTML + '</template>';
+				var targetTemp = cont.querySelector('template#build');
 				targetTemp.addEventListener('dom-change',function(){
 					setTimeout(function(){
 						attachHandlers(cont)
