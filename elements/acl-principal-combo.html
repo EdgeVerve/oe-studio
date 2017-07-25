@@ -66,6 +66,9 @@
 			},
 			populateRoleList: function() {
 				this.makeAjaxCall('api/BaseRoles', 'GET', null, null, null, null, function(err, res) {
+					if(err){
+						this.fire('oe-show-error','Error fetching Base Roles')
+					}
 					res = res.concat(this.additionalRoles);
 					this.set('comboProperty', {
 						display: "name",
@@ -76,6 +79,9 @@
 			},
 			populateUserList: function() {
 				this.makeAjaxCall('api/BaseUsers', 'GET', null, null, null, null, function(err, res) {
+					if(err){
+						this.fire('oe-show-error','Error fetching Base Users')
+					}
 					this.set('comboProperty', {
 						display: "username",
 						value: "id"

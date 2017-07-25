@@ -429,28 +429,31 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             addPropBtn.click();
 
             flush(function() {
-              var deleteIcon = Polymer.dom(emptyModelContainer.root).querySelector('.listing .list-item #delete-icon');
-              var validateIcon = Polymer.dom(emptyModelContainer.root).querySelector('.listing .list-item #validate-icon');
+              var editProp = Polymer.dom(emptyModelContainer.root).querySelector('.listing .list-item');
+              editProp.click();
 
-
-              validateIcon.click()
-              deleteIcon.click();
-
-              var msgHandler = emptyModelContainer.childNodes[emptyModelContainer.childNodes.length - 1];
+			flush(function(){
+				var delBtn = Polymer.dom(emptyModelContainer.root).querySelector('#delete-prop-btn');
+				delBtn.click();
+				var msgHandler = emptyModelContainer.childNodes[emptyModelContainer.childNodes.length - 1];
               var confirmToast = Polymer.dom(msgHandler.root).querySelector('paper-toast#confirm');
-              var okBtn = confirmToast.querySelector('paper-button#ok');
               var cancelBtn = confirmToast.querySelector('paper-button#cancel');
 
               cancelBtn.click();
               assert.equal(emptyModelContainer.modelObj.properties.length, 1);
 
-              deleteIcon.click();
-              okBtn.click();
-              assert.equal(emptyModelContainer.modelObj.properties.length, 0);
+              delBtn.click();
+				flush(function(){
+					msgHandler = emptyModelContainer.childNodes[emptyModelContainer.childNodes.length - 1];
+              confirmToast = Polymer.dom(msgHandler.root).querySelector('paper-toast#confirm');
+              okBtn = confirmToast.querySelector('paper-button#ok');
 
 
-              done();
-
+					okBtn.click();
+					assert.equal(emptyModelContainer.modelObj.properties.length, 0);
+			  		done();
+				})
+			})
             })
           })
         })

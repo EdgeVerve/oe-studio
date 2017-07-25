@@ -352,7 +352,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         showDataTable: {
           type: Boolean,
           value: false
-        }
+        },
+		  modelList:{
+			  type:Array,
+			  value:function(){
+				  return []
+			  }
+		  }
       },
       behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.ModelBehavior],
       listeners: {
@@ -638,7 +644,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             'model')) {
           return obj;
         } else {
-          var baseModel = this.domHost.modelList.find(function (d) {
+          var baseModel = this.modelList.find(function (d) {
             return d.name === baseModelName;
           });
           if (!baseModel)

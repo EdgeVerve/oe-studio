@@ -346,7 +346,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       calcCount: function () {
         this.modelCount = this.modelList.filter(function (model) {
-          return !model.designerHiddenModel && model.public != false && model.name !=
+          return model && !model.designerHiddenModel && model.public != false && model.name !=
             'BaseEntity';
         }).length;
       },
