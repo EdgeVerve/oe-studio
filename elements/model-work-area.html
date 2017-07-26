@@ -465,11 +465,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         ModelReduxBehavior
       ],
       actions: {
-        initializeModelList: function () {
-          return {
-            type: 'INITIALIZE_MODEL_LIST'
-          }
-        },
         deleteModel: function (index) {
           return {
             type: "DELETE_MODEL",
@@ -690,6 +685,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             var index = _.findIndex(sideNav.modelList, {
               'id': modelConfig.id
             });
+            if(index === -1){
+              return;
+            }
             sideNav.set('modelList.' + index + '.checked', true);
             sideNav.fire('render-model', sideNav.modelList[index]);
           });
@@ -875,6 +873,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       clearWorkSpace: function () {
         this.$['model-side-nav'].unselectAll();
+        var modelNodes = this.$.workarea.querySelectorAll('model-container');
+        [].forEach.call(modelNodes,function(node){
+            this.workAreaInstance.remove(node);
+        }.bind(this))
+        this.set('workSpaceModelList', []);
+        this.set('workSpaceModelCount', 0);
+        Polymer.dom.flush();
       },
       closeModel: function (e) {
         var sideNav = this.$['model-side-nav'];

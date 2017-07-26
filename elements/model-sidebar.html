@@ -503,7 +503,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           _.forEach(this.modelList, function (model, i) {
             if (model.checked && !model.designerHiddenModel && model.public != false) {
               this.set('modelList.' + i + '.checked', false);
-              this.fire('render-model', model);
             }
           }.bind(this));
           this.fire('set-zoom', 1);
