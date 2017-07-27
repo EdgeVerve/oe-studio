@@ -39,6 +39,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
       setup(function() {
         emptyStateEle = fixture('validation-grid-test');
+        var modelList = [{name:"Account"},{name:"Customer"}];
+        emptyStateEle.set('modelList',modelList);
         var msgHandler = document.createElement('oe-message-handler');
         msgHandler.id = 'toast';
         msgHandler.fitBottom = true;
@@ -49,7 +51,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
       test('Inital state when no parameters are set', function() {
         expect(emptyStateEle.showValidations).to.equal(false);
-        expect(emptyStateEle.hideAddBtn).to.equal(false);
         expect(emptyStateEle.deleteMultiple).to.equal(false);
         expect(emptyStateEle.evValidations.length).to.equal(0);
       })
@@ -64,13 +65,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       })
 
       test('Prevent adding additonal row when existing row is empty', function(done) {
-
         flush(function() {
           var emptyStateBtn = Polymer.dom(emptyStateEle.root).querySelector('#addmodel');
           emptyStateBtn.click();
           flush(function() {
-            var nonEmptyBtn = Polymer.dom(emptyStateEle.root).querySelector('#addvalid');
-            nonEmptyBtn.click();
+            emptyStateEle._addValidation();
             expect(emptyStateEle.evValidations.length).to.equal(1);
             done();
           })
@@ -83,18 +82,20 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           emptyStateBtn.click();
           flush(function() {
             var valid = {
-              'validationName': 'Link',
-              'validationType': 'reference',
-              'referenceModel': 'Account',
+              '__name__': 'Link',
+              'type': 'reference',
+              'refModel': 'Account',
               'errorCode': '400',
-              'reference': 'ok'
+              'refWhere': 'ok'
             }
             emptyStateEle.set('evValidations.0', valid);
             flush(function() {
-              var nonEmptyBtn = Polymer.dom(emptyStateEle.root).querySelector('#addvalid');
-              nonEmptyBtn.click();
-              expect(emptyStateEle.evValidations.length).to.equal(1);
+              emptyStateEle._addValidation();
+              flush(function(){
+              expect(emptyStateEle.evValidations.length).to.equal(2);
               done();
+              })
+              
             });
           })
         })
@@ -134,11 +135,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           emptyStateBtn.click();
           flush(function() {
             var valid = {
-              'validationName': 'Link',
-              'validationType': 'reference',
-              'referenceModel': 'Account',
+              '__name__': 'Link',
+              'type': 'reference',
+              'refModel': 'Account',
               'errorCode': '400',
-              'reference': 'ok'
+              'refWhere': 'ok',
+              'editable':true
             }
             emptyStateEle.set('evValidations.0', valid);
             flush(function() {
@@ -165,11 +167,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           emptyStateBtn.click();
           flush(function() {
             var valid = {
-              'validationName': 'Link',
-              'validationType': 'reference',
-              'referenceModel': 'Account',
+              '__name__': 'Link',
+              'type': 'reference',
+              'refModel': 'Account',
               'errorCode': '400',
-              'reference': 'ok'
+              'refWhere': 'ok',
+              'editable':true
             }
             emptyStateEle.set('evValidations.0', valid);
             flush(function() {
@@ -198,22 +201,22 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           emptyStateBtn.click();
           flush(function() {
             var valid = {
-              'validationName': 'Link',
-              'validationType': 'reference',
-              'referenceModel': 'Account',
+              '__name__': 'Link',
+              'type': 'reference',
+              'refModel': 'Account',
               'errorCode': '400',
-              'reference': 'ok'
+              'refWhere': 'ok',
+              'editable':true
             }
             emptyStateEle.set('evValidations.0', valid);
             flush(function() {
-              var nonEmptyBtn = Polymer.dom(emptyStateEle.root).querySelector('#addvalid');
-              nonEmptyBtn.click();
+              emptyStateEle._addValidation();
               var valid2 = {
-                'validationName': 'Link',
-                'validationType': 'reference',
-                'referenceModel': 'Customer',
+                '__name__': 'Link',
+                'type': 'reference',
+                'refModel': 'Customer',
                 'errorCode': '400',
-                'reference': 'ok'
+                'refWhere': 'ok'
               }
               emptyStateEle.set('evValidations.1', valid2);
               flush(function() {
@@ -247,22 +250,21 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           emptyStateBtn.click();
           flush(function() {
             var valid = {
-              'validationName': 'Link',
-              'validationType': 'reference',
-              'referenceModel': 'Account',
+              '__name__': 'Link',
+              'type': 'reference',
+              'refModel': 'Account',
               'errorCode': '400',
-              'reference': 'ok'
+              'refWhere': 'ok'
             }
             emptyStateEle.set('evValidaions.0', valid);
             flush(function() {
-              var nonEmptyBtn = Polymer.dom(emptyStateEle.root).querySelector('#addvalid');
-              nonEmptyBtn.click();
+             emptyStateEle._addValidation();
               var valid2 = {
-                'validationName': 'Link',
-                'validationType': 'reference',
-                'referenceModel': 'Customer',
+                '__name__': 'Link',
+                'type': 'reference',
+                'refModel': 'Customer',
                 'errorCode': '400',
-                'reference': 'ok'
+                'refWhere': 'ok'
               }
               emptyStateEle.set('evValidations.1', valid2);
               flush(function() {
@@ -292,21 +294,18 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             flush(function() {
               emptyStateBtn.click();
               var valid = {
-                'validationName': 'Link',
-                'validationType': 'reference',
-                'referenceModel': 'Account',
-                'errorCode': '400',
-                'reference': 'ok',
-                'editable': true
-              }
+              '__name__': 'Link',
+              'refModel': 'Account',
+              'errorCode': '400',
+              'refWhere': 'ok',
+              'editable': true
+            }
               emptyStateEle.set('evValidations.0', valid);
               flush(function() {
                 expect(emptyStateEle.customValidation()).to.equal(false);
                 done();
               })
             })
-
-
           })
         })
       })
@@ -317,12 +316,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           emptyStateBtn.click();
           flush(function() {
             var valid = {
-              'validationName': 'Link',
-              'validationType': 'reference',
-              'referenceModel': 'Customer',
-              'errorCode': '400',
-              'reference': 'ok'
-            }
+                '__name__': 'Link',
+                'type': 'reference',
+                'refModel': 'Customer',
+                'errorCode': '400',
+                'refWhere': 'ok'
+              }
             emptyStateEle.set('evValidations.0', valid);
             flush(function() {
               emptyStateEle.fire('read-only');
@@ -341,39 +340,37 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           var emptyStateBtn = Polymer.dom(emptyStateEle.root).querySelector('#addmodel');
           emptyStateBtn.click();
           flush(function() {
-            var valid = {
-              'validationName': 'Link',
-              'validationType': 'reference',
-              'referenceModel': 'Customer',
+             var valid = {
+              '__name__': 'Link',
+              'type': 'reference',
+              'refModel': 'Account',
               'errorCode': '400',
-              'reference': 'ok'
+              'refWhere': 'ok'
             }
             emptyStateEle.set('evValidations.0', valid);
             flush(function() {
-              var nonEmptyBtn = Polymer.dom(emptyStateEle.root).querySelector('#addvalid');
-              nonEmptyBtn.click();
-              expect(emptyStateEle.evValidations.length).to.equal(1);
+              emptyStateEle._addValidation();
+              flush(function(){
+              expect(emptyStateEle.evValidations.length).to.equal(2);
               var listItems = Polymer.dom(emptyStateEle.root).querySelectorAll('.read-only');
               listItems[0].click();
-              emptyStateEle.set('evValidations.0.reference', 'ok');
-              flush(function() {
-                var resetBtn = Polymer.dom(emptyStateEle.root).querySelector('#restore')
-                resetBtn.click();
-                done();
+              flush(function(){
+                emptyStateEle.set('evValidations.0.refWhere', 'fail');
+                flush(function() {
+                  var resetBtn = Polymer.dom(emptyStateEle.root).querySelector('#restore')
+                  resetBtn.click();
+                  flush(function(){
+                    expect(emptyStateEle.evValidations[0].refWhere).to.equal('ok');
+                    done();
+                  })
+                })
+              });
               })
+              
             });
           })
         })
       })
-
-
-
-
-
-
-
-
-
     });
 
   </script>

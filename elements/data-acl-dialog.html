@@ -41,6 +41,7 @@
     Polymer({
       is: 'data-acl-dialog',
       attached: function() {
+        this.set('dataAcls', []);
         this.set('dataAclColumnDef', [{
           key: 'accessType',
           label: 'Access Type',
@@ -113,8 +114,9 @@
 
 		   this.makeAjaxCall('api/DataACLs', 'GET', null, null, params, null, function(err, resp) {
               if (!err) {
-				this.set('dataAcls', resp);
+				      this.set('dataAcls', resp);
             	formElement.set('modelNameToSave', this.modelObj.name);
+              this.fire('oe-show-success', 'Data ACLs successfully fetched');
               } else {
                  this.fire('oe-show-error', 'Error fetching Data ACLs');
               }

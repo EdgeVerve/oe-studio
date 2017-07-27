@@ -141,7 +141,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           this.set('workAreaModels', JSON.parse(JSON.stringify(this.modelList)));
         }.bind(this));
       },
-      uploadModelMetadata: function () {
+     /* uploadModelMetadata: function () {
         this.makeAjaxCall('/api/admin/upload', 'POST', {}, null, null, function (err, response) {
           if (response) {
             this.fire('oe-show-success', 'Successfully uploaded.');
@@ -170,7 +170,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           self.fire('oe-show-error', 'Error while downloading files.');
         });
         ajax.generateRequest();
-      },
+      },*/
       toggleSideMenu: function () {
         this.set('toolBar.showSideMenu', !this.toolBar.showSideMenu);
         this.fire('toggle-grid-sidemenu', !this.toolBar.showSideMenu);

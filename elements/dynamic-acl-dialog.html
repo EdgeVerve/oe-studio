@@ -6,52 +6,50 @@
       width: calc(100% - 100px);
       height: calc(100% - 80px);
     }
-    
+
     iron-icon {
       --iron-icon-width: 20px;
       --iron-icon-height: 20px;
     }
-    
+
     .custom-icon {
       margin-right: 16px;
     }
-    
+
     .dialog-content {
       overflow: auto;
     }
-
   </style>
   <template>
-		<style include="shared-styles"></style>
-		<paper-dialog id="dialog" modal class="layout vertical">
-			<div class="dialog-header">
-				<span>Define ACLs for [[modelObj.name]]</span>
-			</div>
-			<div class="dialog-content flex">
-				<paper-tabs selected="{{selectedTab}}">
-				<paper-tab>Dynamic ACL</paper-tab>
-				<paper-tab>Static ACL</paper-tab>
-				</paper-tabs>
-				<iron-pages selected="[[selectedTab]]">
-					<oe-data-table id="dynamicACLTable" label="Data Acls" items={{dynamicAcls}} record-handling="remote" editor-form-url="bower_components/oe-studio/elements/dynamic-acl-form.html" columns=[[dynamicAclColumnDef]]></oe-data-table>
-					<div>
-						<oe-data-table label="Static Acls" items=[[modelObj.acls]]
-							  	toolbar-actions="[[staticTableActions]]"
-							   columns=[[staticAclColumnDef]]></oe-data-table>
-					</div>
-					</iron-pages>
-			</div>
-			<div class="dialog-footer">
-				<div class="layout horizontal center end-justified">
-					<paper-button id="cancelbtn" on-tap="closeDialog">Cancel</paper-button>
-				</div>
-			</div>
-		</paper-dialog>
-	</template>
+    <style include="shared-styles"></style>
+    <paper-dialog id="dialog" modal class="layout vertical">
+      <div class="dialog-header">
+        <span>Define ACLs for [[modelObj.name]]</span>
+      </div>
+      <div class="dialog-content flex">
+        <paper-tabs selected="{{selectedTab}}">
+          <paper-tab>Dynamic ACL</paper-tab>
+          <paper-tab>Static ACL</paper-tab>
+        </paper-tabs>
+        <iron-pages selected="[[selectedTab]]">
+          <oe-data-table id="dynamicACLTable" label="Data Acls" items={{dynamicAcls}} record-handling="remote" editor-form-url="bower_components/oe-studio/elements/dynamic-acl-form.html"
+            columns=[[dynamicAclColumnDef]]></oe-data-table>
+          <div>
+            <oe-data-table label="Static Acls" items=[[modelObj.acls]] toolbar-actions="[[staticTableActions]]" columns=[[staticAclColumnDef]]></oe-data-table>
+          </div>
+        </iron-pages>
+      </div>
+      <div class="dialog-footer">
+        <div class="layout horizontal center end-justified">
+          <paper-button id="cancelbtn" on-tap="closeDialog">Cancel</paper-button>
+        </div>
+      </div>
+    </paper-dialog>
+  </template>
   <script>
     Polymer({
       is: 'dynamic-acl-dialog',
-      attached: function() {
+      attached: function () {
         this.set('staticTableActions', [{
           icon: 'icons:create',
           title: 'change/delete',
@@ -66,14 +64,14 @@
           key: 'property',
           label: 'Property',
           type: 'string',
-			formatter: function(value,row) {
-			  if(!value){
-				  return ""
-			  }
-			var predef = this.dropdownConst.acl.property.all.find(function(k){
-				  return k.value === value
-			});
-            return predef ? predef.label : 'fn('+value+')';
+          formatter: function (value, row) {
+            if (!value) {
+              return ""
+            }
+            var predef = this.dropdownConst.acl.property.all.find(function (k) {
+              return k.value === value
+            });
+            return predef ? predef.label : 'fn(' + value + ')';
           }.bind(this),
           readOnly: true
         }, {
@@ -95,7 +93,7 @@
           key: 'scope',
           label: 'Scope',
           type: 'object',
-          formatter: function(value) {
+          formatter: function (value) {
             if (value) {
               return JSON.stringify(value);
             }
@@ -114,14 +112,14 @@
           key: 'property',
           label: 'Property',
           type: 'string',
-		  formatter: function(value,row) {
-			  if(!value){
-				  return ""
-			  }
-			var predef = this.dropdownConst.acl.property.all.find(function(k){
-				  return k.value === value
-			});
-            return predef ? predef.label : 'fn('+value+')';
+          formatter: function (value, row) {
+            if (!value) {
+              return ""
+            }
+            var predef = this.dropdownConst.acl.property.all.find(function (k) {
+              return k.value === value
+            });
+            return predef ? predef.label : 'fn(' + value + ')';
           }.bind(this),
           readOnly: true
         }, {
@@ -140,12 +138,13 @@
           type: 'string',
           readOnly: true
         }]);
+        this.set('dynamicAcls', []);
       },
       listeners: {
         'oe-data-table-action-edit-static': 'handleStaticEditor'
       },
-      behaviors: [CommonBehavior.EVAjaxBehavior,DesignerBehavior.ConstantBehavior],
-      handleStaticEditor: function() {
+      behaviors: [CommonBehavior.EVAjaxBehavior, DesignerBehavior.ConstantBehavior],
+      handleStaticEditor: function () {
         if (this.$.dynamicACLTable._hideGrid) {
           this.fire('oe-show-error', 'Close editing dynamic ACLs and try again')
           return;
@@ -153,76 +152,39 @@
         this.fire('edit-model', this.modelObj);
         this.closeDialog();
       },
-      fetchData: function(formElement) {
-        async.parallel({
-          dynamicAcl: function(callback) {
-            var params = {
-              filter: {
-                where: {
-                  model: this.modelObj.name
-                }
-              }
+      fetchData: function (formElement) {
+        var params = {
+          filter: {
+            where: {
+              model: this.modelObj.name
             }
-            this.makeAjaxCall('api/BaseACLs', 'GET', null, null, params, null, function(err, resp) {
-              if (err) {
-                this.fire('oe-show-error', 'Error fetching ACLs');
-                callback(err, null)
-              } else {
-                callback(null, resp)
-              }
-            }.bind(this));
-          }.bind(this),
-          usersList: function(callback) {
-            this.makeAjaxCall('api/BaseUsers', 'get', null, null, null, function(err, res) {
-              if (err) {
-                this.fire('oe-show-error', 'Error fetching UserData');
-                callback(err, null)
-              } else {
-                callback(null, res)
-              }
-            }.bind(this))
-          }.bind(this),
-          roleList: function(callback) {
-            this.makeAjaxCall('api/BaseRoles', 'get', null, null, null, function(err, res) {
-              if (err) {
-                this.fire('oe-show-error', 'Error fetching BaseRoles');
-                callback(err, null)
-              } else {
-                callback(null, res)
-              }
-            }.bind(this))
-          }.bind(this)
-        }, function(err, result) {
-          if (!err) {
-            this.set('dynamicAcls', result.dynamicAcl);
-            var predefRoles = ['$everyone', '$owner', '$related', '$authenticated', '$unauthenticated']
+          }
+        }
+        this.makeAjaxCall('api/BaseACLs', 'GET', null, null, params, null, function (err, resp) {
+          if (err) {
+            this.fire('oe-show-error', 'Error fetching ACLs');
+          } else {
+            this.set('dynamicAcls', resp);
             formElement.set('modelNameToSave', this.modelObj.name);
-            formElement.set('principalList.user', result.usersList.map(function(u) {
-              return u.id
-            }));
-            var roles = predefRoles.concat(result.roleList.map(function(r) {
-              return r.id
-            }))
-            formElement.set('principalList.role', roles);
+            this.fire('oe-show-success', 'Model ACLs fetched successfully');
           }
         }.bind(this));
-        this.set('dataAcls', []);
       },
-      openDialog: function(modelObj) {
+      openDialog: function (modelObj) {
         this.set('modelObj', modelObj);
+        this.set('dynamicAcls', []);
         var table = this.querySelector('oe-data-table');
         var formElement = table.$['form-component'].element;
         if (formElement) {
           this.fetchData(formElement);
         }
-		this.set('selectedTab',0);
-		this.$.dynamicACLTable.set('_hideGrid',false);
+        this.set('selectedTab', 0);
+        this.$.dynamicACLTable.set('_hideGrid', false);
         this.$.dialog.open();
       },
-      closeDialog: function() {
+      closeDialog: function () {
         this.$.dialog.close();
       }
     })
-
   </script>
 </dom-module>

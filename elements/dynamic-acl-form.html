@@ -104,7 +104,6 @@
           <div class="segment-block">
 			  <acl-principal-combo required principal-type="[[vm.principalType]]" value="{{vm.principalId}}">
 			  </acl-principal-combo>
-            <!--<oe-combo required field-id="principalId" listdata='[[_computePrincipalList(vm.principalType)]]' label="Principal Id" value="{{vm.principalId}}"></oe-combo>-->
             <iron-icon icon="info-outline" on-tap="toggleInfoPanel"></iron-icon>
             <iron-collapse>
               <div class="segment-input-helper">
@@ -182,7 +181,6 @@
           read: this.dropdownConst.acl.property.read,
           '*': this.dropdownConst.acl.property.all
         });
-        this.set('principalList', {});
       },
       isCustomFunc: function (type) {
         return type === 'EXECUTE'

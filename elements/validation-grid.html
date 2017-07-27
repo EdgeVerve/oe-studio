@@ -241,18 +241,18 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                       error-message="Please select the model"></oe-combo>
                   </div>
                   <div class="gridCol">
-                    <paper-input required label="Reference" error-message="Please enter the reference" no-label-float value="{{validation.refWhere}}"
+                    <paper-input required="[[!ifDisabled(validation.type,'custom')]]" label="Reference" error-message="Please enter the reference" no-label-float value="{{validation.refWhere}}"
                       disabled="[[ifDisabled(validation.type,'custom')]]"></paper-input>
                   </div>
                   <div class="gridCol">
-                    <paper-input required label="Error code" error-message="Please enter the error code" no-label-float value="{{validation.errorCode}}"
+                    <paper-input required="[[!ifDisabled(validation.type,'custom')]]" label="Error code" error-message="Please enter the error code" no-label-float value="{{validation.errorCode}}"
                       disabled="[[ifDisabled(validation.type,'custom')]]"></paper-input>
                   </div>
                   <div class="gridCol">
-                    <paper-input required label="Validate When" error-message="Please enter the validate when condition" no-label-float value="{{validation.validateWhen}}"></paper-input>
+                    <paper-input label="Validate When" error-message="Please enter the validate when condition" no-label-float value="{{validation.validateWhen}}"></paper-input>
                   </div>
                   <div class="gridCol">
-                    <paper-input required label="Validation Expression" error-message="Please enter the validation expression" no-label-float
+                    <paper-input required="[[!ifDisabled(validation.type,'reference')]]" label="Validation Expression" error-message="Please enter the validation expression" no-label-float
                       value="{{validation.expression}}" disabled="[[ifDisabled(validation.type,'reference')]]"></paper-input>
                   </div>
                   <div class="gridCol options around-justified center horizontal layout ">

@@ -450,10 +450,23 @@
 				var moduleStr = '';
 
 				if (this.element.isPolymerElement) {
-					moduleStr += '<dom-module id="' + this.element.polyConfig.is + '">';
-					moduleStr += '<template>' + dom.innerHTML + '</template>';
-					moduleStr += '<script>' + this.polyObjectToString(this.element.polyConfig) + '<\/script>';
-					moduleStr += '</dom-module>';
+					var domModule = document.createElement('dom-module');
+					domModule.setAttribute('id',this.element.polyConfig.is);
+
+					var tempEle =document.createElement('template');
+					tempEle.innerHTML = dom.innerHTML;
+
+					var scriptEle = document.createElement('script');
+					scriptEle.innerHTML = this.polyObjectToString(this.element.polyConfig);
+
+					domModule.appendChild(tempEle);
+					domModule.appendChild(scriptEle);
+					moduleStr = domModule.outerHTML;
+
+					// moduleStr += '<dom-module id="' +  + '">';
+					// moduleStr += '<template>' + dom.innerHTML + '</template>';
+					// moduleStr += '<script>' +  + '<\/script>';
+					// moduleStr += '</dom-module>';
 				} else {
 					moduleStr += dom.innerHTML;
 				}
