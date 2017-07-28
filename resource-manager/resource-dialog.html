@@ -136,36 +136,36 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           notify: true
         }
       },
-      loadFile: function () {
-        this.$.fileInput.value = '';
-        this.$.fileInput.onchange = function (e) {
-          var files = e.target.files;
-          var file = files[0];
-          var regexp = /(?:\.([^.]+))?$/;
-          var type = regexp.exec(file.name)[1];
-          if (type != 'xlsx' && type != 'xls') {
-            this.fire('oe-show-error', 'File type is not supported');
-            this.$.fileInput.value = '';
-            return;
-          }
-          if (!this.validateFileSize(file.size)) {
-            this.fire('oe-show-error', 'File size cannot exceed 5MB');
-            this.$.fileInput.value = '';
-            return false;
-          }
-          this.set('tempDocObj.documentName', file.name)
-          var reader = new FileReader();
-          reader.onload = function (evt) {
-            var binaryString = evt.target.result;
-            this.set('tempDocObj.documentData', binaryString);
-          }.bind(this);
-          reader.readAsDataURL(file);
-        }.bind(this);
-        this.$.fileInput.click();
-      },
-      validateFileSize: function (bytes) {
-        return Math.ceil(bytes / (1024 * 1024)) <= 5;
-      },
+      // loadFile: function () {
+      //   this.$.fileInput.value = '';
+      //   this.$.fileInput.onchange = function (e) {
+      //     var files = e.target.files;
+      //     var file = files[0];
+      //     var regexp = /(?:\.([^.]+))?$/;
+      //     var type = regexp.exec(file.name)[1];
+      //     if (type != 'xlsx' && type != 'xls') {
+      //       this.fire('oe-show-error', 'File type is not supported');
+      //       this.$.fileInput.value = '';
+      //       return;
+      //     }
+      //     if (!this.validateFileSize(file.size)) {
+      //       this.fire('oe-show-error', 'File size cannot exceed 5MB');
+      //       this.$.fileInput.value = '';
+      //       return false;
+      //     }
+      //     this.set('tempDocObj.documentName', file.name)
+      //     var reader = new FileReader();
+      //     reader.onload = function (evt) {
+      //       var binaryString = evt.target.result;
+      //       this.set('tempDocObj.documentData', binaryString);
+      //     }.bind(this);
+      //     reader.readAsDataURL(file);
+      //   }.bind(this);
+      //   this.$.fileInput.click();
+      // },
+      // validateFileSize: function (bytes) {
+      //   return Math.ceil(bytes / (1024 * 1024)) <= 5;
+      // },
       open: function () {
         this.set('tempDocObj', this.resourceObj.document);
         this.$.dialog.open();
@@ -174,7 +174,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.$.dialog.close();
       },
       saveResource: function () {
-        if (!this.$.form.validate) {
+        if (!this.$.form.validate()) {
           return;
         }
         var ajax = this.$.ajax;
@@ -196,7 +196,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           this.set('resourceList.' + index, resource);
           this.fire('update-resource', resource)
         }
-        this.$.dialog.close();
+        this.hide();
       }
     });
   </script>

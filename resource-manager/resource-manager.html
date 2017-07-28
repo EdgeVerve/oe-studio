@@ -73,6 +73,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       properties: {
         resourceList: {
           type: Array,
+          value:function(){
+            return []
+          },
           notify: true
         },
         selectedResource: {
@@ -95,7 +98,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         var dialog = this.$.resourceDialog;
         dialog.set('resourceObj', {
           name: '',
-          document: {}
+          content: ""
         });
         dialog.set('editMode', false);
         dialog.open();
