@@ -57,7 +57,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       }
     </style>
     <div class="module-container">
-      <model-work-area id="createmodel" view-list="{{viewList}}"></model-work-area>
+      <model-work-area id="createmodel" sidebar-status="[[toolBar]]" view-list="{{viewList}}"></model-work-area>
     </div>
     <app-toolbar>
       <iron-icon src="../images/Logo.png" class="application-logo" on-tap="toggleLeftDrawer"></iron-icon>
@@ -173,23 +173,17 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },*/
       toggleSideMenu: function () {
         this.set('toolBar.showSideMenu', !this.toolBar.showSideMenu);
-        this.fire('toggle-grid-sidemenu', !this.toolBar.showSideMenu);
       },
       toggleModels: function () {
         this.set('toolBar.showModels', !this.toolBar.showModels);
         this.set('toolBar.showSideMenu', (this.toolBar.showModels || this.toolBar.showViews));
-        this.fire('toggle-grid-sidemenu', !this.toolBar.showSideMenu);
-        this.fire('toggle-models', this.toolBar.showModels);
       },
       toggleViews: function () {
         this.set('toolBar.showViews', !this.toolBar.showViews);
         this.set('toolBar.showSideMenu', (this.toolBar.showModels || this.toolBar.showViews));
-        this.fire('toggle-grid-sidemenu', !this.toolBar.showSideMenu);
-        this.fire('toggle-views', this.toolBar.showViews);
       },
       toggleBackgroundGrid: function () {
         this.set('toolBar.showGridBg', !this.toolBar.showGridBg);
-        this.fire('toggle-bg', this.toolBar.showGridBg);
       }
     });
   </script>

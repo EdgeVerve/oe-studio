@@ -184,7 +184,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         font-weight: bold;
       }
     </style>
-    <div class="model-listing models" hidden$="{{!showModels}}">
+    <div class="model-listing models" hidden$="[[!showModels]]">
       <search-header filter-val="{{filterVal}}">
         <iron-icon class="small" icon="oe-designer-icons:model"></iron-icon><span class="flex">Models ({{modelCount}})</span>
         <iron-icon icon="notification:sync" class="small" id="refresh-all-model" on-tap="refreshModels"></iron-icon>
@@ -279,7 +279,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         </ul>
       </div>
     </div>
-    <div class="listing views" hidden$="{{!showViews}}">
+    <div class="listing views" hidden$="[[!showViews]]">
       <search-header filter-val="{{filterviewVal}}">
         <iron-icon class="small" icon="image:view-comfy"></iron-icon><span class="flex">Model Views</span>
       </search-header>
@@ -349,16 +349,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           return model && !model.designerHiddenModel && model.public != false && model.name !=
             'BaseEntity';
         }).length;
-      },
-      attached: function () {
-        this.set('showModels', true);
-        this.set('showViews', false);
-        document.addEventListener('toggle-models', function (e) {
-          this.set('showModels', e.detail);
-        }.bind(this));
-        document.addEventListener('toggle-views', function (e) {
-          this.set('showViews', e.detail);
-        }.bind(this));
       },
       refreshModels: function () {
         this.fire('refresh-model-list');

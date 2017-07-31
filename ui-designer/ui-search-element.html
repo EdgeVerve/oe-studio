@@ -130,7 +130,7 @@
 						</div>
 					</template>
 				</template>
-				<template is="dom-if" if=[[!searchResults.length]]>
+<!--				<template is="dom-if" if=[[!searchResults.length]]>-->
 					<label class="server-label">Showing results from server</label>
 					<template is="dom-repeat" items="[[filteredProspectElements]]">
 						<div class="category">[[normalize(item.category)]]</div>
@@ -144,7 +144,7 @@
 							</div>
 						</template>
 					</template>
-				</template>
+<!--				</template>-->
 			</iron-collapse>
 		</div>
 	</template>
@@ -230,24 +230,29 @@
 			_searchElement: function() {
 				var searchKey = this.searchKey;
 				if (searchKey.length) {
-					var result = OEUtils.designerData.elementList.filter(function(d) {
+					var localresult = OEUtils.designerData.elementList.filter(function(d) {
 						return this.ifMatch(d.name, searchKey);
 					}.bind(this));
-					this.set('searchResults', this.categorize(result));
+					this.set('searchResults', this.categorize(localresult));
 					this.set('showSearchResult', true);
-
-					if (result.length === 0 && this.prospectElements && this.prospectElements.length > 0) {
-						result = this.prospectElements.filter(function(d) {
+					var serverResult = this.prospectElements.filter(function(d) {
 							return this.ifMatch(d.name, searchKey);
 						}.bind(this));
-						result = this.categorize(result);
-						this.set('filteredProspectElements', result);
-					} else {
-						this.set('filteredProspectElements', []);
-					}
+					this.set('filteredProspectElements', this.categorize(serverResult));
+//
+//					if (result.length === 0 && this.prospectElements && this.prospectElements.length > 0) {
+//						result = this.prospectElements.filter(function(d) {
+//							return this.ifMatch(d.name, searchKey);
+//						}.bind(this));
+//						result = this.categorize(result);
+//						this.set('filteredProspectElements', result);
+//					} else {
+//						this.set('filteredProspectElements', []);
+//					}
 				} else {
 					this.set('showSearchResult', false);
 					this.set('searchResults', []);
+					this.set('filteredProspectElements', []);
 				}
 			},
 			categorize: function(result) {

@@ -57,7 +57,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       overflow: auto;
     }
 
-    .wrapper.show-grid {
+    .wrapper.show-grid-true {
       background: url('../images/grid.png');
     }
 
@@ -289,8 +289,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
   </style>
   <template>
     <div class="flex horizontal layout">
-      <iron-collapse id="expandBar" horizontal opened>
-        <model-sidebar id="model-side-nav" show-models={{showModels}} show-views={{showViews}} view-list="{{viewList}}" on-render-view="_renderView"></model-sidebar>
+      <iron-collapse id="expandBar" horizontal opened="[[sidebarStatus.showSideMenu]]">
+        <model-sidebar id="model-side-nav" show-models=[[sidebarStatus.showModels]]
+					   						show-views=[[sidebarStatus.showViews]]
+					   view-list="{{viewList}}" on-render-view="_renderView"></model-sidebar>
       </iron-collapse>
       <div class="work-area">
         <div class="tab-header">
@@ -320,7 +322,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           </div>
         </div>
         <div class="wrapper-container">
-          <div class="wrapper noselect" id="wrapperBg" hidden$="[[!modelDefinition]]">
+          <div class$="wrapper noselect show-grid-[[sidebarStatus.showGridBg]]" id="wrapperBg"
+			   hidden$="[[!modelDefinition]]">
             <div class="workarea-container" id="workarea" hidden$="[[_isEmpty(workSpaceModelCount)]]">
             </div>
             <template is="dom-if" if="[[_isEmpty(workSpaceModelCount)]]">
@@ -388,6 +391,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             return [];
           }
         },
+		  sidebarStatus:{
+			  type:Object,
+			  notify:true
+		  },
         dataManager: {
           type: Boolean,
           value: false
@@ -408,19 +415,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               icon: ''
             }
           }
-        },
-        relationTypes: {
-          type: Array,
-          value: [{
-            type: 'hasMany',
-            icon: 'oe-icons:has-many'
-          }, {
-            type: 'belongsTo',
-            icon: 'oe-icons:belongs-to'
-          }, {
-            type: 'hasOne',
-            icon: 'oe-icons:has-one'
-          }]
         },
         showButtons: true,
         removeModel: false,
@@ -509,22 +503,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this._leftHidden = true;
         this.selectedView = null;
         this.set('workSpaceModelCount', 0);
-        this.set('showGridBg', false);
-        document.addEventListener('toggle-bg', function (e) {
-          this.showGridBg = e.detail;
-          if (this.showGridBg) {
-            this.$.wrapperBg.classList.add('show-grid')
-          } else {
-            this.$.wrapperBg.classList.remove('show-grid')
-          }
-        }.bind(this));
-        document.addEventListener('toggle-grid-sidemenu', function (e) {
-          if (e.detail) {
-            this.$.expandBar.opened = false;
-          } else {
-            this.$.expandBar.opened = true;
-          }
-        }.bind(this));
         document.addEventListener('add-view', function () {
           var view = {
             name: this._selectedTab.name,

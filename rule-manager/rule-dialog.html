@@ -99,9 +99,15 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           <oe-json-input no-label-float value="{{ruleObj.scope}}" placeholder="Scope"></oe-json-input>
           <label class="helper-text upload-title">Upload Rule File</label>
           <div hidden="{{tempDocObj.documentName}}" class="help-panel">
+			  <oe-file-input show-clear value-type="dataUrl" value={{tempDocObj.documentData}}
+							 file-name={{tempDocObj.documentName}}
+							 accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+          		</oe-file-input>
+<!--
             <input type="file" id="fileInput" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
               hidden name="file" required/>
             <paper-button primary class="upload-btn" on-tap="loadFile">Upload File</paper-button>
+-->
             <div class="helper-text">- File should not exceed 5MB<br> - .xlsx,.xls files are supported</div>
           </div>
           <div class="file-name layout center justified flex horizontal" hidden="{{!tempDocObj.documentName}}">
@@ -138,41 +144,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           notify: true
         }
       },
-      loadFile: function () {
-        this.$.fileInput.value = '';
-        this.$.fileInput.onchange = function (e) {
-          var files = e.target.files;
-          var file = files[0];
-          var regexp = /(?:\.([^.]+))?$/;
-          var type = regexp.exec(file.name)[1];
-          if (type != 'xlsx' && type != 'xls') {
-            this.fire('oe-show-error', 'File type is not supported');
-            this.$.fileInput.value = '';
-            return;
-          }
-          if (!this.validateFileSize(file.size)) {
-            this.fire('oe-show-error', 'File size cannot exceed 5MB');
-            this.$.fileInput.value = '';
-            return false;
-          }
-          this.set('tempDocObj.documentName', file.name);
-          if (!this.ruleObj.name) {
-            this.set('ruleObj.name', file.name.replace('.' + type, ''))
-          }
-          var reader = new FileReader();
-          reader.onload = function (evt) {
-            var binaryString = evt.target.result;
-            this.set('tempDocObj.documentData', binaryString);
-          }.bind(this);
-          reader.readAsDataURL(file);
-        }.bind(this);
-        this.$.fileInput.click();
-      },
-      validateFileSize: function (bytes) {
-        return (Math.ceil(bytes / (1024 * 1024)) <= 5);
-      },
       removeFile: function () {
-        this.$.fileInput.value = '';
         this.set('tempDocObj', {});
       },
       open: function () {
@@ -183,7 +155,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.$.dialog.close();
       },
       saveRule: function () {
-        if (!this.$.form.validate) {
+        if (!this.$.form.validate()) {
           return;
         }
         var ajax = this.$.ajax;
