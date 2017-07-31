@@ -1,0 +1,52 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <!-- importing dependent elements -->
+  <link rel="import" href="../all-imports.html">
+</head>
+
+<body>
+  <!-- You can use the document as a place to set up your fixtures. -->
+  <test-fixture id="route-element-fixture">
+    <template>
+            <route-element>
+            </route-element>
+        </template>
+  </test-fixture>
+  <script>
+    suite('route-element', function() {
+
+      var myEl;
+
+      setup(function() {
+        myEl = fixture('route-element-fixture');
+        myEl.set('routeObj', {"type":"elem","name":"loan-details","path":"/loan/:loanId","import":"elements/loan-details.html","group":"","retainInstance":false,"id":"597b11c48e4fb3d81e1ee6b9","_type":"UIRoute","_createdBy":"system","_modifiedBy":"system","_createdOn":"2017-07-28T10:28:18.599Z","_modifiedOn":"2017-07-28T10:28:18.599Z","_isDeleted":false,"_version":"0adb900a-4633-4d27-b0b6-49ed5fbb4027","checked":true});
+      });
+
+      test('remove route element event', function(done) {
+        var element = Polymer.dom(myEl.root).querySelector('.close-icon');
+        myEl.addEventListener('remove-route-element', function(e) {
+          assert.equal(e.detail.name, myEl.routeObj.name);
+          assert.equal(e.detail.type, myEl.routeObj.type);
+          done();
+        });
+        element.fire('tap');
+      });
+    });
+
+  </script>
+</body>
+
+</html>

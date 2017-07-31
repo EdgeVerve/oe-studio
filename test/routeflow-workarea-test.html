@@ -1,0 +1,379 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/test-helpers.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <script src="../../fakerest/dist/FakeRest.min.js"></script>
+  <!-- importing dependent elements -->
+  <link rel="import" href="../all-imports.html">
+</head>
+
+<body>
+  <!-- You can use the document as a place to set up your fixtures. -->
+  <test-fixture id="routeflow-workarea">
+    <template>
+      <routeflow-workarea></routeflow-workarea>
+    </template>
+  </test-fixture>
+  <script>
+    HTMLImports.whenReady(function () {
+      OEUtils.geturl = function (url) {
+        return url;
+      }
+    });
+
+    suite('routeflow-workarea', function () {
+      var workArea;
+      var server;
+      setup(function () {
+        server = sinon.fakeServer.create();
+        server.autoRespond = true;
+        server.respondImmediately = true;
+
+
+        var routeList = [{
+          "type": "elem",
+          "name": "customer-home-page",
+          "path": "/",
+          "import": "elements/customer-home-page.html",
+          "group": "",
+          "retainInstance": false,
+          "transitions": [{
+            "path": "/loan/:loanId",
+            "route": "/loan/{{loanId}}",
+            "event": "redirect-to-loan-details"
+          }, {
+            "path": "/loan-info/:productId",
+            "route": "/loan-info/{{product.id}}",
+            "event": "redirect-to-loan-info"
+          }, {
+            "path": "/apply/:productId",
+            "route": "/apply/{{product.id}}",
+            "event": "redirect-to-apply-loan"
+          }, {
+            "path": "/la/:id/uploaddocs",
+            "route": "/la/{{id}}/uploaddocs",
+            "event": "redirect-to-upload-docs"
+          }],
+          "id": "597b11c48e4fb3d81e1ee5d3",
+          "_type": "UIRoute",
+          "_createdBy": "system",
+          "_modifiedBy": "system",
+          "_createdOn": "2017-07-28T10:28:18.231Z",
+          "_modifiedOn": "2017-07-28T10:28:18.231Z",
+          "scope": {
+            "roles": ["customer"]
+          },
+          "_isDeleted": false,
+          "_version": "55d8ff02-3089-4bf8-80b8-9bda98f00864"
+        }, {
+          "type": "elem",
+          "name": "loan-info-page",
+          "path": "/loan-info/:productId",
+          "import": "elements/loan-info-page.html",
+          "group": "",
+          "retainInstance": false,
+          "transitions": [{
+            "path": "/apply/:productId",
+            "route": "/apply/{{product.id}}",
+            "event": "redirect-to-apply-loan"
+          }],
+          "id": "597b11c48e4fb3d81e1ee6b8",
+          "_type": "UIRoute",
+          "_createdBy": "system",
+          "_modifiedBy": "system",
+          "_createdOn": "2017-07-28T10:28:18.576Z",
+          "_modifiedOn": "2017-07-28T10:28:18.576Z",
+          "_isDeleted": false,
+          "_version": "8028fb34-37b2-486f-903f-0654159569aa"
+        }, {
+          "type": "elem",
+          "name": "loan-details",
+          "path": "/loan/:loanId",
+          "import": "elements/loan-details.html",
+          "group": "",
+          "retainInstance": false,
+          "id": "597b11c48e4fb3d81e1ee6b9",
+          "_type": "UIRoute",
+          "_createdBy": "system",
+          "_modifiedBy": "system",
+          "_createdOn": "2017-07-28T10:28:18.599Z",
+          "_modifiedOn": "2017-07-28T10:28:18.599Z",
+          "_isDeleted": false,
+          "_version": "0adb900a-4633-4d27-b0b6-49ed5fbb4027"
+        }];
+
+
+        server.respondWith('GET', /api\/UIRoutes\/*/, function (req) {
+          req.respond(200, {
+            'Content-Type': 'application/json'
+          }, JSON.stringify(routeList))
+        });
+
+        server.respondWith('PUT', /api\/*/, function (req) {
+          req.respond(200, {
+            'Content-Type': 'application/json'
+          }, req.requestBody)
+        });
+
+        server.respondWith('POST', /api\/*/, function (req) {
+          var resp = JSON.parse(req.requestBody);
+          resp.id = '1421876-128378234824-123'
+          req.respond(200, {
+            'Content-Type': 'application/json'
+          }, JSON.stringify(resp))
+        });
+        server.respondWith('DELETE', /api\/*/, function (req) {
+          var resp = {
+            'count': 1
+          };
+          req.respond(200, {
+            'Content-Type': 'application/json'
+          }, JSON.stringify(resp))
+        });
+        workArea = fixture('routeflow-workarea');
+        workArea.set('currentZoom', 1);
+        var msgHandler = document.createElement('oe-message-handler');
+        msgHandler.id = 'toast';
+        msgHandler.fitBottom = true;
+        msgHandler.duration = 5000;
+        workArea.appendChild(msgHandler);
+        Polymer.dom(workArea.root).flush();
+      });
+
+      teardown(function () {
+        server.restore();
+      });
+
+      test('Inital state when no parameters are set', function (done) {
+        workArea.fetchRoutes();
+        flush(function () {
+          expect(workArea.routeList).to.be.array;
+          flush(function () {
+            expect(workArea.routeList.length).to.be.equal(3);
+            done();
+          })
+        })
+      })
+
+      test('zoom in and zoom out', function (done) {
+        flush(function () {
+          var ZoomInBtn = Polymer.dom(workArea.root).querySelector('#zoom-in');
+          var ZoomOutBtn = Polymer.dom(workArea.root).querySelector('#zoom-out');
+          var currentZoomLevel = workArea.currentZoom;
+          assert.equal(workArea.currentZoom, 1);
+          flush(function () {
+            MockInteractions.tap(ZoomInBtn);
+            flush(function () {
+              assert.equal(workArea.currentZoom, (currentZoomLevel + 0.1));
+              MockInteractions.tap(ZoomOutBtn);
+              flush(function () {
+                assert.equal(workArea.currentZoom, currentZoomLevel);
+                done();
+              })
+            })
+          })
+        })
+      })
+      test('load/unload a route into workspace', function (done) {
+        flush(function () {
+          assert.equal(workArea.workareaRouteList.length, 0);
+          workArea.fetchRoutes();
+          var sideBar = Polymer.dom(workArea.root).querySelector('route-listing');
+          flush(function () {
+            assert.equal(workArea.workareaRouteList.length, 3);
+            var routeItem = Polymer.dom(sideBar.root).querySelectorAll('li.list-item');
+            MockInteractions.tap(routeItem[0]);
+            MockInteractions.tap(routeItem[1]);
+            flush(function () {
+              assert.equal(workArea.workareaRouteList.length, 1);
+              MockInteractions.tap(routeItem[0]);
+              MockInteractions.tap(routeItem[1]);
+              flush(function () {
+                assert.equal(workArea.workareaRouteList.length, 3);
+                done();
+              })
+            })
+          })
+        })
+      })
+      test('test to remove an existing route from workspace', function (done) {
+        flush(function () {
+          workArea.fetchRoutes();
+          var sideBar = Polymer.dom(workArea.root).querySelector('route-listing');
+          flush(function () {
+            assert.equal(workArea.workareaRouteList.length, 3);
+            assert.equal(sideBar.routeList[0].checked,true);
+            var routeElem = Polymer.dom(workArea.root).querySelectorAll('route-element')[0];
+            var closeIcon = Polymer.dom(routeElem.root).querySelector('.close-icon');
+            closeIcon.click();
+            flush(function () {
+              assert.equal(workArea.workareaRouteList.length, 2);
+              assert.equal(sideBar.routeList[0].checked,false);
+                done();
+            })
+          })
+        })
+      })
+      /*
+           test('edit Model to add a relation', function (done) {
+             flush(function () {
+               var sideBar = Polymer.dom(workArea.root).querySelector('route-listing');
+               var modelItem = Polymer.dom(sideBar.root).querySelectorAll('.model-list-item');
+               modelItem[0].click();
+               modelItem[1].click();
+               flush(function () {
+                 var modelContainers = Polymer.dom(workArea.root).querySelectorAll('model-container');
+                 var customerContainer = modelContainers[1];
+                 Polymer.dom(customerContainer.root).querySelector('#edit-model-starter').click();
+                 flush(function () {
+                   var Savedialog = Polymer.dom(workArea.root).querySelector('#createmodeldialog');
+                   Savedialog.push('vm.relations', {
+                     'type': 'hasMany',
+                     'model': 'Account',
+                     '__name__': 'accounts'
+                   });
+                   flush(function () {
+                     var lastStep = Polymer.dom(Savedialog.root).querySelector('.stepper #step_4');
+                     var lastSave = Polymer.dom(Savedialog.root).querySelector(
+                       '.dialog-footer #nextbtn');
+                     var saveBtn = Polymer.dom(Savedialog.root).querySelector(
+                       '.dialog-footer #savebtn');
+                     lastStep.click();
+                     flush(function () {
+                       lastSave.click();
+                       flush(function () {
+                         saveBtn.click();
+
+                         flush(function () {
+                           var SaveAllModels = Polymer.dom(workArea.root).querySelector(
+                             '#save-all-models-btn');
+                           SaveAllModels.click();
+                           flush(function () {
+                             setTimeout(function () {
+                               workArea._showExistingRelations();
+                               assert.equal(customerContainer.modelObj.relations
+                                 .length, 1);
+                               done();
+                             }, 2000)
+
+                           })
+                         })
+
+                       })
+                     })
+                   })
+                 })
+               })
+
+             })
+           }) 
+           test('operations on model-container', function (done) {
+             flush(function () {
+               var msgHandler = workArea.childNodes[workArea.childNodes.length - 1];
+               var confirmToast = Polymer.dom(msgHandler.root).querySelector('paper-toast#confirm');
+               var okBtn = confirmToast.querySelector('paper-button#ok');
+               var cancelBtn = confirmToast.querySelector('paper-button#cancel');
+               var sideBar = Polymer.dom(workArea.root).querySelector('route-listing');
+               var modelItem = Polymer.dom(sideBar.root).querySelectorAll('.model-list-item');
+               modelItem[0].click();
+               modelItem[1].click();
+               flush(function () {
+                 var modelContainers = Polymer.dom(workArea.root).querySelectorAll('model-container');
+                 var dataDialog = Polymer.dom(workArea.root).querySelector('model-definition-dialog')
+                 var ruleDialog = Polymer.dom(workArea.root).querySelector('#addRuleDlg')
+                 var customerContainer = modelContainers[1];
+                 Polymer.dom(customerContainer.root).querySelector('#personalization-rule-starter').click();
+
+                 flush(function () {
+                   assert.isTrue(Polymer.dom(ruleDialog.root).querySelector('paper-dialog').opened);
+                   Polymer.dom(ruleDialog.root).querySelector('#close-dialog').click();
+                   Polymer.dom(customerContainer.root).querySelector('#edit-model-starter').click();
+                   flush(function () {
+                     assert.isTrue(Polymer.dom(dataDialog.root).querySelector('paper-dialog').opened);
+                     Polymer.dom(dataDialog.root).querySelector(
+                       '#model-definition-dialog-custom-save').click();
+                     Polymer.dom(customerContainer.root).querySelector('#clone-model-starter').click();
+                     flush(function () {
+                       assert.isTrue(Polymer.dom(dataDialog.root).querySelector('paper-dialog').opened);
+                       Polymer.dom(dataDialog.root).querySelector(
+                         '#model-definition-dialog-custom-save').click();
+                       Polymer.dom(customerContainer.root).querySelector('#delete-model-starter')
+                         .click();
+                       flush(function () {
+                         cancelBtn.click();
+                         customerContainer.$$('#toggle-detail-view').click();
+                         flush(function () {
+                           assert.equal(workArea.workareaRouteList.length, 2);
+                           customerContainer.$$('#view-detail-view').click();
+                           flush(function () {
+                             assert.equal(workArea.$.detailDialog.$.modelDetailDialog
+                               .opened, true);
+                             workArea.$.detailDialog.hideDialog();
+                             var closeModelContainer = Polymer.dom(customerContainer
+                               .root).querySelector('#close-container');
+                             closeModelContainer.click();
+                             flush(function () {
+                               assert.equal(workArea.workareaRouteList.length,
+                                 1);
+                               modelContainers[0].querySelector(
+                                 '#delete-model-starter').click();
+                               flush(function () {
+                                 okBtn.click();
+                                 flush(function () {
+                                   workArea.async(function () {
+                                     assert.equal(workArea.workareaRouteList
+                                       .length, 0);
+                                     done();
+                                   })
+                                 })
+                               })
+                             })
+                           })
+                         })
+                       })
+                     })
+                   })
+                 })
+               })
+             })
+           }) 
+           
+           test('listen to edit-property event', function (done) {
+             flush(function () {
+               var sideBar = Polymer.dom(workArea.root).querySelector('route-listing');
+               var modelItem = Polymer.dom(sideBar.root).querySelectorAll('.model-list-item');
+               modelItem[0].click();
+               flush(function () {
+                 assert.equal(workArea.workareaRouteList.length, 1);
+                 var modelContainer = workArea.querySelectorAll('model-container');
+                 var propList = modelContainer[0].querySelectorAll('.list-item');
+                 propList[0].querySelector('#edit-icon').click();
+                 flush(function () {
+                   var propBtn = modelContainer[0].querySelector('#validate-prop-btn');
+                   propBtn.click();
+                   flush(function () {
+                     assert.equal(workArea.$.addProperty.querySelector('paper-dialog').opened, true);
+                     workArea.$.addProperty.hideDialog();
+                     done();
+                   });
+                 })
+               });
+             })
+           }) */
+    });
+  </script>
+</body>
+
+</html>

@@ -67,7 +67,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     </search-header>
     <div class="list">
       <ul role="menu" class="vertical layout">
-        <template is="dom-repeat" items={{routeList}} initial-count=10 filter="{{_filter(filterVal)}}" as="route">
+        <template is="dom-repeat" items="{{routeList}}" initial-count=10 filter="{{_filter(filterVal)}}" as="route">
           <li on-tap="showSelected" class$="{{route.checked}} list-item center layout horizontal justified">
             <div class="route-path">{{route.path}}</div>
             <iron-icon icon="icons:visibility" hidden$="{{!route.checked}}"></iron-icon>
@@ -98,7 +98,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           if (!model) {
             return false;
           }
-          return (model.name.toLowerCase().indexOf(val.toLowerCase()) != -1);
+          return (model.path.toLowerCase().indexOf(val.toLowerCase()) != -1);
         }
       },
       showSelected: function (e) {
