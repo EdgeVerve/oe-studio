@@ -226,34 +226,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           });
         })
       })
-      test('listen for toggle-bg event', function(done) {
-        flush(function() {
-          workArea.showGridBg = false;
-          workArea.fire('toggle-bg', true);
-          flush(function() {
-            assert.equal(workArea.showGridBg, true);
-            workArea.fire('toggle-bg', false);
-            flush(function() {
-              assert.equal(workArea.showGridBg, false);
-              done();
-            })
-          })
-        })
-      })
-      test('listen for toggle-grid-sidemenu event', function(done) {
-        flush(function() {
-          workArea.$.expandBar.opened = true;
-          workArea.fire('toggle-grid-sidemenu', true);
-          flush(function() {
-            assert.equal(workArea.$.expandBar.opened, false);
-            workArea.fire('toggle-grid-sidemenu', false);
-            flush(function() {
-              assert.equal(workArea.$.expandBar.opened, true);
-              done();
-            })
-          })
-        })
-      })
       test('load/unload a model container into workspace', function(done) {
         flush(function() {
           assert.equal(workArea.workSpaceModelList.length, 0);

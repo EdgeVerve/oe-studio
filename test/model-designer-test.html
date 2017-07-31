@@ -78,36 +78,36 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
             test('Toggle grid background', function (done) {
                 assert.equal(testElement.toolBar.showGridBg, false);
-                testElement.addEventListener('toggle-bg', function (e) {
-                     assert.equal(testElement.toolBar.showGridBg, true);
+                interactionIcon.toggleGrid.click();
+                flush(function () {
+                    assert.equal(testElement.toolBar.showGridBg, true);
                     done();
                 })
-                interactionIcon.toggleGrid.click();
             });
 
             test('Toggle side menu', function (done) {
                 assert.equal(testElement.toolBar.showSideMenu, true);
-                testElement.addEventListener('toggle-grid-sidemenu', function (e) {
+                interactionIcon.toggleMenu.click();
+                flush(function () {
                     assert.equal(testElement.toolBar.showSideMenu, false);
                     done();
                 })
-                interactionIcon.toggleMenu.click();
             });
 
             test('Toggle side menu models/views', function (done) {
                 assert.equal(testElement.toolBar.showModels, true);
                 assert.equal(testElement.toolBar.showViews, false);
-                testElement.addEventListener('toggle-models', function (e) {
+                interactionIcon.toggleModels.click();
+                flush(function () {
                     assert.equal(testElement.toolBar.showModels, false);
                     assert.equal(testElement.toolBar.showSideMenu, false);
                     interactionIcon.toggleViews.click();
+                    flush(function () {
+                        assert.equal(testElement.toolBar.showViews, true);
+                        assert.equal(testElement.toolBar.showSideMenu, true);
+                        done();
+                    })
                 })
-                testElement.addEventListener('toggle-views', function (e) {
-                    assert.equal(testElement.toolBar.showViews, true);
-                    assert.equal(testElement.toolBar.showSideMenu, true);
-                    done();
-                })
-                interactionIcon.toggleModels.click();
             });
 
         });
