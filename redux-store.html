@@ -21,6 +21,9 @@ var reduxFactory = (function(){
   }
 
   var deepCloneNode = function(node) {
+    if(!node){
+      return
+    }
     var temp = document.createElement('template');
     temp.innerHTML = node.outerHTML;
     return temp.content.querySelector(node.nodeName.toLowerCase()).cloneNode(true)
@@ -50,6 +53,9 @@ var reduxFactory = (function(){
   }
 
   var updateElement = function(dom, element) {
+    if(!dom){
+      return
+    }
     var target = dom.querySelector('[oe-id="' + element.getAttribute('oe-id') + '"]');
     if (!target) {
       return

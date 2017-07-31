@@ -191,7 +191,7 @@
                 <div class="add-attribute-container" id="addAttrContainer">
                   <div class="actions-panel layout end-justified horizontal center">
                     <paper-button on-tap="cancelAction">CANCEL</paper-button>
-                    <paper-button secondary on-tap="addAttribute">ADD</paper-button>
+                    <paper-button id="addAttribSubmitBtn" secondary on-tap="addAttribute">ADD</paper-button>
                   </div>
                   <div class="attribute-info">
                     <form is="iron-form" id="addAttributeForm">
@@ -522,10 +522,13 @@
         }
 		  props = this.selectedElement.attributes;
 		  this._generateAttributeList(props, 'attribute');
-		  var config = OEUtils.designerData.elementList.find(function(obj) {
-			return obj.tag == self.selectedElement.tagName.toLowerCase();
-		  });
-
+		  var config;
+      if(OEUtils.designerData.elementList){
+        config = OEUtils.designerData.elementList.find(function(obj) {
+  			  return obj.tag == self.selectedElement.tagName.toLowerCase();
+		    });
+      }
+      
           /*
            * fetch attr config from designer elem list
            * then iterate over the actual selected element atributes property so that the type in attr config will not be overwritten
