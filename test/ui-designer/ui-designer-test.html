@@ -1,0 +1,186 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+    <!-- importing dependent elements -->
+    <link rel="import" href="../../all-imports.html">
+    <!-- importing element to be tested -->
+</head>
+
+<body>
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <test-fixture id="ui-designer-fixture">
+        <template>
+            <ui-designer>
+            </ui-designer>
+        </template>
+    </test-fixture>
+    <script>
+        suite('<ui-designer>', function () {
+            var testElement;
+            var server;
+            var uiComponents = [{
+                "name": "contact-form",
+                "templateName": "default-form.html",
+                "modelName": "Contact",
+                "fields": ["FirstName", "LastName", "Email", "MobilePhone", {
+                    "fieldId": "LeadSource",
+                    "label": "Lead Source",
+                    "uitype": "oe-combo",
+                    "listdata": ["Web", "Phone Inquiry", "Partner Referral", "Purchased List",
+                        "Other"
+                    ],
+                    "container": "fields"
+                }, "LeadSource"],
+                "polymerConfig": {
+                    "listeners": {
+                        "oe-route-change": "_routeChanged"
+                    },
+                    "functions": {
+                        "_routeChanged": "function(event) { this.set('contact.CanTrigger', true); }"
+                    }
+                },
+                "autoInjectFields": true,
+                "excludeFields": ["CanTrigger"],
+                "id": "b912967e-547f-4da1-9eef-6db8fefe9c19",
+                "_type": "UIComponent",
+                "_createdBy": "system",
+                "_modifiedBy": "system",
+                "_createdOn": "2017-07-28T05:26:13.557Z",
+                "_modifiedOn": "2017-07-28T05:26:13.557Z",
+                "_isDeleted": false,
+                "_version": "e92f6386-c7f4-4bec-84c9-0eff5ce7af2f"
+            }, {
+                "name": "apply-loan",
+                "templateName": "loan-template-1.html",
+                "modelName": "LoanApplication",
+                "autoInjectFields": true,
+                "excludeFields": [],
+                "id": "b919967e-547f-4da1-9eef-6db8fefe9c19",
+                "_type": "UIComponent",
+                "_createdBy": "system",
+                "_modifiedBy": "system",
+                "_createdOn": "2017-07-28T05:26:13.288Z",
+                "_modifiedOn": "2017-07-28T05:26:13.288Z",
+                "_isDeleted": false,
+                "_version": "4bcc4e15-80fa-44f5-9d05-a39e04d30ddd"
+            }]
+
+            var assets = {"images":[{"file":"car_loan_banner.png","path":"client/images","size":71858},{"file":"de.png","path":"client/images","size":1105},{"file":"Designer.svg","path":"client/images","size":3372},{"file":"en-US.png","path":"client/images","size":2511},{"file":"ev-white-logo.png","path":"client/images","size":1862},{"file":"evlogo.png","path":"client/images","size":3095},{"file":"foundation.png","path":"client/images","size":4491},{"file":"fr.png","path":"client/images","size":1233},{"file":"home_loan_banner.png","path":"client/images","size":170162},{"file":"it.png","path":"client/images","size":1253},{"file":"logo.png","path":"client/images","size":1536},{"file":"logo.svg","path":"client/images","size":2188},{"file":"logo_black.png","path":"client/images","size":1797},{"file":"logo_label.png","path":"client/images","size":5573},{"file":"logo_label2.png","path":"client/images","size":3790},{"file":"personal_loan_banner.png","path":"client/images","size":153960}],"videos":[],"audios":[]}
+
+            setup(function () {
+                server = sinon.fakeServer.create();
+                server.autoRespond = true;
+                server.respondImmediately = true;
+                server.respondWith('POST', /api\/UIComponents/, function (req) {
+                    var body = JSON.parse(req.requestBody)
+                        body.id = "asdasdaszxvx";
+                        req.respond(200, {
+                            'Content-Type': 'application/json'
+                        }, JSON.stringify(body));
+                });
+                server.respondWith('PUT', /api\/UIComponents/, function (req) {
+                    req.respond(200, {
+                        'Content-Type': 'application/json'
+                    }, req.requestBody);
+                });
+                server.respondWith('GET', /api\/UIComponents/, function (req) {
+                    if (!!req.url.match('/component/')) {
+                        req.respond(200, {
+                            'Content-Type': 'application/json'
+                        }, JSON.stringify(document));
+                    } else {
+                        req.respond(200, {
+                            'Content-Type': 'application/json'
+                        }, JSON.stringify(uiComponents));
+                    }
+                });
+                server.respondWith('DELETE', /api\/UIComponents\/*/, function (req) {
+                    req.respond(200, {
+                        'Content-Type': 'application/json'
+                    }, req.requestBody);
+                });
+
+                server.respondWith('GET', /designer\/assets/, function (req) {
+                   req.respond(200, {
+                            'Content-Type': 'application/json'
+                        }, JSON.stringify(assets));
+                });
+
+                testElement = fixture('ui-designer-fixture');
+            });
+
+            test('Initial state', function (done) {
+                flush(function () {
+                    assert.equal(true,true);
+                })
+            });
+
+            // test('Edit rule', function (done) {
+            //     flush(function () {
+            //         var ruleList = testElement.querySelector('rule-listing');
+            //         assert.equal(testElement.ruleList[0].name, "eligibilityUSA");
+            //         ruleList.set('selectedRule', testElement.ruleList[0]);
+            //         flush(function () {
+            //             var dwnldBtn = testElement.querySelector(
+            //                 'rule-detail #download-rule-btn');
+            //             dwnldBtn.click();
+            //             var editBtn = testElement.querySelector(
+            //                 'rule-detail #edit-rule-btn');
+            //             editBtn.click();
+            //             flush(function () {
+            //                 var ruleDialog = testElement.querySelector(
+            //                     '#ruleDialog');
+            //                 var saveBtn = ruleDialog.querySelector('#add');
+            //                 ruleDialog.set('ruleObj.name', "eligibilityUS");
+            //                 flush(function () {
+            //                     saveBtn.click();
+            //                     flush(function () {
+            //                         assert.equal(testElement.ruleList[
+            //                                 0].name,
+            //                             "eligibilityUS");
+            //                         done();
+            //                     });
+            //                 });
+            //             });
+            //         });
+            //     });
+            // });
+
+            // test('Execute rule', function (done) {
+            //     flush(function () {
+            //         var ruleList = testElement.querySelector('rule-listing');
+            //         assert.equal(testElement.ruleList[0].name, "eligibilityUSA");
+            //         ruleList.set('selectedRule', testElement.ruleList[0]);
+            //         flush(function () {
+            //             var ruleDetail = testElement.querySelector('rule-detail');
+            //             ruleDetail.set('ruleInput', null)
+            //             ruleDetail.executeRule();
+            //             ruleDetail.set('ruleInput', {
+            //                 "name": "test",
+            //                 "age": 50
+            //             });
+            //             ruleDetail.executeRule();
+            //             flush(function () {
+            //                 assert.equal(ruleDetail.ruleOutput, JSON.stringify(
+            //                     execOutput, null, 2));
+            //                 done();
+            //             });
+            //         });
+            //     });
+            // });
+        });
+    </script>
+</body>
+
+</html>

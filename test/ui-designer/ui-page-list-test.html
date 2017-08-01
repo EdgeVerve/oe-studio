@@ -1,0 +1,141 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+    <!-- importing dependent elements -->
+    <link rel="import" href="../../all-imports.html">
+    <!-- importing element to be tested -->
+</head>
+
+<body>
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <test-fixture id="ui-page-list-fixture">
+        <template>
+            <ui-page-list>
+            </ui-page-list>
+        </template>
+    </test-fixture>
+    <script>
+        OEUtils.designerData = OEUtils.designerData || {};
+        OEUtils.designerData.elementList = OEUtils.designerData.elementList || []
+        suite('<ui-page-list>', function () {
+            var testElement;
+            var server;
+            var uiComponents = [{
+                "name": "contact-form",
+                "templateName": "default-form.html",
+                "modelName": "Contact",
+                "fields": ["FirstName", "LastName", "Email", "MobilePhone", {
+                    "fieldId": "LeadSource",
+                    "label": "Lead Source",
+                    "uitype": "oe-combo",
+                    "listdata": ["Web", "Phone Inquiry", "Partner Referral", "Purchased List",
+                        "Other"
+                    ],
+                    "container": "fields"
+                }, "LeadSource"],
+                "polymerConfig": {
+                    "listeners": {
+                        "oe-route-change": "_routeChanged"
+                    },
+                    "functions": {
+                        "_routeChanged": "function(event) { this.set('contact.CanTrigger', true); }"
+                    }
+                },
+                "autoInjectFields": true,
+                "excludeFields": ["CanTrigger"],
+                "id": "b912967e-547f-4da1-9eef-6db8fefe9c19",
+                "_type": "UIComponent",
+                "_createdBy": "system",
+                "_modifiedBy": "system",
+                "_createdOn": "2017-07-28T05:26:13.557Z",
+                "_modifiedOn": "2017-07-28T05:26:13.557Z",
+                "_isDeleted": false,
+                "_version": "e92f6386-c7f4-4bec-84c9-0eff5ce7af2f"
+            }, {
+                "name": "apply-loan",
+                "templateName": "loan-template-1.html",
+                "modelName": "LoanApplication",
+                "autoInjectFields": true,
+                "excludeFields": [],
+                "id": "b919967e-547f-4da1-9eef-6db8fefe9c19",
+                "_type": "UIComponent",
+                "_createdBy": "system",
+                "_modifiedBy": "system",
+                "_createdOn": "2017-07-28T05:26:13.288Z",
+                "_modifiedOn": "2017-07-28T05:26:13.288Z",
+                "_isDeleted": false,
+                "_version": "4bcc4e15-80fa-44f5-9d05-a39e04d30ddd"
+            }];
+
+            var templates = [{
+                    "file": "blank-page.html",
+                    "path": "client/bower_components/oe-studio/templates",
+                    "content": "<div></div>\r\n",
+                    "type": "html"
+                },
+                {
+                    "file": "blank-template.html",
+                    "path": "client/bower_components/oe-studio/templates",
+                    "content": "<!--\r\n        @author Rohit_Khode\r\n        @description Blank Template\r\n-->\r\n<link rel=\"import\" href=\"/bower_components/meta-polymer/meta-polymer.html\">\r\n<link rel=\"import\" href=\"/bower_components/polymer/polymer.html\">\r\n\r\n<dom-module id=\":componentName\">\r\n  <style>\r\n     :host {\r\n      display: block;\r\n      padding: 8px;\r\n    }\r\n    \r\n    #content {\r\n      background: #fff;\r\n    }\r\n\r\n  </style>\r\n  <template>\r\n\t\t<div class=\"content\" id=\"content\">\r\n\r\n\t\t</div>\r\n\t</template>\r\n  <script>\r\n    MetaPolymer({\r\n      is: ':componentName'\r\n    });\r\n\r\n    <\/script>\r\n</dom-module>\r\n",
+                    "type": "component"
+                }
+            ];
+            setup(function () {
+                server = sinon.fakeServer.create();
+                server.autoRespond = true;
+                server.respondImmediately = true;
+                server.respondWith('POST', /api\/UIComponents/, function (req) {
+                    var body =
+                        JSON.parse(req.requestBody);
+                    body.id = "asdasdaszxvx";
+                    req.respond(200, {
+                        'Content-Type': 'application/json'
+                    }, JSON.stringify(body));
+                });
+                server.respondWith('PUT', /api\/UIComponents/, function (req) {
+                    req.respond(200, {
+                        'Content-Type': 'application/json'
+                    }, req.requestBody);
+                });
+                server.respondWith('GET', /api\/UIComponents/, function (req) {
+                    req.respond(200, {
+                        'Content-Type': 'application/json'
+                    }, JSON.stringify(uiComponents));
+                });
+                server.respondWith('DELETE', /api\/UIComponents\/*/, function (req) {
+                    req.respond(200, {
+                        'Content-Type': 'application/json'
+                    }, req.requestBody);
+                });
+                server.respondWith('GET', /designer\/templates/,
+                    function (req) {
+                        req.respond(200, {
+                            'Content-Type': 'application/json'
+                        }, JSON.stringify(templates));
+                    });
+                testElement = fixture('ui-page-list-fixture');
+            });
+            test('Initial state', function (done) {
+                flush(function () {
+                    assert.equal(testElement.templateList.length, 2);
+                    assert.equal(testElement.componentList.length, 2);
+                    assert.equal(testElement.polymerCount, 2);
+                    assert.equal(testElement.staticCount,0);
+                    done();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
