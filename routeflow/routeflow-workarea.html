@@ -489,7 +489,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }, 5000);
 
         this.addEventListener('delete-transition', function (event) {
-          this.workAreaInstance.detach(event.detail);
+          this.workAreaInstance.deleteConnection(event.detail);
         }.bind(this));
 
         this.addEventListener('add-transition', function (event) {
@@ -508,7 +508,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           if (event.detail.editMode) {
             return;
           }
-          this.workAreaInstance.detach(this.currentConnection);
+          this.workAreaInstance.deleteConnection(this.currentConnection);
           this.eventName = '';
         }.bind(this));
       },

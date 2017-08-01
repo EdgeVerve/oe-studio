@@ -248,6 +248,43 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           })
         })
       });
+      test('delete existing transition', function (done) {
+        flush(function () {
+          workArea.fetchRoutes();
+          flush(function () {
+            var labelNodes = Polymer.dom(workArea.root).querySelectorAll('.overlay-label-style');
+            var transitionDialog = Polymer.dom(workArea.root).querySelector('transition-dialog');
+            var deleteBtn = Polymer.dom(transitionDialog.root).querySelector('#delete')
+            assert.equal(dialog.opened, false);
+            var label;
+            [].forEach.call(labelNodes, function (node) {
+              if (node.innerHTML == "redirect-to-loan-details") {
+                label = node;
+              }
+            });
+            label.click();
+            flush(function () {
+              deleteBtn.click();
+              flush(function(){
+                var labelNodes = Polymer.dom(workArea.root).querySelectorAll('.overlay-label-style');
+                var found = false;
+                [].forEach.call(labelNodes, function (node) {
+                  if (node.innerHTML == "redirect-to-loan-details") {
+                    found = true;
+                  }
+                });
+                assert.equal(found,false);
+                var index = workArea.routeList[0].transitions.findIndex(function(obj){
+                  return obj.event == "redirect-to-loan-details"
+                })
+                assert.equal(index,-1);
+                done();
+              })
+              
+            })
+          })
+        })
+      });
     });
   </script>
 </body>

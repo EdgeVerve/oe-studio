@@ -8,7 +8,7 @@
     "jquery": "^2.2.0",
     "lodash": "^4.3.0",
     "jquery-ui": "^1.11.4",
-    "oe-ui": "http://evgit/oecloud.io/oe-ui.git#master",
+    "oe-ui": "https://github.com/EdgeVerve/oe-ui.git#master",
     "oe-charts": "http://evgit/oecloud.io/oe-charts.git#master",
     "roboto-fontface": "^0.4.5",
     "inflection": "^1.10.0",
@@ -24,7 +24,7 @@
     "paper-elements": "PolymerElements/paper-elements#^1.0.1",
     "marked-element": "PolymerElements/marked-element#^1.0.0",
     "polymer-redux": "^0.4.0",
-    "jsPlumb": "https://github.com/jsplumb/jsPlumb.git",
+    "jsPlumb": "https://github.com/jsplumb/jsPlumb.git#2.4.3",
     "oe-widget-container": "http://evgit/oecloud.io/oe-widget-container.git",
     "oe-workflow-modeler": "http://evgit/oecloud.io/oe-workflow-modeler.git"
 
