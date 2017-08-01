@@ -279,6 +279,7 @@
     .scope-text {
       font-size: 11px;
     }
+
   </style>
   <template>
     <div class="layout horizontal center">
@@ -510,28 +511,27 @@
         'page-created': 'newPageCreated',
         'page-deleted':'deletePage'
       },
-      toggleThemePanel: function () {
+      toggleThemePanel: function() {
         this.fire('toggle-theme-panel');
         this.$.pageSelectMenu.close();
       },
-      closePageSettings: function (event) {
+      closePageSettings: function(event) {
         if(event){
             event.stopPropagation();
         }
-       
         this.$.pageSettingsIcon.close();
       },
-      closeCloneSettings: function (event) {
+      closeCloneSettings: function(event) {
         if(event){
             event.stopPropagation();
         }
         this.$.clonePagePanel.close();
       },
-      formatJSON: function (value) {
+      formatJSON: function(value) {
         return JSON.stringify(value, null, 2);
       },
-      _filter: function (val) {
-        return function (model) {
+      _filter: function(val) {
+        return function(model) {
           if (!val) {
             return true;
           }
@@ -541,7 +541,7 @@
           return (model.name.toLowerCase().indexOf(val.toLowerCase()) != -1);
         }
       },
-      showClonePage: function (hasActivePage, activePage) {
+      showClonePage: function(hasActivePage, activePage) {
         if (!hasActivePage) {
           return true;
         }
@@ -550,33 +550,33 @@
         }
         return false;
       },
-      showPageCreation: function () {
+      showPageCreation: function() {
         var elem = this.$.uiCreateComponent;
         elem.reset();
         elem.set('componentType', this.selected);
         this.step = 1;
       },
-      loadFile: function () {
+      loadFile: function() {
         var self = this;
         self.$.fileInput.value = '';
-        this.$.fileInput.onchange = function (e) {
+        this.$.fileInput.onchange = function(e) {
           var reader = new FileReader();
-          reader.onload = function (evt) {
+          reader.onload = function(evt) {
             self.handleUploadedPage(evt.target.result, e.target.files[0]);
           };
           reader.readAsText(e.currentTarget.files[0]);
         }
         self.$.fileInput.click();
       },
-      handleUploadedPage: function (textStr, file) {
+      handleUploadedPage: function(textStr, file) {
         var maped = {
           'html': 'e-v-html',
           'body': 'e-v-body',
           'head': 'e-v-head'
         }
-        Object.keys(maped).forEach(function (k) {
+        Object.keys(maped).forEach(function(k) {
           var reg = new RegExp('<' + k + '(>| )')
-          textStr = textStr.replace(reg, function (n) {
+          textStr = textStr.replace(reg, function(n) {
             return n.replace(k, maped[k])
           })
           textStr = textStr.replace('<\/' + k + '>', '<\/' + maped[k] + '>')
@@ -598,22 +598,22 @@
         this.set('hasActivePage', true);
         this.$.pageSelectMenu.close();
       },
-      _openedObserver: function () {
+      _openedObserver: function() {
         if (this.opened) {
           this.showPageListing();
         }
       },
-      showPageListing: function () {
+      showPageListing: function() {
         this.step = 0;
         this.set('searchKey', '');
       },
-      attached: function () {
+      attached: function() {
         var self = this;
         this.step = 0;
         async.parallel({
-          templateList: function (callback) {
+          templateList: function(callback) {
 
-            self.makeAjaxCall('/designer/templates', 'get', null, null, null, function (
+            self.makeAjaxCall('/designer/templates', 'get', null, null, null, function(
               err, res) {
               if (err) {
                 self.fire('oe-show-error', 'Error fetching Templates');
@@ -623,8 +623,8 @@
               }
             })
           },
-          uiComponents: function (callback) {
-            self.makeAjaxCall('/api/UIComponents', 'get', null, null, null, function (err,
+          uiComponents: function(callback) {
+            self.makeAjaxCall('/api/UIComponents', 'get', null, null, null, function(err,
               res) {
               if (err) {
                 self.fire('oe-show-error',
@@ -635,15 +635,15 @@
               }
             })
           }
-        }, function (err, results) {
+        }, function(err, results) {
           if (!err) {
             self.set('templateList', results.templateList || []);
             self.set('componentList', results.uiComponents || []);
           }
         });
 
-        document.addEventListener('launch-page', function (event) {
-          var index = this.componentList.findIndex(function (component) {
+        document.addEventListener('launch-page', function(event) {
+          var index = this.componentList.findIndex(function(component) {
             return component.id == event.detail.id
           })
           if (index == -1) {
@@ -655,7 +655,7 @@
           return null;
         }.bind(this));
       },
-      isActivePageExists: function () {
+      isActivePageExists: function() {
         if (this.activePage && Object.keys(this.activePage).length != 0) {
           this.set('hasActivePage', true);
           return true;
@@ -664,16 +664,16 @@
           return false;
         }
       },
-      isActivePage: function (activePage, currPage) {
+      isActivePage: function(activePage, currPage) {
         return (activePage && (activePage.id == currPage.id)) ? 'iron-selected' : '';
       },
-      getComponents: function () {
-        var list = this.componentList.filter(function (obj) {
+      getComponents: function() {
+        var list = this.componentList.filter(function(obj) {
           if (!obj.filePath && obj.templateName) {
             obj.isPolymerElement = true;
-            obj._isWidget = !!OEUtils.designerData.elementList.find(function (n) {
+        obj._isWidget = !!OEUtils.designerData.elementList.find(function(n) {
               return n.tag === obj.name
-            });
+         });
             return true;
           }
           return false
@@ -682,8 +682,8 @@
         this.set('polymerListEmpty', list.length ? false : true)
         return list;
       },
-      getPages: function () {
-        var list = this.componentList.filter(function (obj) {
+      getPages: function() {
+        var list = this.componentList.filter(function(obj) {
           if (!obj.filePath && !obj.templateName) {
             obj.isPolymerElement = false;
             return true;
@@ -694,14 +694,14 @@
         this.set('staticListEmpty', list.length ? false : true)
         return list;
       },
-      deletePage: function (event) {
+      deletePage: function(event) {
         this.set('deleteFlag', false);
         var pageData = event.detail;
         if (this.activePage.id == pageData.id) {
           this.fire('clear-workspace');
           this.set('activePage', {});
         }
-        var pageIndex = this.componentList.findIndex(function (p) {
+        var pageIndex = this.componentList.findIndex(function(p) {
           return p.id == pageData.id;
         })
         
@@ -709,19 +709,19 @@
         this.fire('oe-show-success', pageData.name + ' successfully deleted');
         this.closePageSettings();
       },
-      newPageCreated: function (e) {
+      newPageCreated: function(e) {
         this.showPageListing();
         var pageData = e.detail.response;
         pageData.isPolymerElement = (event.detail.type != 'html')
         this.push('componentList', pageData);
         this._handleEditLaunch(pageData);
       },
-      _downloadComponent: function (event) {
+      _downloadComponent: function(event) {
         var self = this;
         var pageData = event.model.page;
         self.makeAjaxCall('/api/UIComponents/component/' + pageData.name, 'get', null, null, null, {
           handleAs: 'text'
-        }, function (err, res) {
+        }, function(err, res) {
           if (err) {
             self.fire('oe-show-error', 'Error fetching component');
           } else {
@@ -729,15 +729,15 @@
           }
         });
       },
-      _deleteComponent: function (event) {
+      _deleteComponent: function(event) {
         event.stopPropagation();
         var pageData = event.model.page;
         var self = this;
         var elemDeleteUrl = '/api/UIComponents/' + pageData.id;
-        self.makeAjaxCall(elemDeleteUrl, 'delete', {}, null, null, function (err) {
+        self.makeAjaxCall(elemDeleteUrl, 'delete', {}, null, null, function(err) {
           if (!err) {
-            self.$.pageSettingsPanel.getRouteDetails(pageData, function (routeData) {
-              self.$.pageSettingsPanel.deleteRouteDetails(routeData, function () {
+            self.$.pageSettingsPanel.getRouteDetails(pageData, function(routeData) {
+              self.$.pageSettingsPanel.deleteRouteDetails(routeData, function() {
                 self.fire('page-deleted', pageData)
               })
             })
@@ -746,7 +746,7 @@
           }
         })
       },
-      _exportAsComponent: function (e) {
+      _exportAsComponent: function(e) {
         var componentData = e.model.page;
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -769,15 +769,15 @@
         this.fire('update-widget', config);
         this.$.pageSelectMenu.close();
       },
-      updateComponentList: function (pageData) {
-        var pageIndex = this.componentList.findIndex(function (p) {
+      updateComponentList: function(pageData) {
+        var pageIndex = this.componentList.findIndex(function(p) {
           return p.id == pageData.id;
         });
         this.set('componentList.' + pageIndex, pageData);
         this._handleEditLaunch(pageData);
       },
-      _handleEditLaunch: function (pageData) {
-        this.$.pageSettingsPanel.getRouteDetails(pageData, function (routeData) {
+      _handleEditLaunch: function(pageData) {
+        this.$.pageSettingsPanel.getRouteDetails(pageData, function(routeData) {
           pageData.routeData = routeData;
           this.set('activePage', pageData);
           Polymer.dom.flush();
@@ -787,7 +787,7 @@
             isPolymerElement: pageData.isPolymerElement
           }
           if (page.isPolymerElement) {
-            var template = this.templateList.find(function (tmp) {
+            var template = this.templateList.find(function(tmp) {
               return tmp.file == pageData.templateName
             });
             page.templateData = template
@@ -801,12 +801,12 @@
           this.$.pageSelectMenu.close();
         }.bind(this));
       },
-      _editPage: function (e) {
+      _editPage: function(e) {
         var pageData = e.model.page;
         this._handleEditLaunch(pageData);
       },
-      handleWidgetUpdate: function (data) {
-        var compIndex = this.componentList.findIndex(function (comp) {
+      handleWidgetUpdate: function(data) {
+        var compIndex = this.componentList.findIndex(function(comp) {
           return comp.name == data.value.tag
         });
         if (compIndex === -1) {
