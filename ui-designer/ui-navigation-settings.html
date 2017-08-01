@@ -157,7 +157,7 @@
         var config = {
           navigationIcon: null
         };
-        if (!this.activePage) {
+        if (!this.activePage | this.routeData) {
           this.routeData = {};
           return;
         }
@@ -227,16 +227,17 @@
     },
     deleteRouteDetails: function(routeData, cb) {
       var deleteInfo = {
-        routeDeleted: !!(routeData.uiRoute && routeData.uiRoute.id),
-        navDeleted: !!(routeData.navigationLink && routeData.navigationLink.id)
-      };
-      if (!deleteInfo.routeDeleted) {
+        routePresent: routeData.uiRoute && routeData.uiRoute.id,
+        navLinkPresent: routeData.navigationLink && routeData.navigationLink.id
+      }
+      
+      if (deleteInfo.routePresent) {
         var routeDeleteUrl = '/api/UIRoutes/' + routeData.uiRoute.id
         self.makeAjaxCall(routeDeleteUrl, 'delete', {}, null, null, null, function(err1) {
           if (!err1) {
             routeData.uiRoute = null;
             deleteInfo.routeDeleted = true;
-            if (!deleteInfo.navDeleted) {
+            if (deleteInfo.navLinkPresent) {
               var navDeleteUrl = '/api/NavigationLinks/' + routeData.navigationLink.id
               self.makeAjaxCall(navDeleteUrl, 'delete', {}, null,
                 function(err2) {
