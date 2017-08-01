@@ -214,164 +214,40 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           var sideBar = Polymer.dom(workArea.root).querySelector('route-listing');
           flush(function () {
             assert.equal(workArea.workareaRouteList.length, 3);
-            assert.equal(sideBar.routeList[0].checked,true);
+            assert.equal(sideBar.routeList[0].checked, true);
             var routeElem = Polymer.dom(workArea.root).querySelectorAll('route-element')[0];
             var closeIcon = Polymer.dom(routeElem.root).querySelector('.close-icon');
             closeIcon.click();
             flush(function () {
               assert.equal(workArea.workareaRouteList.length, 2);
-              assert.equal(sideBar.routeList[0].checked,false);
-                done();
+              assert.equal(sideBar.routeList[0].checked, false);
+              done();
             })
           })
         })
       })
-      /*
-           test('edit Model to add a relation', function (done) {
-             flush(function () {
-               var sideBar = Polymer.dom(workArea.root).querySelector('route-listing');
-               var modelItem = Polymer.dom(sideBar.root).querySelectorAll('.model-list-item');
-               modelItem[0].click();
-               modelItem[1].click();
-               flush(function () {
-                 var modelContainers = Polymer.dom(workArea.root).querySelectorAll('model-container');
-                 var customerContainer = modelContainers[1];
-                 Polymer.dom(customerContainer.root).querySelector('#edit-model-starter').click();
-                 flush(function () {
-                   var Savedialog = Polymer.dom(workArea.root).querySelector('#createmodeldialog');
-                   Savedialog.push('vm.relations', {
-                     'type': 'hasMany',
-                     'model': 'Account',
-                     '__name__': 'accounts'
-                   });
-                   flush(function () {
-                     var lastStep = Polymer.dom(Savedialog.root).querySelector('.stepper #step_4');
-                     var lastSave = Polymer.dom(Savedialog.root).querySelector(
-                       '.dialog-footer #nextbtn');
-                     var saveBtn = Polymer.dom(Savedialog.root).querySelector(
-                       '.dialog-footer #savebtn');
-                     lastStep.click();
-                     flush(function () {
-                       lastSave.click();
-                       flush(function () {
-                         saveBtn.click();
-
-                         flush(function () {
-                           var SaveAllModels = Polymer.dom(workArea.root).querySelector(
-                             '#save-all-models-btn');
-                           SaveAllModels.click();
-                           flush(function () {
-                             setTimeout(function () {
-                               workArea._showExistingRelations();
-                               assert.equal(customerContainer.modelObj.relations
-                                 .length, 1);
-                               done();
-                             }, 2000)
-
-                           })
-                         })
-
-                       })
-                     })
-                   })
-                 })
-               })
-
-             })
-           }) 
-           test('operations on model-container', function (done) {
-             flush(function () {
-               var msgHandler = workArea.childNodes[workArea.childNodes.length - 1];
-               var confirmToast = Polymer.dom(msgHandler.root).querySelector('paper-toast#confirm');
-               var okBtn = confirmToast.querySelector('paper-button#ok');
-               var cancelBtn = confirmToast.querySelector('paper-button#cancel');
-               var sideBar = Polymer.dom(workArea.root).querySelector('route-listing');
-               var modelItem = Polymer.dom(sideBar.root).querySelectorAll('.model-list-item');
-               modelItem[0].click();
-               modelItem[1].click();
-               flush(function () {
-                 var modelContainers = Polymer.dom(workArea.root).querySelectorAll('model-container');
-                 var dataDialog = Polymer.dom(workArea.root).querySelector('model-definition-dialog')
-                 var ruleDialog = Polymer.dom(workArea.root).querySelector('#addRuleDlg')
-                 var customerContainer = modelContainers[1];
-                 Polymer.dom(customerContainer.root).querySelector('#personalization-rule-starter').click();
-
-                 flush(function () {
-                   assert.isTrue(Polymer.dom(ruleDialog.root).querySelector('paper-dialog').opened);
-                   Polymer.dom(ruleDialog.root).querySelector('#close-dialog').click();
-                   Polymer.dom(customerContainer.root).querySelector('#edit-model-starter').click();
-                   flush(function () {
-                     assert.isTrue(Polymer.dom(dataDialog.root).querySelector('paper-dialog').opened);
-                     Polymer.dom(dataDialog.root).querySelector(
-                       '#model-definition-dialog-custom-save').click();
-                     Polymer.dom(customerContainer.root).querySelector('#clone-model-starter').click();
-                     flush(function () {
-                       assert.isTrue(Polymer.dom(dataDialog.root).querySelector('paper-dialog').opened);
-                       Polymer.dom(dataDialog.root).querySelector(
-                         '#model-definition-dialog-custom-save').click();
-                       Polymer.dom(customerContainer.root).querySelector('#delete-model-starter')
-                         .click();
-                       flush(function () {
-                         cancelBtn.click();
-                         customerContainer.$$('#toggle-detail-view').click();
-                         flush(function () {
-                           assert.equal(workArea.workareaRouteList.length, 2);
-                           customerContainer.$$('#view-detail-view').click();
-                           flush(function () {
-                             assert.equal(workArea.$.detailDialog.$.modelDetailDialog
-                               .opened, true);
-                             workArea.$.detailDialog.hideDialog();
-                             var closeModelContainer = Polymer.dom(customerContainer
-                               .root).querySelector('#close-container');
-                             closeModelContainer.click();
-                             flush(function () {
-                               assert.equal(workArea.workareaRouteList.length,
-                                 1);
-                               modelContainers[0].querySelector(
-                                 '#delete-model-starter').click();
-                               flush(function () {
-                                 okBtn.click();
-                                 flush(function () {
-                                   workArea.async(function () {
-                                     assert.equal(workArea.workareaRouteList
-                                       .length, 0);
-                                     done();
-                                   })
-                                 })
-                               })
-                             })
-                           })
-                         })
-                       })
-                     })
-                   })
-                 })
-               })
-             })
-           }) 
-           
-           test('listen to edit-property event', function (done) {
-             flush(function () {
-               var sideBar = Polymer.dom(workArea.root).querySelector('route-listing');
-               var modelItem = Polymer.dom(sideBar.root).querySelectorAll('.model-list-item');
-               modelItem[0].click();
-               flush(function () {
-                 assert.equal(workArea.workareaRouteList.length, 1);
-                 var modelContainer = workArea.querySelectorAll('model-container');
-                 var propList = modelContainer[0].querySelectorAll('.list-item');
-                 propList[0].querySelector('#edit-icon').click();
-                 flush(function () {
-                   var propBtn = modelContainer[0].querySelector('#validate-prop-btn');
-                   propBtn.click();
-                   flush(function () {
-                     assert.equal(workArea.$.addProperty.querySelector('paper-dialog').opened, true);
-                     workArea.$.addProperty.hideDialog();
-                     done();
-                   });
-                 })
-               });
-             })
-           }) */
+      test('edit existing transition', function (done) {
+        flush(function () {
+          workArea.fetchRoutes();
+          flush(function () {
+            var labelNodes = Polymer.dom(workArea.root).querySelectorAll('.overlay-label-style');
+            var transitionDialog = Polymer.dom(workArea.root).querySelector('transition-dialog');
+            var dialog = Polymer.dom(transitionDialog.root).querySelector('paper-dialog')
+            assert.equal(dialog.opened, false);
+            var label;
+            [].forEach.call(labelNodes, function (node) {
+              if (node.innerHTML == "redirect-to-loan-details") {
+                label = node;
+              }
+            });
+            label.click();
+            flush(function () {
+              assert.equal(dialog.opened, true);
+              done();
+            })
+          })
+        })
+      });
     });
   </script>
 </body>

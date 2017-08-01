@@ -1,0 +1,125 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <!-- importing dependent elements -->
+  <link rel="import" href="../all-imports.html">
+</head>
+
+<body>
+  <!-- You can use the document as a place to set up your fixtures. -->
+  <test-fixture id="transition-dialog-fixture">
+    <template>
+      <transition-dialog>
+      </transition-dialog>
+    </template>
+  </test-fixture>
+  <script>
+    suite('transition-dialog', function () {
+
+      var myEl;
+
+      setup(function () {
+        myEl = fixture('transition-dialog-fixture');
+        myEl.set('source', {
+          "type": "elem",
+          "name": "customer-home-page",
+          "path": "/",
+          "import": "elements/customer-home-page.html",
+          "group": "",
+          "retainInstance": false,
+          "transitions": [{
+            "path": "/loan/:loanId",
+            "route": "/loan/{{loanId}}",
+            "event": "redirect-to-loan-details"
+          }, {
+            "path": "/loan-info/:productId",
+            "route": "/loan-info/{{product.id}}",
+            "event": "redirect-to-loan-info"
+          }, {
+            "path": "/apply/:productId",
+            "route": "/apply/{{product.id}}",
+            "event": "redirect-to-apply-loan"
+          }, {
+            "path": "/la/:id/uploaddocs",
+            "route": "/la/{{id}}/uploaddocs",
+            "event": "redirect-to-upload-docs"
+          }],
+          "id": "597b11c48e4fb3d81e1ee5d3",
+          "_type": "UIRoute",
+          "_createdBy": "system",
+          "_modifiedBy": "system",
+          "_createdOn": "2017-07-28T10:28:18.231Z",
+          "_modifiedOn": "2017-07-28T10:28:18.231Z",
+          "scope": {
+            "roles": ["customer"]
+          },
+          "_isDeleted": false,
+          "_version": "55d8ff02-3089-4bf8-80b8-9bda98f00864",
+          "checked": true
+        });
+        myEl.set('target', {
+          "type": "elem",
+          "name": "loan-details",
+          "path": "/loan/:loanId",
+          "import": "elements/loan-details.html",
+          "group": "",
+          "retainInstance": false,
+          "id": "597b11c48e4fb3d81e1ee6b9",
+          "_type": "UIRoute",
+          "_createdBy": "system",
+          "_modifiedBy": "system",
+          "_createdOn": "2017-07-28T10:28:18.599Z",
+          "_modifiedOn": "2017-07-28T10:28:18.599Z",
+          "_isDeleted": false,
+          "_version": "0adb900a-4633-4d27-b0b6-49ed5fbb4027",
+          "checked": true
+        });
+      });
+
+      test('open and close dialog test', function (done) {
+        var dialog = Polymer.dom(myEl.root).querySelector('paper-dialog');
+        assert.equal(dialog.opened, false);
+        myEl.openDialog();
+        flush(function () {
+          assert.equal(dialog.opened, true);
+          myEl.hideDialog();
+          flush(function () {
+            assert.equal(dialog.opened, false);
+            done();
+          })
+        })
+      });
+
+      test('undo transition', function (done) {
+        myEl.set('editMode',false);
+        myEl.addEventListener('undo-transition', function(e) {
+          assert.equal(e.detail.editMode, myEl.editMode);
+          done();
+        });
+        myEl.openDialog();
+        flush(function () {
+          var cancelButton = Polymer.dom(myEl.root).querySelector('#cancel');
+          var dialog = Polymer.dom(myEl.root).querySelector('paper-dialog');
+          cancelButton.click();
+          flush(function () {
+              assert.equal(dialog.opened, false);
+          })
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
