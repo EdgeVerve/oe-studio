@@ -268,8 +268,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                       </template>
                       <template is="dom-if" if="{{modelDataObj.method.data.visible}}">
                         <div class="object-editor">
-                          <iron-autogrow-textarea required="{{modelDataObj.method.data.required}}" id="editor" class$="validity-[[valid]]" bind-value="{{editableValue}}"
-                            row="5"></iron-autogrow-textarea>
+							<oe-json-input class$="validity-[[valid]]" label="Data"
+										   required="{{modelDataObj.method.data.required}}" id="editor"
+										   value="{{editableValue}}"></oe-json-input>
                         </div>
                       </template>
                     </form>
