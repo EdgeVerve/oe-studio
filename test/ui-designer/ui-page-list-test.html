@@ -91,6 +91,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     "type": "component"
                 }
             ];
+
+            var modelDefinitions = [{"name":"Admin"},{"name":"dev"},{"name":"BaseEntity"},{"name":"ModelDefinition"},{"name":"DataSourceDefinition"},{"name":"PersonalizationRule"},{"name":"DbTransaction"},{"name":"UIBase"},{"name":"UIMetadata"},{"name":"Validation"},{"name":"Field"},{"name":"UIRoute"},{"name":"userCredential"},{"name":"userIdentity"},{"name":"DataACL"},{"name":"Tenant"},{"name":"UserProfile"},{"name":"Literal"},{"name":"CacheManager"},{"name":"Error"},{"name":"EnumBase"},{"name":"NavigationLink"},{"name":"ChangeRequest"},{"name":"UIResource"},{"name":"TypeMapping"},{"name":"GridMetaData"},{"name":"GridConfig"},{"name":"GridColumnConfig"},{"name":"Email"},{"name":"RefCodeBase"},{"name":"OTP"},{"name":"Document"},{"name":"BusinessRule"},{"name":"JobScheduler"},{"name":"DataSourceMapping"},{"name":"LoggerConfig"},{"name":"AppConfig"},{"name":"DesignerPage"},{"name":"ModelView"},{"name":"UIManager"},{"name":"DesignerRule"},{"name":"UIComponent"},{"name":"UIElement"},{"name":"UIAttribute"},{"name":"BaseType"},{"name":"NodeRedFlow"},{"name":"ReconciliationEvent"},{"name":"BaseActorEntity"},{"name":"BaseJournalEntity"},{"name":"ActorActivity"},{"name":"State"},{"name":"EventHistory"},{"name":"BaseReplayableEntity"},{"name":"RoutingRules"},{"name":"DecisionTable"},{"name":"DocumentData"},{"name":"DesignerElement"},{"name":"MinimumState"},{"name":"SystemConfig"},{"name":"ModelRule"},{"name":"TrustedApp"},{"name":"Lock"},{"name":"PendingJournal"},{"name":"WorkflowBaseEntity"},{"name":"ProcessDefinition"},{"name":"ProcessInstance"},{"name":"Task"},{"name":"bpmndata"},{"name":"WorkflowDefinition"},{"name":"WorkflowInstance"},{"name":"WorkflowRequest"},{"name":"WorkflowManager"},{"name":"Activiti_Manager"},{"name":"Activiti_BaseEntity"},{"name":"Activiti_Account"},{"name":"Activiti_WorkflowRequest"},{"name":"WorkflowMapping"},{"name":"UserInfo"},{"name":"Address"},{"name":"Country"},{"name":"Product"},{"name":"Counter"},{"name":"container"},{"name":"Currency"},{"name":"Region"},{"name":"CustomerProfile"},{"name":"LoanType"},{"name":"EmploymentType"},{"name":"IncomeType"},{"name":"TransactionType"},{"name":"Transaction"},{"name":"IncomeDetail"},{"name":"EmploymentDetail"},{"name":"Loan"},{"name":"LoanApplication"},{"name":"Contact"},{"name":"AuthSession"},{"name":"BaseUser"},{"name":"AppUser"},{"name":"BaseACL"},{"name":"BaseRoleMapping"},{"name":"BaseRole"}];
+
+            var modelMeta = {"CustomerProfile":{"id":"CustomerProfile","plural":"CustomerProfiles","resturl":"/api/CustomerProfiles","properties":{"firstName":{"type":"string","required":true},"lastName":{"type":"string"},"region":{"type":"string","refcodetype":"Region"},"dateOfBirth":{"type":"date"},"address":{"type":"model","modeltype":"Address"},"phoneNumber":{"type":"string","pattern":"^[0-9]{10}$"},"image":{"type":"string"},"userId":{"type":"objectid","required":true},"department":{"type":"string","required":false},"id":{"type":"objectid","id":1,"generated":true},"_type":{"type":"string","length":50,"required":true},"_createdBy":{"type":"string","length":50,"required":true},"_modifiedBy":{"type":"string","length":50,"required":true},"_createdOn":{"type":"timestamp","required":true,"evtype":"timestamp"},"_modifiedOn":{"type":"timestamp","required":true,"evtype":"timestamp"},"scope":{"type":"object","required":false},"_isDeleted":{"type":"boolean","default":false},"_oldVersion":{"type":"string"},"_version":{"type":"string","index":{"unique":true,"background":true},"required":true},"_requestId":{"type":"string"},"_newVersion":{"type":"string"}},"relations":{"user":{"name":"user","type":"belongsTo","modelFrom":"CustomerProfile","keyFrom":"userId","modelTo":"AppUser","keyTo":"id","multiple":false}}}};
             setup(function () {
                 server = sinon.fakeServer.create();
                 server.autoRespond = true;
@@ -124,6 +128,17 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                             'Content-Type': 'application/json'
                         }, JSON.stringify(templates));
                     });
+                 server.respondWith('GET', /api\/ModelDefinitions/, function (req) {
+                    if(req.url.match('modelmeta')){
+                        req.respond(200, {
+                            'Content-Type': 'application/json'
+                        }, JSON.stringify(modelMeta));
+                     }else{
+                        req.respond(200, {
+                            'Content-Type': 'application/json'
+                        }, JSON.stringify(modelDefinitions));
+                     }
+                });
                 testElement = fixture('ui-page-list-fixture');
             });
             test('Initial state', function (done) {
@@ -131,11 +146,165 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     assert.equal(testElement.templateList.length, 2);
                     assert.equal(testElement.componentList.length, 2);
                     assert.equal(testElement.polymerCount, 2);
-                    assert.equal(testElement.staticCount,0);
+                    assert.equal(testElement.staticCount, 0);
                     done();
                 });
+            });
+
+            test('Create a Static Page', function (done) {
+                testElement.addEventListener('page-selected', function (e) {
+                    var detail = e.detail;
+                     assert.equal(detail.name, 'testStaticPage');
+                     assert.equal(detail.isPolymerElement, false);
+                     assert.equal(testElement.staticCount, 1);
+                    done();
+                })
+                flush(function () {
+                    assert.equal(testElement.staticCount, 0);
+                    var createComponent = testElement.querySelector('ui-create-component');
+                    var addTrigger = testElement.querySelector('#add-component-panel');
+                    addTrigger.click();
+                    flush(function () {
+                        createComponent.set('componentType', 1);
+                        var prevBtn = createComponent.querySelector(
+                            '.step-navigation-panel .secondary-btn');
+                        var nextBtn = createComponent.querySelector(
+                            '.step-navigation-panel .primary-btn');
+                        flush(function () {
+                            nextBtn.click();
+                            flush(function () {
+                                createComponent.set('elementName',
+                                    'testElement.html');
+                                flush(function () {
+                                    nextBtn.click();
+                                    flush(function () {
+                                        var simpleTemp =
+                                            createComponent
+                                            .querySelector(
+                                                '.step-4 paper-radio-button'
+                                            );
+                                        simpleTemp.click();
+                                        flush(function () {
+                                            prevBtn
+                                                .click();
+                                            flush
+                                                (
+                                                    function () {
+                                                        createComponent
+                                                            .set(
+                                                                'elementName',
+                                                                'testStaticPage'
+                                                            );
+                                                        flush
+                                                            (
+                                                                function () {
+                                                                    nextBtn
+                                                                        .click();
+                                                                    flush
+                                                                        (
+                                                                            function () {
+                                                                                nextBtn
+                                                                                    .click();
+                                                                            }
+                                                                        )
+                                                                }
+                                                            )
+                                                    }
+                                                )
+                                        })
+                                    })
+                                })
+                            })
+                        })
+                    })
+                })
+            });
+
+            test('Create a Polymer Page', function (done) {
+                testElement.addEventListener('page-selected', function (e) {
+                    var detail = e.detail;
+                     assert.equal(detail.name, 'test-element');
+                     assert.equal(detail.isPolymerElement, true);
+                     assert.equal(testElement.polymerCount, 3);
+                    done();
+                })
+                flush(function () {
+                    assert.equal(testElement.polymerCount, 2);
+                    var createComponent = testElement.querySelector('ui-create-component');
+                    var addTrigger = testElement.querySelector('#add-component-panel');
+                    addTrigger.click();
+                    flush(function () {
+                        createComponent.set('componentType', 0);
+                        var prevBtn = createComponent.querySelector(
+                            '.step-navigation-panel .secondary-btn');
+                        var nextBtn = createComponent.querySelector(
+                            '.step-navigation-panel .primary-btn');
+                        flush(function () {
+                            nextBtn.click();
+                            flush(function () {
+                                createComponent.set('elementName','test-element');
+                                createComponent.set('showModelBinder',true);
+                                flush(function () {
+                                    nextBtn.click();
+                                    flush(function () {
+                                       var modelSelector =createComponent.querySelector('.step-3 oe-combo');
+                                       modelSelector.set('value',"CustomerProfile");
+                                       modelSelector.fire('change');
+                                       flush(function(){
+                                            nextBtn.click();
+                                            flush(function(){
+                                                var simpleTemp =createComponent.querySelector('.step-4 paper-radio-button');
+                                                 simpleTemp.click();
+                                                 flush(function(){
+                                                     nextBtn.click();
+                                                 })
+                                            })
+                                       })
+                                    })
+                                })
+                            })
+                        })
+                    })
+                })
+            });
+
+            test('Clone Polymer Element',function(done){
+                flush(function(){
+                    var pageItem = testElement.querySelector('.page-item');
+                    pageItem.click();
+                    flush(function(){
+                        testElement.$.clonePagePanel.click();
+                        flush(function(){
+                            var cloneComponent =testElement.querySelector('ui-clone-page');
+                            cloneComponent.addEventListener('clone-page',function(e){
+                                var pageDetail = e.detail;
+                                 assert.equal(pageDetail.scope.location, "USA");
+                                 done();
+                            })
+                            cloneComponent.set('scope',{"location":"USA"});
+                            flush(function(){
+                                cloneComponent.$.clonePageBtn.click();
+                            })
+                        })
+                    })
+                })
+            });
+
+            test('Delete Polymer Element',function(done){
+                testElement.addEventListener('page-deleted',function(e){
+                    assert.equal(testElement.polymerCount, 1);
+                    assert.equal(e.detail.name, "contact-form");
+                    done();
+                });
+                flush(function(){
+                    assert.equal(testElement.polymerCount, 2);
+                    var pageItem = testElement.querySelector('.page-item');
+                    var deleteIcon = pageItem.querySelector('.options [icon="delete"]');
+                    deleteIcon.click();
+                })
             });
         });
     </script>
 </body>
+
 </html>
