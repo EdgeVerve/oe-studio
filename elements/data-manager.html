@@ -339,8 +339,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         isSpinnerActive: false,
         editableValue: {
           type: String,
-          value: '',
-          observer: '_isValidText'
+          value: ''
         },
         tabState: {
           type: Array,
@@ -435,18 +434,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       getMethodSelected: function (method) {
         return (method == 'get')
-      },
-      _isValidText: function () {
-        this.computeCheckAll();
-        try {
-          this.modelDataObj.method.editableValue = this.editableValue;
-          // var obj = JSON.parse(this.editableValue);
-        } catch (e) {
-          this.valid = false;
-          return;
-        }
-
-        this.valid = true;
       },
       setTotalRecords: function (msg) {
         this.set('modelDataObj.method.totalRecords', msg);
@@ -834,7 +821,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         if (!this.modelDataObj.method.path) {
           this.fire('oe-show-error', 'No path to query.')
         }
-        var data = this.parseData();
+        var data = this.editableValue;
         var method = this.modelDataObj.method;
         var pathObj = this.resolvePath(method);
         var url = 'api' + pathObj.url;

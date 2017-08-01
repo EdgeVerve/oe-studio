@@ -1,0 +1,64 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+    <!-- importing dependent elements -->
+    <link rel="import" href="../../all-imports.html">
+    <!-- importing element to be tested -->
+</head>
+
+<body>
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <test-fixture id="ui-element-tree-fixture">
+        <template>
+            <ui-element-tree>
+            </ui-element-tree>
+        </template>
+    </test-fixture>
+    <script>
+        OEUtils.designerData = OEUtils.designerData || {};
+        OEUtils.designerData.elementList = OEUtils.designerData.elementList || []
+        suite('<ui-element-tree>', function () {
+            var testElement;
+            var dom;
+            setup(function () {
+                dom = document.createElement('template');
+                dom.innerHTML="<div class=\"custom-class\" oe-id=\"test1\"><paper-input oe-id=\"input-1\"></paper-input><h2 oe-id=\"text-1\">This is test</h2></div>";
+                testElement = fixture('ui-element-tree-fixture');
+            });
+
+            test('Generate Element Tree', function (done) {
+                testElement.set('dom',dom);
+                flush(function () {
+                    assert.equal(testElement.node.name,'template');
+                    done();
+                });
+            });
+
+            test('Expand Collapse Element Tree', function (done) {
+                testElement.set('dom',dom);
+                flush(function () {
+                    assert.equal(testElement.node.isCollapsed,false);
+                    var collapseIcon =testElement.querySelector('iron-icon.node-collapse-icon');
+                    collapseIcon.click();
+                    flush(function(){
+                        assert.equal(testElement.node.isCollapsed,true);
+                        done();
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
