@@ -238,11 +238,11 @@
               </iron-collapse>
               <div class="attribute-list">
                 <template is="dom-repeat" items="{{attributeList}}" sort="_sort" filter="{{_filterAttribute(searchKey)}}">
-                  <attribute-element attr-obj="{{item}}" on-delete-attribute="deleteAttribute" on-save-attribute="saveAttrConfiguration"></attribute-element>
+                  <attribute-element name$="[[item.name]]" attr-obj="{{item}}" on-delete-attribute="deleteAttribute" on-save-attribute="saveAttrConfiguration"></attribute-element>
                 </template>
                 <iron-collapse id="attribute-list" opened="{{showMore}}">
                   <template is="dom-repeat" items="{{propertyList}}" sort="_sort" filter="{{_filterAttribute(searchKey)}}">
-                    <attribute-element attr-obj="{{item}}" on-delete-attribute="deleteAttribute" on-save-attribute="saveAttrConfiguration"></attribute-element>
+                    <attribute-element name$="[[item.name]]" attr-obj="{{item}}" on-delete-attribute="deleteAttribute" on-save-attribute="saveAttrConfiguration"></attribute-element>
                   </template>
                 </iron-collapse>
               </div>

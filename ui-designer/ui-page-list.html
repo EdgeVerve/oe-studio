@@ -320,13 +320,13 @@
                         <iron-pages selected="{{selected}}">
                           <div class="page-list">
                             <template is="dom-repeat" items="{{getComponents(componentList.*)}}" as="page">
-                              <div id="id_{{page.id}}" class$="page-item list-item layout horizontal center justified [[isActivePage(activePage,page)]]"
+                              <div id="id_{{page.id}}" name$="[[page.name]]" class$="page-item list-item layout horizontal center justified [[isActivePage(activePage,page)]]"
                                 on-tap="_editPage">
                                 <iron-icon icon="polymer"></iron-icon>
                                 <span class="flex page-name">[[page.name]]</span>
                                 <template is="dom-if" if="{{page.scope}}"><span class="scope-text">{ ... }</span></template>
                                 <div class="options">
-                                  <iron-icon icon="star-border" on-tap="_exportAsComponent" hidden="[[page._isWidget]]"></iron-icon>
+                                  <iron-icon icon="star-border" class="export-as-component" on-tap="_exportAsComponent" hidden="[[page._isWidget]]"></iron-icon>
                                   <iron-icon icon="file-download" on-tap="_downloadComponent"></iron-icon>
                                   <iron-icon icon="delete" on-tap="_deleteComponent"></iron-icon>
                                 </div>
@@ -343,7 +343,7 @@
                           </div>
                           <div class="page-list">
                             <template is="dom-repeat" items="[[getPages(componentList.*)]]" as="page">
-                              <div id="id_{{page.id}}" class$="list-item layout horizontal center justified [[isActivePage(activePage,page)]]" on-tap="_editPage">
+                              <div id="id_{{page.id}}" name$="[[page.name]]" class$="list-item layout horizontal center justified [[isActivePage(activePage,page)]]" on-tap="_editPage">
                                 <iron-icon icon="assignment"></iron-icon>
                                 <span class="flex page-name">[[page.name]]</span>
                                 <template is="dom-if" if="{{page.scope}}"><span class="scope-text">{ ... }</span></template>
@@ -372,7 +372,7 @@
                         <div class="list-header">Polymer Components</div>
                         <div class="page-search-list">
                           <template is="dom-repeat" items="{{getComponents(componentList.*)}}" filter="{{_filter(searchKey)}}" as="page">
-                            <div id="id_{{page.id}}" class$="page-item list-item layout horizontal center justified [[isActivePage(activePage,page)]]"
+                            <div id="id_{{page.id}}" name$="[[page.name]]" class$="page-item list-item layout horizontal center justified [[isActivePage(activePage,page)]]"
                               on-tap="_editPage">
                               <iron-icon icon="polymer"></iron-icon>
                               <span class="flex page-name">[[page.name]]</span>
@@ -394,7 +394,7 @@
                         <div class="list-header">Static pages</div>
                         <div class="page-search-list">
                           <template is="dom-repeat" items="[[getPages(componentList.*)]]" filter="{{_filter(searchKey)}}" as="page">
-                            <div id="id_{{page.id}}" class$="list-item layout horizontal center justified [[isActivePage(activePage,page)]]" on-tap="_editPage">
+                            <div id="id_{{page.id}}" name$="[[page.name]]" class$="list-item layout horizontal center justified [[isActivePage(activePage,page)]]" on-tap="_editPage">
                               <iron-icon icon="assignment"></iron-icon>
                               <span class="flex page-name">[[page.name]]</span>
                               <template is="dom-if" if="{{page.scope}}"><span class="scope-text">{ ... }</span></template>
