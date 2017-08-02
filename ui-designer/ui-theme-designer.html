@@ -4,7 +4,7 @@
       display: block;
       z-index: 10;
     }
-    
+
     .theme-container {
       width: 240px;
       height: 100vh;
@@ -15,7 +15,7 @@
       padding-bottom: 40px;
       box-sizing: border-box;
     }
-    
+
     .theme-control-panel {
       height: 56px;
       padding: 12px;
@@ -27,12 +27,12 @@
       z-index: 10;
       box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.4);
     }
-    
+
     .theme-control-panel>iron-icon {
       --iron-icon-width: 18px;
       --iron-icon-height: 18px;
     }
-    
+
     paper-button {
       font-family: Roboto;
       font-size: 12px;
@@ -41,11 +41,11 @@
       margin-left: 12px;
       border-radius: 2px;
     }
-    
+
     paper-button:not(.primary) {
       background: rgba(153, 153, 153, 0.10);
     }
-    
+
     .panel-header {
       font-size: 10px;
       color: #ffffff;
@@ -57,14 +57,14 @@
       margin-bottom: 12px;
       cursor: pointer;
     }
-    
+
     .empty-state-create {
       margin: 24px 12px;
       background: #263238;
       border-radius: 2px;
       height: 94px;
     }
-    
+
     .empty-state-create .sub-text {
       opacity: 0.5;
       font-family: Roboto;
@@ -73,11 +73,11 @@
       line-height: 16px;
       margin: 12px 0px;
     }
-    
+
     .panel-section {
       padding: 0px 12px;
     }
-    
+
     .panel-section .section-header {
       margin: 12px 0px 16px;
       display: block;
@@ -86,12 +86,12 @@
       color: #ffffff;
       text-transform: capitalize;
     }
-    
+
     .color-palette-container {
       border-bottom: 2px solid rgba(255, 255, 255, 0.2);
       padding-bottom: 12px;
     }
-    
+
     .color-box {
       width: 51px;
       height: 30px;
@@ -100,16 +100,16 @@
       box-sizing: border-box;
       cursor: pointer;
     }
-    
+
     .color-box .color-selected-icon {
       display: none;
       color: #000;
     }
-    
+
     .color-box.iron-selected .color-selected-icon {
       display: inline-block;
     }
-    
+
     .palette-block {
       height: 32px;
       background: #263238;
@@ -124,7 +124,7 @@
       position: relative;
       color: #fff;
     }
-    
+
     .palette-block .color-preview {
       border: 1px solid #ffffff;
       border-radius: 2px;
@@ -134,149 +134,148 @@
       left: 8px;
       top: 5px;
     }
-    
+
     .key-name {
       opacity: 0.54;
       text-transform: capitalize;
     }
-    
+
     .color-name {
       text-transform: uppercase;
     }
-    
+
     .theme-applied-icon {
       color: var(--accent-color);
     }
-    
+
     .preset-theme-block .theme-download-icon {
       float: right;
       margin-right: 8px;
     }
-    
+
     .preset-theme-block {
       padding: 12px 6px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       margin: 0px 6px;
       box-sizing: border-box;
     }
-    
+
     .preset-theme-block .theme-name {
       font-size: 12px;
       color: #ffffff;
       margin-bottom: 12px;
       display: inline-block;
     }
-    
+
     .preset-theme-block .theme-applied-icon {
       visibility: hidden;
       --iron-icon-width: 18px;
       margin-left: 8px;
     }
-    
+
     .preset-theme-block.iron-selected .theme-applied-icon {
       visibility: visible;
     }
-    
+
     .theme-preview {
       border-radius: 2px;
       overflow: hidden;
       width: 200px;
     }
-    
+
     .theme-preview .preview-box {
       height: 28px;
       width: 50px;
     }
-    
+
     .predefined-theme-panel,
     .custom-theme-panel {
       padding-bottom: 8px;
     }
-
   </style>
   <template>
-		<iron-collapse horizontal opened="[[panelOpened]]">
-			<div class="theme-container">
-				<div class="theme-control-panel layout horizontal justified">
-					<iron-icon icon="clear" on-tap="togglePanel"></iron-icon>
-					<iron-icon icon="settings-backup-restore" on-tap="removeTheme"></iron-icon>
-					<paper-button on-tap="applyTheme" class="primary">APPLY THEME</paper-button>
-				</div>
-				<div class="custom-theme-panel">
-					<div class="panel-header" on-tap="toggleAdjCollpse">CUSTOMIZE THEME</div>
-					<iron-collapse opened="[[!isPreset]]">
-						<template is="dom-if" if="[[!isCreateMode]]">
-							<div class="empty-state-create layout vertical center">
-								<label class="sub-text">No theme created for this element</label>
-								<paper-button class="primary" on-tap="toggleCreateMode">Add Custom Theme</paper-button>
-							</div>
-						</template>
-  <template is="dom-if" if="[[isCreateMode]]">
-							<div class="panel-section">
-								<label class="section-header">1.Choose primary color</label>
-								<iron-selector class="color-palette-container layout horizontal wrap" selected="{{primaryColor}}" attr-for-selected="color">
-									<template is="dom-repeat" items="{{palette}}" as="color">
-										<div class="color-box" color="[[color]]" style$="background-color:[[color.shades.500.hex]]">
-											<iron-icon icon="done" class="color-selected-icon"></iron-icon>
-										</div>
-									</template>
-  </iron-selector>
-  </div>
-  <div class="panel-section">
-    <label class="section-header">2.Choose accent color</label>
-    <iron-selector class="color-palette-container layout horizontal wrap" selected="{{accentColor}}" attr-for-selected="color">
-      <template is="dom-repeat" items="{{palette}}" as="color">
-										<div class="color-box" color="[[color]]" style$="background-color:[[color.shades.500.hex]]">
-											<iron-icon icon="done" class="color-selected-icon"></iron-icon>
-										</div>
-									</template>
-    </iron-selector>
-  </div>
-  <div class="panel-section" hidden="[[!paletteArray]]">
-    <div class="layout horizontal justified center">
-      <label class="section-header">3. Generated Palette</label>
-      <iron-icon class="theme-download-icon" icon="file-download" on-tap="downloadTheme"></iron-icon>
-    </div>
-    <div class="pallete-container">
-      <template is="dom-repeat" items="[[paletteArray]]">
-										<div class="palette-block">
-											<div class="color-preview" style$="background-color:[[item.value]]"></div>
-											<label class="key-name">[[item.label]]</label>
-											<label class="color-name">[[item.value]]</label>
-										</div>
-									</template>
-    </div>
-  </div>
-  </template>
-  </iron-collapse>
-  </div>
-  <div class="predefined-theme-panel">
-    <div class="panel-header" on-tap="toggleAdjCollpse">PRESET THEME</div>
-    <iron-collapse opened="[[isPreset]]">
-      <iron-selector selected="{{generatedTheme}}" attr-for-selected="theme">
-        <template is="dom-repeat" items="[[presetThemes]]">
-								<div class="preset-theme-block" theme="[[item]]">
-									<label class="theme-name">[[item.themeName]]</label>
-									<iron-icon class="theme-applied-icon" icon="editor:format-paint"></iron-icon>
-									<iron-icon class="theme-download-icon" icon="file-download" on-tap="downloadPresetTheme"></iron-icon>
-									<div class="theme-preview layout horizontal">
-										<div class="preview-box" style$="background-color:[[getBg(item.theme,'--dark-primary-color')]]"></div>
-										<div class="preview-box" style$="background-color:[[getBg(item.theme,'--default-primary-color')]]"></div>
-										<div class="preview-box" style$="background-color:[[getBg(item.theme,'--light-primary-color')]]"></div>
-										<div class="preview-box" style$="background-color:[[getBg(item.theme,'--accent-color')]]"></div>
-									</div>
-								</div>
-							</template>
-      </iron-selector>
+    <iron-collapse horizontal opened="[[panelOpened]]">
+      <div class="theme-container">
+        <div class="theme-control-panel layout horizontal justified">
+          <iron-icon icon="clear" id="toggle-panel-icon" on-tap="togglePanel"></iron-icon>
+          <iron-icon icon="settings-backup-restore" id="remove-theme-btn" on-tap="removeTheme"></iron-icon>
+          <paper-button on-tap="applyTheme" class="primary">APPLY THEME</paper-button>
+        </div>
+        <div class="custom-theme-panel">
+          <div class="panel-header" id="custom-theme-header" on-tap="toggleAdjCollpse">CUSTOMIZE THEME</div>
+          <iron-collapse opened="[[!isPreset]]">
+            <template is="dom-if" if="[[!isCreateMode]]">
+              <div class="empty-state-create layout vertical center">
+                <label class="sub-text">No theme created for this element</label>
+                <paper-button id="toggle-create-mode" class="primary" on-tap="toggleCreateMode">Add Custom Theme</paper-button>
+              </div>
+            </template>
+            <template is="dom-if" if="[[isCreateMode]]">
+              <div class="panel-section">
+                <label class="section-header">1.Choose primary color</label>
+                <iron-selector class="color-palette-container layout horizontal wrap" selected="{{primaryColor}}" attr-for-selected="color">
+                  <template is="dom-repeat" items="{{palette}}" as="color">
+                    <div class="color-box" color="[[color]]" style$="background-color:[[color.shades.500.hex]]">
+                      <iron-icon icon="done" class="color-selected-icon"></iron-icon>
+                    </div>
+                  </template>
+                </iron-selector>
+              </div>
+              <div class="panel-section">
+                <label class="section-header">2.Choose accent color</label>
+                <iron-selector class="color-palette-container layout horizontal wrap" selected="{{accentColor}}" attr-for-selected="color">
+                  <template is="dom-repeat" items="{{palette}}" as="color">
+                    <div class="color-box" color="[[color]]" style$="background-color:[[color.shades.500.hex]]">
+                      <iron-icon icon="done" class="color-selected-icon"></iron-icon>
+                    </div>
+                  </template>
+                </iron-selector>
+              </div>
+              <div class="panel-section" hidden="[[!paletteArray]]">
+                <div class="layout horizontal justified center">
+                  <label class="section-header">3. Generated Palette</label>
+                  <iron-icon class="theme-download-icon" icon="file-download" on-tap="downloadTheme"></iron-icon>
+                </div>
+                <div class="pallete-container">
+                  <template is="dom-repeat" items="[[paletteArray]]">
+                    <div class="palette-block">
+                      <div class="color-preview" style$="background-color:[[item.value]]"></div>
+                      <label class="key-name">[[item.label]]</label>
+                      <label class="color-name">[[item.value]]</label>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </template>
+          </iron-collapse>
+        </div>
+        <div class="predefined-theme-panel">
+          <div class="panel-header" id="preset-theme-header" on-tap="toggleAdjCollpse">PRESET THEME</div>
+          <iron-collapse opened="[[isPreset]]">
+            <iron-selector selected="{{generatedTheme}}" attr-for-selected="theme">
+              <template is="dom-repeat" items="[[presetThemes]]">
+                <div class="preset-theme-block" theme="[[item]]">
+                  <label class="theme-name">[[item.themeName]]</label>
+                  <iron-icon class="theme-applied-icon" icon="editor:format-paint"></iron-icon>
+                  <iron-icon class="theme-download-icon" icon="file-download" on-tap="downloadPresetTheme"></iron-icon>
+                  <div class="theme-preview layout horizontal">
+                    <div class="preview-box" style$="background-color:[[getBg(item.theme,'--dark-primary-color')]]"></div>
+                    <div class="preview-box" style$="background-color:[[getBg(item.theme,'--default-primary-color')]]"></div>
+                    <div class="preview-box" style$="background-color:[[getBg(item.theme,'--light-primary-color')]]"></div>
+                    <div class="preview-box" style$="background-color:[[getBg(item.theme,'--accent-color')]]"></div>
+                  </div>
+                </div>
+              </template>
+            </iron-selector>
+          </iron-collapse>
+        </div>
+      </div>
     </iron-collapse>
-  </div>
-  </div>
-  </iron-collapse>
   </template>
   <script>
     Polymer({
       is: 'ui-theme-designer',
-      ready: function() {
+      ready: function () {
         var presetThemes = [{
           'themeName': 'Silver',
           'theme': {
@@ -1484,7 +1483,7 @@
         }]
         this.set('palette', palette);
       },
-      attached: function() {
+      attached: function () {
         var self = this;
         this.set('pageSelected', 0);
         this.set('panelOpened', false);
@@ -1494,23 +1493,23 @@
         this.set('accentColor', null);
         this.set('generatedTheme', null);
 
-        Polymer.Base.importHref('bower_components/oe-studio/ui-designer/custom-theme.tmpl', function(s) {
+        Polymer.Base.importHref('bower_components/oe-studio/ui-designer/custom-theme.tmpl', function (s) {
           self.set('customTmpl', s.target.import.querySelector('dom-module'));
-        }, function() {
+        }, function () {
           self.fire('oe-show-error', 'Error fetching custom theme template');
         });
       },
       behaviors: [
         CommonBehavior.EVAjaxBehavior
       ],
-      getBg: function(theme, prop) {
+      getBg: function (theme, prop) {
         return theme[prop]
       },
       observers: [
         'computeTheme(primaryColor,accentColor)',
         'previewTheme(generatedTheme)'
       ],
-      previewTheme: function() {
+      previewTheme: function () {
         var domMan = document.querySelector('ui-dom-manager');
         if (domMan && this.generatedTheme) {
           domMan.applyTheme(this.generatedTheme.theme);
@@ -1520,23 +1519,24 @@
           }
         }
       },
-      removeTheme: function() {
+      removeTheme: function () {
         var domMan = document.querySelector('ui-dom-manager');
-        domMan.applyTheme(null);
-        this.set('generatedTheme', null);
+        if(domMan){
+          domMan.applyTheme(null);
+        }
         this.set('primaryColor', null);
         this.set('accentColor', null);
       },
-      toggleAdjCollpse: function() {
+      toggleAdjCollpse: function () {
         this.set('isPreset', !this.isPreset)
       },
-      toggleCreateMode: function() {
+      toggleCreateMode: function () {
         this.set('isCreateMode', !this.isCreateMode)
       },
-      togglePanel: function() {
+      togglePanel: function () {
         this.set('panelOpened', !this.panelOpened);
       },
-      computeTheme: function(primary, accent) {
+      computeTheme: function (primary, accent) {
         var paletteArray = null;
         var generatedTheme = null;
         if (primary && accent) {
@@ -1544,7 +1544,8 @@
             darkPrimaryColor: primary.shades[700].hex,
             defaultPrimaryColor: primary.shades[500].hex,
             lightPrimaryColor: primary.shades[100].hex,
-            accentPrimaryColor: (accent.shades.A200 && 'white' === accent.shades.A200.contrast ? accent.shades.A200.hex : accent.shades[500].hex),
+            accentPrimaryColor: (accent.shades.A200 && 'white' === accent.shades.A200.contrast ? accent.shades.A200
+              .hex : accent.shades[500].hex),
             textPrimaryColor: ('white' === primary.shades[500].contrast ? '#FFFFFF' : '#212121'),
             defaultPrimaryColorContrast: primary.shades[500].contrast,
             lightPrimaryColorContrast: primary.shades[100].contrast,
@@ -1562,7 +1563,7 @@
             '--primary-text-color': '#212121',
             '--secondary-text-color': '#757575'
           }
-          paletteArray = Object.keys(generatedTheme).map(function(k) {
+          paletteArray = Object.keys(generatedTheme).map(function (k) {
             return {
               label: k.replace(/-/g, ' ').trim(),
               key: k,
@@ -1578,13 +1579,13 @@
         }
         this.set('paletteArray', paletteArray);
       },
-      applyTheme: function() {
+      applyTheme: function () {
         if (this.generatedTheme && this.generatedTheme.theme) {
           var self = this;
 
           var theme = this.generatedTheme.theme;
           var themeFile = this.customTmpl.outerHTML;
-          Object.keys(theme).forEach(function(k) {
+          Object.keys(theme).forEach(function (k) {
             var reg = new RegExp('<<' + k + '>>', 'g');
             themeFile = themeFile.replace(reg, theme[k]);
           });
@@ -1592,10 +1593,12 @@
           var payload = {
             data: themeFile
           }
-          self.makeAjaxCall('/designer/save-theme', 'post', payload, null, null, function(err) {
+          self.makeAjaxCall('/designer/save-theme', 'post', payload, null, null, null,function (err) {
             if (!err) {
               var domMan = document.querySelector('ui-dom-manager');
-              domMan.applyTheme(theme, true);
+              if(domMan){
+                domMan.applyTheme(theme, true);
+              }
               self.fire('oe-show-success', 'Theme Applied successfully');
             } else {
               self.resolveError(err);
@@ -1603,13 +1606,13 @@
           })
         }
       },
-      downloadTheme: function(themeObj) {
+      downloadTheme: function (themeObj) {
         if (!themeObj.themeName) {
           themeObj = this.generatedTheme;
         }
         var theme = themeObj.theme;
         var themeFile = this.customTmpl.outerHTML;
-        Object.keys(theme).forEach(function(k) {
+        Object.keys(theme).forEach(function (k) {
           var reg = new RegExp('<<' + k + '>>', 'g');
           themeFile = themeFile.replace(reg, theme[k]);
         });
@@ -1618,11 +1621,10 @@
         dl.setAttribute('download', 'app-theme.html');
         dl.click();
       },
-      downloadPresetTheme: function(e) {
+      downloadPresetTheme: function (e) {
         var theme = e.model.item;
         this.downloadTheme(theme);
       }
     })
-
   </script>
 </dom-module>

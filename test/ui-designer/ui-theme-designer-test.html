@@ -1,0 +1,156 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+    <!-- importing dependent elements -->
+    <link rel="import" href="../../all-imports.html">
+    <!-- importing element to be tested -->
+</head>
+
+<body>
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <test-fixture id="ui-theme-designer-fixture">
+        <template>
+            <ui-theme-designer>
+            </ui-theme-designer>
+        </template>
+    </test-fixture>
+    <script>
+        suite('<ui-theme-designer>', function () {
+            var testElement;
+            var server;
+            var customTheme = `<template>
+    <style>
+      :root {
+        --dark-primary-color:       <<--dark-primary-color>>;
+        --default-primary-color:    <<--default-primary-color>>;
+        --light-primary-color:      <<--light-primary-color>>;
+        --text-primary-color:       <<--text-primary-color>>;
+        --accent-color:             <<--accent-color>>;
+        --primary-background-color: <<--primary-background-color>>;
+        --primary-text-color:       <<--primary-text-color>>;
+        --secondary-text-color:     <<--secondary-text-color>>;
+        --disabled-text-color:      #BDBDBD;
+        --divider-color:            #BDBDBD;
+
+
+        /* Components */
+
+        /* paper-drawer-panel */
+        --drawer-menu-color:           #ffffff;
+        --drawer-border-color:         1px solid #ccc;
+        --drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
+
+        /* paper-menu */
+        --paper-menu-background-color: #fff;
+        --menu-link-color:             #111111;
+
+        /* paper-input */
+		
+		--paper-input-container-color: <<--secondary-text-color>>;
+		--paper-input-container-input-color: <<--secondary-text-color>>;
+		--paper-input-container-focus-color: <<--default-primary-color>>;
+      }
+    </style>
+  </template>`;
+            setup(function () {
+                server = sinon.fakeServer.create();
+                server.autoRespond = true;
+                server.respondImmediately = true;
+                server.respondWith('GET', /bower_components\/oe-studio\/ui-designer\/custom-theme.tmpl/, function (req) {
+                    req.respond(200, {
+                        'Content-Type': 'text/html'
+                    }, customTheme);
+                });
+                 server.respondWith('POST', /designer\/save-theme/, function (req) {
+                    req.respond(200, {
+                        'Content-Type': 'application/json'
+                    },JSON.stringify([]));
+                });
+                var themeTemplate =document.createElement('dom-module');
+                themeTemplate.setAttribute('id','app-theme');
+                themeTemplate.innerHTML = customTheme;
+                testElement = fixture('ui-theme-designer-fixture');
+                testElement.set('customTmpl',themeTemplate)
+            });
+
+            test('Initial Template Fetch', function (done) {
+                flush(function () {
+                   assert.notEqual(testElement.customTmpl,null);
+                   assert.equal(testElement.primaryColor,null);
+                   assert.equal(testElement.accentColor,null);
+                   assert.equal(testElement.generatedTheme,null);
+                   done();
+                });
+            });
+            
+            test('Toggle to different views',function(done){
+                flush(function(){
+                    assert.equal(testElement.isCreateMode,false);
+                    assert.equal(testElement.isPreset,true);
+                    assert.equal(testElement.panelOpened,false);
+                    var customThemeHeader = testElement.querySelector('#custom-theme-header');
+                    customThemeHeader.click();
+                    flush(function(){
+                        assert.equal(testElement.isPreset,false);
+                        var createModeToggle = testElement.querySelector('#toggle-create-mode');
+                        createModeToggle.click();
+                        flush(function(){
+                             assert.equal(testElement.isCreateMode,true);
+                            var panelCollapseToggle = testElement.querySelector('#toggle-panel-icon');
+                            panelCollapseToggle.click();
+                            flush(function(){
+                                assert.equal(testElement.panelOpened,true);
+                                done();
+                            })
+                        });
+                    });
+                })
+            })
+
+            test('Download Preset Theme', function (done) {
+                flush(function () {
+                    var downloadIcon = testElement.querySelector('.preset-theme-block iron-icon.theme-download-icon');
+                    downloadIcon.click();
+                    //No test to verify doanloaded file
+                    done();
+                });
+            });
+
+            test('Generate/apply/remove custom Theme', function (done) {
+                flush(function () {
+                    testElement.set('isPreset',false);
+                    testElement.set('primaryColor',testElement.palette[0]);
+                    testElement.set('accentColor',testElement.palette[1]);
+                    flush(function(){
+                        assert.equal(testElement.generatedTheme.theme['--dark-primary-color'],"#D32F2F");
+                        assert.equal(testElement.generatedTheme.theme['--accent-color'],"#FF4081");
+                        var applyBtn = testElement.querySelector('.theme-control-panel paper-button.primary');
+                        applyBtn.click();
+                        flush(function(){
+                            var removeThemeBtn = testElement.querySelector('#remove-theme-btn');
+                            removeThemeBtn.click();
+                            flush(function(){
+                                assert.equal(testElement.generatedTheme.theme,null);
+                                done();
+                            })
+                        });
+                    });
+                });
+            });
+
+        });
+    </script>
+</body>
+
+</html>
