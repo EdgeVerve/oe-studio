@@ -1,17 +1,17 @@
 # UI Validations
 
 ## What you'll Build
-
+A simple screen, to list the products using oe-studio
 
 ## What you'll Need
 * Familiarity with oeClod.io
 * Basic understanding of UIComponents,Routes and Navigation Links
 * Basic understanding of HTML,CSS,JavaScript
-* [Example Application](https://cassibank.oecloud.io/login) to start with
+* [Example Application](http://evgit/oecloud.io/oe-demo-app) to start with
 
 ## How to complete this guide
 
-By the end of this guide, using data from  loan-application model and other related models of cassi bank, we will create an admin dashboard, a route and a navigation link, a route design to navigate to dashboard and a specific theme for the admin. 
+By the end of this guide, using ***Product*** model of the application, we will create a simple listing screen and a route to navigate to the listing page. 
 
 Run the application using `node .` and open [http://localhost:3000/](http://localhost:3000/) in your browser. Login in as an admin, credentials are  john/Edge@2017$.
 
@@ -27,30 +27,28 @@ Click on the uidesigner icon i.e., the bottom left second icon, you will be navi
 
 Using uidesigner of oe-studio, it is possible to create either a static page or a polymer element. You can add a route and a navigation link to thus create page/element with few simple clicks in the designer.
 
-In this guide we will build a static page, which essentially serves as a dashboard. 
+In this guide we will build a polymer element, which essentially serves as a listing screen. 
 
 Select Create/Manage Components, as shown image, follow the steps in the subsequent images:
 
-![Static Page][static-page]
 
+![UIDesigner Page][UIDesigner-page]
 
+![Final Page][final-page]
 
-## Configuring route and navigation link for the page developed
-
-
-## Designing Route Navigation flow using Route Designer of oe-studio
-
-## Adding custom theme to a role using Resource Manager
+## Configuring route for the page developed
 
 
 
 
+
+![Actual Page][actual-page]
 
 ## Summary
 Oe-studio is a  powerful tool to Create a page,its route,designing the route flow and creating specific themes with less or no coding
 
 
-[start-page]:  ../guides/images/ui-based/oe-studio/desstart-page.png "Start Page"
-[UIDesigner-page]:../guides/images/ui-based/oe-studio/uidesstart-page.png "UIDesigner Page"
-[static-page]:../guides/images/ui-based/oe-studio/static-page.png "Static Page"
-[end-page]: ../guides/images/ui-based/oe-studio/end-page.png "End Page"
+[start-page]:  images/ui-based/oe-studio-charts/desstart-page.png "Start Page"
+[UIDesigner-page]:images/ui-based/oe-studio-charts/uidesstart-page.png "UIDesigner Page"
+[actual-page]:images/ui-based/oe-studio-list/actual-page.png "Actual Page"
+[final-page]:images/ui-based/oe-studio-list/final_render.png "Final Page"
