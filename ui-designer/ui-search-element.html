@@ -111,7 +111,6 @@
 				width: 20px;
 				height: 20px;
 			}
-
 		</style>
 		<oe-ajax url="/designer/elements" auto last-response={{prospectElements}}></oe-ajax>
 
@@ -130,21 +129,21 @@
 						</div>
 					</template>
 				</template>
-<!--				<template is="dom-if" if=[[!searchResults.length]]>-->
-					<label class="server-label">Showing results from server</label>
-					<template is="dom-repeat" items="[[filteredProspectElements]]">
-						<div class="category">[[normalize(item.category)]]</div>
-						<template is="dom-repeat" items="[[item.list]]" as="list">
-							<div class="item layout horizontal justified" draggable="true" on-dragstart="dragStartHandle" config="[[list]]">
-								<div class="layout horizontal">
-									<iron-icon icon="[[list.icon]]"></iron-icon>
-									<label>[[list.name]]</label>
-								</div>
-								<iron-icon icon="icons:star-border" on-tap="addToElements"></iron-icon>
+				<!--				<template is="dom-if" if=[[!searchResults.length]]>-->
+				<label class="server-label">Showing results from server</label>
+				<template is="dom-repeat" items="[[filteredProspectElements]]">
+					<div class="category">[[normalize(item.category)]]</div>
+					<template is="dom-repeat" items="[[item.list]]" as="list">
+						<div class="item layout horizontal justified" draggable="true" on-dragstart="dragStartHandle" config="[[list]]">
+							<div class="layout horizontal">
+								<iron-icon icon="[[list.icon]]"></iron-icon>
+								<label>[[list.name]]</label>
 							</div>
-						</template>
+							<iron-icon icon="oe-designer-icons:add-widget" on-tap="addToElements"></iron-icon>
+						</div>
 					</template>
-<!--				</template>-->
+				</template>
+				<!--				</template>-->
 			</iron-collapse>
 		</div>
 	</template>
@@ -157,7 +156,7 @@
 			properties: {
 				serverElements: {
 					type: Array,
-					value: function() {
+					value: function () {
 						return [];
 					},
 					notify: true
@@ -171,7 +170,7 @@
 					observer: '_searchElement'
 				},
 				animationConfig: {
-					value: function() {
+					value: function () {
 						return {
 							'entry': {
 								name: 'slide-from-left-animation',
@@ -194,11 +193,11 @@
 			listeners: {
 				'neon-animation-finish': '_onNeonAnimationFinish'
 			},
-			addToElements: function(e) {
+			addToElements: function (e) {
 				var eleConfig = e.model.__data__.list;
 				this.fire('update-widget', eleConfig);
 			},
-			dragStartHandle: function(e) {
+			dragStartHandle: function (e) {
 				var selectedComponent = e.currentTarget.config;
 				e.dataTransfer.setData('action', 'add');
 				e.dataTransfer.setData('configStr', JSON.stringify(selectedComponent));
@@ -206,18 +205,18 @@
 				this.fire('set-recent', selectedComponent);
 				this.hide();
 			},
-			dragServerElements: function(e) {
+			dragServerElements: function (e) {
 				var selectedComponent = e.currentTarget.config;
 				this.saveToLocalStorage(selectedComponent);
 				this.dragStartHandle(e);
 			},
-			saveToLocalStorage: function(item) {
+			saveToLocalStorage: function (item) {
 				var localStorageElems = window.localStorage.designerElements;
 				if (!localStorageElems) {
 					localStorageElems = [item];
 				} else {
 					localStorageElems = JSON.parse(localStorageElems);
-					var exist = localStorageElems.find(function(d) {
+					var exist = localStorageElems.find(function (d) {
 						return d.name == item.name;
 					});
 					if (!exist) {
@@ -227,39 +226,39 @@
 				}
 				window.localStorage.setItem('designerElements', JSON.stringify(localStorageElems));
 			},
-			_searchElement: function() {
+			_searchElement: function () {
 				var searchKey = this.searchKey;
 				if (searchKey.length) {
-					var localresult = OEUtils.designerData.elementList.filter(function(d) {
+					var localresult = OEUtils.designerData.elementList.filter(function (d) {
 						return this.ifMatch(d.name, searchKey);
 					}.bind(this));
 					this.set('searchResults', this.categorize(localresult));
 					this.set('showSearchResult', true);
-					var serverResult = this.prospectElements.filter(function(d) {
-							return this.ifMatch(d.name, searchKey);
-						}.bind(this));
+					var serverResult = this.prospectElements.filter(function (d) {
+						return this.ifMatch(d.name, searchKey);
+					}.bind(this));
 					this.set('filteredProspectElements', this.categorize(serverResult));
-//
-//					if (result.length === 0 && this.prospectElements && this.prospectElements.length > 0) {
-//						result = this.prospectElements.filter(function(d) {
-//							return this.ifMatch(d.name, searchKey);
-//						}.bind(this));
-//						result = this.categorize(result);
-//						this.set('filteredProspectElements', result);
-//					} else {
-//						this.set('filteredProspectElements', []);
-//					}
+					//
+					//					if (result.length === 0 && this.prospectElements && this.prospectElements.length > 0) {
+					//						result = this.prospectElements.filter(function(d) {
+					//							return this.ifMatch(d.name, searchKey);
+					//						}.bind(this));
+					//						result = this.categorize(result);
+					//						this.set('filteredProspectElements', result);
+					//					} else {
+					//						this.set('filteredProspectElements', []);
+					//					}
 				} else {
 					this.set('showSearchResult', false);
 					this.set('searchResults', []);
 					this.set('filteredProspectElements', []);
 				}
 			},
-			categorize: function(result) {
-				var searchResults = _.groupBy(result, function(d) {
+			categorize: function (result) {
+				var searchResults = _.groupBy(result, function (d) {
 					return d.category
 				});
-				searchResults = _.keys(searchResults).map(function(d) {
+				searchResults = _.keys(searchResults).map(function (d) {
 					return {
 						category: d,
 						list: searchResults[d]
@@ -267,7 +266,7 @@
 				});
 				return searchResults;
 			},
-			ifMatch: function(str, pattern) {
+			ifMatch: function (str, pattern) {
 				if (str && pattern) {
 					str = str.toLowerCase().replace(/[^A-Z0-9]/ig, '');
 					pattern = pattern.toLowerCase().replace(/[^A-Z0-9]/ig, '');
@@ -275,40 +274,39 @@
 				}
 				return -1;
 			},
-			attached: function() {
+			attached: function () {
 				var self = this;
-				this.addEventListener('tap', function(event) {
+				this.addEventListener('tap', function (event) {
 					event.stopPropagation();
 					self.hide();
 				});
-				this.$.searchContainer.addEventListener('tap', function(event) {
+				this.$.searchContainer.addEventListener('tap', function (event) {
 					event.stopPropagation();
 				});
 			},
-			open: function() {
+			open: function () {
 				this.opened = true;
 				this.set('searchKey', '');
 				this.style.display = 'block';
 				this.playAnimation('entry');
-				this.async(function() {
+				this.async(function () {
 					this.$.input.focus();
 				})
 			},
-			hide: function() {
+			hide: function () {
 				this.opened = false;
 				this.playAnimation('exit');
 			},
-			_onNeonAnimationFinish: function() {
+			_onNeonAnimationFinish: function () {
 				if (!this.opened) {
 					this.style.display = 'none';
 				}
 			},
-			normalize: function(name) {
+			normalize: function (name) {
 				if (name) {
 					return _.startCase(name).toUpperCase();
 				}
 			}
 		});
-
 	</script>
 </dom-module>
