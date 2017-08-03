@@ -112,6 +112,21 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           "_modifiedOn": "2017-07-28T10:28:18.599Z",
           "_isDeleted": false,
           "_version": "0adb900a-4633-4d27-b0b6-49ed5fbb4027"
+        }, {
+          "type": "elem",
+          "name": "login-element",
+          "path": "/login",
+          "import": "elements/login-element.html",
+          "group": "login",
+          "retainInstance": false,
+          "id": "597b11c48e4fb3d81e1ee66e",
+          "_type": "UIRoute",
+          "_createdBy": "system",
+          "_modifiedBy": "system",
+          "_createdOn": "2017-07-28T10:28:18.264Z",
+          "_modifiedOn": "2017-07-28T10:28:18.264Z",
+          "_isDeleted": false,
+          "_version": "a941f951-088b-4295-87e4-f4b7fc4b0c0f"
         }];
 
 
@@ -161,7 +176,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         flush(function () {
           expect(workArea.routeList).to.be.array;
           flush(function () {
-            expect(workArea.routeList.length).to.be.equal(3);
+            expect(workArea.routeList.length).to.be.equal(4);
             done();
           })
         })
@@ -248,6 +263,34 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           })
         })
       });
+      test('add new transition', function (done) {
+        flush(function () {
+          workArea.fetchRoutes();
+          var sideBar = Polymer.dom(workArea.root).querySelector('route-listing');
+          flush(function () {
+            var routeItem = Polymer.dom(sideBar.root).querySelectorAll('li.list-item');
+            MockInteractions.tap(routeItem[3]);
+            flush(function () {
+              assert.equal(workArea.workareaRouteList.length, 4);
+              var transitionDialog = Polymer.dom(workArea.root).querySelector('transition-dialog');
+              var dialog = Polymer.dom(transitionDialog.root).querySelector('paper-dialog');
+              assert.equal(dialog.opened, false);
+              var targetRoute = Polymer.dom(workArea.root).querySelectorAll('route-element')[0];
+              var sourceRoute = Polymer.dom(workArea.root).querySelectorAll('route-element')[3];
+              var sourceEndPoint = sourceRoute.getAttribute('id') + '-right';
+              var targetEndPoint = targetRoute.getAttribute('id') + '-left';
+              expect(sourceRoute.transitions).to.be.undefined;
+              workArea.workAreaInstance.connect({
+                uuids: [sourceEndPoint, targetEndPoint]
+              });
+              flush(function () {
+                assert.equal(dialog.opened, true);
+                done();
+              })
+            })
+          })
+        })
+      })
       test('delete existing transition', function (done) {
         flush(function () {
           workArea.fetchRoutes();
@@ -265,22 +308,23 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             label.click();
             flush(function () {
               deleteBtn.click();
-              flush(function(){
-                var labelNodes = Polymer.dom(workArea.root).querySelectorAll('.overlay-label-style');
+              flush(function () {
+                var labelNodes = Polymer.dom(workArea.root).querySelectorAll(
+                  '.overlay-label-style');
                 var found = false;
                 [].forEach.call(labelNodes, function (node) {
                   if (node.innerHTML == "redirect-to-loan-details") {
                     found = true;
                   }
                 });
-                assert.equal(found,false);
-                var index = workArea.routeList[0].transitions.findIndex(function(obj){
+                assert.equal(found, false);
+                var index = workArea.routeList[0].transitions.findIndex(function (obj) {
                   return obj.event == "redirect-to-loan-details"
                 })
-                assert.equal(index,-1);
+                assert.equal(index, -1);
                 done();
               })
-              
+
             })
           })
         })
