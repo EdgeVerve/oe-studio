@@ -25,7 +25,6 @@
     "marked-element": "PolymerElements/marked-element#^1.0.0",
     "polymer-redux": "^0.4.0",
     "jsPlumb": "https://github.com/jsplumb/jsPlumb.git#2.4.3",
-    "oe-widget-container": "http://evgit/oecloud.io/oe-widget-container.git",
     "oe-workflow-modeler": "http://evgit/oecloud.io/oe-workflow-modeler.git"
 
   },
