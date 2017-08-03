@@ -203,7 +203,7 @@
             functions: [],
             listeners: []
           }
-          var behaviors = Object.keys(EV).filter(function(k) {
+          var behaviors = Object.keys(OEUtils).filter(function(k) {
             return k.match(/behavior\b/i)
           });
           behaviors.push('ModelHandler');
@@ -211,9 +211,11 @@
           if (config.behaviors) {
             appliedbehaviors = config.behaviors;
           }
+          behaviors = behaviors.map(function(b){return 'OEUtils.'+b});
+          behaviors = _.union(behaviors,appliedbehaviors);
           behaviors = behaviors.map(function(beh) {
             var b = {
-              name: 'OEUtils.' + beh
+              name: beh
             }
             b.selected = (appliedbehaviors.indexOf(b.name) != -1)
             return b

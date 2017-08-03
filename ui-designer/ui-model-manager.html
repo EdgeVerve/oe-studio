@@ -212,7 +212,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           <div class="title layout center horizontal">
             <div class="layout center horizontal">
               [[selectedModelName]]
-              <iron-icon icon="icons:close" on-tap="addModel"></iron-icon>
+              <iron-icon id="unbind-model" icon="icons:close" on-tap="addModel"></iron-icon>
             </div>
           </div>
           <div class="header layout center horizontal" on-tap="collapse" index='0'>PROPERTIES ([[getLength(modelProperties)]])</div>
@@ -227,10 +227,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           <iron-collapse>
             <div class="propertyList">
               <div class="layout center horizontal">
-                <paper-checkbox checked="{{checkAll}}" on-change="_checkAll"></paper-checkbox><i>Select All</i>
+                <paper-checkbox id="check-all-box" checked="{{checkAll}}" on-change="_checkAll"></paper-checkbox><i>Select All</i>
               </div>
               <template is="dom-repeat" items="{{modelProperties}}">
-                <div class="layout center horizontal">
+                <div class="layout center horizontal property-item">
                   <paper-checkbox checked="{{item.checked}}" on-change="_check"></paper-checkbox>[[item.name]]
                 </div>
               </template>

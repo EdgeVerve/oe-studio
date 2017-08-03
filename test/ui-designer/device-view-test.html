@@ -1,0 +1,78 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+    <!-- importing dependent elements -->
+    <link rel="import" href="../../all-imports.html">
+    <!-- importing element to be tested -->
+</head>
+
+<body>
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <test-fixture id="device-view-fixture">
+        <template>
+            <device-view>
+                <div></div>
+            </device-view>
+        </template>
+    </test-fixture>
+    <script>
+        suite('<device-view>', function () {
+            var testElement;
+            setup(function () {
+                testElement = fixture('device-view-fixture');
+            });
+
+            test('Initial State', function (done) {
+                flush(function () {
+                    assert.equal(testElement.selectedDevice,'window');
+                    assert.equal(testElement.selectedWidth.size,960);
+                    done();
+                });
+            });
+
+            test('Change device width', function (done) {
+                flush(function () {
+                    var window960Selector = testElement.querySelector('.width-block[name="960"]');
+                    var window1280Selector = testElement.querySelector('.width-block[name="1280"]');
+                    assert.isTrue(window960Selector.classList.contains('iron-selected'));
+                    assert.equal(testElement._windowSizeLabel,'window medium');
+                    window1280Selector.click();
+                    flush(function(){
+                        assert.equal(testElement._windowSizeLabel,'window large');
+                        done();
+                    });
+                });
+            });
+
+            test('Change device type', function (done) {
+                flush(function () {
+                    assert.equal(testElement._windowSizeLabel,'window medium');
+                    testElement.fire('device-changed','handset');
+                    flush(function(){
+                        assert.equal(testElement.selectedWidth.size,360);
+                        assert.equal(testElement._windowSizeLabel,'phone portrait');
+                        var handset600Selector = testElement.querySelector('.width-block[name="600"]');
+                        handset600Selector.click();
+                        flush(function(){
+                            assert.equal(testElement.selectedWidth.size,600);
+                            assert.equal(testElement._windowSizeLabel,'phone landscape');
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
