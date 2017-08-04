@@ -1,13 +1,11 @@
-# UI Validations
+# Create a dashboard using oe-studio
 
 ## What you'll Build
 
-Working on a [Example Application](https://cassibank.oecloud.io/login) which is added with oe-studio you will 
+Working on a [Example Application](https://cassibank.oecloud.io/login) which has oe-studio as bower dependency you will 
 * create a dashboard using studio
 * create a navigation link for the dashboard page using studio
 * create a route for the dashboard page using studio
-* create a route design to the dashboard using route designer
-* create a specific theme for the admin user using designer
 
 ## What you'll Need
 * Familiarity with oeClod.io
@@ -17,10 +15,15 @@ Working on a [Example Application](https://cassibank.oecloud.io/login) which is 
 
 ## How to complete this guide
 
-By the end of this guide, using data from  loan-application model and other related models of cassi bank, we will create an admin dashboard, a route and a navigation link, a route design to navigate to dashboard and a specific theme for the admin. 
+By the end of this guide, using data from  loan-application model and other related models of cassi bank, we will create an admin dashboard, a route and a navigation link. 
 
-Run the application using `node .` and open [http://localhost:3000/](http://localhost:3000/) in your browser. Login in as an admin, credentials are  john/Edge@2017$.
+Run the application using `node .` and open [http://localhost:3000/](http://localhost:3000/) in your browser. Login in as an admin, credentials are
 
+```
+username : john
+password : Edge@2017$
+
+```
 Navigate to http://localhost:3000/designer. You should see the screen as below:
 
 ![Start Page][desstart-page]
@@ -33,30 +36,133 @@ Click on the uidesigner icon i.e., the bottom left second icon, you will be navi
 
 Using uidesigner of oe-studio, it is possible to create either a static page or a polymer element. You can add a route and a navigation link to thus create page/element with few simple clicks in the designer.
 
-In this guide we will build a static page, which essentially serves as a dashboard. 
+In this guide we will build a static page, which will serve as a dashboard. 
 
-Select Create/Manage Components, as shown image, follow the steps in the subsequent images:
+Select Create/Manage Components, as shown image, 
 
-![Static Page][static-page]
+![Create Page][static-page]
+
+Select Static Page
+
+![Static Page][static-select]
+
+Add a new component
+
+![Add Component][add-component]
+
+![Choose Page][choose-page]
+
+![Add Details][add-details]
+
+Let us choose a blank form for our dashboard as a template:
+
+![Choose Template][add-template]
+
+Dashboard page looks as below
+
+![New Dashboard][first-dashboard]
+
+Now let us drag and drop components, to achieve the dashboard as below
+
+![End Page][end-page]
+
+## Adding Data table component to the dashboard
+
+![Adding datatable1][datatable-step1]
+
+![Adding datatable2][datatable-step2]
 
 
+![Adding datatable3][datatable-step3]
 
-## Configuring route and navigation link for the page developed
+![Adding datatable4][datatable-step4]
+
+## Adding Widget container
+
+![widget container][widget-container]
+![Configure Layout][configure-layout]
+
+![Final Layout][final-layout]
+
+## Adding Labels to the graphs in dashboard
+
+![Adding label1][label-step1]
+![Adding label2][label-step2]
+![Adding label3][label-step3]
+
+## Adding Graphs to the dashboard
+
+![Adding graphs1][graphs-step1]
+![Adding graphs2][graphs-step2]
+![Adding graphs3][graphs-step3]
 
 
-## Designing Route Navigation flow using Route Designer of oe-studio
+![Before Style][before-style]
 
-## Adding custom theme to a role using Resource Manager
+## Adding Additional Styles to the dashboard
+
+![Adding Style1][style-step1]
+![Adding Style2][style-step2]
+
+![After Style][after-style]
+
+## Code View of oe-studio
+
+![Code View][code-view]
+
+## Configuring route for the page developed
+
+Let us now configure the route and navigation for the page that is designed in oe-studio.
+
+![Configure Route][configuring route]
 
 
+## In our application
 
+Navigate to localhost:3000
+
+![Application Start][application-start]
+
+Click on the menu i.e, to left top corner and you will see the screen below.
+
+![Navigation Menu][navigation-menu]
+
+Click on dashborad and you will navigate to dashboard page. 
+
+![End Page][end-page]
 
 
 ## Summary
-Oe-studio is a  powerful tool to Create a page,its route,designing the route flow and creating specific themes with less or no coding
+Oe-studio is a  powerful tool to Create a page,its routewith less or no coding
 
 
-[start-page]:  ../guides/images/ui-based/oe-studio/desstart-page.png "Start Page"
-[UIDesigner-page]:../guides/images/ui-based/oe-studio/uidesstart-page.png "UIDesigner Page"
-[static-page]:../guides/images/ui-based/oe-studio/static-page.png "Static Page"
-[end-page]: ../guides/images/ui-based/oe-studio/end-page.png "End Page"
+[start-page]:  images/oe-studio-charts/desstart-page.png "Start Page"
+[UIDesigner-page]:images/oe-studio-charts/uidesstart-page.png "UIDesigner Page"
+[static-page]:images/oe-studio-charts/static-page.png "Static Page"
+[static-select]:images/oe-studio-charts/static-select.png "Static Page"
+[add-component]:images/oe-studio-charts/add-component.png "Add Component"
+[choose-page]:images/oe-studio-charts/choose-page.png "Choose Page"
+[adding-details]:images/oe-studio-charts/adding-details.png "Add Details"
+[add-template]:images/oe-studio-charts/choose-template.png "Choose Template"
+[first-dashboard]:images/oe-studio-charts/new-dashboard.png "New Dashboard"
+[end-page]: images/oe-studio-charts/actual_dashboard.png "End Page"
+[configuring route]:images/oe-studio-charts/route-configuration.png "Configure Route"
+[application-start]:images/oe-studio-charts/application-start.png "Application Start"
+[datatable-step1]:images/oe-studio-charts/drag-datatable.png "Adding datatable1"
+[datatable-step2]:images/oe-studio-charts/drag-datatable-1.png "Adding datatable2"
+[datatable-step3]:images/oe-studio-charts/drag-datatable-2.png "Adding datatable3"
+[datatable-step4]:images/oe-studio-charts/drag-datatable-3.png "Adding datatable4"
+[widget-container]:images/oe-studio-charts/widget-container.png "widget container"
+[label-step1]:images/oe-studio-charts/adding_labels_1.png "Adding label1"
+[label-step2]:images/oe-studio-charts/adding_labels_2.png "Adding label2"
+[label-step3]:images/oe-studio-charts/adding_labels_3.png "Adding label3"
+[graphs-step1]:images/oe-studio-charts/oe-charts-1.png "Adding graphs1"
+[graphs-step2]:images/oe-studio-charts/oe-charts-2.png "Adding graphs2"
+[graphs-step3]:images/oe-studio-charts/oe-charts-3.png "Adding graphs3"
+[before-style]:images/oe-studio-charts/dashboard-withoutstyle.png "Before Style"
+[style-step1]:images/oe-studio-charts/adding-style.png "Adding Style1"
+[style-step2]:images/oe-studio-charts/adding-style-2.png "Adding Style2"
+[after-style]:images/oe-studio-charts/dashboard-afterstyle.png "After Style"
+[configure-layout]:images/oe-studio-charts/delete-resize.png "Configure Layout"
+[final-layout]:images/oe-studio-charts/final_layout.png "Final Layout"
+[code-view]:images/oe-studio-charts/code-view.png "Code View"
