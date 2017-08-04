@@ -115,23 +115,29 @@ Templates are  bear backbone structures on which the listing screen has to sit. 
 So let us choose, default-list template
 ![Choose Template][choose-template]
 
-**In case you have a custom template, you can add the same in client/templates folder.Refresh the designer and your template will be available 
+**In case you have a custom template, you can add the same in client/templates folder.Refresh the designer and your template will be available for further use 
 
 
 ## Finally in Designer
+
+
 ![Final Page][final-page]
 
 ## Configuring route for the page developed
+
+Let us now configure the route for the page that is designed in oe-studio. We will not configure the navigation links for this demo
 
 ![Configure Route][configuring route]
 
 
 ## In our application
 
+Navigate to localhost:3000/Products and you will see the screen below.
+
 ![Actual Page][actual-page]
 
 ## Summary
-Oe-studio is a  powerful tool to Create a page,its route,designing the route flow and creating specific themes with less or no coding
+oe-studio is a  powerful tool to Create a page with less or no coding. From this guide, we have created a simple listing screen.
 
 
 [desstart-page]:  images/oe-studio-charts/desstart-page.png "Start Page"
