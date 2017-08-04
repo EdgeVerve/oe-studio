@@ -1,4 +1,4 @@
-# Create a simple Listing Screen , with oe-studio
+# Create a Simple Listing Screen , with oe-studio
 
 ## What you'll Build
 A simple screen, to list the products, that are stored in Product Model of the [sample application](http://evgit/oecloud.io/oe-demo-app) using oe-studio
@@ -38,10 +38,9 @@ Select Create/Manage Components, as shown image
 ![UIDesigner Page][UIDesigner-page]
 
 Let us add a component, in our case, we will be adding a polymer component and navigate to add further details
+![Select PolymerComponent][select-polymer]
 
 ![Add Component][add-component]
-
-![Select PolymerComponent][select-polymer]
 
 ![Navigating][next-page]
 
