@@ -141,7 +141,7 @@ Oe-studio is a  powerful tool to Create a page,its routewith less or no coding
 
 
 [start-page]:  ./images/oe-studio-charts/desstart-page.png "Start Page"
-[UIDesigner-page]:images/oe-studio-charts/uidesstart-page.png "UIDesigner Page"
+[UIDesigner-page]:http://evgit/oecloud.io/oe-studio/raw/master/docs/images/oe-studio-charts/uidesstart-page.PNG "UIDesigner Page"
 [static-page]:images/oe-studio-charts/static-page.png "Static Page"
 [static-select]:images/oe-studio-charts/static-select.png "Static Page"
 [add-component]:images/oe-studio-charts/add-component.png "Add Component"
