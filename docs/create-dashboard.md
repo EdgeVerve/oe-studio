@@ -68,6 +68,10 @@ Now let us drag and drop components, to achieve the dashboard as below
 
 ## Adding Data table component to the dashboard
 
+Data Table is a component from oeCloud.io. The bare minimunm data to populate the table are **data-controller** and **config-code**
+
+Based on the RestURL specified in the data controller and 
+
 ![Adding datatable1][datatable-step1]
 
 ![Adding datatable2][datatable-step2]
