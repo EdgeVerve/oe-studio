@@ -1,14 +1,8 @@
-# UI Validations
+# Designing Flows or Navigations
 
 ## What you'll Build
 
-Working on a [Example Application](http://evgit/oecloud.io/oe-demo-app) which is added with oe-studio you will 
-* create a dashboard using studio
-* create a navigation link for the dashboard page using studio
-* create a route for the dashboard page using studio
-* create a route design to the dashboard using route designer
-* create a specific theme for the admin user using designer
-
+Working on a [Example Application](http://evgit/oecloud.io/oe-demo-app) which is added with oe-studio we will 
 ## What you'll Need
 * Familiarity with oeClod.io
 * Basic understanding of UIComponents,Routes and Navigation Links
