@@ -1,6 +1,6 @@
 # OE STUDIO
 
-OE STUDIO(oe-studio), is a powerful tool, designed to assit coders develop applications, enhancements, in minimal time, without having to restart the application. 
+OE STUDIO(oe-studio), is a powerful tool, designed to assist coders develop applications, enhancements, in minimal time, without having to restart the application. 
 
 Below are some  Guides that demonstrate oe-studio features :
 
