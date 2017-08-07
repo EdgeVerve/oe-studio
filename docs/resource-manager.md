@@ -104,12 +104,12 @@ If the header of Judith is as below ,then we have successfully added admin speci
 Creating specific themes is made easy with oe-studio
 
 
-[start-page]:  images/oe-studio-charts/application-start.png "Start Page"
-[desstart-page]:  images/oe-studio-resman/desstart-page.png "Designer Page"
-[resource-manager]:/images/oe-studio-resman/navigate-rm.png "Resource Manager"
-[add-theme]:images/oe-studio-resman/add_new_theme.png "Adding Theme"
-[theme-success]:images/oe-studio-resman/after_adding_theme.png "Theme Added"
-[resource-managerpage]:images/oe-studio-resman/uidesstart-page.png "ResourceManager Page"
-[before-theme]:images/oe-studio-resman/start_page.png "Before Theme"
-[after-theme]:images/oe-studio-resman/new_theme.png "After Theme"
-[non-admin]:images/oe-studio-resman/non_admin.png "Non Admin"
+[start-page]:  images/oe-studio-charts/application-start.PNG "Start Page"
+[desstart-page]:  images/oe-studio-resman/desstart-page.PNG "Designer Page"
+[resource-manager]: images/oe-studio-resman/navigate_rm.PNG "Resource Manager"
+[add-theme]:images/oe-studio-resman/add_new_theme.PNG "Adding Theme"
+[theme-success]:images/oe-studio-resman/after_adding_theme.PNG "Theme Added"
+[resource-managerpage]:images/oe-studio-resman/rm-screen.PNG "ResourceManager Page"
+[before-theme]:images/oe-studio-resman/start_page.PNG "Before Theme"
+[after-theme]:images/oe-studio-resman/new_theme.PNG "After Theme"
+[non-admin]:images/oe-studio-resman/non_admin.PNG "Non Admin"
