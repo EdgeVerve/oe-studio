@@ -65,7 +65,7 @@ Templates are  bear backbone structures on which the listing screen has to sit. 
 
 
 ```
-<link rel="import" href="/bower_components/meta-polymer/meta-polymer.html">
+<link rel="import" href="/bower_components/oe-ui-forms/meta-polymer.html">
 <link rel="import" href="/bower_components/oe-info/oe-info.html">
 <link rel="import" href="/bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="/bower_components/iron-image/iron-image.html">
