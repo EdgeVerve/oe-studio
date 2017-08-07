@@ -26,7 +26,7 @@ password : Edge@2017$
 ```
 Navigate to http://localhost:3000/designer. You should see the screen as below:
 
-![Start Page][desstart-page]
+![Start Page][start-page]
 
 ## Navigating to designer mode and building a page
 
@@ -49,8 +49,6 @@ Select Static Page
 Add a new component
 
 ![Add Component][add-component]
-
-![Choose Page][choose-page]
 
 ![Add Details][add-details]
 
@@ -140,33 +138,32 @@ Click on dashborad and you will navigate to dashboard page.
 Oe-studio is a  powerful tool to Create a page,its routewith less or no coding
 
 
-[start-page]:  images/oe-studio-charts/desstart-page.png "Start Page"
-[UIDesigner-page]:images/oe-studio-charts/uidesstart-page.png "UIDesigner Page"
-[static-page]:images/oe-studio-charts/static-page.png "Static Page"
-[static-select]:images/oe-studio-charts/static-select.png "Static Page"
-[add-component]:images/oe-studio-charts/add-component.png "Add Component"
-[choose-page]:images/oe-studio-charts/choose-page.png "Choose Page"
-[adding-details]:images/oe-studio-charts/adding-details.png "Add Details"
-[add-template]:images/oe-studio-charts/choose-template.png "Choose Template"
-[first-dashboard]:images/oe-studio-charts/new-dashboard.png "New Dashboard"
+[start-page]: images/oe-studio-charts/desstart-page.PNG "Start Page"
+[UIDesigner-page]: images/oe-studio-charts/uidesstart-page.PNG "UIDesigner Page"
+[static-page]: images/oe-studio-charts/static-page.PNG "Static Page"
+[static-select]: images/oe-studio-charts/static-select.PNG "Static Page"
+[add-component]: images/oe-studio-charts/add-component.PNG "Add Component"
+[add-details]: http://evgit/oecloud.io/oe-studio/raw/master/docs/images/oe-studio-charts/adding-details.PNG "Add Details"
+[add-template]: images/oe-studio-charts/choose-template.PNG "Choose Template"
+[first-dashboard]: images/oe-studio-charts/new-dashborad.PNG "New Dashboard"
 [end-page]: images/oe-studio-charts/actual_dashboard.png "End Page"
-[configuring route]:images/oe-studio-charts/route-configuration.png "Configure Route"
-[application-start]:images/oe-studio-charts/application-start.png "Application Start"
-[datatable-step1]:images/oe-studio-charts/drag-datatable.png "Adding datatable1"
-[datatable-step2]:images/oe-studio-charts/drag-datatable-1.png "Adding datatable2"
-[datatable-step3]:images/oe-studio-charts/drag-datatable-2.png "Adding datatable3"
-[datatable-step4]:images/oe-studio-charts/drag-datatable-3.png "Adding datatable4"
-[widget-container]:images/oe-studio-charts/widget-container.png "widget container"
-[label-step1]:images/oe-studio-charts/adding_labels_1.png "Adding label1"
-[label-step2]:images/oe-studio-charts/adding_labels_2.png "Adding label2"
-[label-step3]:images/oe-studio-charts/adding_labels_3.png "Adding label3"
-[graphs-step1]:images/oe-studio-charts/oe-charts-1.png "Adding graphs1"
-[graphs-step2]:images/oe-studio-charts/oe-charts-2.png "Adding graphs2"
-[graphs-step3]:images/oe-studio-charts/oe-charts-3.png "Adding graphs3"
-[before-style]:images/oe-studio-charts/dashboard-withoutstyle.png "Before Style"
-[style-step1]:images/oe-studio-charts/adding-style.png "Adding Style1"
-[style-step2]:images/oe-studio-charts/adding-style-2.png "Adding Style2"
-[after-style]:images/oe-studio-charts/dashboard-afterstyle.png "After Style"
-[configure-layout]:images/oe-studio-charts/delete-resize.png "Configure Layout"
-[final-layout]:images/oe-studio-charts/final_layout.png "Final Layout"
-[code-view]:images/oe-studio-charts/code-view.png "Code View"
+[configuring route]: images/oe-studio-charts/route-configuration.PNG "Configure Route"
+[application-start]:images/oe-studio-charts/application-start.PNG "Application Start"
+[datatable-step1]: images/oe-studio-charts/drag-datatable.PNG "Adding datatable1"
+[datatable-step2]: images/oe-studio-charts/drag-datatable-1.PNG "Adding datatable2"
+[datatable-step3]: images/oe-studio-charts/drag-datatable-2.PNG "Adding datatable3"
+[datatable-step4]:images/oe-studio-charts/drag-datatable-3.PNG "Adding datatable4"
+[widget-container]:images/oe-studio-charts/widget-container.PNG "widget container"
+[label-step1]:images/oe-studio-charts/adding_labels_1.PNG "Adding label1"
+[label-step2]:images/oe-studio-charts/adding_labels_2.PNG "Adding label2"
+[label-step3]:images/oe-studio-charts/adding_labels_3.PNG "Adding label3"
+[graphs-step1]:images/oe-studio-charts/oe-charts-1.PNG "Adding graphs1"
+[graphs-step2]:images/oe-studio-charts/oe-charts-2.PNG "Adding graphs2"
+[graphs-step3]:images/oe-studio-charts/oe-charts-3.PNG "Adding graphs3"
+[before-style]:images/oe-studio-charts/dashboard-withoutstyle.PNG "Before Style"
+[style-step1]:images/oe-studio-charts/adding-style.PNG "Adding Style1"
+[style-step2]:images/oe-studio-charts/adding-style-2.PNG "Adding Style2"
+[after-style]:images/oe-studio-charts/dashboard-afterstyle.PNG "After Style"
+[configure-layout]:images/oe-studio-charts/delete-resize.PNG "Configure Layout"
+[final-layout]:images/oe-studio-charts/final_layout.PNG "Final Layout"
+[code-view]:images/oe-studio-charts/code-view.PNG "Code View"
