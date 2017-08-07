@@ -1,4 +1,8 @@
 <link rel="import" href="../redux-store.html">
+<link rel="import" href="../elements/module-switcher.html">
+<link rel="import" href="../elements/tenant-info.html">
+<link rel="import" href="ui-page-list.html">
+
 <dom-module id="ui-toolbar">
   <style>
     :host {
@@ -124,20 +128,20 @@
 				</div>
 				<div class="layout horizontal center toolbar-menu" hidden$="{{!hasActivePage}}">
 					<div class="undo-redo">
-						<paper-icon-button icon="undo" on-tap="undo" disabled="[[disableUndo(currentState)]]"></paper-icon-button>
-						<paper-icon-button icon="redo" on-tap="redo" disabled="[[disableRedo(currentState,stackSize)]]"></paper-icon-button>
+						<paper-icon-button id="undo-btn" icon="undo" on-tap="undo" disabled="[[disableUndo(currentState)]]"></paper-icon-button>
+						<paper-icon-button id="redo-btn" icon="redo" on-tap="redo" disabled="[[disableRedo(currentState,stackSize)]]"></paper-icon-button>
 					</div>
-					<paper-menu-button no-animations no-overlap vertical-align="bottom" close-on-activate class="toolbar-item">
+					<paper-menu-button no-animations no-overlap vertical-align="bottom" close-on-activate class="toolbar-item device-selector">
 						<paper-button class="dropdown-trigger device-btn">
 							<iron-icon icon="[[setSelectedDevice(selectedDevice)]]"></iron-icon>
 							<iron-icon icon="icons:arrow-drop-down"></iron-icon>
 						</paper-button>
 						<div class="dropdown-content">
 							<iron-selector on-iron-select=changeDevice selected={{selectedDevice}} attr-for-selected=name>
-								<div name=window class="list-item">
+								<div name="window" class="list-item">
 									<iron-icon icon=hardware:laptop></iron-icon>
 								</div>
-								<div name=handset class="list-item">
+								<div name="handset" class="list-item">
 									<iron-icon icon=hardware:smartphone></iron-icon>
 								</div>
 							</iron-selector>
@@ -149,17 +153,17 @@
 							<iron-icon icon="icons:arrow-drop-down"></iron-icon>
 						</paper-button>
 						<paper-menu class="dropdown-content">
-							<paper-item on-tap="savePage">
+							<paper-item  id="save-btn" on-tap="savePage">
 								<iron-icon icon="save"></iron-icon>
 								<span> Save</span>
 							</paper-item>
-							<paper-item on-tap="exportComponent">
+							<paper-item  id="export-btn" on-tap="exportComponent">
 								<iron-icon icon="file-download"></iron-icon>
 								<span> Download</span>
 							</paper-item>
 						</paper-menu>
 					</paper-menu-button>
-					<paper-icon-button icon="code" class="toolbar-item" on-tap="toggleCodePanel"></paper-icon-button>
+					<paper-icon-button  id="code-view-btn" icon="code" class="toolbar-item" on-tap="toggleCodePanel"></paper-icon-button>
 					<paper-menu-button class="toolbar-item preview-icon" no-animations no-overlap ignore-select vertical-align="bottom" horizontal-align="right"
 					    disabled$="[[!linkInfo.previewAvailabe]]" close-on-activate>
 						<paper-button class="dropdown-trigger visiblity-btn preview-icon">

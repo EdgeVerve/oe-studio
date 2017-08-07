@@ -7,6 +7,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../behaviours/designer-wrapper-behaviors.html">
 <link rel="import" href="../model-redux-store.html">
+<link rel="import" href="search-header.html">
 <dom-module id="model-sidebar">
   <template>
     <style>
@@ -479,8 +480,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this._checkAll();
       },
       _checkAll: function () {
-        /* var busyComp = document.querySelector("model-work-area #workSpaceStatus")
-              busyComp.hidden = false; */
         if (this.checkAll) {
           _.forEach(this.modelList, function (model, i) {
             if (!model.checked && !model.designerHiddenModel && model.public != false) {

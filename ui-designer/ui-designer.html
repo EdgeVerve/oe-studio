@@ -1,14 +1,9 @@
 <link rel="import" href="ui-toolbar.html">
-<link rel="import" href="ui-page-list.html">
-<link rel="import" href="ui-search-element.html">
 <link rel="import" href="ui-element-list.html">
 <link rel="import" href="ui-dom-manager.html">
 <link rel="import" href="ui-right-panel.html">
-<link rel="import" href="ui-create-component.html">
-<link rel="import" href="ui-asset-manager.html">
-<link rel="import" href="ui-model-manager.html">
-<link rel="import" href="search-input.html">
 <link rel="import" href="ui-add-widget-dialog.html">
+<link rel="import" href="ui-theme-designer.html">
 
 <dom-module id="ui-designer">
 	<style>
@@ -283,29 +278,6 @@
 			reFactorFromDesigner: function(node) {
               //handle here
 				var self = this;
-				/*var fromMap = {
-					'dom-bind-element': {
-						name: 'template',
-						attrs: {
-							is: 'dom-bind'
-						}
-					},
-					'dom-if-element': {
-						name: 'template',
-						attrs: {
-							is: 'dom-if'
-						}
-					},
-					'dom-repeat-element': {
-						name: 'template',
-						attrs: {
-							is: 'dom-repeat'
-						}
-					},
-					'page-selector-element': {
-						name: 'neon-animated-pages'
-					}
-				}*/
 				self.traverseDom(node, function(el) {
 					var name = el.nodeName.toLowerCase();
 

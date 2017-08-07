@@ -146,7 +146,7 @@
 			<div id=size-selector-topbar>
 				<iron-selector id=size-selector selected={{selectedWidth}} attr-for-selected=config>
 					<template id=size-template is=dom-repeat items=[[deviceProfiles]] filter={{_sizeSelectorFilter(selectedDevice)}}>
-						<div name$={{item.size}} class=item style="width:[[item.size]]px" config="[[item]]">
+						<div name$={{item.size}} class="item width-block" style="width:[[item.size]]px" config="[[item]]">
 							<div class="left px">{{item.size}}</div>
 							<div class="right px">{{item.size}}</div>
 						</div>
@@ -283,7 +283,7 @@
         }
       },
       _setDeviceParams: function() {
-        if (this.selectedDevice == 'window') {
+        if (this.selectedDevice === 'window') {
           var device = this.querySelector('#' + this.selectedDevice);
           device.style.height = '100%';
           this.set('selectedWidth', this.deviceProfiles.find(function(obj) {
@@ -297,6 +297,8 @@
       },
       attached: function() {
         var self = this;
+        this.set('selectedDevice','window');
+        this._setDeviceParams();
         document.addEventListener('device-changed', function(event) {
           self.set('selectedDevice', event.detail);
           self._setDeviceParams();
