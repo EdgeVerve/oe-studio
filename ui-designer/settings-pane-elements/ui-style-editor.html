@@ -188,7 +188,7 @@
   </template>
   <div class="sub-header flex layout horizontal justified">
     <span>Inline Style</span>
-    <paper-toggle-button checked="{{showStyleEditor}}"></paper-toggle-button>
+    <paper-toggle-button id="inline-editor-toggle" checked="{{showStyleEditor}}"></paper-toggle-button>
   </div>
   <div hidden$="{{!showStyleEditor}}">
     <div class="action-bar">
@@ -244,7 +244,10 @@
           value: false
         },
         _classList: {
-          type: Array
+          type: Array,
+          value:function(){
+            return []
+          }
         },
         fontList: {
           type: Array
@@ -306,7 +309,6 @@
           this.push('_classList', this._classSearchString);
           this._updateElement();
           this.set('_classSearchString', '');
-          this.set('_showSearch', false);
         }
       },
       _updateElement: function() {

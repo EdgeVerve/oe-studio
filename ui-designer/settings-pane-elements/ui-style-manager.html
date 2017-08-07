@@ -158,7 +158,7 @@
                     <iron-pages selected="{{tabSelected}}">
                         <div>
                             <template is="dom-repeat" items="{{_getLocalRules(styleSheet.cssRules.*)}}" filter="{{_filter(selectedDevice,selectedWidth)}}">
-                                <div class="list-item layout center horizontal">
+                                <div class="list-item local-rules layout center horizontal">
                                     <div class="class-selector">[[item.selectorText]]</div>
                                     <div class="options">
                                         <iron-icon icon="create" on-tap="editRule"></iron-icon>
@@ -169,7 +169,7 @@
   </div>
   <div>
     <template is="dom-repeat" items="{{_getGlobalRules(predefinedStyles.cssRules.*)}}" filter="{{_filter(selectedDevice,selectedWidth)}}">
-                                <div class="list-item layout center horizontal">
+                                <div class="list-item global-rules layout center horizontal">
                                     <div class="class-selector">[[item.selectorText]]</div>
                                     <div class="options">
                                         <iron-icon icon="create" on-tap="editRule"></iron-icon>

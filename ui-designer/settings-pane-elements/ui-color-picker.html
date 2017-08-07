@@ -67,8 +67,8 @@
         var context = canvas.getContext('2d');
         var rect = canvas.getBoundingClientRect();
         var mousePoint = {
-          x: evt.clientX - rect.left,
-          y: evt.clientY - rect.top
+          x: evt.offsetX,
+          y: evt.offsetY
         };
         var imageData = context.getImageData(0, 0, 256, 256);
         var imageObj = this.imageObj;

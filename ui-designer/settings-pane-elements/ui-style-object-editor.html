@@ -720,7 +720,8 @@
       _styleChanged: function() {
         this.debounce('style-changed', function() {
           this.async(function() {
-            this.uiDomManager.styleChangeHandler();
+              if(this.uiDomManager)
+                this.uiDomManager.styleChangeHandler();
           }, 250);
         }, 300);
       },
@@ -809,12 +810,12 @@
         }
         this.$['color-dialog'].open();
       },
-      _colorPickerDialogClosed: function(event) {
+      _colorPickerDialogClosed: function() {
         this.removeEventListener('color-changed', this._colorChanged);
-        this._changeStyleInstant(event);
-        this._changeInStyle(event);
+        this._changeStyleInstant();
+        this._changeInStyle();
       },
-      _clearstyle: function(event) {
+      _clearstyleObj: function(event) {
         var element = event.currentTarget;
         var attribute = element.getAttribute('attribute-to-clear');
         this.set('styleObj.' + attribute, '');
