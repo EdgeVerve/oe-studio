@@ -140,7 +140,7 @@ Click on dashborad and you will navigate to dashboard page.
 Oe-studio is a  powerful tool to Create a page,its routewith less or no coding
 
 
-[start-page]:  images/oe-studio-charts/desstart-page.png "Start Page"
+[start-page]:  ./images/oe-studio-charts/desstart-page.png "Start Page"
 [UIDesigner-page]:images/oe-studio-charts/uidesstart-page.png "UIDesigner Page"
 [static-page]:images/oe-studio-charts/static-page.png "Static Page"
 [static-select]:images/oe-studio-charts/static-select.png "Static Page"
