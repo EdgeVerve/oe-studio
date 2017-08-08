@@ -297,9 +297,11 @@
       getAssets: function() {
         var url = '/designer/assets';
         this.makeAjaxCall(url, 'get', null, null, null, function(err, resp) {
-          this.setImages(resp.images);
-          this.setVideos(resp.videos);
-          this.setAudios(resp.audios);
+          if(resp){
+            this.setImages(resp.images);
+            this.setVideos(resp.videos);
+            this.setAudios(resp.audios);
+          }
         }.bind(this));
       },
       setImages: function(items) {

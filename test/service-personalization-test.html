@@ -157,9 +157,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         server.respondImmediately = true;
 
         server.respondWith('GET', /api\/PersonalizationRules/, function(req) {
-          var modelName = req.url.split('=')[1];
+          var filter = req.url.split('=')[1];
+          var filterObj = JSON.parse(decodeURI(unescape(filter)))
           var list = PersonalizationRules.filter(function(d) {
-            return d.modelName == modelName;
+            return d.modelName == filterObj.where.modelName;
           });
           if (list) {
             req.respond(200, {
@@ -212,6 +213,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }.bind(this));
 
         testElement = fixture('service-personalization-fixture');
+        testElement.set('modelObj',ModelTest);
         var msgHandler = document.createElement('oe-message-handler');
         msgHandler.id = 'toast';
         msgHandler.fitBottom = true;
@@ -225,11 +227,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         flush(function() {
           testElement.set('modelObj', ModelTest);
           flush(function() {
+            assert.equal(testElement.rulesList.length,2);
             done();
           });
         });
       });
-
       test('select personalization rule', function(done) {
         flush(function() {
           testElement.set('modelObj', ModelTest);
@@ -239,6 +241,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             var rule = rules[0]
             rule.click();
             flush(function() {
+              assert.equal(testElement.selectedRule.name,"TestRule")
               done();
             });
           });
@@ -248,19 +251,21 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         flush(function() {
           var menu = Polymer.dom(testElement.root).querySelector('work-area-menu');
           var createRuleBtn = Polymer.dom(menu.root).querySelector('#create-rule');
-          createRuleBtn.click();
-          flush(function() {
+          testElement.addEventListener('add-rule',function(e){
+            assert.equal(e.detail.name,'ModelTest');
             done();
-          });
+          })
+          createRuleBtn.click();
         });
       });
       test('add new rule', function(done) {
         flush(function() {
           var createRuleBtn = Polymer.dom(testElement.root).querySelector('#add-rule-btn');
-          createRuleBtn.click();
-          flush(function() {
+          testElement.addEventListener('add-rule',function(e){
+            assert.equal(e.detail.name,'ModelTest');
             done();
-          });
+          })
+          createRuleBtn.click();
         });
       });
       test('edit personalization rule', function(done) {
@@ -276,13 +281,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               var editRule = Polymer.dom(testElement.root).querySelector('#service-personalization-edit-rule');
               editRule.click();
               flush(function() {
+                assert.equal(testElement.selectedRule.name,"TestRule");
                 done();
               });
             });
           });
         });
       });
-
       test('delete personalization rule', function(done) {
         flush(function() {
           testElement.set('modelObj', ModelTest);
@@ -291,6 +296,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             var rules = ruleslist.querySelectorAll('.rule')
             var rule = rules[0]
             rule.click();
+            assert.equal(testElement.rulesList.length,2);
             flush(function() {
               var deleteRule = Polymer.dom(testElement.root).querySelector('#service-personalization-delete-rule');
               deleteRule.click();
@@ -308,6 +314,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     deleteRule.click();
                     flush(function() {
                       cancelBtn.click();
+                      assert.equal(testElement.rulesList.length,1);
                       done();
                     })
                   });

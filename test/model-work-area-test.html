@@ -1032,6 +1032,64 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           });
         });
       });
+      test('Attach Workflow to model',function(done){
+         var sideBar = Polymer.dom(workArea.root).querySelector('#model-side-nav');
+          var modelItem = Polymer.dom(sideBar.root).querySelectorAll('.model-list-item');
+          modelItem[0].click();
+          flush(function() {
+            var modelContainer = Polymer.dom(workArea.root).querySelector('model-container');
+            var model =modelContainer.modelObj;
+            Polymer.dom(modelContainer.root).querySelector('#attach-workflow-starter').click();
+            flush(function(){
+              assert.equal(workArea.$.attachWorkflowDlg.workflowDef.modelName, model.name);
+              workArea.$.attachWorkflowDlg.hideDialog();
+              done();
+            });
+          });
+      });
+      test('Error Message computation from server',function(done){
+        var auth_error = {
+                          "error": {
+                            "name": "ValidationError",
+                            "status": 422,
+                            "message": "The `LoanApplication` instance is not valid.",
+                            "statusCode": 422,
+                            "details": {
+                              "context": "LoanApplication",
+                              "codes": {
+                                "type": [
+                                  "validation-err-004"
+                                ],
+                                "amount": [
+                                  "validation-err-004"
+                                ],
+                                "tenure": [
+                                  "validation-err-004"
+                                ]
+                              },
+                              "messages": {
+                                "type": [
+                                  " field is mandatory"
+                                ],
+                                "amount": [
+                                  " field is mandatory"
+                                ],
+                                "tenure": [
+                                  " field is mandatory"
+                                ]
+                              }
+                            },
+                            "stack": "ValidationError: The `LoanApplication` instance is not valid."
+                          }
+                        }
+        var newServerErr = new ErrorEvent('error');
+        newServerErr.detail = {request:{response:auth_error}};
+        var authMsg = workArea.resolveError(newServerErr);
+        assert.equal(authMsg,'The `LoanApplication` instance is not valid.');
+        var resolveMultiple =workArea.resolveErrors(newServerErr);
+        assert.equal(resolveMultiple.length,3);
+        done();
+      });
     });
 
   </script>
