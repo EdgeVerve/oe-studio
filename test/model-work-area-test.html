@@ -175,6 +175,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           '_isDeleted': false
         }]
 
+        var dataPath = [{
+          file:"customer.json",
+          path:"model/common",
+          value:[{name:"sherlock",address:"221B , Baker street"}]
+        }]
 
         server.respondWith('GET', /api\/ModelDefinitions/, function(req) {
           req.respond(200, {
@@ -182,6 +187,18 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           }, JSON.stringify(modelList))
         });
 
+       
+        server.respondWith('GET', /designer\/data/, function(req) {
+          req.respond(200, {
+            'Content-Type': 'application/json'
+          }, JSON.stringify(dataPath))
+        });
+        server.respondWith('POST', /designer\/save-file/, function(req) {
+          var resp = JSON.parse(req.requestBody);
+          req.respond(200, {
+            'Content-Type': 'application/json'
+          }, JSON.stringify(resp))
+        });
         server.respondWith('PUT', /api\/*/, function(req) {
           req.respond(200, {
             'Content-Type': 'application/json'
@@ -995,13 +1012,26 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               flush(function() {
                 assert.equal(workArea.$.addProperty.querySelector('paper-dialog').opened, true);
                 workArea.$.addProperty.hideDialog();
-                
+
                 done();
               });
             })
           });
         })
-      })
+      });
+      test('Manage startup data',function(done){
+        workArea.fire('manage-startup-data','Customer');
+        flush(function(){
+          assert.equal(workArea.$.manageDataDialog.modelName,'Customer');
+          assert.equal(workArea.$.manageDataDialog.path,'model/common');
+          workArea.$.manageDataDialog.set('value',JSON.stringify([{name:"Moriarty"}]));
+          flush(function(){
+            workArea.$.manageDataDialog.saveFile();
+            workArea.$.manageDataDialog.closeDialog();
+            done();
+          });
+        });
+      });
     });
 
   </script>
