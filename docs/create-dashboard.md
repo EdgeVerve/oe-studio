@@ -176,13 +176,14 @@ inherit-parent-dimension : true
 series :[{"property":"type","filter":"PERSONAL_LOAN","name":"PERSONAL_LOAN","aggregation":"count","color":"orange"},{"property":"type","filter":"HOME_LOAN","name":"HOME_LOAN","color":"blue","aggregation":"count"},{"property":"type","aggregation":"count","filter":"CAR_LOAN","name":"CAR_LOAN","color":"yellow"}]
 ```
 
-_Category_ represents the x-axis of the graph. It can any property of the Model. 
-_category-aggregator_ is more useful in the scenarios like date as category. Date has an year,month and day. So the x-axis can be either one of them or a different one altogether. This can be specified in category-aggregator
-_category-format_ specifies the prefix to the x-axis label
-_chart-type_ specifies the type of chart the data has to be represented in
-_data-url_ specifies the datasource for the graph
-_inherit-parent-dimension_ when set to true, the graph takes the size of the parent container,else will be of fixed dimensions.
-_series_ represents the y-axis of the chart. It is an array and can take may series. _property_ of the series represents the property of the model , on which the data analysis is being done. _aggregation_ defines, if the data in the property has to be counted/added._filter_ specifies a filter with in the same data with which we can generate multiple series._color_ gives the desired color to the chart.Value specified in the _name_ appears as a label in the graph 
+*  _Category_ represents the x-axis of the graph. It can be any property of the Model. 
+
+*  _category-aggregator_ is more useful in the scenarios like date as category. Date has an year,month and day. So the x-axis can be either one of them or a different one altogether. This can be specified in category-aggregator
+* _category-format_ specifies the prefix to the x-axis label
+* _chart-type_ specifies the type of chart the data has to be represented in
+* _data-url_ specifies the datasource for the graph
+* _inherit-parent-dimension_ when set to true, the graph takes the size of the parent container,else will be of fixed dimensions.
+* _series_ represents the y-axis of the chart. It is an array and can take may series. _property_ of the series represents the property of the model , on which the data analysis is being done. _aggregation_ defines, if the data in the property has to be counted/added._filter_ specifies a filter with in the same data with which we can generate multiple series._color_ gives the desired color to the chart.Value specified in the _name_ appears as a label in the graph 
 
 After adding the graphs, our page looks as below:
 
