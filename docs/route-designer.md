@@ -9,7 +9,7 @@ Working on an [Example Application](http://evgit/oecloud.io/oe-demo-app) which i
 * Familiarity with oeClod.io
 * Basic understanding of UIComponents,Routes and Navigation Links
 * Basic understanding of HTML,CSS,JavaScript
-* [Example Application](https://cassibank.oecloud.io/login) to start with
+* Clone the [Example Application](http://evgit/oecloud.io/oe-demo-app) to start with
 * [dashboard page](create-dashboard.md) and [Product form](create-forms)
 
 ## How to complete this guide

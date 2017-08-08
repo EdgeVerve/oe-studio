@@ -7,7 +7,7 @@ A simple screen, to capture the product details, that will be stored in Product 
 * Familiarity with oeClod.io
 * Basic understanding of UIComponents,Routes and Navigation Links
 * Basic understanding of HTML,CSS,JavaScript
-* [Example Application](http://evgit/oecloud.io/oe-demo-app) to start with
+* Clone the [Example Application](http://evgit/oecloud.io/oe-demo-app) to start with
 
 ## How to complete this guide
 

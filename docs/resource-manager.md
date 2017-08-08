@@ -8,7 +8,7 @@ Working on a [Example Application](http://evgit/oecloud.io/oe-demo-app) which is
 * Familiarity with oeClod.io
 * Basic understanding of UIComponents,Routes,themes and Navigation Links
 * Basic understanding of HTML,CSS,JavaScript
-* [Example Application](http://evgit/oecloud.io/oe-demo-app) to start with
+* Clone the [Example Application](http://evgit/oecloud.io/oe-demo-app) to start with
 
 ## How to complete this guide
 
