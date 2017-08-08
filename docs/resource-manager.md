@@ -8,7 +8,7 @@ Working on a [Example Application](http://evgit/oecloud.io/oe-demo-app) which is
 * Familiarity with oeClod.io
 * Basic understanding of UIComponents,Routes,themes and Navigation Links
 * Basic understanding of HTML,CSS,JavaScript
-* [Example Application](http://evgit/oecloud.io/oe-demo-app) to start with
+* Clone the [Example Application](http://evgit/oecloud.io/oe-demo-app) to start with
 
 ## How to complete this guide
 
@@ -33,12 +33,66 @@ Navigate to http://localhost:3000/designer. You should see the screen as below:
 
 ![Designer Page][desstart-page]
 
-## Points to note
+## Choosing an existing theme or customising a theme
 
-Before proceeding to Resource Manager, PFB some important points that has to be known:
-* Make sure that the name of new theme file is app-theme.html
-* The base theme will not be inherited, so make sure all the properties have themes set properly
+oe-studio offers you some existing themes, you can choose from them or customise one. 
 
+Select create/Manage components, to the right side you will see an option to customize theme as shown in the below picture. Choose the same
+
+![Customising Theme][customising-theme]
+
+As mentioned above you can choose an existing theme or design your own theme. 
+To customise your own theme, you can click on customize theme as shown  image below: 
+![Customising Step1][customising-theme1]
+
+You will navigate to the below screen , you can choose a Primary color and a Accent color for the theme and later download the same. 
+![Customising Step2][customising-theme2]
+
+In this guide, we have picked up an existing theme as shown in the image below, and downloaded the same
+![Customising Step3][customising-theme3]
+
+The downloaded app-theme for the example application looks as below:
+
+```
+<dom-module id="app-theme">
+  <template>
+    <style>
+      :root {
+        --dark-primary-color:       #616161;
+        --default-primary-color:    #9E9E9E;
+        --light-primary-color:      #F5F5F5;
+        --text-primary-color:       #212121;
+        --accent-color:             #448AFF;
+        --primary-background-color: #F5F5F5;
+        --primary-text-color:       #212121;
+        --secondary-text-color:     #757575;
+        --disabled-text-color:      #BDBDBD;
+        --divider-color:            #BDBDBD;
+
+
+        /* Components */
+
+        /* paper-drawer-panel */
+        --drawer-menu-color:           #ffffff;
+        --drawer-border-color:         1px solid #ccc;
+        --drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
+
+        /* paper-menu */
+        --paper-menu-background-color: #fff;
+        --menu-link-color:             #111111;
+
+        /* paper-input */
+		
+		--paper-input-container-color: #757575;
+		--paper-input-container-input-color: #757575;
+		--paper-input-container-focus-color: #9E9E9E;
+      }
+    </style>
+  </template>
+</dom-module>
+```
+** You can always edit this file to add more details.**
+#### **NOTE** : _Do not change the file name when downloading/uploading the app-theme_
 
 ## Modifications to theme import to support run time selection of themes 
 
@@ -46,13 +100,9 @@ In the example application, the import to the theme is specified in app-shell. S
 
 The current theme import is specified as 
 
-```<link rel="import" href="../styles/app-theme.html">```
-
-Modify this to 
-
 ```<link rel="import" href="/api/UIResources/content/app-theme.html">``` 
 
-This change, calls the api UIResources,to fetch the appropriate app-theme from server for the specific user.
+Rather than a relative path like _href="../style/app-theme.html"_ .This change, calls the api UIResources,to fetch the appropriate app-theme from server for the specific user/scope.
 
 ## Navigating to Resource Manager Mode and adding a new theme
 
@@ -113,3 +163,7 @@ Creating specific themes is made easy with oe-studio
 [before-theme]:images/oe-studio-resman/start_page.PNG "Before Theme"
 [after-theme]:images/oe-studio-resman/new_theme.PNG "After Theme"
 [non-admin]:images/oe-studio-resman/non_admin.PNG "Non Admin"
+[customising-theme]:images/oe-studio-resman/customising_theme.PNG "Customising Theme"
+[customising-theme1]:images/oe-studio-resman/customising_theme1.PNG "Customising Step1"
+[customising-theme2]:images/oe-studio-resman/customising_theme2.PNG "Customising Step2"
+[customising-theme3]:images/oe-studio-resman/customising_theme3.PNG "Customising Step3"

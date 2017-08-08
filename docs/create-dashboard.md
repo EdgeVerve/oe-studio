@@ -2,7 +2,7 @@
 
 ## What you'll Build
 
-Working on a [Example Application](https://cassibank.oecloud.io/login) which has oe-studio as bower dependency you will 
+Working on a [Example Application](http://evgit/oecloud.io/oe-demo-app) which has oe-studio as bower dependency you will 
 * create a dashboard using studio
 * create a navigation link for the dashboard page using studio
 * create a route for the dashboard page using studio
@@ -11,7 +11,7 @@ Working on a [Example Application](https://cassibank.oecloud.io/login) which has
 * Familiarity with oeClod.io
 * Basic understanding of UIComponents,Routes and Navigation Links
 * Basic understanding of HTML,CSS,JavaScript
-* [Example Application](https://cassibank.oecloud.io/login) to start with
+* Clone the [Example Application](http://evgit/oecloud.io/oe-demo-app) to start with
 
 ## How to complete this guide
 
@@ -50,6 +50,8 @@ Add a new component
 
 ![Add Component][add-component]
 
+Add the details like name of the page
+
 ![Add Details][add-details]
 
 Let us choose a blank form for our dashboard as a template:
@@ -66,49 +68,156 @@ Now let us drag and drop components, to achieve the dashboard as below
 
 ## Adding Data table component to the dashboard
 
-Data Table is a component from oeCloud.io. The bare minimunm data to populate the table are **data-controller** and **config-code**
+Data Table is an ui component from oeCloud.io. The bare minimunm data to populate the table are **data-controller** and **config-code**. To understand more about the data table follow the [guides]("www.oeCloud.io/docs")
 
-Based on the RestURL specified in the data controller and 
+Based on the RestURL specified in the _data-controller_ and the model name mentioned in the _config-code_, the data table is populated.
+
+For the guide, the values for _data-controller_ and _config-code_ are {"restUrl":"/api/Products"} and Product respectively.
+
+Search Data table in the designer and drag and drop the table into the container
 
 ![Adding datatable1][datatable-step1]
 
+After drag and drop, the screen looks as below.
+
 ![Adding datatable2][datatable-step2]
 
+Click on the settings icon as shown in the image, to configure the properties of the table
 
 ![Adding datatable3][datatable-step3]
+
+Add values to the properties to achieve a table as shown below
 
 ![Adding datatable4][datatable-step4]
 
 ## Adding Widget container
 
-![widget container][widget-container]
-![Configure Layout][configure-layout]
+Widget Containers are the draggable and expandable sections of the page. Let us use these to add charts to the dash boards.
+
+The final layout, with the widget containers should look as below
 
 ![Final Layout][final-layout]
 
+Choose the widget container icon in the designer as shown in the image. Drag and drop the same into the page 
+![widget container][widget-container]
+
+You can delete and expand the widgets. Do the necessary to achieve the layout as show in the above image.
+
+![Configure Layout][configure-layout]
+
+
 ## Adding Labels to the graphs in dashboard
 
+Before adding graphs into the widget containers, let us label the graph. Steps for one label creation is shown. Try out rest on your own: 
+
+Search for oe-info in the designer and drag and drop the component into the first widget container 
+
 ![Adding label1][label-step1]
+
+oe-info has a label property and value property, apart from other properties. Let us add our graph description to the value proerty of the oe-info. 
+
+For the first one the description is added as _Region wise analysis of applications_.
+
 ![Adding label2][label-step2]
+
+Similarly add the labels for other containers as shown in the below image.
+
 ![Adding label3][label-step3]
+
+** Do not forget to save the changes. **
 
 ## Adding Graphs to the dashboard
 
+oe-charts is an ui component that is developed in polymer and offered by oeCloud.io. oe-charts supports varied types of charts that suits majority of the business needs. In this guide, we will be using 
+
+*Column graph for a scenario , to analyse the region wise applications for the bank across years
+*line graph for a scenario to analyse the yearly growth in terms of the number of applications
+*GroupedColumn graph for a scenario understand quarterly report on the number of applications for each type
+
+In this guide, the sample data for all the three graphs is provided, while only one has detailed explanation.Try out the other two graphs on own
+
+Search for oe-charts in ui designer 
+
 ![Adding graphs1][graphs-step1]
+
+ drag and drop the same into the widget container
+
 ![Adding graphs2][graphs-step2]
+
+Let us configure the properties to achieve the graph as shown in the below image:
+
+```
+category :appUser.profile.region
+chart-type:column
+data-url:/api/LoanApplications?filter=%7B%22include%22%3A%7B%22appUser%22%3A%22profile%22%7D%7D
+inherit-parent-dimension : true
+series :[{"property":"id","name":"Loan Applications","aggregation":"count","color":"green"}]
+```
 ![Adding graphs3][graphs-step3]
 
+Data for other two graphs are : 
+
+```
+category :_createdOn
+category-aggregator:year
+chart-type:line
+data-url:/api/LoanApplications
+inherit-parent-dimension : true
+series :[{"property":"id","name":"Loan Applications","aggregation":"count","color":"green"}]
+```
+
+```
+category :_createdOn
+category-aggregator:quarter
+category-format :Q- 
+chart-type:groupedColumn
+data-url:api/LoanApplications?filter[where][_createdOn][gte]=%222017-01-01%22
+inherit-parent-dimension : true
+series :[{"property":"type","filter":"PERSONAL_LOAN","name":"PERSONAL_LOAN","aggregation":"count","color":"orange"},{"property":"type","filter":"HOME_LOAN","name":"HOME_LOAN","color":"blue","aggregation":"count"},{"property":"type","aggregation":"count","filter":"CAR_LOAN","name":"CAR_LOAN","color":"yellow"}]
+```
+
+_Category_ represents the x-axis of the graph. It can any property of the Model. 
+_category-aggregator_ is more useful in the scenarios like date as category. Date has an year,month and day. So the x-axis can be either one of them or a different one altogether. This can be specified in category-aggregator
+_category-format_ specifies the prefix to the x-axis label
+_chart-type_ specifies the type of chart the data has to be represented in
+_data-url_ specifies the datasource for the graph
+_inherit-parent-dimension_ when set to true, the graph takes the size of the parent container,else will be of fixed dimensions.
+_series_ represents the y-axis of the chart. It is an array and can take may series. _property_ of the series represents the property of the model , on which the data analysis is being done. _aggregation_ defines, if the data in the property has to be counted/added._filter_ specifies a filter with in the same data with which we can generate multiple series._color_ gives the desired color to the chart.Value specified in the _name_ appears as a label in the graph 
+
+After adding the graphs, our page looks as below:
 
 ![Before Style][before-style]
 
 ## Adding Additional Styles to the dashboard
 
-![Adding Style1][style-step1]
-![Adding Style2][style-step2]
+We can add additional properties to an ui-component of the designer, apart from the common properties. 
+
+For example, let us try to add a style property to the charts that makes our dashboard more beautiful. 
+One example is shown, follow the same to achieve the final design as below
 
 ![After Style][after-style]
 
+Choose oe-charts, as shown in the below image, you can add attributes, let us add property
+
+```
+style
+````
+and value 
+
+```
+border: solid 2px;
+```
+
+![Adding Style1][style-step1]
+
+After adding style, the page looks as below.Add the same to other charts to achieve the above design
+
+![Adding Style2][style-step2]
+
+
 ## Code View of oe-studio
+
+oe-studio offers you to view the design in both , design view and code view. To modify in code view , you can always click on the icon as shown in the below image to achieve the code-view.
 
 ![Code View][code-view]
 
@@ -125,11 +234,7 @@ Navigate to localhost:3000
 
 ![Application Start][application-start]
 
-Click on the menu i.e, to left top corner and you will see the screen below.
-
-![Navigation Menu][navigation-menu]
-
-Click on dashborad and you will navigate to dashboard page. 
+Click on the menu i.e, to left top corner.Click on dashborad and you will navigate to dashboard page. 
 
 ![End Page][end-page]
 
