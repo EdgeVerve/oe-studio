@@ -520,6 +520,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     testElement.fire('launch-page',testComponent);
                 });
             });
+
+            test('Prettify Dom',function(done){
+                var domHtml = '<paper-button id="primary-btn"><label>Save<label></paper-button>';
+                var pretiffiedDom = OEUtils.prettify.domString(domHtml);
+                assert.notEqual(pretiffiedDom,domHtml);
+                done();
+            })
             //launch-page
         });
     </script>

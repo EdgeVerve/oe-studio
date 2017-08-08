@@ -1415,7 +1415,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             self.$.createmodeldialog.openDialog();
             self.$.createmodeldialog.selected = 2;
             self.$.createmodeldialog._validateTab();
-            self.$.createmodeldialog.$.propertyGrid._addValidation();
+            self.$.createmodeldialog.$.validationGrid._addValidation();
           });
           self.addEventListener('add-relation-in-dialog', function (e) {
             self.$.createmodeldialog.set('isEditMode', true);
@@ -1472,14 +1472,15 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             self.$.addProperty.openDialog();
 
           });
-          self.addEventListener('save-property', function (e) {
-            var detail = e.detail;
-            var modelNodes = this.$.workarea.querySelectorAll('model-container');
-            var modelNode = _.find(modelNodes, function (ele) {
-              return (ele.modelObj.id == detail.modelObj.id)
-            });
-            modelNode.set('modelObj.properties.' + detail.index, detail.propertyObj);
-          });
+          // Hanlded by each model container node
+          // self.addEventListener('save-property', function (e) {
+          //   var detail = e.detail;
+          //   var modelNodes = this.$.workarea.querySelectorAll('model-container');
+          //   var modelNode = _.find(modelNodes, function (ele) {
+          //     return (ele.modelObj.id == detail.modelObj.id)
+          //   });
+          //   modelNode.set('modelObj.properties.' + detail.index, detail.propertyObj);
+          // });
 
           //do actions needed when elements are disconnected
           self.workAreaInstance.bind('connectionDetached', function (info) {
