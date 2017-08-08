@@ -62,7 +62,7 @@ If auto-generate fields is set true, all the properties of the model ,appear as 
 
 ## Selecting a template
 
-Templates are  bear backbone structures on which the form is rendered. It has CSS and other necessary details. The default-form template looks as below
+Templates are  bare backbone structures on which the form is rendered. It has CSS and other necessary details. The default-form template looks as below
 
 
 ```

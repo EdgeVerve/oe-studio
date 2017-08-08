@@ -1,0 +1,262 @@
+<!-- ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+The EdgeVerve proprietary software program ("Program"), is protected by copyrights laws, international treaties and other pending or existing intellectual property rights in India, the United States and other countries.
+The Program may contain/reference third party or open source components, the rights to which continue to 
+remain with the applicable third party licensors or the open source community as the case may be and nothing 
+here transfers the rights to the third party and open source components, except as expressly permitted. 
+Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+    <link rel="stylesheet" href="../test-styles.css" id="testStyleSheet">
+    <link rel="stylesheet" href="../test-styles.css" id="predefStyleSheet">
+    <!-- importing dependent elements -->
+    <link rel="import" href="../../all-imports.html">
+    <!-- importing element to be tested -->
+    <link rel="import" href="../../ui-designer/ui-right-panel.html">
+</head>
+
+<body>
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <test-fixture id="ui-right-panel-fixture">
+        <template>
+            <ui-right-panel>
+            </ui-right-panel>
+        </template>
+    </test-fixture>
+    <script>
+        suite('<ui-right-panel>', function () {
+            var testElement;
+            var server;
+            var element;
+            var assets = {
+                "images": [{
+                    "file": "car_loan_banner.png",
+                    "path": "client/images",
+                    "size": 7164685858
+                }, {
+                    "file": "de.png",
+                    "path": "client/images",
+                    "size": 1105
+                }, {
+                    "file": "Designer.svg",
+                    "path": "client/images",
+                    "size": 3372
+                }, {
+                    "file": "en-US.png",
+                    "path": "client/images",
+                    "size": 2511
+                }, {
+                    "file": "ev-white-logo.png",
+                    "path": "client/images",
+                    "size": 1862
+                }, {
+                    "file": "evlogo.png",
+                    "path": "client/images",
+                    "size": 3095
+                }, {
+                    "file": "foundation.png",
+                    "path": "client/images",
+                    "size": 4491
+                }, {
+                    "file": "fr.png",
+                    "path": "client/images",
+                    "size": 1233
+                }, {
+                    "file": "home_loan_banner.png",
+                    "path": "client/images",
+                    "size": 170162
+                }, {
+                    "file": "it.png",
+                    "path": "client/images",
+                    "size": 1253
+                }, {
+                    "file": "logo.png",
+                    "path": "client/images",
+                    "size": 1536
+                }, {
+                    "file": "logo.svg",
+                    "path": "client/images",
+                    "size": 2188
+                }, {
+                    "file": "logo_black.png",
+                    "path": "client/images",
+                    "size": 1797
+                }, {
+                    "file": "logo_label.png",
+                    "path": "client/images",
+                    "size": 5573
+                }, {
+                    "file": "logo_label2.png",
+                    "path": "client/images",
+                    "size": 3790
+                }, {
+                    "file": "personal_loan_banner.png",
+                    "path": "client/images",
+                    "size": 153960
+                }],
+                "videos": [{
+                    "file": "foundation.mp4",
+                    "path": "client/videos",
+                    "size": 4491006
+                }],
+                "audios": []
+            };
+            setup(function () {
+                var styleSheet = document.getElementById('testStyleSheet');
+                var preDefSheet = document.getElementById('predefStyleSheet');
+
+                element = document.createElement('h1');
+                element.setAttribute('class', 'heading-class');
+                element.setAttribute('oe-id', 'test123');
+                server = sinon.fakeServer.create();
+                server.autoRespond = true;
+                server.respondImmediately = true;
+                server.respondWith('GET', /designer\/assets/, function (req) {
+                    req.respond(200, {
+                        'Content-Type': 'application/json'
+                    }, JSON.stringify(assets));
+                });
+                testElement = fixture('ui-right-panel-fixture');
+                testElement.set('styleSheet', styleSheet.sheet);
+                testElement.set('predefinedStyles', preDefSheet.sheet);
+                testElement.set('assets', assets);
+                testElement.set('element', element);
+            });
+            test('Toggle Right Panel', function (done) {
+                flush(function () {
+                    assert.equal(testElement.rightPanelState.opened, false);
+                    var collapseBookmark = testElement.querySelector('.collapse-control');
+                    collapseBookmark.click();
+                    flush(function () {
+                        assert.equal(testElement.rightPanelState.opened, true);
+                        done();
+                    });
+                });
+            });
+
+            test('Edit inline style of the element', function (done) {
+                flush(function () {
+                    var styleEditor = testElement.querySelector('ui-style-editor');
+                    assert.isFalse(styleEditor.showStyleEditor);
+                    var inlineStyleToggle = styleEditor.querySelector('#inline-editor-toggle');
+                    inlineStyleToggle.click();
+                    flush(function () {
+                        assert.isTrue(styleEditor.showStyleEditor);
+                        var inlineEditor = styleEditor.querySelector(
+                            'ui-style-object-editor');
+                        var backgroundTitle = inlineEditor.querySelector(
+                            '[collapse-target="style-background"]');
+                        backgroundTitle.click();
+                        flush(function () {
+                            inlineEditor.set('_activeBorderObj.style', 'solid');
+                            flush(function () {
+                                var listener = function (e) {
+                                    var styleObj = e.detail;
+                                    if (styleObj.background === 'red') {
+                                        assert.equal(styleObj.background,'red');
+                                        var removeBorderIcon = inlineEditor.querySelector( 'iron-icon[attribute-to-clear="background"]');
+                                        removeBorderIcon.click();
+                                        flush(function () {
+                                            inlineEditor.removeEventListener('change-style-instant',listener);
+                                            assert.equal(inlineEditor.styleObj.background,'');
+                                            done();
+                                        });
+                                    }
+                                }
+                                inlineEditor.addEventListener('change-style-instant',listener);
+                                inlineEditor.set('styleObj.background', 'red');
+                            });
+                        });
+                    });
+                });
+            });
+
+            test('Create new class', function (done) {
+                flush(function () {
+                    var styleEditor = testElement.querySelector('ui-style-editor');
+                    styleEditor.set('selectedElement',element);
+                    flush(function(){
+                        var classSearcher = styleEditor.querySelector('#search-class-input');
+                    classSearcher.set('value','my-class');
+                    flush(function(){
+                        var newClassBox =styleEditor.querySelector('.class-suggestions-name.new');
+                        newClassBox.click();
+                        
+                        flush(function(){
+                            var classStyleEditor = testElement.querySelector('ui-css-rule-editor #styleEditor');
+                            var colorIcon = classStyleEditor.querySelector('[attribute-to-color="color"]');
+                            colorIcon.click();
+                            flush(function(){
+                                var colorPicker = classStyleEditor.querySelector('#color-dialog ui-color-picker');
+                                var hoverEvt = new MouseEvent('mousemove',{offsetX:0,offsetY:0});
+                                colorPicker.hoverHandle(hoverEvt);
+                                colorPicker.setColor();
+                                flush(function(){
+                                    var listener = function(e){
+                                        var styleObj = e.detail;
+                                        console.log(styleObj.color);
+                                        if(styleObj.color == "rgb(255,255,255)"){
+                                            assert.equal(classStyleEditor.styleObj.color,'rgb(255,255,255)');
+                                            classStyleEditor.removeEventListener('change-style-instant',listener)
+                                            done();
+                                        }
+                                    }
+                                    classStyleEditor.addEventListener('change-style-instant',listener)
+                                    classStyleEditor._colorPickerDialogClosed();
+                                });
+                            });
+                        })
+                    });
+                    })
+                });
+            });
+
+            test('Add/Edit/Delete class', function (done) {
+                flush(function () {
+                    var styleManager = testElement.querySelector('ui-style-manager');
+                    var styleEditor = testElement.querySelector('ui-style-editor');
+                    styleEditor.set('selectedElement',element);
+                    var ruleList = styleManager._getLocalRules();
+                    flush(function(){
+                        var classSearcher = styleEditor.querySelector('#search-class-input');
+                        classSearcher.set('value','my-class');
+                    flush(function(){
+                        var newClassBox =styleEditor.querySelector('.class-suggestions-name.new');
+                        newClassBox.click();
+                        flush(function(){
+                            assert.equal(styleManager._getLocalRules().length,ruleList.length +1 );
+                            var closeEditor = testElement.querySelector('ui-css-rule-editor .close-btn');
+                            closeEditor.click();
+                            flush(function(){
+                                assert.equal(styleManager.selected,0);
+                                var listItem = styleManager.querySelector('.list-item.local-rules');
+                                var editBtn = listItem.querySelector('[icon="create"]');
+                                editBtn.click();
+                                flush(function(){
+                                    assert.equal(styleManager.selected,1);
+                                    closeEditor.click();
+                                    flush(function(){
+                                        var deleteBtn = listItem.querySelector('[icon="delete"]');
+                                        deleteBtn.click();
+                                        flush(function(){
+                                            assert.equal(styleManager._getLocalRules().length,ruleList.length);
+                                            done();
+                                        })
+                                    })
+                                });
+                            })
+                        });
+                    });
+                    })
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

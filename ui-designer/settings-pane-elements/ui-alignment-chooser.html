@@ -373,6 +373,9 @@
 							alignment: '',
 							childrenLayout: ''
 						}
+						if(!this.element){
+							this.element = newVal;
+						}
 						var classList = this.element.classList;
 						this.set('isLayoutCollapsed', false);
 						this.set('isAlignmentCollapsed', false);
