@@ -153,7 +153,7 @@ Templates are  bear backbone structures on which the form is rendered. It has CS
 So let us choose, default-list template
 ![Choose Template][choose-template]
 
-**In case you have a custom template, you can add the same in client/templates folder.Refresh the designer and your template will be available for further use 
+#### **Note** :**_In case you have a custom template, you can add the same in client/templates folder.Refresh the designer and your template will be available for further use_** 
 
 
 ## Finally in Designer
