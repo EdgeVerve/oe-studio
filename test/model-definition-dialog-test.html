@@ -223,11 +223,16 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
               expect(testElement.vm.plural).to.be.equal('newModels');
               var nextBtn = Polymer.dom(testElement.root).querySelector('#nextbtn');
               var backBtn = Polymer.dom(testElement.root).querySelector('#backbtn');
-              // properties tab
               nextBtn.click(); 
+               // properties tab
               flush(function() {
                 addItemBtn.click();
-                flush(function() {
+               flush(function(){
+                 nextBtn.click();
+                 // validation tab
+                 flush(function(){
+                   addItemBtn.click();
+                   flush(function() {
                   // relation tab
                   nextBtn.click(); 
                   flush(function() {
@@ -257,7 +262,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                       });
                     })
                   });
-                })
+                });
+                 });
+               })
               });
             });
           });
@@ -390,7 +397,41 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         });
       });
 
-
+      test('download edited model', function(done) {
+          flush(function() {
+            testElement.openDialog();
+            var form = testElement.$.basicform
+            _.forEach(form.elements, function(ele) {
+              ele.invalid = false
+            });
+            testElement.set('renderInWorkArea', true);
+            testElement.set('vm', {
+              'name': '',
+              'plural': '',
+              'description': '',
+              'base': 'BaseEntity',
+              'idInjection': false,
+              'strict': true,
+              'properties': [],
+              'validations': [],
+              'evValidations': [],
+              'relations': [],
+              'acls': [],
+              'methods': [],
+              'checked': false,
+              'dataSourceName': '',
+              'autoscope': []
+            });
+            flush(function() {
+              var modelNameInput = Polymer.dom(testElement.root).querySelector('#model-name');
+              modelNameInput.value = 'ModelToTest';
+              flush(function() {
+                testElement._downloadDefinition();
+                done();
+              });
+            });
+          });
+        });
     });
 
   </script>
