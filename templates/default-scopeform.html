@@ -4,7 +4,13 @@
 -->
 <dom-module id=":componentName">
   <template>
-    <style>
+    <style include="oe-layout-styles">
+      :host{
+            display: block;
+            position: relative;
+            padding: 0px 16px 16px 16px;
+      }
+
       #fields>* {
         width: calc(100% - 16px);
         margin: 0px 8px;

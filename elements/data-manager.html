@@ -255,13 +255,19 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 </div>
                 <template is="dom-if" if="{{!modelDataObj.fileUpload}}">
                   <div class="filter">
-                    <paper-dropdown-menu label="{{modelDataObj.method.label}}">
+                    <oe-combo label="[[modelDataObj.method.label]]" on-pt-item-confirmed="_changePath"
+                              listdata="[[modelDataObj.method.methodRoutes]]" 
+                              valueproperty="path"
+                              displayproperty="path"
+                              selected="{{modelDataObj.method.path}}"></oe-combo>
+
+                    <!--<paper-dropdown-menu label="{{modelDataObj.method.label}}">
                       <paper-menu class="dropdown-content" attr-for-selected="datavalue" selected="{{modelDataObj.method.path}}">
                         <template is="dom-repeat" items="[[modelDataObj.method.methodRoutes]]">
                           <paper-item datavalue="[[item.path]]" on-tap="_changePath">{{formatPath(item.path)}}</paper-item>
                         </template>
                       </paper-menu>
-                    </paper-dropdown-menu>
+                    </paper-dropdown-menu>-->
                     <div class="method-description">{{modelDataObj.method.description}}</div>
                     <form is="iron-form" id="form">
                       <template is="dom-repeat" items="{{modelDataObj.method.requiredFields}}">
@@ -521,13 +527,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }
       },
       _changePath: function (e) {
-        var path = e.model.item.path;
-        if (this.modelDataObj.method.path === path) {
-          return;
-        }
-        var description = e.model.item.description;
-        this.set('modelDataObj.method.path', path);
-        this.set('modelDataObj.method.description', description);
+        this.set('modelDataObj.method.path', e.detail.path);
+        this.set('modelDataObj.method.description', e.detail.description);
         this.setFields();
       },
       setResponseObj: function (flag) {
@@ -764,7 +765,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       getModelRoutes: function (modelObj, cb) {
         var model = modelObj.plural || inflection.pluralize(modelObj.name);
-        var url = 'designerRoutes/' + model;
+        var url = 'designer/routes/' + model;
         this.makeAjaxCall(url, 'get', null, null, null, function (err, response) {
           cb(err, response)
         });
