@@ -635,7 +635,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           return obj;
         } else {
           var baseModel = this.modelList.find(function (d) {
-            return d.name === baseModelName;
+              return (d.name === baseModelName && !d.variantOf) || (d.name === baseModelName && d.name !== d.base);
           });
           if (!baseModel)
             return obj;
