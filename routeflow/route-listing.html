@@ -10,7 +10,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 <dom-module id="route-listing">
   <template>
     <style>
-      :host {
+       :host {
         position: relative;
         display: block;
         background: var(--dark-primary-color);
@@ -62,10 +62,20 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         height: 18px;
         margin-right: 5px;
       }
+
+      .toggle-panel {
+        height: 40px;
+        background: var(--light-primary-color);
+        padding: 0px 10px 0px 16px;
+      }
     </style>
     <search-header filter-val="{{filterVal}}">
       <iron-icon class="small" icon="oe-designer-icons:route-manager"></iron-icon><span class="flex">Routes</span>
     </search-header>
+    <div class="toggle-panel layout horizontal center justified">
+      <label>Show All</label>
+      <paper-checkbox id="box" on-change="_handleSelectorStatus"> </paper-checkbox>
+    </div>
     <div class="list">
       <ul role="menu" class="vertical layout">
         <template is="dom-repeat" items="{{routeList}}" initial-count=10 filter="{{_filter(filterVal)}}" as="route">
@@ -102,11 +112,28 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       showSelected: function (e) {
         var route = e.model.route;
         route.checked = !route.checked;
-        var index = this.routeList.findIndex(function (obj) {
-          return obj.id == route.id;
-        })
+        var index = 0;
+        var selectorStatus = true;
+        var box = document.querySelector('#box');
+
+        this.routeList.forEach(function (obj, i) {
+          selectorStatus = obj.checked && selectorStatus;
+          index = obj.id == route.id ? i : index;
+        });
+        box.checked = selectorStatus;
+
         this.set('routeList.' + index + '.checked', route.checked);
         this.fire('render-route', route);
+      },
+      _handleSelectorStatus: function () {
+        var box = document.querySelector('#box');
+        this.routeList.forEach(function (route, index) {
+          if (route.checked != box.checked) {
+            route.checked = box.checked;
+            this.set('routeList.' + index + '.checked', route.checked);
+            this.fire('render-route', route);
+          }
+        }, this);
       }
     });
   </script>
