@@ -459,7 +459,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           }
         });
         this.set('modelDataObj.method.requiredFields', this.getDeepCopy(requiredFields));
-        this.set('editableValue', this.getDefaultValues(), null, 2);
+        this.getDefaultValues();
+        //this.set('editableValue', this.getDefaultValues(), null, 2);
         this.setResponseObj();
       },
       submit: function () {
@@ -611,8 +612,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         return methodObj;
       },
       setEditableValue: function () {
-        var editableValue = this.modelDataObj.method.editableValue || this.getDefaultValues();
-        this.set('editableValue', editableValue, null, 2);
+        this.modelDataObj.method.editableValue || this.getDefaultValues();
       },
       setSpinner: function (flag) {
         var spinner = this.$.spinner;
@@ -624,9 +624,27 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.set('isSpinnerActive', flag);
       },
       getDefaultValues: function () {
-        var obj = this.getModelProps(this.modelDataObj.model);
-        obj = Object.assign(obj, this.getAllBaseModelProps(this.modelDataObj.model, {}));
-        return JSON.stringify(obj, null, 2);
+        var url="designer/properties/"+this.modelDataObj.model.plural;
+        this.makeAjaxCall(url,'get',null,null,null,function(err,res){
+          var obj = {};
+          if(!err){
+            Object.keys(res).forEach(function(k){
+              if(!k.startsWith('_') && k !== 'id' &&  k !== 'scope'){
+                switch(res[k]["type"]){
+                  case "String":obj[k] = "";break;
+                  case "Date":obj[k] = (new Date()).toLocaleDateString();break;
+                  case "Number": obj[k] = 0;break;
+                  case "Boolean": obj[k] = false;break;
+                  default:obj[k] = {};break;
+                }
+              }
+            }.bind(this));
+          }else{
+            obj = this.getModelProps(this.modelDataObj.model);
+            obj = Object.assign(obj, this.getAllBaseModelProps(this.modelDataObj.model, {}));
+          }
+          this.set('editableValue', JSON.stringify(obj, null, 2));
+        }.bind(this));
       },
       getAllBaseModelProps: function (model, obj) {
         var baseModelName = model.base;
