@@ -11,3 +11,6 @@ var baseUrl = window.location.protocol;
 baseUrl = '//' + window.location.host;
 window.OEUtils.baseurl = baseUrl;
 window.OEUtils.uibaseroute = baseUrl;
+window.OEUtils.camelToSnake = function(str){
+	return str.replace(/([A-Z])/g, function($1){return "-"+$1.toLowerCase();});
+};

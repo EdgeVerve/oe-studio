@@ -1,0 +1,59 @@
+<dom-module id="oe-studio-styles">
+  <template>
+    <style>
+      oe-input,
+      oe-json-input,
+      oe-decimal,
+      oe-combo {
+        --paper-input-container: {
+          background: #263238;
+          padding: 2px 8px;
+          border-radius: 2px;
+          box-sizing: border-box;
+        }
+        --paper-input-container-input: {
+          font-size: 12px;
+          color: #ffffff;
+          opacity: 0.87;
+        }
+        --paper-input-container-underline: {
+          display: none;
+        }
+        --paper-input-container-underline-focus: {
+          display: none;
+        }
+      }
+
+      oe-checkbox {
+          --paper-checkbox-unchecked-color: rgba(255, 255, 255, 0.6);
+      }
+
+      paper-toggle-button {
+          --paper-toggle-button-unchecked-bar-color: rgba(255, 255, 255, 0.6);
+      }
+
+      oe-input.light-control,
+      oe-combo.light-control,
+      oe-json-input.light-control,
+      oe-decimal.light-control {
+        --paper-input-container: {
+          background: rgba(38, 49, 56, 0.12);
+          padding: 2px 8px;
+          border-radius: 2px;
+          box-sizing: border-box;
+        }
+        --paper-input-container-input: {
+          font-size: 12px;
+          color: var(--secondary-text-color);
+        }
+        --paper-input-container-underline: {
+          display: none;
+        }
+        --paper-input-container-underline-focus: {
+          display: none;
+        }
+      }
+
+    </style>
+  </template>
+</dom-module>
