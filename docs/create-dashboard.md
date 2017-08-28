@@ -155,6 +155,40 @@ series :[{"property":"id","name":"Loan Applications","aggregation":"count","colo
 ```
 ![Adding graphs3][graphs-step3]
 
+In the previous scenario the series data contains an aggregation function, but if data provided is already formatted no need of providing any aggregation function.
+Example :
+Suppose we have formatted data as below :
+```
+data : [{
+            country: 'China',
+            appls: 1066702
+        }, {
+            country: 'India',
+            appls: 1005600
+        }, {
+            country: 'United States',
+            appls: 1503498
+        }]
+```
+Then setting the following properties will achieve a graph as shown in the below image.
+```
+category : country
+chart-type : column
+inherit-parent-dimension : true
+series : [{"property":"appls","name":"Loan Applications","color":"green"}]
+data : [{
+            country: 'China',
+            appls: 1066702
+        }, {
+            country: 'India',
+            appls: 1005600
+        }, {
+            country: 'United States',
+            appls: 1503498
+        }]
+```
+![Formatted Chart][formatted-chart]
+
 Data for other two graphs are : 
 
 ```
@@ -284,3 +318,4 @@ Oe-studio is a  powerful tool to Create a page,its routewith less or no coding
 [configure-layout]:images/oe-studio-charts/delete-resize.PNG "Configure Layout"
 [final-layout]:images/oe-studio-charts/final_layout.PNG "Final Layout"
 [code-view]:images/oe-studio-charts/code-view.PNG "Code View"
+[formatted-chart]:images/oe-studio-charts/chart-formatted-data.PNG "Formatted Chart"
