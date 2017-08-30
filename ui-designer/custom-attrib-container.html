@@ -1,9 +1,11 @@
+<link rel="import" href="../styles/oe-studio-styles.html">
 <dom-module id="custom-attrib-container">
     <template>
         <style include="oe-studio-styles">
             :host{
                 display: block;
                 position: relative;
+                padding-bottom: 16px;
             }
             .attr-name{
                 text-overflow: ellipsis;
@@ -12,7 +14,6 @@
             }
             .container-header{
                 font-size: 12px;
-                padding: 6px 0px;
                 min-width: 60px;
                 color: #fff;
                 opacity: 0.54;
@@ -40,16 +41,19 @@
             paper-toggle-button{
                 transform:scale(0.8);
             }
+            .attrib-container{
+                min-height: 70px;
+            }
         </style>
         <div class="attrib-container">
             <div class="layout horizontal justified center container-header">
-                <span class="flex attr-name">[[_getLabel(label,attrib.label)]]
+                <span class="flex attr-name" hidden="[[noLabel]]">[[_getLabel(label,attrib.label)]]
                     <paper-tooltip position="left">[[_getLabel(label,attrib.label)]]</paper-tooltip>
                 </span>
                 <div class="layout horizontal center row-actions">
                     <paper-toggle-button checked="{{attrib.isBinded}}"></paper-toggle-button>
                     <span class="helper-text">Bind value</span>
-                    <iron-icon icon="delete" class="delete-icon" on-tap="deleteAttribute"></iron-icon>
+                    <iron-icon icon="delete" class="delete-icon" on-tap="deleteAttribute" hidden="[[noAction]]"></iron-icon>
                 </div>
             </div>
             <div class="container-content">
@@ -77,12 +81,23 @@
                 attrib:{
                     type:Object,
                     notify:true
+                },
+                noAction:{
+                    type:Boolean,
+                    value:false
+                },
+                noLabel:{
+                    type:Boolean,
+                    value:false
                 }
             },
             _getLabel:function(label,attribLabel){
                 return label || attribLabel;
             },
             _handleBindValueChange:function(){
+                if(this.noAction){
+                    return;
+                }
                 this.fire('update-attribute',this.attrib);
             },
             deleteAttribute: function() {

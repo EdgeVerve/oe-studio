@@ -377,6 +377,7 @@
 				this.makeAjaxCall('/api/DesignerElements', 'get', null, null, null, function(err, res) {
 					var elementList = JSON.parse(JSON.stringify(self.defaultElementList));
 					var groupedElements = {};
+					var editorMap = {};
 					if (!err) {
 						var resposeList = res.map(function(d) {
 							return d.name.toLowerCase();
@@ -386,7 +387,10 @@
 						});
 						elementList = elementList.concat(res);
 						elementList.forEach(function(d) {
-							d._userDefined = d._type === "DesignerElement"
+							d._userDefined = d._type === "DesignerElement";
+							if(d.config.editorUrl){
+								editorMap[d.tag] = d.config.editorUrl;
+							}
 						})
 					} else {
 						self.resolveError(err);
@@ -396,6 +400,7 @@
                     groupedElements = _.groupBy(elementList, function(item) {
 						return item.category;
 					});
+					self.fire('update-editors-list',editorMap);
 					self.set('components', groupedElements);
 					self.set('elementList', Object.keys(groupedElements).map(function(grpName) {
 						return {

@@ -1,6 +1,5 @@
 <link rel="import" href="settings-pane-elements/ui-style-editor.html">
 <link rel="import" href="settings-pane-elements/ui-style-manager.html">
-<link rel="import" href="custom-attrib-editors/ui-custom-attribute-editor.html">
 <link rel="import" href="ui-attribute-editor.html">
 <link rel="import" href="ui-element-layers-panel.html">
 <link rel="import" href="ui-asset-manager.html">
@@ -97,10 +96,7 @@
                 </paper-tabs>
                 <iron-pages selected="{{selectedTab}}">
                     <div class="page-container">
-                      <iron-pages selected="[[_selectEditor(selectedElement)]]">
-                        <ui-custom-attribute-editor></ui-custom-attribute-editor>
-                        <ui-attribute-editor id="attribEditor"></ui-attribute-editor>
-                      </iron-pages>
+                      <ui-attribute-editor id="attribEditor"></ui-attribute-editor>
                     </div>
                     <div class="page-container">
                         <ui-style-editor selected-width="{{selectedWidth}}" selected-device="{{selectedDevice}}" style-sheet={{styleSheet}} assets={{assets}}
@@ -147,10 +143,6 @@
           type: Object,
           notify: true,
           observer: 'elementChanged'
-        },
-        selectedElement: {
-          type: Object,
-          statePath: 'selectedElement'
         }
       },
       behaviors: [
@@ -185,14 +177,6 @@
         cssRule._isGlobalSetting = false;
         this.set('selectedTab', 2);
         this.$['style-manager'].editRule(event.detail);
-      },
-      _selectEditor:function(element){
-        if(!element){
-          return;
-        }
-        var tagName = element.tagName.toLowerCase();
-        var customList = ["oe-charts"];
-        return (customList.indexOf(tagName) !== -1)?0:1;
       }
     })
   </script>

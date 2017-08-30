@@ -1,0 +1,69 @@
+<link rel="import" href="custom-attrib-container.html">
+<link rel="import" href="../styles/oe-studio-styles.html">
+<dom-module id="generic-attrib-editor">
+    <template>
+        <style include="oe-studio-styles">
+        :host{
+            display: block;
+            position: relative;
+        }
+        .attribute-fields{
+            padding: 8px 16px;
+        }
+        
+        custom-attrib-container{
+            border-bottom: 1px solid var(--default-primary-color);
+        }
+
+        </style>
+        <div class="attribute-fields">
+            <template is="dom-repeat" items="[[_getProperty(elementConfig.*)]]" as="prop">
+                <custom-attrib-container attrib="{{prop}}">
+                    <template is="dom-if" restamp if="[[_showControl('String',prop.type)]]">
+                        <oe-input no-label-float value="{{prop.value}}" attr-id$="[[prop.key]]" on-change="_updateAttribValue"></oe-input>
+                    </template>
+                    <template is="dom-if" restamp if="[[_showControl('Boolean',prop.type)]]">
+                        <oe-checkbox value="{{prop.value}}" attr-id$="[[prop.key]]" on-change="_updateAttribValue"></oe-checkbox>
+                    </template>
+                    <template is="dom-if" restamp if="[[_showControl('Object',prop.type)]]">
+                        <oe-json-input no-label-float value="{{prop.value}}" attr-id$="[[prop.key]]" on-change="_updateAttribValue"></oe-json-input>
+                    </template>
+                    <template is="dom-if" restamp if="[[_showControl('Number',prop.type)]]">
+                        <oe-decimal precision="0" no-label-float value="{{prop.value}}" attr-id$="[[prop.key]]" on-change="_updateAttribValue"></oe-decimal>
+                    </template>
+                </custom-attrib-container>
+            </template>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "generic-attrib-editor",
+            properties: {
+                elementConfig: {
+                    type: Object
+                },
+            },
+            _getProperty: function () {
+                if (this.elementConfig) {
+                    return Object.keys(this.elementConfig).map(function (k) {
+                        return this.elementConfig[k];
+                    }.bind(this));
+                }
+                return []
+            },
+            _showControl: function (type, propType) {
+                if (type === 'Object') {
+                    return propType === "Object" || propType === "Array"
+                }
+                return propType === type;
+            },
+            _updateAttribValue:function(e){
+                var field = e.currentTarget.getAttribute('attr-id');
+                var obj = this.elementConfig[field];
+                if(e.currentTarget.validate()){
+                    this.fire('update-attribute',obj);
+                }
+            }
+        })
+    </script>
+</dom-module>

@@ -1,55 +1,12 @@
-<link rel="import" href="attribute-element.html">
+<link rel="import" href="search-input.html">
+<link rel="import" href="generic-attrib-editor.html">
+<link rel="import" href="../styles/oe-studio-styles.html">
 <dom-module id="ui-attribute-editor">
   <template>
-    <style>
-      :host {
+    <style include="oe-studio-styles">
+       :host {
         display: block;
         position: relative;
-      }
-
-      oe-input,
-      oe-json-input,
-      oe-decimal,
-      oe-combo {
-        --paper-input-container: {
-          background: #263238;
-          padding: 2px 8px;
-          border-radius: 2px;
-          box-sizing: border-box;
-        }
-        --paper-input-container-input: {
-          font-size: 12px;
-          color: #ffffff;
-          opacity: 0.87;
-        }
-        --paper-input-container-underline: {
-          display: none;
-        }
-        --paper-input-container-underline-focus: {
-          display: none;
-        }
-      }
-
-      oe-input.light-control,
-      oe-combo.light-control,
-      oe-json-input.light-control,
-      oe-decimal.light-control {
-        --paper-input-container: {
-          background: rgba(38, 49, 56, 0.12);
-          padding: 2px 8px;
-          border-radius: 2px;
-          box-sizing: border-box;
-        }
-        --paper-input-container-input: {
-          font-size: 12px;
-          color: var(--secondary-text-color);
-        }
-        --paper-input-container-underline: {
-          display: none;
-        }
-        --paper-input-container-underline-focus: {
-          display: none;
-        }
       }
 
       .element-name {
@@ -67,24 +24,14 @@
         color: #fff;
         background: var(--light-primary-color);
         height: 32px;
-        padding: 10px 12px;
+        padding: 0px 12px;
         box-sizing: border-box;
         cursor: pointer;
       }
 
       .info-box {
-        padding: 12px 0px;
+        padding: 8px 0px;
         position: relative;
-      }
-
-      .info-box .row-actions {
-        visibility: hidden;
-        position: absolute;
-        right: 0px;
-      }
-
-      .info-box:hover .row-actions {
-        visibility: visible;
       }
 
       .info-label {
@@ -105,30 +52,8 @@
         max-width: 90px;
       }
 
-      attribute-element+attribute-element {
-        border-top: 1px solid var(--default-primary-color);
-      }
-
-      .add-attribute-container {
-        color: var(--secondary-text-color);
-        background: #CFD8DC;
-        padding: 0px 12px;
-      }
-
       .attribute-list {
         padding: 0px 12px;
-      }
-
-      .add-attribute-container .info-label {
-        color: var(--primary-text-color);
-      }
-
-      oe-checkbox {
-        --paper-checkbox-unchecked-color: rgba(255, 255, 255, 0.6);
-      }
-
-      paper-toggle-button {
-        --paper-toggle-button-unchecked-bar-color: rgba(255, 255, 255, 0.6);
       }
 
       .attribute-container {
@@ -167,86 +92,99 @@
         background: var(--default-primary-color);
       }
 
+      .attribute-info {
+        padding: 0px 16px;
+      }
+
+      .attr-item {
+        padding: 0px 16px 16px 16px;
+      }
+
+      .attr-item .attr-key {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 12px;
+        min-width: 60px;
+      }
+
+      search-input {
+        margin-bottom: 16px;
+      }
+
+      .attr-header {
+        height: 30px;
+        color: #fff;
+        opacity: 0.54;
+      }
+
+      .attr-header iron-icon {
+        --iron-icon-width: 16px;
+        --iron-icon-height: 16px;
+      }
+
+      .panel-open-true {
+        transform: rotate(180deg);
+      }
     </style>
     <template is="dom-if" if="[[selectedElement]]">
       <div>
         <div class="element-name">[[_getElementName(selectedElement)]]</div>
-        <div class="section-header layout horizontal center justified" collapse-target="attribute-layout" on-tap="_toggleCollaspe">
+        <div class="section-header layout horizontal center justified" on-tap="_toggleAttributePanel">
           <span>ATTRIBUTES</span>
-          <iron-icon icon="icons:add-box" class="action-icon" on-tap="showAttribute" id="addAttributeIcon"></iron-icon>
-          <paper-tooltip for="addAttributeIcon">Add Attribute</paper-tooltip>
+          <div>
+            <iron-icon icon="icons:add-box" class="action-icon" on-tap="_showAddAttribute" id="addAttributeIcon"></iron-icon>
+            <paper-tooltip for="addAttributeIcon">Add Attribute</paper-tooltip>
+            <iron-icon icon="arrow-drop-down" class$="panel-open-[[showAttrList]] dd-icon"></iron-icon>
+          </div>
         </div>
-        <iron-collapse id="attribute-layout" opened="[[showAttributes]]">
-          <div class="section-content">
-            <search-input value="{{searchKey}}" placeholder="Search Attributes"></search-input>
-            <template is="dom-if" if="[[propertyList.length]]">
-              <div class="more-attr-header layout horizontal center end-justified" collapse-target="attribute-list" on-tap="_toggleCollaspe">
-                <span>[[generateText(showMore)]]</span>
-                <iron-icon icon="icons:add" class="action-icon" hidden="[[showMore]]"></iron-icon>
-                <iron-icon icon="icons:remove" class="action-icon" hidden="[[!showMore]]"></iron-icon>
+        <div class="attribute-control">
+          <iron-collapse opened="[[showAddAttribute]]">
+            <div class="add-attribute-container" id="addAttrContainer">
+              <div class="actions-panel layout end-justified horizontal center">
+                <paper-button on-tap="cancelAction">CANCEL</paper-button>
+                <paper-button id="addAttribSubmitBtn" secondary on-tap="addAttribute">ADD</paper-button>
               </div>
-            </template>
-            <div class="attribute-container">
-              <iron-collapse opened="[[showAddAttribute]]">
-                <div class="add-attribute-container" id="addAttrContainer">
-                  <div class="actions-panel layout end-justified horizontal center">
-                    <paper-button on-tap="cancelAction">CANCEL</paper-button>
-                    <paper-button id="addAttribSubmitBtn" secondary on-tap="addAttribute">ADD</paper-button>
-                  </div>
-                  <div class="attribute-info">
-                    <form is="iron-form" id="addAttributeForm">
-                      <div class="info-box layout horizontal center">
-                        <div class="info-label">Attribute: </div>
-                        <div class="info-value">
-                          <oe-combo allow-free-text class="light-control" listdata="{{listdata}}" displayproperty="name" pattern="^[a-z][0-9a-z-]+[0-9a-z]$" required no-label-float value="{{attributeObj}}"></oe-combo>
-                        </div>
-                      </div>
-                      <template is="dom-if" if="{{!isString(attributeObj.type)}}">
-                        <div class="info-box layout horizontal center">
-                          <paper-toggle-button checked="{{attributeObj.isBindedValue}}"></paper-toggle-button>
-                          <span class="helper-text">{{_generateLabel(attributeObj.isBindedValue)}}</span>
-                        </div>
-                      </template>
-                      <div class="info-box layout horizontal center">
-                        <div class="info-label">Value: </div>
-                        <div class="info-value flex">
-                          <template is="dom-if" restamp if="{{attributeObj.isBindedValue}}">
-                            <oe-input class="light-control" no-label-float value="{{attributeObj.value}}" pattern="^(\{\{[0-9a-zA-Z\.]+\}\}|\[\[[0-9a-zA-Z\.]+\]\])$"></oe-input>
-                          </template>
-                          <template is="dom-if" restamp if="{{!attributeObj.isBindedValue}}">
-                            <template is="dom-if" restamp if="{{_showControl('String',attributeObj.name)}}">
-                              <oe-input class="light-control" no-label-float value="{{attributeObj.value}}"></oe-input>
-                            </template>
-                            <template is="dom-if" restamp if="{{_showControl('Boolean',attributeObj.name)}}">
-                              <oe-checkbox class="light-control" value="{{attributeObj.value}}"></oe-checkbox>
-                            </template>
-                            <template is="dom-if" restamp if="{{_showControl('Object',attributeObj.name)}}">
-                              <oe-json-input class="light-control" no-label-float value="{{attributeObj.value}}"></oe-json-input>
-                            </template>
-                            <template is="dom-if" restamp if="{{_showControl('Array',attributeObj.name)}}">
-                              <oe-json-input class="light-control" no-label-float value="{{attributeObj.value}}"></oe-json-input>
-                            </template>
-                            <template is="dom-if" restamp if="{{_showControl('Number',attributeObj.name)}}">
-                              <oe-decimal class="light-control" precision="0" no-label-float value="{{attributeObj.value}}"></oe-decimal>
-                            </template>
-                          </template>
-                        </div>
-                      </div>
-                    </form>
+              <div class="attribute-info">
+                <div class="info-box layout horizontal center">
+                  <div class="info-label">Attribute: </div>
+                  <div class="info-value flex">
+                    <oe-input no-label-float value="{{attributeObj.attribKey}}"></oe-input>
                   </div>
                 </div>
-              </iron-collapse>
-              <div class="attribute-list">
-                <template is="dom-repeat" items="{{attributeList}}" sort="_sort" filter="{{_filterAttribute(searchKey)}}">
-                  <attribute-element name$="[[item.name]]" attr-obj="{{item}}" on-delete-attribute="deleteAttribute" on-save-attribute="saveAttrConfiguration"></attribute-element>
-                </template>
-                <iron-collapse id="attribute-list" opened="{{showMore}}">
-                  <template is="dom-repeat" items="{{propertyList}}" sort="_sort" filter="{{_filterAttribute(searchKey)}}">
-                    <attribute-element name$="[[item.name]]" attr-obj="{{item}}" on-delete-attribute="deleteAttribute" on-save-attribute="saveAttrConfiguration"></attribute-element>
-                  </template>
-                </iron-collapse>
+                <div class="info-box layout horizontal center">
+                  <div class="info-label">Value: </div>
+                  <div class="info-value flex">
+                    <oe-input no-label-float value="{{attributeObj.value}}"></oe-input>
+                  </div>
+                </div>
               </div>
             </div>
+          </iron-collapse>
+        </div>
+        <iron-collapse opened="[[showAttrList]]">
+          <div class="attribute-list-container">
+            <search-input value="{{searchKey}}" placeholder="Search Attributes.."></search-input>
+            <template is="dom-repeat" items="{{attributeList}}" as="attr" filter="{{_filterAttribute(searchKey)}}">
+              <div class="attr-item">
+                <div class="attr-header layout horizontal center justified">
+                  <label class="attr-key">[[attr.attribKey]]</label>
+                  <iron-icon icon="delete" on-tap="_deleteAttrib"></iron-icon>
+                </div>
+                <oe-input no-label-float value="{{attr.value}}" attr="[[attr]]" on-change="_updateAttrib"></oe-input>
+              </div>
+            </template>
+          </div>
+        </iron-collapse>
+        <div class="section-header layout horizontal center justified" hidden="[[!_showProperties]]" on-tap="_togglePropertiesPanel">
+          <span>PROPERTIES</span>
+          <iron-icon icon="arrow-drop-down" class$="panel-open-[[showPropList]] dd-icon"></iron-icon>
+        </div>
+        <iron-collapse opened="[[showPropList]]">
+          <div class="property-editor-container">
+            <iron-pages id="editorSelector" attr-for-selected="ele-name">
+              <generic-attrib-editor ele-name="default"></generic-attrib-editor>
+            </iron-pages>
           </div>
         </iron-collapse>
       </div>
@@ -269,360 +207,216 @@
       selectedPolymerElement: {
         type: Object,
         statePath: 'selectedPolymerElement'
-      },
-      attributeList: {
-        type: Array,
-        value: function() {
-          return [];
-        }
-      },
-      tempAttributeList: {
-        type: Array,
-        value: function() {
-          return [];
-        }
-      },
-      searchKey: {
-        type: String,
-        value: ''
       }
     },
     observers: ['elementSelected(selectedElement,selectedPolymerElement)'],
+    listeners: {
+      'update-attribute': '_updateAttribute',
+      'delete-attribute': '_deleteAttribute'
+    },
     behaviors: [
       ReduxBehavior
     ],
-    attached: function() {
-      this.initialize();
-    },
     actions: {
-      update: function(element) {
+      update: function (element) {
         return {
           type: 'UPDATE_ELEMENT',
           element: element
         }
       }
     },
-    isString: function(type) {
-      return (!type || type == 'String' || type == 'string');
-    },
-    generateText: function(flag) {
-      return (flag ? 'Collapse All' : 'Expand All');
-    },
-    _getElementName: function(elem) {
+    _getElementName: function (elem) {
       return elem && elem.tagName.toUpperCase();
     },
-    _generateLabel: function(flag) {
-      return (flag ? 'Bind value' : 'Custom');
-    },
-    _filterAttribute: function(val) {
+    _filterAttribute: function (val) {
       if (!val) {
         this.set('showMore', false);
       } else {
         this.set('showMore', true);
       }
-      return function(model) {
+      return function (model) {
         if (!val) {
           return true;
         }
         if (!model) {
           return false;
         }
-        return (model.name.toLowerCase().indexOf(val.toLowerCase()) != -1);
+        return (model.attribKey.toLowerCase().indexOf(val.toLowerCase()) != -1);
       }
     },
-    initialize: function() {
+    _initialize: function () {
       this.set('searchKey', '');
       this.set('showAddAttribute', false);
-      this.set('isCustom', true);
-      this.set('showAttributes', true);
-      //this.set('showMore', false);
-      this.set('attributeObj', {});
-      this.set('attributeObj.isBindedValue', false);
-      this.set('attributeObj.type', 'String');
-      this.set('listdata', []);
       this.set('attributeList', []);
-      this.set('propertyList', []);
-      this.set('tempAttributeList', []);
+      this.set('showAttrList', true);
+      this.set('showPropList', true);
     },
-    showAttribute: function(event) {
-      event.stopPropagation();
-      this.set('attributeObj', {});
-      this.set('attributeObj.isBindedValue', false);
-      this.set('attributeObj.type', 'String');
-      this.set('showAddAttribute', true);
-      this.set('showAttributes', true);
-      this.async(function() {
-        this.$$('#addAttrContainer').scrollIntoView({
-          block: 'start',
-          behavior: 'smooth'
-        });
-      }, 300)
-
+    attached: function () {
+      document.addEventListener('update-editors-list', function (e) {
+        this.set('editorMap', e.detail);
+      }.bind(this));
+      this._initialize();
     },
-    cancelAction: function() {
-      this.set('showAddAttribute', false);
-    },
-    deleteAttribute: function(event) {
-      var index = event.model.index;
-      this.splice('attributeList', index, 1);
-      this.selectedElement.removeAttribute(event.model.item.name);
-      this.dispatch('update', this.selectedElement);
-    },
-    addAttribute: function() {
-      if (!this.$$('#addAttributeForm').validate()) {
-        return;
-      }
-      var obj = this.attributeObj;
-      var regexp = new RegExp('^(\{\{[0-9a-zA-Z\.]+\}\}|\[\[[0-9a-zA-Z\.]+\]\])$');
-      if (regexp.test(obj.value)) {
-        obj.isBindedValue = true;
-      } else {
-        obj.isBindedValue = false;
-      }
-      var index = this.attributeList.findIndex(function(attr) {
-        return attr.name == obj.name;
-      })
-      if (index >= 0) {
-        this.set('attributeList.' + index, obj);
-      } else {
-        var found = this.propertyList.findIndex(function(attr) {
-          return attr.name == obj.name;
-        })
-        if (found >= 0) {
-          this.splice('propertyList', found, 1);
-        }
-        this.push('attributeList', obj);
-      }
-      this.set('attributeObj', {});
-      this.set('attributeObj.isBindedValue', false);
-      this.set('attributeObj.type', String);
-      this.saveAttrConfiguration();
-    },
-    _showControl: function(type, attrName) {
-      var attribute = this.listdata.find(function(attr) {
-        return attr.name == attrName
-      })
-      if (!attribute) {
-        return type == 'String';
-      }
-      if (attribute.type == type) {
-        return true;
-      }
-      return false;
-    },
-    _toggleCollaspe: function(event) {
-      var target = event.currentTarget.getAttribute('collapse-target');
-      var collapseTarget = this.querySelector('#' + target);
-      collapseTarget.toggle();
-      Polymer.dom.flush();
-      this.async(function() {
-        if (target == 'attribute-list' && collapseTarget.opened) {
-          collapseTarget.scrollIntoView({
-            block: 'start',
-            behavior: 'smooth'
-          });
-        }
-      }, 300);
-    },
-    _generateAttributeList: function(props, type) {
-      var self = this;
-      if (!type) {
-        type = 'property';
-      }
-      var regexp = new RegExp('^(\{\{[0-9a-zA-Z\.]+\}\}|\[\[[0-9a-zA-Z\.]+\]\])$')
-      if (!props) {
-        return;
-      }
-      Object.keys(props).forEach(function(key) {
-        var obj = {
-          value: props[key].value || null,
-          type: props[key].type ? (props[key].type.name || props[key].type) : 'String'
-        }
-        obj.isBindedValue = false;
-        var index;
-        if (obj.value && (typeof(obj.value) == 'string')) {
-          obj.isBindedValue = regexp.test(obj.value);
-        }
-        if (type == 'property') {
-          obj.value = null;
-          if (obj.type == 'Date') {
-            obj.type = 'String';
-          }
-          obj.name = self._convertToKebabCase(key);
-          if (obj.name.startsWith('_')) {
-            return;
-          }
-          if (obj.type != 'Function' && typeof obj.value != 'function') {
-            index = self.propertyList.findIndex(function(attr) {
-              return attr.name == obj.name;
-            })
-            if (index >= 0) {
-              self.set('propertyList.' + index, obj);
-            } else {
-              self.push('propertyList', obj);
-            }
-          }
-        } else {
-          obj.name = props[key].name;
-          if (obj.name == 'oe-id' || obj.name == 'oe-ele-type' || obj.name === 'draggable') {
-            return;
-          }
-          index = self.propertyList.findIndex(function(attr) {
-            return attr.name == obj.name;
-          })
-          if (index >= 0) {
-            obj.type = self.propertyList[index].type;
-            self.splice('propertyList', index, 1);
-          }
-          if (obj.value && (typeof(obj.value) == 'string')) {
-            obj.isBindedValue = regexp.test(obj.value);
-          }
-          if (obj.type == 'Boolean' && !obj.isBindedValue) {
-            obj.value = true;
-          }
-          if (obj.type != 'Function' && typeof obj.value != 'function') {
-            index = self.attributeList.findIndex(function(attr) {
-              return attr.name == obj.name;
-            })
-            if (index >= 0) {
-              self.set('attributeList.' + index, obj);
-            } else {
-              self.push('attributeList', obj);
-            }
-          }
-        }
-      })
-    },
-    elementSelected: function(el, polyEl) {
+    elementSelected: function (el, polyEl) {
       if (!el || !polyEl || el.tagName != polyEl.tagName) {
         return;
       }
       var self = this;
-      this.initialize();
-      if (this.prevEleId !== el.getAttribute('oe-id')) {
-        this.prevEleId = el.getAttribute('oe-id');
-        this.set('showMore', false);
-      }
+      this._initialize();
       Polymer.dom.flush();
-      if (this.selectedElement) {
-        var props;
-        if (this.selectedPolymerElement.set) {
-		  var isDynamic = (this.selectedPolymerElement.is === "dynamic-dom-element");
-          var ele = isDynamic?this.selectedPolymerElement.polyConfig:this.selectedPolymerElement;
-
-		  props = ele.properties;
-          this._generateAttributeList(props, 'property');
-          ele.behaviors.forEach(function(behavior) {
-            var props = behavior.properties;
-            self._generateAttributeList(props, 'property');
-          });
-
-			//If not dynamic extract attributes
-			isDynamic || this._generateAttributeList(ele.attributes, 'attribute');
-        }
-		  props = this.selectedElement.attributes;
-		  this._generateAttributeList(props, 'attribute');
-		  var config;
-      if(OEUtils.designerData.elementList){
-        config = OEUtils.designerData.elementList.find(function(obj) {
-  			  return obj.tag == self.selectedElement.tagName.toLowerCase();
-		    });
+      var attrList = [];
+      var propertiesConfig = {};
+      var ignoreList = ['class', 'oe-id', 'oe-ele-type', 'draggable', 'oe-handle', 'oe-container']
+      if (polyEl.set) {
+        var isDynamic = (polyEl.is === "dynamic-dom-element");
+        var ele = isDynamic ? polyEl.polyConfig : polyEl;
+        self._getProperties(el, ele, ele.properties, propertiesConfig);
+        ele.behaviors.forEach(function (behavior) {
+          self._getProperties(el, ele, behavior.properties, propertiesConfig);
+        });
       }
-      
-          /*
-           * fetch attr config from designer elem list
-           * then iterate over the actual selected element atributes property so that the type in attr config will not be overwritten
-           */
-        if (config) {
-            config.config.attributes.forEach(function(attr) {
-              var obj = {};
-              if (typeof attr === 'string') {
-                obj = {
-                  name: attr,
-                  value: self.selectedElement.getAttribute(attr),
-                  isBindedValue: false,
-                  type: 'String'
-                }
-              } else {
-                obj = {
-                  name: attr.name,
-                  value: self.selectedElement.getAttribute(attr),
-                  type: attr.type ? self._convertToPascalCase(attr.type) : 'String',
-                  isBindedValue: false
-                }
-              }
-              var index = self.attributeList.findIndex(function(attr) {
-                return attr.name == obj.name;
-              })
-              if (index >= 0) {
-                obj.value = self.attributeList[index].value;
-                obj.isBindedValue = self.attributeList[index].isBindedValue;
-                self.set('attributeList.' + index, obj);
-              } else {
-                self.push('attributeList', obj);
-              }
-            })
+      if (el) {
+        [].forEach.call(el.attributes, function (attr) {
+          var attrKey = attr.nodeName;
+          if (!propertiesConfig.hasOwnProperty(OEUtils.snakeToCamel(attrKey)) &&
+            ignoreList.indexOf(attrKey) === -1) {
+            var attrObj = {
+              attribKey: attrKey,
+              value: attr.nodeValue
+            }
+            attrList.push(attrObj);
           }
-        if (this.attributeList.length == 0) {
-          this.set('showMore', true);
-        }
-        this.set('tempAttributeList', _.cloneDeep(this.attributeList));
-        this.set('listdata', [].concat.call(this.attributeList, this.propertyList))
-      }
-      var c1 = this.querySelector('.attribute-container');
-      c1 && (c1.scrollTop = 0);
-    },
-    _convertToPascalCase: function(str) {
-      return str.replace(/\w\S*/g, function(txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-      });
-    },
-    _convertToCamelCase: function(myString) {
-      return myString.replace(/-([a-z])/g, function(g) {
-        return g[1].toUpperCase();
-      });
-    },
-    _convertToKebabCase: function(myString) {
-      return myString.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-    },
-    _sort: function(a, b) {
-      if (a.name.toLowerCase() === b.name.toLowerCase()) {
-        return 0;
-      }
-      return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
-    },
-    saveAttrConfiguration: function(event) {
-      if (event) {
-        var obj = event.model.item;
-        var index = this.attributeList.findIndex(function(attr) {
-          return attr.name == obj.name
         })
-        if (index != -1) {
-          this.set('attributeList.' + index, obj);
-        } else {
-          this.push('attributeList', obj);
-        }
       }
-      var self = this;
-      var changedAttributeList
-      if (_.differenceWith) {
-        changedAttributeList = _.differenceWith(this.attributeList, this.tempAttributeList, _.isEqual);
-      } else {
-        changedAttributeList = _.difference(this.attributeList, this.tempAttributeList, _.isEqual);
+      this.set('attributeList', attrList);
+      this.set('_showProperties', Object.keys(propertiesConfig).length !== 0);
+      this._handleEditorSelection(propertiesConfig)
+    },
+    _getProperties: function (el, polyEl, properties, config) {
+      if (typeof properties !== "object") {
+        return;
       }
-
-      changedAttributeList.forEach(function(attr) {
-        if (attr.type == 'Boolean' && !attr.value) {
-          self.selectedElement.removeAttribute(attr.name);
-        } else if (!attr.isBindedValue && (attr.type == 'Object' || attr.type == 'Array')) {
-          self.selectedElement.setAttribute(attr.name, JSON.stringify(attr.value));
-        } else {
-          self.selectedElement.setAttribute(attr.name, attr.value);
+      Object.keys(properties).forEach(function (prop) {
+        if (prop.startsWith('_') || (typeof properties[prop] !== 'object')) {
+          return;
         }
+        var actualValue = polyEl[prop];
+        var attrKey = OEUtils.camelToSnake(prop)
+        var attribValue = el.getAttribute(attrKey);
+        var hasAttribValue = !!attribValue && attribValue.length > 0;
+        var obj = {
+          key: prop,
+          attribKey: attrKey,
+          label: OEUtils.camelCaseToLabel(prop),
+          type: properties[prop].type.name,
+          isBinded: (!!attribValue && attribValue.match(/(\{\{[0-9a-zA-Z\.]+\}\}|\[\[[0-9a-zA-Z\.]+\]\])$/))
+        }
+        if (obj.type === "Boolean") {
+          obj.value = el.hasAttribute(attrKey);
+        } else {
+          if (hasAttribValue) {
+            obj.value = actualValue;
+          }
+        }
+        obj.bindValue = obj.isBinded ? attribValue.substr(2, attribValue.length - 4) : "";
+        config[prop] = obj;
       });
+    },
+    _handleEditorSelection: function (config) {
+      var tagName = this.selectedElement.tagName.toLowerCase();
+      var selector = this.querySelector('#editorSelector');
+      function _setEditor(editorKey) {
+        selector.select(editorKey || 'default');
+        selector.selectedItem.set('elementConfig', config);
+      }
+      if (this.editorMap && this.editorMap[tagName]) {
+        var query = '[ele-name="' + tagName + '"]';
+        var editor = selector.querySelector(query);
+        if (editor) {
+          _setEditor(tagName);
+        } else {
+          Polymer.Base.importHref(this.editorMap[tagName], function handleDynamicImport(e) {
+            var domModule = e.target.import.querySelector('dom-module');
+            if (!domModule) {
+              _setEditor();
+            } else {
+              var newEditor = document.createElement(domModule.id);
+              newEditor.setAttribute('ele-name', tagName);
+              Polymer.dom(selector).appendChild(newEditor);
+              Polymer.dom.flush();
+              _setEditor(tagName);
+            }
+          }, function handleImportError() {
+            _setEditor();
+          });
+        }
+      } else {
+        _setEditor();
+      }
+    },
+    _showAddAttribute: function (event) {
+      event.stopPropagation();
+      this.set('attributeObj', {
+        attribKey: "",
+        value: ""
+      });
+      this.set('showAddAttribute', true);
+    },
+    addAttribute: function () {
+      this.fire('update-attribute', this.attributeObj);
+      this.set('showAddAttribute', false);
+    },
+    cancelAction: function () {
+      this.set('showAddAttribute', false);
+    },
+    _updateAttrib: function (e) {
+      var attrib = e.model.attr;
+      this.fire('update-attribute', attrib);
+    },
+    _deleteAttrib: function (e) {
+      var attrib = e.model.attr;
+      this.fire('delete-attribute', attrib);
+    },
+    _toggleAttributePanel: function () {
+      this.set('showAttrList', !this.showAttrList);
+    },
+    _togglePropertiesPanel: function () {
+      this.set('showPropList', !this.showPropList);
+    },
+    _deleteAttribute: function (e) {
+      var attrObj = e.detail;
+      this.selectedElement.removeAttribute(attrObj.attribKey);
       this.dispatch('update', this.selectedElement);
-
+    },
+    _updateAttribute: function (e) {
+      var attrObj = e.detail;
+      if (attrObj.isBinded) {
+        this.selectedElement.setAttribute(attrObj.attribKey, "{{" + attrObj.bindValue + "}}");
+      } else {
+        switch (attrObj.type) {
+          case "Boolean":
+            if (attrObj.value) {
+              this.selectedElement.setAttribute(attrObj.attribKey, "");
+            } else {
+              this.selectedElement.removeAttribute(attrObj.attribKey);
+            }
+            break;
+          case "Object":
+          case "Array":
+            if (!attrObj.value) {
+              this.selectedElement.removeAttribute(attrObj.attribKey);
+            } else {
+              this.selectedElement.setAttribute(attrObj.attribKey, JSON.stringify(attrObj.value));
+            }
+            break;
+          case "Number":
+          case "String":
+          default:
+            this.selectedElement.setAttribute(attrObj.attribKey, attrObj.value);
+            break;
+        }
+      }
+      this.dispatch('update', this.selectedElement);
     }
   })
-
 </script>
