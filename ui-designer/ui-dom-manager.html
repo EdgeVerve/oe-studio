@@ -235,21 +235,21 @@
         }
       },
       selectedBreadCrumb: function (dom, selected) {
-        var parent = [];
+        var parentElementList = [];
         if (!dom || !selected || !dom.contains(selected)) {
-          this.set('breadCrumb', parent.reverse());
+          this.set('breadCrumb', parentElementList.reverse());
           return;
         }
         var pointer = selected;
         while (pointer != dom) {
 			var name = (pointer.nodeName.toLowerCase() !== "dynamic-dom-element"?pointer.nodeName.toLowerCase():pointer.getAttribute('poly-type'));
-          parent.push({
+          parentElementList.push({
             tagName: name,
             ele: pointer
           });
           pointer = pointer.parent || pointer.parentElement
         }
-        this.set('breadCrumb', parent.reverse());
+        this.set('breadCrumb', parentElementList.reverse());
         this.frameWindow.designerController.focusElement(selected);
 
       },
