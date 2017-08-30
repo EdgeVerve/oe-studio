@@ -94,17 +94,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 testElement = fixture('oe-designer-fixture');
             });
 
-            test('Intial setup', function (done) {
+            test('Intial setup and Toggle Sidebars', function (done) {
                flush(function(){
                    assert.equal(testElement.currentSession.username,'john');
                    assert.isTrue(testElement.currentSession.isAdmin);
                    assert.equal(testElement.tenantList.length,1);
-                   done();
-               });
-            });
-
-            test('Toggle Sidebars', function (done) {
-               flush(function(){
                    assert.equal(testElement.$.leftDrawer.opened,false);
                    testElement.fire('toggle-left-drawer');
                    flush(function(){

@@ -411,7 +411,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             'Content-Type': 'application/json'
           }, JSON.stringify(list));
         });
-        server.respondWith('GET', /designerRoutes\/*/, function(req) {
+        server.respondWith('GET', /designer\/routes\/*/, function(req) {
           req.respond(200, {
             'Content-Type': 'application/json'
           }, JSON.stringify(designerRoutes));
@@ -530,10 +530,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         dataManager.set('modelDataObj.viewMode', 1);
         dataManager._showData(TestModel);
         flush(function() {
-          var pathDropDown = Polymer.dom(dataManager.root).querySelector('.filter').querySelectorAll('paper-item');
+          var pathDropDown = Polymer.dom(dataManager.root).querySelector('.filter').querySelector('oe-combo');
           // selecting findone path
-          pathDropDown = pathDropDown[6]; 
-          pathDropDown.click();
+          pathDropDown.set('value',pathDropDown.listdata[3].path);
           flush(function() {
             var getBtn = Polymer.dom(dataManager.root).querySelector('#getBtn');
             getBtn.click();

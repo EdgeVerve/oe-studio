@@ -8,71 +8,80 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="../../web-component-tester/browser.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    var WCT = {
+      mochaOptions: {
+        timeout: 20 * 1000
+      }
+    };
+
+  </script>
+  <script src="../../web-component-tester/browser.js"></script>
 </head>
 
 <body>
-    <script>
-        // Load and run all tests (.html, .js):
-        WCT.loadSuites([
-            "acl-grid-test.html",
-            "add-relation-dialog-test.html",
-            "add-rule-dialog-test.html",
-            "add-view-dialog-test.html",
-            "app-config-test.html",
-            "data-acl-dialog-test.html",
-            "data-manager-test.html",
-            "dynamic-acl-dialog-test.html",
-            "model-container-test.html",
-            "model-data-dialog-test.html",
-            "model-definition-dialog-test.html",
-            "model-designer-test.html",
-            "model-detail-dialog-test.html",
-            "model-detail-test.html",
-            "model-sidebar-test.html",
-            "model-work-area-test.html",
-            "oe-css-parser-test.html",
-            "oe-designer-test.html",
-            "property-dialog-test.html",
-            "property-grid-test.html",
-            "property-validation-form-test.html",
-            "relation-grid-test.html",
-            "resource-manager-test.html",
-            "route-element-test.html",
-            "route-flow-designer-test.html",
-            "route-listing-test.html",
-            "routeflow-workarea-test.html",
-            "rule-manager-test.html",
-            "search-header-test.html",
-            "service-personalization-field-replace-test.html",
-            "service-personalization-field-value-replace-test.html",
-            "service-personalization-filter-test.html",
-            "service-personalization-mask-test.html",
-            "service-personalization-rule-test.html",
-            "service-personalization-sort-test.html",
-            "service-personalization-test.html",
-            "transition-dialog-test.html",
-            "ui-designer/device-view-test.html",
-            "ui-designer/ui-alignment-chooser-test.html",
-            "ui-designer/ui-asset-manager-test.html",
-            "ui-designer/ui-attribute-editor-test.html",
-            "ui-designer/ui-dom-tree-test.html",
-            "ui-designer/ui-element-list-test.html",
-            "ui-designer/ui-element-tree-test.html",
-            "ui-designer/ui-model-manager-test.html",
-            "ui-designer/ui-navigation-settings-test.html",
-            "ui-designer/ui-page-list-test.html",
-            "ui-designer/ui-right-panel-test.html",
-            "ui-designer/ui-scripter-element-test.html",
-            "ui-designer/ui-theme-designer-test.html",
-            "ui-designer/ui-toolbar-test.html",
-            "upload-data-test.html",
-            "validation-grid-test.html",
-            "work-area-menu-test.html"
-        ]);
-    </script>
+  <script>
+    WCT.loadSuites([
+      "acl-grid-test.html",
+      "add-relation-dialog-test.html",
+      "add-rule-dialog-test.html",
+      "add-view-dialog-test.html",
+      "app-config-test.html",
+      "data-acl-dialog-test.html",
+      "data-manager-test.html",
+      "dynamic-acl-dialog-test.html",
+      "model-container-test.html",
+      "model-data-dialog-test.html",
+      "model-definition-dialog-test.html",
+      "model-designer-test.html",
+      "model-detail-dialog-test.html",
+      "model-detail-test.html",
+      "model-sidebar-test.html",
+      "model-work-area-test.html",
+      "oe-css-parser-test.html",
+      "oe-designer-test.html",
+      "property-dialog-test.html",
+      "property-grid-test.html",
+      "property-validation-form-test.html",
+      "relation-grid-test.html",
+      "resource-manager-test.html",
+      "route-element-test.html",
+      "route-flow-designer-test.html",
+      "route-listing-test.html",
+      "routeflow-workarea-test.html",
+      "rule-manager-test.html",
+      "search-header-test.html",
+      "service-personalization-field-replace-test.html",
+      "service-personalization-field-value-replace-test.html",
+      "service-personalization-filter-test.html",
+      "service-personalization-mask-test.html",
+      "service-personalization-rule-test.html",
+      "service-personalization-sort-test.html",
+      "service-personalization-test.html",
+      "transition-dialog-test.html",
+      "ui-designer/device-view-test.html",
+      "ui-designer/ui-alignment-chooser-test.html",
+      "ui-designer/ui-asset-manager-test.html",
+      "ui-designer/ui-attribute-editor-test.html",
+      "ui-designer/ui-dom-tree-test.html",
+      "ui-designer/ui-element-list-test.html",
+      "ui-designer/ui-element-tree-test.html",
+      "ui-designer/ui-model-manager-test.html",
+      "ui-designer/ui-navigation-settings-test.html",
+      "ui-designer/ui-page-list-test.html",
+      "ui-designer/ui-right-panel-test.html",
+      "ui-designer/ui-scripter-element-test.html",
+      "ui-designer/ui-theme-designer-test.html",
+      "ui-designer/ui-toolbar-test.html",
+      "upload-data-test.html",
+      "validation-grid-test.html",
+      "work-area-menu-test.html"
+    ]);
+
+  </script>
 </body>
+
 </html>

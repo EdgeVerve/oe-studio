@@ -8,239 +8,221 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="../../../web-component-tester/browser.js"></script>
-    <!-- importing dependent elements -->
-    <link rel="import" href="../../all-imports.html">
-    <!-- importing element to be tested -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+	<script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+	<script src="../../../web-component-tester/browser.js"></script>
+	<!-- importing dependent elements -->
+	<link rel="import" href="../../all-imports.html">
+	<!-- importing element to be tested -->
 	<link rel="import" href="../../ui-designer/ui-attribute-editor.html">
 </head>
 
 <body>
-    <!-- You can use the document as a place to set up your fixtures. -->
-    <test-fixture id="ui-attribute-editor-fixture">
-        <template>
-            <ui-attribute-editor>
-            </ui-attribute-editor>
-        </template>
-    </test-fixture>
-    <script>
-        var OEUtils = OEUtils || {};
-        OEUtils.designerData = OEUtils.designerData || {};
-        OEUtils.designerData.elementList = OEUtils.designerData.elementList || [{
-            "name": "Title-H1",
-            "icon": "oe-designer-icons:h1",
-            "tag": "h1",
-            "description": "HTML H1 tag used for page headers",
-            "content": "<h1>H1 text element</h1>",
-            "category": "textElement",
-            "config": {
-                "domType": "HTML",
-                "attributes": [{
-                    "name": "i18n-key",
-                    "type": "string"
-                }, {
-                    "name": "data-bound",
-                    "type": "boolean"
-                }],
-                "importUrl": "",
-                "type": "text"
-            },
-            "previewImg": "",
-            "_userDefined": false
-        }]
-        suite('<ui-attribute-editor>', function () {
-            var testElement;
-            setup(function () {
-                testElement = fixture('ui-attribute-editor-fixture');
-            });
+	<!-- You can use the document as a place to set up your fixtures. -->
+	<test-fixture id="ui-attribute-editor-fixture">
+		<template>
+			<ui-attribute-editor>
+			</ui-attribute-editor>
+		</template>
+	</test-fixture>
+	<script>
+		var OEUtils = OEUtils || {};
+		OEUtils.designerData = OEUtils.designerData || {};
+		OEUtils.designerData.elementList = OEUtils.designerData.elementList || [{
+			"name": "Title-H1",
+			"icon": "oe-designer-icons:h1",
+			"tag": "h1",
+			"description": "HTML H1 tag used for page headers",
+			"content": "<h1>H1 text element</h1>",
+			"category": "textElement",
+			"config": {
+				"domType": "HTML",
+				"attributes": [{
+					"name": "i18n-key",
+					"type": "string"
+				}, {
+					"name": "data-bound",
+					"type": "boolean"
+				}],
+				"importUrl": "",
+				"type": "text"
+			},
+			"previewImg": "",
+			"_userDefined": false
+		}]
+		suite('<ui-attribute-editor>', function() {
+			var testElement;
+			setup(function() {
+				testElement = fixture('ui-attribute-editor-fixture');
+			});
 
-            test('Initial state', function (done) {
-                flush(function () {
-                    assert.equal(testElement.searchKey, '');
-                    assert.equal(testElement.showAddAttribute, false);
-                    assert.equal(testElement.isCustom, true);
-                    assert.equal(testElement.showAttributes, true);
-                    assert.equal(testElement.attributeObj.isBindedValue, false);
-                    assert.equal(testElement.attributeObj.type, 'String');
-                    assert.equal(testElement.listdata.length, 0);
-                    assert.equal(testElement.attributeList.length, 0);
-                    assert.equal(testElement.propertyList.length, 0);
-                    assert.equal(testElement.tempAttributeList.length, 0);
-                    done();
-                })
-            });
-            test('Select basic HTML element', function (done) {
-                var selectedElement = document.createElement('h1');
-                selectedElement.setAttribute('class', 'heading-class');
-                selectedElement.setAttribute('oe-id', 'test123');
-                selectedElement.setAttribute('data-bound', '');
-                flush(function () {
-                    testElement.set('selectedElement', selectedElement);
-                    testElement.set('selectedPolymerElement', selectedElement);
-                    flush(function () {
-                        assert.notEqual(testElement.attributeList.length, 0);
-                        done();
-                    })
-                });
-            });
-            test('Select Polymer element', function (done) {
-                var attachedElement = document.createElement('paper-input');
-                attachedElement.setAttribute('class', 'my-input');
-                attachedElement.setAttribute('oe-id', 'test123');
-                document.body.appendChild(attachedElement);
+			test('Initial state', function(done) {
+				flush(function() {
+					assert.equal(testElement.searchKey, '');
+					assert.equal(testElement.showAddAttribute, false);
+					assert.equal(testElement.showAttrList, true);
+					assert.equal(testElement.showPropList, true);
+					assert.equal(testElement.attributeList.length, 0);
+					done();
+				})
+			});
+			test('Select basic HTML element', function(done) {
+				var selectedElement = document.createElement('h1');
+				selectedElement.setAttribute('class', 'heading-class');
+				selectedElement.setAttribute('oe-id', 'test123');
+				selectedElement.setAttribute('data-bound', '');
+				flush(function() {
+					testElement.set('selectedElement', selectedElement);
+					testElement.set('selectedPolymerElement', selectedElement);
+					flush(function() {
+						assert.equal(testElement.attributeList.length, 1);
+						assert.equal(testElement._showProperties, false);
+						done();
+					})
+				});
+			});
+			test('Select Polymer element', function(done) {
+				var attachedElement = document.createElement('paper-input');
+				attachedElement.setAttribute('class', 'my-input');
+				attachedElement.setAttribute('oe-id', 'test123');
+				document.body.appendChild(attachedElement);
+				var temp = document.createElement('template');
+				temp.innerHTML = '<paper-input oe-id="test123" class="my-input"></paper-input>';
+				var detachedElem = temp.content.children[0];
+				flush(function() {
+					testElement.set('selectedElement', detachedElem);
+					testElement.set('selectedPolymerElement', attachedElement);
+					flush(function() {
+						assert.equal(testElement.attributeList.length, 0);
+						assert.equal(testElement._showProperties, true);
+						done();
+					})
+				});
+			});
+			test('Add attribute to element', function(done) {
+				var attachedElement = document.createElement('paper-input');
+				attachedElement.setAttribute('class', 'my-input');
+				attachedElement.setAttribute('oe-id', 'test123');
+				document.body.appendChild(attachedElement);
+				var temp = document.createElement('template');
+				temp.innerHTML = '<paper-input oe-id="test123" class="my-input"></paper-input>';
+				var detachedElem = temp.content.children[0];
+				testElement.addEventListener('update-attribute', function(e) {
+					assert.equal(e.detail.attribKey, "new-attr");
+					done();
+				});
+				flush(function() {
+					testElement.set('selectedElement', detachedElem);
+					testElement.set('selectedPolymerElement', attachedElement);
+					assert.equal(testElement.showAddAttribute, false);
+					flush(function() {
+						var addAttribIcon = testElement.querySelector('#addAttributeIcon');
+						addAttribIcon.click();
+						flush(function() {
+							assert.equal(testElement.showAddAttribute, true);
+							testElement.set('attributeObj', {
+								attribKey: "new-attr",
+								value: "attrVal"
+							});
+							flush(function() {
+								flush(function() {
+									var addSubmitBtn = testElement.querySelector('#addAttrContainer #addAttribSubmitBtn');
+									addSubmitBtn.click();
+								});
+							});
+						});
+					})
+				});
+			});
+			test('Toggle Attribute List and delete attribute', function(done) {
+				var attachedElement = document.createElement('paper-input');
+				attachedElement.setAttribute('class', 'my-input');
+				attachedElement.setAttribute('oe-id', 'test123');
+				attachedElement.setAttribute('new-attr', 'newVal');
+				document.body.appendChild(attachedElement);
+				var temp = document.createElement('template');
+				temp.innerHTML = '<paper-input oe-id="test123" class="my-input" new-attr="newVal"></paper-input>';
+				var detachedElem = temp.content.children[0];
+				testElement.addEventListener('delete-attribute', function(e) {
+					assert.equal(e.detail.attribKey, "new-attr");
+					done();
+				});
+				flush(function() {
+					testElement.set('selectedElement', detachedElem);
+					testElement.set('selectedPolymerElement', attachedElement);
+					flush(function() {
+						var togglePanel = document.querySelector('.section-header');
+						togglePanel.click();
+						flush(function() {
+							assert.equal(testElement.showAttrList, false);
+							togglePanel.click();
+							flush(function() {
+								assert.equal(testElement.showAttrList, true);
+								var attribCount = testElement.attributeList.length;
+								var attrib = testElement.querySelector('.attr-item .attr-header');
+								var deleteIcon = attrib.querySelector('iron-icon[icon="delete"]');
+								deleteIcon.click();
+							});
+						});
+					});
+				});
+			});
+			test('Update Attribute', function(done) {
+				var attachedElement = document.createElement('paper-input');
+				attachedElement.setAttribute('class', 'my-input');
+				attachedElement.setAttribute('oe-id', 'test123');
+				attachedElement.setAttribute('label', 'mylabel');
+				document.body.appendChild(attachedElement);
+				var temp = document.createElement('template');
+				temp.innerHTML = '<paper-input label="mylabel" oe-id="test123" class="my-input"></paper-input>';
+				var detachedElem = temp.content.children[0];
+				flush(function() {
+					testElement.set('selectedElement', detachedElem);
+					testElement.set('selectedPolymerElement', attachedElement);
+					flush(function() {
+						var genericEditor = testElement.querySelector('generic-attrib-editor');
+						assert.equal(genericEditor.elementConfig.label.value, 'mylabel');
+						var labelEle = genericEditor.querySelector('oe-input[attr-id="label"]')
+						labelEle.set('value', 'My Label');
+						flush(function() {
+							labelEle.fire('change');
+							flush(function() {
+								assert.equal(genericEditor.elementConfig.label.value, 'My Label');
+								done();
+							});
+						});
+					});
+				});
+			});
+			test('Filter Attribute', function(done) {
+				var attachedElement = document.createElement('paper-input');
+				attachedElement.setAttribute('class', 'my-input');
+				attachedElement.setAttribute('oe-id', 'test123');
+				attachedElement.setAttribute('mylabel', 'mylabel');
+				attachedElement.setAttribute('newattr', 'test');
+				document.body.appendChild(attachedElement);
+				var temp = document.createElement('template');
+				temp.innerHTML = '<paper-input newattr="test" mylabel="{{label}}" oe-id="test123" class="my-input"></paper-input>';
+				var detachedElem = temp.content.children[0];
+				flush(function() {
+					testElement.set('selectedElement', detachedElem);
+					testElement.set('selectedPolymerElement', attachedElement);
+					flush(function() {
+						var unFilteredCount = testElement.querySelectorAll('.attr-item').length;
+						assert.equal(unFilteredCount > 1, true);
+						testElement.set('searchKey', 'mylabel');
+						flush(function() {
+							var filteredCount = testElement.querySelectorAll('.attr-item').length;
+							assert.equal(filteredCount, 1);
+							done();
+						});
+					});
+				});
+			});
+		});
 
-                var temp = document.createElement('template');
-                temp.innerHTML = '<paper-input oe-id="test123" class="my-input"></paper-input>';
-                var detachedElem = temp.content.children[0];
-
-                flush(function () {
-                    testElement.set('selectedElement', detachedElem);
-                    testElement.set('selectedPolymerElement', attachedElement);
-                    flush(function () {
-                        assert.notEqual(testElement.attributeList.length, 0);
-                        assert.notEqual(testElement.propertyList.length, 0);
-                        done();
-                    })
-                });
-            });
-            test('Add attribute to element', function (done) {
-                var attachedElement = document.createElement('paper-input');
-                attachedElement.setAttribute('class', 'my-input');
-                attachedElement.setAttribute('oe-id', 'test123');
-                document.body.appendChild(attachedElement);
-                var temp = document.createElement('template');
-                temp.innerHTML = '<paper-input oe-id="test123" class="my-input"></paper-input>';
-                var detachedElem = temp.content.children[0];
-
-                flush(function () {
-                    testElement.set('selectedElement', detachedElem);
-                    testElement.set('selectedPolymerElement', attachedElement);
-                    assert.equal(testElement.showAddAttribute, false);
-                    flush(function () {
-                        var attribCount = testElement.attributeList.length;
-                        var addAttribIcon = testElement.querySelector(
-                            '#addAttributeIcon');
-                        addAttribIcon.click();
-                        flush(function () {
-                            assert.equal(testElement.showAddAttribute, true);
-                            var labelAttr = testElement.listdata.find(function (
-                                s) {
-                                return s.name == "label"
-                            });
-                            testElement.set('attributeObj', labelAttr);
-                            flush(function () {
-                                testElement.set('attributeObj.value',
-                                    "First Name");
-                                flush(function () {
-                                    var addSubmitBtn =
-                                        testElement.querySelector(
-                                            '#addAttrContainer #addAttribSubmitBtn'
-                                        );
-                                    addSubmitBtn.click();
-                                    flush(function () {
-                                        assert.equal(
-                                            testElement
-                                            .attributeList
-                                            .length,
-                                            attribCount +
-                                            1);
-                                        done();
-                                    })
-                                })
-                            })
-                        });
-                    })
-                });
-            });
-            test('Toggle Attribute List and delete attribute', function (done) {
-                var attachedElement = document.createElement('paper-input');
-                attachedElement.setAttribute('class', 'my-input');
-                attachedElement.setAttribute('oe-id', 'test123');
-                document.body.appendChild(attachedElement);
-                var temp = document.createElement('template');
-                temp.innerHTML = '<paper-input oe-id="test123" class="my-input"></paper-input>';
-                var detachedElem = temp.content.children[0];
-                flush(function () {
-                    testElement.set('selectedElement', detachedElem);
-                    testElement.set('selectedPolymerElement', attachedElement);
-                    flush(function () {
-                        var togglePanel = document.querySelector('.section-header');
-                        togglePanel.click();
-                        flush(function () {
-                            assert.equal(testElement.showAttributes, true);
-                            var attribCount = testElement.attributeList.length;
-                            var attrib = testElement.querySelector(
-                                '#attribute-list attribute-element');
-                                var deleteIcon = attrib.querySelector('iron-icon[icon="delete"]');
-                           deleteIcon.click();
-                            flush(function () {
-                                assert.equal(testElement.attributeList.length,
-                                    attribCount - 1);
-                                done();
-                            });
-                        });
-                    });
-                });
-            });
-            test('Update Attribute', function (done) {
-                var attachedElement = document.createElement('paper-input');
-                attachedElement.setAttribute('class', 'my-input');
-                attachedElement.setAttribute('oe-id', 'test123');
-                attachedElement.setAttribute('label', 'mylabel');
-                document.body.appendChild(attachedElement);
-                var temp = document.createElement('template');
-                temp.innerHTML = '<paper-input label="mylabel" oe-id="test123" class="my-input"></paper-input>';
-                var detachedElem = temp.content.children[0];
-                flush(function () {
-                    testElement.set('selectedElement', detachedElem);
-                    testElement.set('selectedPolymerElement', attachedElement);
-                    flush(function () {
-                        var labelAttr = testElement.attributeList.find(function(a){return a.name==="label"});
-                        assert.equal(labelAttr.value, 'mylabel');
-                        var attribCount = testElement.attributeList.length;
-                        var labelEle = testElement.querySelector('attribute-element[name="label"]')
-                        var inputBox = labelEle.querySelector('.info-value oe-input');
-                        labelEle.set('attrObj.value','My Label');
-                            flush(function(){
-                                inputBox.fire('change');
-                                flush(function () {
-                                var labelAttr = testElement.attributeList.find(function(a){return a.name==="label"});
-                                assert.equal(labelAttr.value, 'My Label');
-                                done();
-                            });
-                        });
-                    });
-                });
-            });
-            test('Filter Attribute', function (done) {
-                var attachedElement = document.createElement('paper-input');
-                attachedElement.setAttribute('class', 'my-input');
-                attachedElement.setAttribute('oe-id', 'test123');
-                attachedElement.setAttribute('label', 'mylabel');
-                document.body.appendChild(attachedElement);
-                var temp = document.createElement('template');
-                temp.innerHTML = '<paper-input label="{{label}}" oe-id="test123" class="my-input"></paper-input>';
-                var detachedElem = temp.content.children[0];
-                flush(function () {
-                    testElement.set('selectedElement', detachedElem);
-                    testElement.set('selectedPolymerElement', attachedElement);
-                    flush(function () {
-                        var unFilteredCount = testElement.querySelectorAll('attribute-element').length;
-                        assert.equal(unFilteredCount > 1,true);
-                        testElement.set('searchKey','no-label');
-                        flush(function () {
-                            var filteredCount = testElement.querySelectorAll('attribute-element').length;
-                            assert.equal(filteredCount,1);
-                            done();
-                        });
-                    });
-                });
-            });
-        });
-    </script>
+	</script>
 </body>
 
 </html>

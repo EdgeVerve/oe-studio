@@ -200,22 +200,23 @@
         OEUtils.designerData.frameLoaded = true;
 
         var iframeWindow = this.frameWindow;
-        iframeWindow.HTMLImports.whenReady(function () {
-          var iframeHead = iframeWindow.document.head;
-          var styleTag = iframeHead.querySelector('#user-defined-style');
-          this.set('userDefStyleTag', styleTag);
-          var styleSheet = styleTag.sheet;
-          this.set('styleSheet', styleSheet);
-          this.async(function () {
-            var predefinedStyles = iframeWindow.Polymer.StyleUtil.cssFromModules(
-              'shared-styles');
-            var predefinedStyleTag = iframeHead.querySelector('#predefined-styles');
-            predefinedStyleTag.textContent = predefinedStyles;
-            predefinedStyles = predefinedStyleTag.sheet;
-            this.set('predefinedStyles', predefinedStyles);
-          }, 3000);
-
-        }.bind(this));
+        if(iframeWindow && iframeWindow.HTMLImports){
+          iframeWindow.HTMLImports.whenReady(function () {
+            var iframeHead = iframeWindow.document.head;
+            var styleTag = iframeHead.querySelector('#user-defined-style');
+            this.set('userDefStyleTag', styleTag);
+            var styleSheet = styleTag.sheet;
+            this.set('styleSheet', styleSheet);
+            this.async(function () {
+              var predefinedStyles = iframeWindow.Polymer.StyleUtil.cssFromModules(
+                'shared-styles');
+              var predefinedStyleTag = iframeHead.querySelector('#predefined-styles');
+              predefinedStyleTag.textContent = predefinedStyles;
+              predefinedStyles = predefinedStyleTag.sheet;
+              this.set('predefinedStyles', predefinedStyles);
+            }, 3000);
+          }.bind(this));
+        }
       },
       attached: function () {
         var self = this;
