@@ -87,6 +87,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       </app-drawer>
       <app-header-layout>
         <div class="main-app-content">
+<!--
+          <oe-app-route route="{{route}}" config-url="" routes-list="[[designerRoutes]]">
+            <iron-pages route-target>
+            </iron-pages>
+          </oe-app-route>
+-->
           <iron-pages selected="{{route.path}}" attr-for-selected="router-path">
             <model-designer router-path=""></model-designer>
             <workflow-designer router-path="workflow"></workflow-designer>
@@ -167,7 +173,52 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             this.fire('oe-show-error', 'Unable to fetch user information');
             this._logOut();
           }
-        }.bind(this))
+        }.bind(this));
+        this.set('designerRoutes',[
+          {
+            "type": "elem",
+            "name": "model-designer",
+            "path": "",
+            "import": "/bower_components/oe-studio/elements/model-designer.html",
+            "group": "",
+            "retainInstance":true
+          }, {
+            "type": "elem",
+            "name": "ui-designer",
+            "path": "uidesigner",
+            "import": "/bower_components/oe-studio/ui-designer/ui-designer.html",
+            "group": "",
+            "retainInstance":true
+          },{
+            "type": "elem",
+            "name": "route-flow-designer",
+            "path": "routeflow",
+            "import": "/bower_components/oe-studio/routeflow/route-flow-designer.html",
+            "group": "",
+            "retainInstance":true
+          }, {
+            "type": "elem",
+            "name": "resource-manager",
+            "path": "resourcemanager",
+            "import": "/bower_components/oe-studio/resource-manager/resource-manager.html",
+            "group": "",
+            "retainInstance":true
+          }, {
+            "type": "elem",
+            "name": "rule-manager",
+            "path": "rulemanager",
+            "import": "/bower_components/oe-studio/rule-manager/rule-manager.html",
+            "group": "",
+            "retainInstance":true
+          },{
+            "type": "elem",
+            "name": "workflow-designer",
+            "path": "workflow",
+            "import": "/bower_components/oe-workflow-modeler/workflow-designer.html",
+            "group": "",
+            "retainInstance":true
+          }
+        ]);
       },
       _logOut: function() {
         this.$.logout.body = {};
