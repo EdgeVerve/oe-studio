@@ -30,7 +30,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       }
 
       .list {
-        padding: 0px 16px;
         overflow-y: auto;
         overflow-x: hidden;
         width: 100%;
@@ -40,10 +39,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       }
 
       .list-item {
+        padding: 0px 16px;
         height: 40px;
         cursor: pointer;
       }
 
+      .list-item:hover{
+          box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.67),1px -2px 2px rgba(0, 0, 0, 0.67);
+      }
       .route-path {
         white-space: nowrap;
         overflow: hidden;
@@ -63,6 +66,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         margin-right: 5px;
       }
 
+      .refresh-icon{
+        visibility: hidden;
+      }
+
+      search-header:hover .refresh-icon{
+        visibility: visible;
+      }
+
       .toggle-panel {
         height: 40px;
         background: var(--light-primary-color);
@@ -70,7 +81,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       }
     </style>
     <search-header filter-val="{{filterVal}}">
-      <iron-icon class="small" icon="oe-designer-icons:route-manager"></iron-icon><span class="flex">Routes</span>
+      <iron-icon class="small" icon="oe-designer-icons:route-manager"></iron-icon>
+      <span class="flex">Routes</span>
+      <iron-icon class="small refresh-icon" icon="icons:autorenew" on-tap="_refreshRouteList"></iron-icon>
     </search-header>
     <div class="toggle-panel layout horizontal center justified">
       <label>Show All</label>
@@ -79,10 +92,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     <div class="list">
       <ul role="menu" class="vertical layout">
         <template is="dom-repeat" items="{{routeList}}" initial-count=10 filter="{{_filter(filterVal)}}" as="route">
-          <li on-tap="showSelected" class$="{{route.checked}} list-item center layout horizontal justified">
+          <li id$="r-[[route.id]]" on-tap="showSelected" class$="{{route.checked}} list-item center layout horizontal justified">
             <div class="route-path">{{route.path}}</div>
             <iron-icon icon="icons:visibility" hidden$="{{!route.checked}}"></iron-icon>
           </li>
+          <paper-tooltip for$="r-[[route.id]]" hidden$="[[!route.scope]]">[[_getScope(route)]]</paper-tooltip>
         </template>
       </ul>
     </div>
@@ -134,6 +148,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             this.fire('render-route', route);
           }
         }, this);
+      },
+      _getScope:function(route){
+        if(route.scope){
+          return JSON.stringify(route.scope,null,2);
+        }
+      },
+      _refreshRouteList:function(){
+        this.fire('fetch-routes');
       }
     });
   </script>

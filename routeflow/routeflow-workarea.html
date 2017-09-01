@@ -176,6 +176,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       listeners: {
         'render-route': 'renderRoute',
+        'fetch-routes':'fetchRoutes',
         'remove-route-element': 'removeRouteFromWorkarea'
       },
       observers: [
@@ -201,26 +202,26 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       renderExistingFlows: function () {
         var self = this;
-        this.routeList.filter(function (route) {
-          return (route.transitions && route.transitions.length);
-        }).forEach(function (route) {
-          if (!self.isRouteRendered(route)) {
-            route.checked = true;
-            self.notifyPath('routeList.' + self.routeList.indexOf(route) + '.checked');
-            self.createRouteContainer(route);
-            route.transitions.forEach(function (transition) {
-              var routeIndex = self.routeList.findIndex(function (routeObj) {
-                return (routeObj.path == transition.path);
-              })
-              if (routeIndex != -1) {
-                if (!self.isRouteRendered(self.routeList[routeIndex])) {
-                  self.set('routeList.' + routeIndex + '.checked', true);
-                  self.createRouteContainer(self.routeList[routeIndex]);
+        this.routeList.forEach(function(route,idx){
+            var isRouteRendered = self.isRouteRendered(route)
+            self.set('routeList.'+idx+'.checked',isRouteRendered);
+            if(route.transitions && route.transitions.length && !isRouteRendered){
+              route.checked = true;
+              self.notifyPath('routeList.' + idx + '.checked');
+              self.createRouteContainer(route);
+              route.transitions.forEach(function (transition) {
+                var routeIndex = self.routeList.findIndex(function (routeObj) {
+                  return (routeObj.path == transition.path);
+                })
+                if (routeIndex != -1) {
+                  if (!self.isRouteRendered(self.routeList[routeIndex])) {
+                    self.set('routeList.' + routeIndex + '.checked', true);
+                    self.createRouteContainer(self.routeList[routeIndex]);
+                  }
                 }
-              }
-            })
-          }
-        })
+              });
+            }   
+        });
         self.showExistingTransitions();
       },
       renderRoute: function (event) {
