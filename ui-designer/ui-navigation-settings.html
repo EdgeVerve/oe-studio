@@ -24,6 +24,12 @@
 				--paper-input-container-color: rgba(255, 255, 255, 0.6);
 			}
 
+      oe-json-input.light-input {
+				--paper-input-container-focus-color: #ffffff;
+				--paper-input-container-input-color: rgba(255, 255, 255, 0.6);
+				--paper-input-container-color: rgba(255, 255, 255, 0.6);
+			}
+
 			.heading-pane {
 				padding: 0px 16px;
 				height: 48px;
@@ -130,6 +136,8 @@
 				<span class="helper-text">Navigation link group</span>
 				<icon-picker selected-icon="{{config.navigationIcon}}"></icon-picker>
 				<span class="helper-text">Navigation link icon</span>
+        <oe-json-input class="light-input" label="Scope" value="{{config.scope}}" id="navGroup"></oe-json-input>
+				<span class="helper-text">Scope for Route and Navigation Link</span>
 			</form>
 			<div class="buttons layout horizontal end-justified center">
 				<paper-button class="secondary-btn" on-tap="closePanel">CANCEL</paper-button>
@@ -171,6 +179,7 @@
             config.group = this.routeData.navigationLink.group;
             config.parent = this.routeData.navigationLink.parent;
           }
+          config.scope = this.routeData.uiRoute.scope || this.routeData.navigationLink.scope
         }
         this.set('config', config);
       }
@@ -330,6 +339,10 @@
             navPayload.icon = self.config.navigationIcon;
           }
         }
+        if(self.config.scope){
+          uiRoutePayload.scope = self.config.scope;
+          navPayload.scope = self.config.scope;
+        }
 
         var dl = document.createElement('a');
         dl.setAttribute('href', 'data:application/json;charset=utf-8,' + JSON.stringify(
@@ -358,6 +371,9 @@
             'import': '/api/UIComponents/component/' + self.activePage.name
           }
         }
+         if(self.config.scope){
+          uiRoutePayload.scope = self.config.scope;
+         }
         this.makeAjaxCall('/api/UIRoutes', routeMethod, uiRoutePayload, null, null, function(err, uires) {
           if (!err) {
             var navPayload = self.routeData.navigationLink || {};
@@ -403,6 +419,9 @@
                   navPayload.icon = self.config.navigationIcon;
                 }
               }
+               if(self.config.scope){
+                  navPayload.scope = self.config.scope;
+                }
               self.makeAjaxCall('/api/NavigationLinks', navMethod, navPayload, null, null,
                 function(err, navres) {
                   if (!err) {
