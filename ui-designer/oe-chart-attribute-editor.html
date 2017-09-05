@@ -16,29 +16,29 @@
     }
     </style>
     <div class="attribute-fields">
-        <custom-attrib-container attrib="{{elementConfig.chartType}}">
-            <oe-combo value="{{elementConfig.chartType.value}}" listdata="[[chartList]]" displayproperty="label" valueproperty="value" no-label-float class="attr-input" attr-id="chartType" on-change="_updateAttribValue"></oe-combo>
+        <custom-attrib-container attrib="{{config.chartType}}">
+            <oe-combo value="{{config.chartType.value}}" listdata="[[chartList]]" displayproperty="label" valueproperty="value" no-label-float class="attr-input" attr-id="chartType" on-change="_updateAttribValue"></oe-combo>
         </custom-attrib-container>
-        <custom-attrib-container attrib="{{elementConfig.category}}">
-            <oe-input value="{{elementConfig.category.value}}" no-label-float class="attr-input" attr-id="category" on-change="_updateAttribValue"></oe-input>
+        <custom-attrib-container attrib="{{config.category}}">
+            <oe-input value="{{config.category.value}}" no-label-float class="attr-input" attr-id="category" on-change="_updateAttribValue"></oe-input>
         </custom-attrib-container>
-        <custom-attrib-container attrib="{{elementConfig.series}}">
-            <oe-json-input value="{{elementConfig.series.value}}" no-label-float class="attr-input" attr-id="series" on-change="_updateAttribValue"></oe-json-input>
+        <custom-attrib-container attrib="{{config.series}}">
+            <oe-json-input value="{{config.series.value}}" no-label-float class="attr-input" attr-id="series" on-change="_updateAttribValue"></oe-json-input>
         </custom-attrib-container>
-        <custom-attrib-container attrib="{{elementConfig.data}}">
-            <oe-json-input value="{{elementConfig.data.value}}" no-label-float class="attr-input" attr-id="data" on-change="_updateAttribValue"></oe-json-input>
+        <custom-attrib-container attrib="{{config.data}}">
+            <oe-json-input value="{{config.data.value}}" no-label-float class="attr-input" attr-id="data" on-change="_updateAttribValue"></oe-json-input>
         </custom-attrib-container>
-        <custom-attrib-container attrib="{{elementConfig.dataUrl}}">
-            <oe-input value="{{elementConfig.dataUrl.value}}" no-label-float class="attr-input" attr-id="dataUrl" on-change="_updateAttribValue"></oe-input>
+        <custom-attrib-container attrib="{{config.dataUrl}}">
+            <oe-input value="{{config.dataUrl.value}}" no-label-float class="attr-input" attr-id="dataUrl" on-change="_updateAttribValue"></oe-input>
         </custom-attrib-container>
-        <custom-attrib-container attrib="{{elementConfig.categoryAggregator}}">
-            <oe-input value="{{elementConfig.categoryAggregator.value}}" no-label-float class="attr-input" attr-id="categoryAggregator" on-change="_updateAttribValue"></oe-input>
+        <custom-attrib-container attrib="{{config.categoryAggregator}}">
+            <oe-input value="{{config.categoryAggregator.value}}" no-label-float class="attr-input" attr-id="categoryAggregator" on-change="_updateAttribValue"></oe-input>
         </custom-attrib-container>
-        <custom-attrib-container attrib="{{elementConfig.categorylabelFormat}}">
-            <oe-input value="{{elementConfig.categorylabelFormat.value}}" no-label-float class="attr-input" attr-id="categorylabelFormat" on-change="_updateAttribValue"></oe-input>
+        <custom-attrib-container attrib="{{config.categorylabelFormat}}">
+            <oe-input value="{{config.categorylabelFormat.value}}" no-label-float class="attr-input" attr-id="categorylabelFormat" on-change="_updateAttribValue"></oe-input>
         </custom-attrib-container>
-        <custom-attrib-container attrib="{{elementConfig.noDataMessage}}">
-            <oe-input value="{{elementConfig.noDataMessage.value}}" no-label-float class="attr-input" attr-id="noDataMessage" on-change="_updateAttribValue"></oe-input>
+        <custom-attrib-container attrib="{{config.noDataMessage}}">
+            <oe-input value="{{config.noDataMessage.value}}" no-label-float class="attr-input" attr-id="noDataMessage" on-change="_updateAttribValue"></oe-input>
         </custom-attrib-container>
     </div>
 </template>
@@ -47,7 +47,8 @@
         is:"oe-chart-attribute-editor",
         properties:{
             elementConfig:{
-                type:Object
+                type:Object,
+                observer:'_configChanged'
             },
             chartList:{
                 type:Array,
@@ -108,9 +109,21 @@
         },
         _updateAttribValue:function(e){
             var field = e.currentTarget.getAttribute('attr-id');
-            var obj = this.elementConfig[field];
+            var obj = this.config[field];
             if(e.currentTarget.validate()){
                 this.fire('update-attribute',obj);
+            }
+        },
+        _configChanged:function(nval,oval){
+            if(oval !== nval){
+                var config = JSON.parse(JSON.stringify(this.elementConfig));
+                if(config.series && config.series.value){
+                    var series = config.series.value.map(function(s){
+                        delete s._dataGroup;
+                        return s;
+                    });
+                }
+                this.set('config',config);
             }
         }
     });
