@@ -1,0 +1,444 @@
+<link rel="import" href="../../oe-ui-forms/validators/oe-async-validator.html">
+<link rel="import" href="../../oe-ui-forms/behaviors/oe-form-validation-behavior.html">
+<dom-module id="ui-component-creator">
+    <style>
+         :host {
+            display: block;
+            position: relative;
+            height: 500px;
+            width: 500px;
+        }
+
+        .step-container {
+            height: calc(100% - 40px);
+        }
+
+        .prop {
+            font-size: 12px;
+            padding: 4px 8px;
+            margin: 6px 0px;
+            background: var(--dark-primary-color);
+            border-radius: 4px;
+            max-width: 200px;
+        }
+
+        paper-checkbox {
+            --paper-checkbox-unchecked-color: rgba(255, 255, 255, 0.6);
+            --paper-checkbox-checked-color: #ffffff;
+            --paper-checkbox-checkmark-color: #000000;
+            --paper-checkbox-label-color: #ffffff;
+            --paper-checkbox-label: {
+                max-width: 150px;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+        }
+
+        .template-desc {
+            font-size: 12px;
+            font-family: 'Roboto-Light';
+            padding: 6px 0px;
+        }
+
+        paper-radio-button {
+            display: block;
+            padding: 8px 0px;
+            --paper-radio-button-unchecked-color: rgba(255, 255, 255, 0.6);
+            --paper-radio-button-checked-color: rgba(255, 255, 255, 0.6);
+            --paper-radio-button-label-color: rgba(255, 255, 255, 0.6);
+        }
+
+        oe-input {
+            --paper-input-container-focus-color: #ffffff;
+            --paper-input-container-input-color: rgba(255, 255, 255, 0.6);
+            --paper-input-container-color: rgba(255, 255, 255, 0.6);
+        }
+
+        oe-combo {
+            --paper-input-container-focus-color: #ffffff;
+            --paper-input-container-input-color: rgba(255, 255, 255, 0.6);
+            --paper-input-container-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .list-header {
+            height: 48px;
+            padding: 0 16px;
+            font-size: 15px;
+            color: var(--default-text-color);
+            @apply(--layout-flex);
+            @apply(--layout-horizontal);
+            @apply(--layout-center);
+            opacity: 0.85;
+        }
+
+        .list-item {
+            position: relative;
+            height: 48px;
+            padding: 0 16px;
+            cursor: pointer;
+            color: var(--default-text-color);
+            opacity: 0.6;
+            font-size: 14px;
+            @apply(--layout-flex);
+            @apply(--layout-horizontal);
+            @apply(--layout-center);
+        }
+
+        .list-item.active {
+            opacity: 1;
+        }
+
+        .page-menu-options {
+            width: 200px;
+            background: var(--light-primary-color);
+        }
+
+        .page-menu-options .list-item::before {
+            content: '';
+            width: 12px;
+            height: 12px;
+            margin-right: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: var(--default-text-color);
+        }
+
+        .page-menu-options .list-item.active::before {
+            background: var(--accent-color);
+        }
+
+        .page-menu-options .list-item.invalid::before {
+            background: var(--error-color);
+        }
+
+        .main-text {
+            font-size: 15px;
+            color: var(--default-text-color);
+        }
+
+        .sub-text {
+            font-size: 12px;
+            color: var(--default-text-color);
+            opacity: 0.6;
+            margin-top: 8px;
+        }
+
+        .container {
+            height: 500px;
+        }
+
+        .step {
+            height: 100%;
+        }
+
+        .step-content {
+            height: calc(100% - 56px);
+            overflow: auto;
+            padding: 0px 16px;
+        }
+
+        .step-title {
+            height: 40px;
+            line-height: 40px;
+            font-size: 16px;
+            padding: 8px 16px;
+        }
+
+        .component-type {
+            margin-top: 16px;
+            cursor: pointer;
+        }
+
+        .comp-image {
+            width: 60px;
+            height: 60px;
+            margin-right: 16px;
+            padding: 18px;
+            box-sizing: border-box;
+            color: var(--default-text-color);
+            background: var(--dark-primary-color);
+        }
+
+        .component-type.iron-selected .comp-image {
+            background: var(--accent-color);
+        }
+
+        paper-button.model-binder {
+            height: auto;
+            padding: 0px;
+        }
+
+        paper-button.model-binder iron-icon {
+            height: 24px;
+            width: 24px;
+        }
+
+        paper-button[active].model-binder ::content .comp-image {
+            background: var(--accent-color);
+        }
+
+        .model-binder-options {
+            margin-top: 16px;
+        }
+
+        .model-binder-options label {
+            font-size: 12px;
+            display: block;
+        }
+
+        .buttons {
+            background: var(--dark-primary-color);
+        }
+
+        .more-props {
+            padding: 12px 0px;
+        }
+
+        .prop-list {
+            padding: 8px 0px;
+            border-top: 2px solid var(--dark-primary-color);
+        }
+
+        paper-toggle-button {
+            --paper-toggle-button-label-color: #ffffff;
+        }
+
+        .helper-text {
+            font-size: 12px;
+            font-style: italic;
+            opacity: 0.54;
+            margin-top: 8px;
+        }
+    </style>
+    <template>
+        <div class="layout horizontal container">
+            <div class="flex">
+                <iron-pages selected="{{selectedStep}}" class="step-container">
+                    <div class="step-1 step">
+                        <div class="step-title">Name the page and configure</div>
+                        <div class="step-content">
+                            <oe-input label="Page Name" value="{{uiComponent.name}}" field-id="name" required 
+                            pattern="^([a-zA-Z0-9]+)((-[a-zA-Z0-9]+)+)$" id="componentName"></oe-input>
+                            <oe-async-validator fields='["name"]' model={{uiComponent}} 
+                            requesturl='/api/UIComponents?filter={"where":{"name":"{{uiComponent.name}}"} }' 
+                            ensure="absent" error="component name already in use"></oe-async-validator>
+                            <oe-combo id="modelName" show-refresh value="{{uiComponent.modelName}}" 
+                            required label="Search Models" displayproperty="name" valueproperty="name" 
+                            listurl="/api/ModelDefinitions?filter[fields][name]=true" on-change="_getModelData"></oe-combo>
+                            <div hidden$="[[!isModelObtained]]">
+                                <div class="more-props">
+                                    <paper-toggle-button checked="{{uiComponent.autoInjectFields}}">Auto Inject Fields</paper-toggle-button>
+                                    <div class="helper-text">Properties updated in the model will be injected in the form automatically</div>
+                                </div>
+                                <div class="prop-list">
+                                    <template is="dom-repeat" items="[[modelMeta.modelProperties]]">
+                                        <div class="prop">
+                                            <paper-checkbox checked="{{item.applied}}" class="prop-item">[[item.name]]</paper-checkbox>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step-2 step">
+                        <div class="step-title">Choose template</div>
+                        <div class="step-content">
+                            <paper-radio-group selected="{{uiComponent.templateName}}">
+                                <template is="dom-repeat" items="[[templateList]]">
+                                    <paper-radio-button name="{{item.file}}">
+                                        <label>[[item.file]]</label>
+                                        <div class="template-desc" hidden$="[[!_getDescription(item.content)]]">[[_getDescription(item.content)]]</div>
+                                    </paper-radio-button>
+                                </template>
+                            </paper-radio-group>
+                        </div>
+                    </div>
+                </iron-pages>
+                <div class="buttons flex layout horizontal justified">
+                    <paper-button class="secondary-btn" on-tap="showPageListing">CANCEL</paper-button>
+                    <div class="step-navigation-panel">
+                        <paper-button class="secondary-btn" hidden="[[hidePrevNavigation]]" on-tap="showPrevStep">BACK</paper-button>
+                        <paper-button class="primary-btn" on-tap="showNextStep">[[buttonTitle]]</paper-button>
+                    </div>
+                </div>
+            </div>
+            <div class="column page-menu-options">
+                <div class="list-header">Create new page</div>
+                <iron-selector selected="{{selectedStep}}">
+                    <template is="dom-repeat" items="{{tabList}}" as="tab">
+                        <div class$="list-item [[_computeClass(selectedStep,index)]]">{{tab.name}}</div>
+                    </template>
+                </iron-selector>
+            </div>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'ui-component-creator',
+            properties: {
+                templateList: {
+                    type: Array,
+                    value: function () {
+                        return []
+                    }
+                },
+                componentList: {
+                    type: Array,
+                    value: function () {
+                        return []
+                    }
+                },
+                tabList: {
+                    type: Array,
+                    value: [{
+                        name: 'Name & Model'
+                    }, {
+                        name: 'Templates'
+                    }]
+                }
+            },
+            behaviors: [CommonBehavior.EVAjaxBehavior,OEUtils.FormValidationBehavior],
+            _computeClass:function(curStep,index){
+                var status = '';
+                if(curStep === index){
+                    return 'active'
+                }
+                if(index === 0){
+                    this.$.componentName.validate();
+                    this.$.modelName.validate();
+                    return (this.$.componentName.invalid || this.$.modelName.invalid) ? 'invalid' : ''
+                }else{
+                    return this.uiComponent.templateName ? '' : 'invalid'
+                }
+            },
+            showPageListing: function () {
+                this.fire('hide-create-component');
+            },
+            stepChanged: function () {
+                if (this.selectedStep === 1) {
+                    this.set('buttonTitle', 'SAVE');
+                } else {
+                    this.set('buttonTitle', 'NEXT');
+                }
+                this.set('hidePrevNavigation', this.selectedStep === 0);
+            },
+            showNextStep: function () {
+                if (this.selectedStep === 0) {
+                    this.selectedStep++;
+                } else {
+                    var isValid = !(this.$.componentName.invalid || this.$.modelName.invalid);
+                    if (isValid) {
+                        this.createPage();
+                    }else{
+                        this.fire('oe-show-error',"Please fill all the fields");
+                    }
+                }
+            },
+            showPrevStep: function () {
+                if (this.selectedStep > 0) {
+                    this.selectedStep--;
+                }
+            },
+            _getModelData: function (e) {
+                var model = e.currentTarget.value;
+                this.selectedModel = model;
+                var self = this;
+                this.makeAjaxCall('/api/ModelDefinitions/modelmeta/' + model, 'get', null, null, null,
+                    function (
+                        err, res) {
+                        if (!err) {
+                            self.generateFieldsArr(res);
+                            self.set('isModelObtained', true)
+                        } else {
+                            self.fire('oe-show-error', 'Error in Fetching Model Meta');
+                            //console.log(err);
+                        }
+                    })
+            },
+            generateFieldsArr: function (resp) {
+                // var fields = [];
+                var properties = [];
+                var meta = {}
+                var modelData = resp[this.selectedModel];
+                Object.keys(modelData.properties).forEach(function (prop) {
+                    var modelprop = {
+                        name: prop,
+                        'config': modelData.properties[prop],
+                        'applied': true
+                    }
+                    if (prop[0] == '_' || prop == 'id' || prop == 'scope') {
+                        return;
+                    } else {
+                        properties.push(modelprop)
+                    }
+                });
+                meta.modelProperties = properties;
+                meta.modelName = this.selectedModel;
+                meta.autoInjectFields = true;
+                this.set('modelMeta', meta);
+            },
+            createPage: function () {
+                var self = this;
+                var apiurl = '/api/UIComponents';
+                var payload = this.uiComponent;
+                this.modelMeta.modelProperties.forEach(function (prop) {
+                    if (prop.applied) {
+                        payload.fields.push({
+                            fieldId: prop.name
+                        })
+                    } else {
+                        payload.excludeFields.push(prop.name);
+                    }
+                })
+                this.makeAjaxCall(apiurl, 'post', payload, null, null, function (err, res) {
+                    if (!err) {
+                        self.fire('component-created', res);
+                        self.fire('oe-show-success', 'Element successfully created');
+                    } else {
+                        self.resolveError(err);
+                    }
+                })
+            },
+            attached:function(){
+                this.reset();
+            },
+            reset: function () {
+                this.set('isModelObtained', false);
+                this.set('uiComponent', {
+                    name: "",
+                    templateName: "default-form.html",
+                    fields: [],
+                    excludeFields: [],
+                    autoInjectFields: false
+                });
+                this.set('selectedStep', 0);
+                this.set('lastVisitedTabIndex', 0);
+                this.set('buttonTitle', 'NEXT');
+            },
+            _getDescription: function (content) {
+                var elem = document.createElement('div');
+                elem.innerHTML = content;
+                var templateInfoNode = [].find.call(elem.childNodes, function (node) {
+                    if (node.nodeType == 8) {
+                        if (node.textContent.match('@description')) {
+                            return true;
+                        }
+                    }
+                });
+                if (templateInfoNode) {
+                    return this._getTemplateInfoObject(templateInfoNode.textContent.trim());
+                } else {
+                    return;
+                }
+            },
+            _getTemplateInfoObject: function (text) {
+                var lines = text.split('\n');
+                var description = lines.find(function (line) {
+                    return !!(line.match('@description'))
+                });
+                return description.trim().substring('@description'.length, description.length).trim();
+            }
+        })
+    </script>
+</dom-module>

@@ -1,0 +1,112 @@
+<link rel="import" href="../elements/module-switcher.html">
+<link rel="import" href="ui-component-detail.html">
+<link rel="import" href="ui-component-list.html">
+<dom-module id="ui-component-manager">
+    <template>
+        <style>
+            :host{
+                position:relative;
+                display:block;
+                box-sizing:border-box;
+                color: var(--default-text-color);
+            }
+            .component-container{
+                height: 100vh;
+            }
+            .application-logo {
+                padding: 6px 9px;
+                cursor: pointer;
+                background: var(--dark-primary-color);
+                height: 40px;
+                width: 48px;
+                box-sizing: border-box;
+            }
+            
+        </style>
+        <div class="component-container layout vertical">
+            <ui-component-detail id="detail" class="flex"></ui-component-detail>
+            <app-toolbar>
+                <iron-icon src="../images/Logo.png" class="application-logo" on-tap="toggleLeftDrawer"></iron-icon>
+                <module-switcher></module-switcher>
+                <ui-component-list on-page-selected="pageSelectedHandle" class="flex"></ui-component-list>
+                <tenant-info></tenant-info>
+            </app-toolbar>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is:"ui-component-manager",
+            behaviors: [
+				CommonBehavior.EVAjaxBehavior,
+				DesignerBehavior.HTMLBehavior,
+				CommonBehavior.HTMLHelper,
+				DesignerBehavior.CommonBehavior
+			],
+            customEval: function(str) {
+				var script = document.createElement('script');
+				script.type = 'text/javascript';
+				//Clear all content before Polymer invocation.
+				str = str.replace(/(.*\n)*.*window\.OEUtils/, 'window.OEUtils');
+				script.textContent = 'try{\n' + str + '\n}catch(e){ window.ev_parseFailed = true}'
+				document.head.appendChild(script);
+				document.head.removeChild(script);
+				if (window.ev_parseFailed) {
+					window.ev_parseFailed = false;
+					return null
+				}
+				return true
+			},
+            pageSelectedHandle: function(e) {
+				var self = this;
+				var detail = e.detail;
+				self.makeXhrCall(('/api/UIComponents/component/' + detail.name), function(err, res) {
+					if (err) {
+						self.fire('oe-show-error', 'Error fetching uicomponent')
+					} else {
+						var component = self.createNodeFromStr(res);
+						detail.component = component;
+						var scrTag = (component.nodeName.toLowerCase() == 'script') ? component : component.querySelector('script');
+						if (scrTag) {
+							var target = 'OEUtils.metadataCache["' + detail.name + '"]';
+							var text = scrTag.textContent.split(target)[1];
+							text = 'window.OEUtils.tempMeta ' + text;
+							self.customEval(text);
+							if (scrTag.parentElement) {
+								scrTag.parentElement.removeChild(scrTag);
+							} else {
+								detail.component = null;
+							}
+						}
+						detail.modelMeta = window.OEUtils.tempMeta;
+						window.OEUtils.tempMeta = null;
+						self.processPage(detail);
+					}
+				})
+			},
+            processPage:function(detail){
+               //extract template containers
+               var contianers =  this._extractContainers(detail.templateData.content);
+               this.set('templateContainers', [].map.call(contianers,function(d){return d}));
+               //extract fields from model
+               var modelName = detail.modelMeta.modelName;
+               var properties = detail.modelMeta.metadata.properties;
+               var fields = Object.keys(properties).map(function(k){
+                   var def = properties[k];
+                   var fieldObj = {
+                       fieldId:k,
+                       type:def.type
+                   }
+                   return fields
+               });
+               var uiComponent = detail.uiComponent;
+               debugger;
+            },
+            _extractContainers:function(templateStr){
+                var temp = document.createElement('template');
+                temp.innerHTML = templateStr;
+                var domTemplate = temp.content.querySelector('dom-module > template').content;
+                return domTemplate.querySelectorAll('[id]');
+            }
+        })
+    </script>
+</dom-module>
