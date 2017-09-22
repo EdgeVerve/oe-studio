@@ -26,7 +26,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     <oe-radio-group field-id="operation" required label="Operations" value={{vm.operation}}
                                     displayproperty="display"
                                     valueproperty="value"
-                                    listdata='[{"display":"Create","value":"create"}, {"display":"Update","value":"update"}, {"display":"Delete","value":"delete"}]'></oe-radio-group>
+                                    listdata='[{"display":"Save","value":"save"},{"display":"Create","value":"create"}, {"display":"Update","value":"update"}, {"display":"Delete","value":"delete"}]'></oe-radio-group>
                     <oe-combo field-id="workflowBody.workflowDefinitionName" required label="Process Name" value={{vm.workflowBody.workflowDefinitionName}} listurl="/api/WorkflowDefinitions" displayproperty="name" valueproperty="name" allow-free-text></oe-combo>
                     <oe-checkbox field-id="wfDependent" label="Workflow Dependent" value={{vm.wfDependent}}></oe-checkbox>
                 </div>
