@@ -1,3 +1,9 @@
+/**
+*
+* ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
+* Bangalore, India. All Rights Reserved.
+*
+*/
 (function webpackUniversalModuleDefinition(root, factory) {
   if (typeof exports === 'object' && typeof module === 'object') {
     module.exports = factory();
