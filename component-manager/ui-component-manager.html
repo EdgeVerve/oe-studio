@@ -1,18 +1,24 @@
 <link rel="import" href="../elements/module-switcher.html">
 <link rel="import" href="ui-component-detail.html">
 <link rel="import" href="ui-component-list.html">
+<link rel="import" href="ui-component-editor.html">
 <dom-module id="ui-component-manager">
     <template>
         <style>
-            :host{
-                position:relative;
-                display:block;
-                box-sizing:border-box;
+             :host {
+                position: relative;
+                display: block;
+                box-sizing: border-box;
+            }
+
+            app-toolbar {
                 color: var(--default-text-color);
             }
-            .component-container{
+
+            .component-container {
                 height: 100vh;
             }
+
             .application-logo {
                 padding: 6px 9px;
                 cursor: pointer;
@@ -21,91 +27,97 @@
                 width: 48px;
                 box-sizing: border-box;
             }
-            
         </style>
         <div class="component-container layout vertical">
-            <ui-component-detail id="detail" class="flex"></ui-component-detail>
+            <div class="component-workspace layout horizontal flex">
+                <ui-component-detail id="detail" component="{{workingComponent}}" template-containers="{{containerList}}" meta-data="{{metaData}}"
+                    class="flex-3"></ui-component-detail>
+                <iron-collapse horizontal class="flex-1" opened="[[showActions]]">
+                    <ui-component-editor id="editor" class="flex-1" component="{{workingComponent}}" template-list="{{templateList}}" containers="[[containerList]]"
+                        meta-data="{{metaData}}"></ui-component-editor>
+                </iron-collapse>
+            </div>
             <app-toolbar>
                 <iron-icon src="../images/Logo.png" class="application-logo" on-tap="toggleLeftDrawer"></iron-icon>
                 <module-switcher></module-switcher>
-                <ui-component-list on-page-selected="pageSelectedHandle" class="flex"></ui-component-list>
+                <ui-component-list id="componentLister" template-list="{{templateList}}" on-page-selected="pageSelectedHandle" class="flex"></ui-component-list>
+                <paper-icon-button hidden=[[!showActions]] icon="save" on-tap="_save"></paper-icon-button>
+                <paper-icon-button hidden=[[!showActions]] icon="undo" disabled="[[_disableUndo(stackIndex)]]" on-tap="_undo"></paper-icon-button>
+                <paper-icon-button hidden=[[!showActions]] icon="redo" disabled="[[_disableRedo(stackIndex)]]" on-tap="_redo"></paper-icon-button>
                 <tenant-info></tenant-info>
             </app-toolbar>
         </div>
     </template>
     <script>
         Polymer({
-            is:"ui-component-manager",
-            behaviors: [
-				CommonBehavior.EVAjaxBehavior,
-				DesignerBehavior.HTMLBehavior,
-				CommonBehavior.HTMLHelper,
-				DesignerBehavior.CommonBehavior
-			],
-            customEval: function(str) {
-				var script = document.createElement('script');
-				script.type = 'text/javascript';
-				//Clear all content before Polymer invocation.
-				str = str.replace(/(.*\n)*.*window\.OEUtils/, 'window.OEUtils');
-				script.textContent = 'try{\n' + str + '\n}catch(e){ window.ev_parseFailed = true}'
-				document.head.appendChild(script);
-				document.head.removeChild(script);
-				if (window.ev_parseFailed) {
-					window.ev_parseFailed = false;
-					return null
-				}
-				return true
-			},
-            pageSelectedHandle: function(e) {
-				var self = this;
-				var detail = e.detail;
-				self.makeXhrCall(('/api/UIComponents/component/' + detail.name), function(err, res) {
-					if (err) {
-						self.fire('oe-show-error', 'Error fetching uicomponent')
-					} else {
-						var component = self.createNodeFromStr(res);
-						detail.component = component;
-						var scrTag = (component.nodeName.toLowerCase() == 'script') ? component : component.querySelector('script');
-						if (scrTag) {
-							var target = 'OEUtils.metadataCache["' + detail.name + '"]';
-							var text = scrTag.textContent.split(target)[1];
-							text = 'window.OEUtils.tempMeta ' + text;
-							self.customEval(text);
-							if (scrTag.parentElement) {
-								scrTag.parentElement.removeChild(scrTag);
-							} else {
-								detail.component = null;
-							}
-						}
-						detail.modelMeta = window.OEUtils.tempMeta;
-						window.OEUtils.tempMeta = null;
-						self.processPage(detail);
-					}
-				})
-			},
-            processPage:function(detail){
-               //extract template containers
-               var contianers =  this._extractContainers(detail.templateData.content);
-               this.set('templateContainers', [].map.call(contianers,function(d){return d}));
-               //extract fields from model
-               var modelName = detail.modelMeta.modelName;
-               var properties = detail.modelMeta.metadata.properties;
-               var fields = Object.keys(properties).map(function(k){
-                   var def = properties[k];
-                   var fieldObj = {
-                       fieldId:k,
-                       type:def.type
-                   }
-                   return fields
-               });
-               var uiComponent = detail.uiComponent;
-               debugger;
+            is: "ui-component-manager",
+            properties: {
+                templateList: {
+                    type: Array
+                }
             },
-            _extractContainers:function(templateStr){
-                var temp = document.createElement('template');
-                temp.innerHTML = templateStr;
-                var domTemplate = temp.content.querySelector('dom-module > template').content;
-                return domTemplate.querySelectorAll('[id]');
+            listeners: {
+                'component-updated': '_updateStack',
+                'show-field-setting': '_handleFieldEdit'
+            },
+            observers: ['_componentStackObserver(stackIndex)'],
+            behaviors: [
+                CommonBehavior.EVAjaxBehavior
+            ],
+            customEval: function (str) {
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                //Clear all content before Polymer invocation.
+                str = str.replace(/(.*\n)*.*window\.OEUtils/, 'window.OEUtils');
+                script.textContent = 'try{\n' + str + '\n}catch(e){ window.ev_parseFailed = true}'
+                document.head.appendChild(script);
+                document.head.removeChild(script);
+                if (window.ev_parseFailed) {
+                    window.ev_parseFailed = false;
+                    return null
+                }
+                return true
+            },
+            attached: function () {
+                this.set('showActions', false);
+            },
+            _save: function () {
+                this.$.componentLister.updateComponent(this.workingComponent);
+            },
+            _handleFieldEdit: function (e) {
+                this.$.editor.showFieldEditor(e.detail);
+            },
+            _undo: function () {
+                this.set('stackIndex', this.stackIndex - 1);
+            },
+            _redo: function () {
+                this.set('stackIndex', this.stackIndex + 1);
+            },
+            _disableUndo: function (stackIndex) {
+                return stackIndex === 0;
+            },
+            _disableRedo: function (stackIndex) {
+                return stackIndex === (this.componentStack.length - 1);
+            },
+            _componentStackObserver: function () {
+                if (this.stackIndex < 0) {
+                    return;
+                }
+                var comp = this.componentStack[this.stackIndex];
+                this.set('workingComponent', OEUtils.deepCloneJSON(comp));
+            },
+            pageSelectedHandle: function (e) {
+                var self = this;
+                this.set('uiComponent', e.detail);
+                this.set('showActions', true);
+                this.set('componentStack', []);
+                this.set('stackIndex', -1);
+                this.fire('component-updated', e.detail);
+            },
+            _updateStack: function (e) {
+                this.set('componentStack.' + (this.stackIndex + 1), OEUtils.deepCloneJSON(e.detail));
+                this.set('stackIndex', this.stackIndex + 1);
+                console.log("Stack updated ", this.stackIndex);
             }
         })
     </script>

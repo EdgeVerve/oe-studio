@@ -69,8 +69,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       });
       ajax.generateRequest();
     },
-    makeXhrCall: function (url, cb) {
+    makeXhrCall: function (url, method, body, header, cb) {
       var self = this;
+      method = method.toLowerCase();
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function () {
         if (xhr.status === 200 && xhr.readyState == 4 && xhr.response.length > 0) {
@@ -78,10 +79,25 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }
       }
       xhr.onerror = function () {
-        self.fire('oe-show-error', 'Error fetching data -' + xhr.status);
+        cb(err)
       };
-      xhr.open('get', url, true);
-      xhr.send();
+      if (header) {
+        Object.keys(header).forEach(function (k) {
+          var val = header[k];
+          if (Array.isArray(val)) {
+            xhr.setRequestHeader(k, val[0]);
+          } else {
+            xhr.setRequestHeader(k, val);
+          }
+        })
+      }
+      xhr.open(method, url);
+      if (method === 'get') {
+        xhr.send()
+      } else {
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.send(JSON.stringify(body));
+      }
     },
     resolveError: function (err) {
       var errObj = OEUtils.extractErrorMessage(err);
@@ -497,5 +513,4 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       return test
     }
   }
-
 </script>

@@ -21,6 +21,10 @@
 		return to;
 	}
 
+	OEUtils.deepCloneJSON = function(fromObj){
+		return JSON.parse(JSON.stringify(fromObj));
+	}
+
 	OEUtils.prettify = (function() {
 
 		function generatePrettyDom(dom) {

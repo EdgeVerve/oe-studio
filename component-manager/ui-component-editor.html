@@ -1,0 +1,282 @@
+<link rel="import" href="../styles/oe-studio-styles.html">
+<dom-module id="ui-component-editor">
+    <template>
+        <style include="oe-studio-styles">
+             :host {
+                position: relative;
+                display: block;
+                box-sizing: border-box;
+                padding: 16px;
+                background: var(--default-primary-color);
+                color: #fff;
+                box-shadow: 0px -2px 1px rgba(0, 0, 0, 0.61) inset;
+                height: 100%;
+            }
+
+            .more-props {
+                padding: 12px 0px;
+            }
+
+            .component-name {
+                margin-bottom: 16px;
+                display: block;
+            }
+
+            .prop-list {
+                overflow: auto;
+                border-top: 2px solid var(--dark-primary-color);
+                border-bottom: 2px solid var(--dark-primary-color);
+                max-height: 318px;
+                padding: 8px 0px;
+            }
+
+            paper-toggle-button {
+                --paper-toggle-button-label-color: #ffffff;
+            }
+
+            .helper-text {
+                font-size: 12px;
+                font-style: italic;
+                opacity: 0.54;
+                margin-top: 8px;
+            }
+
+            .prop {
+                font-size: 12px;
+                padding: 4px 8px;
+                margin: 6px 0px;
+                background: var(--dark-primary-color);
+                border-radius: 4px;
+                max-width: 200px;
+            }
+
+            .prop-item {
+                --paper-checkbox-unchecked-color: rgba(255, 255, 255, 0.6);
+                --paper-checkbox-checked-color: #ffffff;
+                --paper-checkbox-checkmark-color: #000000;
+                --paper-checkbox-label-color: #ffffff;
+                --paper-checkbox-label: {
+                    max-width: 150px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                }
+            }
+
+            .prop iron-icon {
+                width: 18px;
+                height: 18px;
+            }
+        </style>
+        <div class="component-container">
+            <iron-pages selected="[[panelSelected]]">
+                <div class="component-form">
+                    <label class="component-name">Component Name : [[component.name]]</label>
+                    <oe-combo label="Template Name" listdata="[[templateList]]" value="{{component.templateName}}" valueproperty="file" displayproperty="file"></oe-combo>
+                    <oe-combo id="modelName" show-refresh value="{{component.modelName}}" required label="Search Models" displayproperty="name"
+                        valueproperty="name" listurl="/api/ModelDefinitions?filter[fields][name]=true"></oe-combo>
+                    <div hidden$="[[!component.modelName]]">
+                        <div class="more-props">
+                            <paper-toggle-button checked="{{component.autoInjectFields}}">Auto Inject Fields</paper-toggle-button>
+                            <div class="helper-text">Properties updated in the model will be injected in the form automatically</div>
+                        </div>
+                        <div class="prop-list">
+                            <template is="dom-repeat" items="[[modelProperties]]">
+                                <div class="prop layout horizontal justified center">
+                                    <paper-checkbox on-change="_refineFieldsEntry" checked="{{item.applied}}" class="prop-item">[[item.name]]</paper-checkbox>
+                                    <iron-icon icon="icons:settings" on-tap="_openFieldSetting"></iron-icon>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                <div class="field-form">
+                    <label class="component-name">Field Id : [[fieldMeta.fieldId]]</label>
+                    <oe-input label="Label" value="{{fieldMeta.label}}"></oe-input>
+                    <oe-input label="Class" value="{{fieldMeta.class}}"></oe-input>
+                    <oe-input label="Label" value="{{fieldMeta.label}}"></oe-input>
+                </div>
+            </iron-pages>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "ui-component-editor",
+            properties: {
+                metaData: {
+                    type: Object,
+                    observer: "_metaDataChanged"
+                },
+                component: {
+                    type: Object
+                },
+                containers: {
+                    type: Array
+                }
+            },
+            behaviors: [CommonBehavior.EVAjaxBehavior],
+            observers: ['_componentDataChanged(component.*)'],
+            attached: function () {
+                this.set('panelSelected', 0);
+            },
+            _metaDataChanged: function (nval, oval) {
+                if (oval !== nval && nval) {
+                    this.generateFieldsArr(this.metaData.metadata.models)
+                }
+            },
+            generateFieldsArr: function (resp) {
+                var properties = [];
+                this.set('modelProperties', []);
+                Polymer.dom.flush();
+                this.component.fields.forEach(function (s) {
+                    var fieldMeta = (typeof s === "string") ? {
+                        'fieldId': s
+                    } : s;
+                    var obj = {
+                        'index': -1,
+                        'name': fieldMeta.fieldId,
+                        'fieldMeta': fieldMeta,
+                        'applied': true
+                    }
+                    properties.push(obj);
+                });
+
+                this.component.excludeFields.forEach(function (s) {
+                    var fieldMeta = (typeof s === "string") ? {
+                        'fieldId': s
+                    } : s;
+                    var obj = {
+                        'index': -1,
+                        'name': s,
+                        'fieldMeta': {
+                            'fieldId': s
+                        },
+                        'applied': false
+                    }
+                    properties.push(obj);
+                })
+                console.log('Properties based on component', JSON.stringify(properties, null, 2));
+                var modelData = resp[this.component.modelName];
+                Object.keys(modelData.properties).filter(function (prop) {
+                    return !(prop[0] == '_' || prop == 'id' || prop == 'scope')
+                }).forEach(function (prop, idx) {
+                    var modelprop = {
+                        'index': idx,
+                        'name': prop,
+                        'fieldMeta': {
+                            'fieldId': prop
+                        },
+                        'applied': this.component.autoInjectFields
+                    }
+                    var isExitingField = properties.find(function (p) {
+                        return p.name === modelprop.name
+                    })
+                    if (isExitingField) {
+                        isExitingField.index = modelprop.index;
+                    } else {
+                        properties.push(modelprop);
+                    }
+                }.bind(this));
+                this.set('modelProperties', properties);
+                this.configureSortable();
+            },
+            _componentDataChanged: function (change) {
+                if (change.path === "component") {
+                    return;
+                }
+                if (change.path === "component.modelName") {
+                    this.component.fields = []
+                    this.component.excludeFields = []
+                }
+                // if (change.path === "component.autoInjectFields") {
+                //     if(this.component.autoInjectFields){
+                //         //on true update excluded fields array
+                //         this.component.excludeFields = this.modelProperties.filter(function(prop){
+                //             return !prop.applied
+                //         }).map(function(prop){
+                //             return prop.name;
+                //         });
+                //     }else{
+                //         var fields = [];
+                //         //on false update fields array of component
+                //         var incfields = this.modelProperties.filter(function(prop){
+                //             return prop.applied
+                //         });
+                //         incfields.forEach(function(f){
+                //             var fidx = this.component.fields.findIndex(function(fld){
+                //                 return fld.fieldId === f.name;
+                //             })
+                //             if(fidx !== -1){
+                //                 fields.push({fieldId:f.name});
+                //             }else{
+                //                 fields.push(this.component.fields[fidx])
+                //             }
+                //         }.bind(this));
+                //         this.component.fields = fields;
+                //     }
+                // }
+
+                this.fire('component-updated', this.component);
+            },
+            configureSortable: function () {
+                Polymer.dom.flush();
+                var containers = this.querySelectorAll('.prop-list');
+                [].forEach.call(containers, function attachSortable(el) {
+                    Sortable.create(el, {
+                        animation: 150,
+                        draggable: '.prop',
+                        onUpdate: function (e) {
+                            var movedField = this.modelProperties.splice(e.oldIndex, 1)[
+                                0];
+                            this.modelProperties.splice(e.newIndex, 0, movedField);
+                            this._refineFieldsEntry();
+                        }.bind(this)
+                    });
+                }.bind(this))
+            },
+            _refineFieldsEntry: function () {
+                var fields = [];
+
+                var includedFields = this.modelProperties.filter(function (prop) {
+                    return prop.applied;
+                });
+                var diffIndex = 0;
+                for (var i = includedFields.length - 1; i > 0; i--) {
+                    if (includedFields[i]["index"] < includedFields[i - 1]["index"]) {
+                        diffIndex = i;
+                        break;
+                    }
+                }
+                var modified = includedFields.slice(0, diffIndex);
+                this.component.fields = modified.map(function (f) {
+                    return f.fieldMeta
+                });
+
+
+                this.component.excludeFields = this.modelProperties.filter(function (prop) {
+                    return !prop.applied;
+                }).map(function (prop) {
+                    return prop.name;
+                });
+
+                this.fire('component-updated', this.component);
+            },
+            showFieldEditor: function (fieldId) {
+                var field = this.modelProperties.find(function (prop) {
+                    return prop.name === fieldId;
+                });
+                if (fieldId && field) {
+                    this.set('fieldMeta', field.fieldMeta);
+                    this.set('panelSelected', 1);
+                } else {
+                    this.set('panelSelected', 0);
+                }
+
+            },
+            _openFieldSetting: function (e) {
+                var field = e.model.item;
+                this.showFieldEditor(field.name);
+            }
+        })
+    </script>
+</dom-module>

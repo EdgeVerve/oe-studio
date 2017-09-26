@@ -79,7 +79,7 @@
 			pageSelectedHandle: function(e) {
 				var self = this;
 				var detail = e.detail;
-				self.makeXhrCall(('/api/UIComponents/component/' + detail.name), function(err, res) {
+				self.makeXhrCall(('/api/UIComponents/component/' + detail.name),'get',null,null,function(err, res) {
 					if (err) {
 						self.fire('oe-show-error', 'Error fetching uicomponent')
 					} else {

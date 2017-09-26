@@ -313,10 +313,7 @@
                                     </template>
                                 </div>
                             </div>
-                            <ui-component-creator id="uiCreateComponent" 
-                            template-list="[[templateList]]" 
-                            component-list="[[componentList]]"
-                            on-hide-create-component="showPageListing"></ui-component-creator>
+                            <ui-component-creator id="uiCreateComponent" template-list="[[templateList]]" component-list="[[componentList]]" on-hide-create-component="showPageListing"></ui-component-creator>
                         </iron-pages>
                     </div>
                 </div>
@@ -333,7 +330,8 @@
                 },
                 templateList: {
                     type: Array,
-                    value: []
+                    value: [],
+                    notify: true
                 },
                 selected: {
                     type: Number,
@@ -482,6 +480,22 @@
                 pageData.isPolymerElement = true
                 this.push('componentList', pageData);
                 this._handleEditLaunch(pageData);
+            },
+            updateComponent: function (comp) {
+                var apiurl = '/api/UIComponents';
+                var self = this;
+                this.makeAjaxCall(apiurl, 'put', comp, null, null, function (err, res) {
+                    if (!err) {
+                        var index = self.componentList.findIndex(function (c) {
+                            return c.id === res.id;
+                        });
+                        self.set('componentList.' + index, res);
+                        self._handleEditLaunch(res);
+                        self.fire('oe-show-success', 'Element successfully updated');
+                    } else {
+                        self.resolveError(err);
+                    }
+                })
             },
             _downloadComponent: function (event) {
                 var self = this;
