@@ -67,20 +67,6 @@
             behaviors: [
                 CommonBehavior.EVAjaxBehavior
             ],
-            customEval: function (str) {
-                var script = document.createElement('script');
-                script.type = 'text/javascript';
-                //Clear all content before Polymer invocation.
-                str = str.replace(/(.*\n)*.*window\.OEUtils/, 'window.OEUtils');
-                script.textContent = 'try{\n' + str + '\n}catch(e){ window.ev_parseFailed = true}'
-                document.head.appendChild(script);
-                document.head.removeChild(script);
-                if (window.ev_parseFailed) {
-                    window.ev_parseFailed = false;
-                    return null
-                }
-                return true
-            },
             attached: function () {
                 this.set('showActions', false);
             },

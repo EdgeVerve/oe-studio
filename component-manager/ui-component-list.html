@@ -474,8 +474,7 @@
                 })
 
                 this.splice('componentList', pageIndex, 1);
-                this.fire('oe-show-success', pageData.name + ' successfully deleted');
-                this.closePageSettings();
+                this.fire('oe-show-success', pageData.name + ' successfully deleted');                
             },
             newPageCreated: function (e) {
                 this.showPageListing();

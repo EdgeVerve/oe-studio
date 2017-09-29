@@ -121,6 +121,10 @@
             },
             _metaDataChanged: function (nval, oval) {
                 if (oval !== nval && nval) {
+                    if(!this.component){
+                        this.set('isPendingGeneration',true);
+                        return;
+                    }
                     this.generateFieldsArr(this.metaData.metadata.models)
                 }
             },
@@ -182,6 +186,10 @@
             },
             _componentDataChanged: function (change) {
                 if (change.path === "component") {
+                    if(this.isPendingGeneration){
+                        this.set('isPendingGeneration',false);
+                        this.generateFieldsArr(this.metaData.metadata.models)
+                    }
                     return;
                 }
                 if (change.path === "component.modelName") {
