@@ -177,7 +177,7 @@
                         properties.push(modelprop);
                     }
                 }.bind(this));
-                this.set('modelProperties', properties);
+                this.set('modelProperties', properties.sort(function(a,b){return (a.applied === b.applied)?0:(b.applied?1:-1)}));
                 this.configureSortable();
             },
             _componentDataChanged: function (change) {
