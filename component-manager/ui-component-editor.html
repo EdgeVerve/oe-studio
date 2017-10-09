@@ -168,8 +168,9 @@
             <iron-pages selected="[[panelSelected]]">
                 <div class="component-form">
                     <label class="component-name">Component Name : [[component.name]]</label>
+                    <oe-input  label="Rest URL" value="{{component.restUrl}}"></oe-input>
                     <oe-combo label="Template Name" listdata="[[templateList]]" value="{{component.templateName}}" valueproperty="file" displayproperty="file"></oe-combo>
-                    <oe-combo id="modelName" show-refresh value="{{component.modelName}}" required label="Search Models" displayproperty="name"
+                    <oe-combo id="modelName" show-refresh value="{{component.modelName}}" required label="Models" displayproperty="name"
                         valueproperty="name" listurl="/api/ModelDefinitions?filter[fields][name]=true"></oe-combo>
                     <div hidden$="[[!component.modelName]]">
                         <div class="more-props">
@@ -383,6 +384,7 @@
                         properties.push(modelprop);
                     }
                 }.bind(this));
+                properties = _.uniqBy(properties,'name');
                 this.set('modelProperties', properties.sort(function (a, b) {
                     return (a.applied === b.applied) ? 0 : (b.applied ? 1 : -1)
                 }));
@@ -424,6 +426,8 @@
                 var includedFields = this.modelProperties.filter(function (prop) {
                     return prop.applied;
                 });
+
+                /* Commenting out fields array trimming logic
                 var diffIndex = 0;
                 for (var i = includedFields.length - 1; i > 0; i--) {
                     if (includedFields[i]["index"] < includedFields[i - 1]["index"]) {
@@ -446,18 +450,28 @@
                         modified[idx]["fieldMeta"] = f;
                     }
                 })
-
-
                 this.component.fields = modified.map(function (f) {
                     return f.fieldMeta
                 });
-
+                */
 
                 this.component.excludeFields = this.modelProperties.filter(function (prop) {
                     return !prop.applied;
                 }).map(function (prop) {
                     return prop.name;
                 });
+                includedFields.forEach(function(f){
+                        var prevField = this.component.fields.find(function(field){
+                            return f.name === field.fieldId
+                        })
+                        fields.push(prevField || f.fieldMeta);
+                }.bind(this))
+
+                this.component.fields = fields;
+
+                this.component.fields = this.component.fields.filter(function(f){
+                    return (this.component.excludeFields.indexOf(f.fieldId) === -1)
+                }.bind(this));
 
                 this.fire('component-updated', this.component);
             },
