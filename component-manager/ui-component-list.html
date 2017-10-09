@@ -2,6 +2,7 @@
 ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
 -->
 <link rel="import" href="ui-component-creator.html">
+<link rel="import" href="../ui-designer/ui-navigation-settings.html">
 <dom-module id="ui-component-list">
     <style>
          :host {
@@ -283,6 +284,7 @@
                                         <label class="mini-heading">Manage Form Components</label>
                                         <div class="layout horizontal center justified">
                                             <span class="helper-text">{{polymerCount}} Components</span>
+                                            <iron-icon icon="refresh" on-tap="fetchInitialData"></iron-icon>
                                             <paper-button id="add-component-panel" on-tap="showPageCreation">
                                                 <iron-icon icon="oe-designer-icons:add-page"></iron-icon><span>Add Component</span>
                                             </paper-button>
@@ -319,6 +321,14 @@
                             <ui-component-creator id="uiCreateComponent" template-list="[[templateList]]" component-list="[[componentList]]" on-hide-create-component="showPageListing"></ui-component-creator>
                         </iron-pages>
                     </div>
+                </div>
+            </paper-menu-button>
+            <paper-menu-button id="pageSettingsIcon" no-animations no-overlap vertical-align="bottom" ignore-select class="page-settings"
+                hidden$="{{!hasActivePage}}">
+                <paper-icon-button class="dropdown-trigger" noink icon="settings">
+                </paper-icon-button>
+                <div class="dropdown-content">
+                    <ui-navigation-settings id="pageSettingsPanel" active-page="{{activePage}}" on-close-panel="closePageSettings"></ui-navigation-settings>
                 </div>
             </paper-menu-button>
         </div>
@@ -373,6 +383,12 @@
                 'component-created': 'newPageCreated',
                 'page-deleted': 'deletePage'
             },
+            closePageSettings: function (event) {
+                if (event) {
+                    event.stopPropagation();
+                }
+                this.$.pageSettingsIcon.close();
+            },
             formatJSON: function (value) {
                 return JSON.stringify(value, null, 2);
             },
@@ -403,11 +419,13 @@
                 this.set('searchKey', '');
             },
             attached: function () {
-                var self = this;
                 this.step = 0;
+                this.fetchInitialData();
+            },
+            fetchInitialData: function () {
+                var self = this;
                 async.parallel({
                     templateList: function (callback) {
-
                         self.makeAjaxCall('/designer/templates', 'get', null, null, null,
                             function (
                                 err, res) {
@@ -461,7 +479,6 @@
                 this.set('polymerListEmpty', list.length ? false : true)
                 return list;
             },
-
             deletePage: function (event) {
                 this.set('deleteFlag', false);
                 var pageData = event.detail;
@@ -474,7 +491,7 @@
                 })
 
                 this.splice('componentList', pageIndex, 1);
-                this.fire('oe-show-success', pageData.name + ' successfully deleted');                
+                this.fire('oe-show-success', pageData.name + ' successfully deleted');
             },
             newPageCreated: function (e) {
                 this.showPageListing();
@@ -526,9 +543,13 @@
                 })
             },
             _handleEditLaunch: function (pageData) {
-                this.set('activePage', pageData);
-                this.fire('page-selected', pageData);
-                this.$.pageSelectMenu.close();
+                var page = JSON.parse(JSON.stringify(pageData));
+                this.$.pageSettingsPanel.getRouteDetails(page,function(resp){
+                    page.routeData = resp;
+                    this.set('activePage', page);
+                    this.fire('page-selected', pageData);
+                    this.$.pageSelectMenu.close();
+                }.bind(this))
             },
             _editPage: function (e) {
                 this._handleEditLaunch(e.model.page);
