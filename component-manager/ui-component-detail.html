@@ -128,9 +128,55 @@
                 }
                 return true
             },
+            attached:function(){
+                var customStyle = document.createElement('style');
+                customStyle.innerHTML = `
+                    [field-id] {
+                        position: relative;
+                    }
+
+                    [field-id]:hover {
+                        outline: 2px solid var(--hover-color);
+                        outline-offset: -2px;
+                        position: relative;
+                    }
+
+                    .current-selection {
+                        outline: 2px solid var(--selection-color);
+                        outline-offset: -2px;
+                    }
+
+                    [field-id]:hover:before,
+                    .current-selection:before {
+                        content: attr(field-id);
+                        position: absolute;
+                        padding: 4px;
+                        font-size: 10px;
+                        color: #FFF;
+                        top: 0px;
+                        left: 0px;
+                    }
+
+                    [field-id]:hover:before {
+                        background: var(--hover-color);
+                    }
+
+                    .current-selection:before {
+                        background: var(--selection-color);
+                    }
+            `
+            this.set('styleElement',customStyle);
+            },
             _elementChanged: function () {
                 if (this.element) {
-                    var temp = this.element.querySelector('template');
+                    //clone element
+                    var newEleId = this.component.name + '-' + OEUtils.generateGuid();
+                    var elem = this.throughClone(this.element);
+                    var custom = document.createElement('dom-module');
+                    custom.setAttribute('id',newEleId);
+                    var temp = elem.querySelector('template');
+                    custom.appendChild(temp);
+                    //MetaPolymer Action
                     this.set('templateContainers', [].map.call(temp.content.querySelectorAll('[id]'),
                         function (d) {
                             return d.getAttribute('id')
@@ -138,25 +184,50 @@
                     if (OEUtils.Metamorph) {
                         OEUtils.Metamorph(temp, this.metaData, {});
                     }
-                    var preview = document.createElement('div');
-                    var binder = document.createElement('template');
-                    binder.setAttribute('is', 'dom-bind');
 
-                    var styleTags = temp.content.querySelectorAll('style');
-                    [].forEach.call(styleTags, function (sty) {
-                        sty.setAttribute('scoped', '');
-                        preview.appendChild(sty);
-                    });
-                    OEUtils.scopeStyles && OEUtils.scopeStyles(preview);
+                    //Attach Extra styles
+                    temp.content.appendChild(this.throughClone(this.styleElement));
+                    custom.register(newEleId);
+                    
+                    //modify element name
+                    var polymerScriptTag = elem.querySelector('script');
+                    var polyScript = polymerScriptTag.innerHTML;
 
-                    while (temp.content.childNodes.length > 0) {
-                        preview.appendChild(temp.content.childNodes[0]);
-                    }
-                    binder.content.appendChild(preview);
+                    polyScript = polyScript.replace('MetaPolymer(','Polymer(')
+                    polyScript = polyScript.replace(new RegExp('is:\\s"'+this.component.name+'"'),'is:"'+newEleId+'"')
+                    
+                    var customScript = document.createElement('script');   
+                    customScript.type = 'text/javascript';
+                    customScript.charset = 'utf-8';
+                    customScript.innerHTML = polyScript;
+
+
+                    var element = document.createElement(newEleId);
                     this.$.previewBox.innerHTML = "";
-                    Polymer.dom.flush();
-                    this.$.previewBox.innerHTML = binder.outerHTML;
-                    Polymer.dom.flush();
+                    this.$.previewBox.appendChild(customScript);
+                    this.$.previewBox.appendChild(element);
+                    return;
+                    
+
+                    // var preview = document.createElement('div');
+                    // var binder = document.createElement('template');
+                    // binder.setAttribute('is', 'dom-bind');
+
+                    // var styleTags = temp.content.querySelectorAll('style');
+                    // [].forEach.call(styleTags, function (sty) {
+                    //     sty.setAttribute('scoped', '');
+                    //     preview.appendChild(sty);
+                    // });
+                    // OEUtils.scopeStyles && OEUtils.scopeStyles(preview);
+
+                    // while (temp.content.childNodes.length > 0) {
+                    //     preview.appendChild(temp.content.childNodes[0]);
+                    // }
+                    // binder.content.appendChild(preview);
+                    // this.$.previewBox.innerHTML = "";
+                    // Polymer.dom.flush();
+                    // this.$.previewBox.innerHTML = binder.outerHTML;
+                    // Polymer.dom.flush();
                 }
             },
             _handleClick: function (e) {

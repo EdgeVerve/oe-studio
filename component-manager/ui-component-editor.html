@@ -500,7 +500,7 @@
                 this.fire('component-updated', this.component);
             },
             showFieldEditor: function (fieldId) {
-                if (fieldId) {
+                if (fieldId && fieldId.length > 0) {
                     var fmeta = {
                         "fieldId": fieldId
                     };
