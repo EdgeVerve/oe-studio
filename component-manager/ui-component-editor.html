@@ -19,14 +19,18 @@
 
             .component-name {
                 margin-bottom: 16px;
-                display: block;
+                display: inline-block;
+            }
+
+            #field-delete-icon{
+                float:right;
             }
 
             .prop-list {
                 overflow: auto;
                 border-top: 2px solid var(--dark-primary-color);
                 border-bottom: 2px solid var(--dark-primary-color);
-                max-height: 318px;
+                max-height: 220px;
                 padding: 8px 0px;
             }
 
@@ -163,15 +167,26 @@
                 max-height: 180px;
                 overflow: auto;
             }
+            
+            paper-button{
+                font-size: 12px;
+                height: 30px;
+                background: var(--accent-color);
+            }
+            .add-field-label{
+                font-size: 12px;
+                margin: 8px 0px;
+                display: block;
+            }
         </style>
         <div class="component-container">
             <iron-pages selected="[[panelSelected]]">
                 <div class="component-form">
                     <label class="component-name">Component Name : [[component.name]]</label>
-                    <oe-input  label="Rest URL" value="{{component.restUrl}}"></oe-input>
+                    <oe-input label="Rest URL" value="{{component.restUrl}}"></oe-input>
                     <oe-combo label="Template Name" listdata="[[templateList]]" value="{{component.templateName}}" valueproperty="file" displayproperty="file"></oe-combo>
-                    <oe-combo id="modelName" show-refresh value="{{component.modelName}}" required label="Models" displayproperty="name"
-                        valueproperty="name" listurl="/api/ModelDefinitions?filter[fields][name]=true"></oe-combo>
+                    <oe-combo id="modelName" show-refresh value="{{component.modelName}}" required label="Models" displayproperty="name" valueproperty="name"
+                        listurl="/api/ModelDefinitions?filter[fields][name]=true"></oe-combo>
                     <div hidden$="[[!component.modelName]]">
                         <div class="more-props">
                             <paper-toggle-button checked="{{component.autoInjectFields}}">Auto Inject Fields</paper-toggle-button>
@@ -185,10 +200,18 @@
                                 </div>
                             </template>
                         </div>
+                        <div class="layout horizontal justified end add-field-panel">
+                            <div>
+                                <label class="add-field-label">Field Id</label>
+                                <oe-input no-label-float label="field Id" value="{{newFieldId}}"></oe-input>
+                            </div>
+                            <paper-button on-tap="_addNewField">Add Field</paper-button>
+                        </div>
                     </div>
                 </div>
                 <div class="field-form">
                     <label class="component-name">Field Id : [[fieldMeta.fieldId]]</label>
+                    <iron-icon icon="delete" id="field-delete-icon" on-tap="_removeField"></iron-icon>
                     <div class="layout horizontal center justified prop-container">
                         <label class="prop-label">Label</label>
                         <oe-input class="flex" no-label-float label="Label" value="{{fieldMeta.label}}"></oe-input>
@@ -384,7 +407,7 @@
                         properties.push(modelprop);
                     }
                 }.bind(this));
-                properties = _.uniqBy(properties,'name');
+                properties = _.uniqBy(properties, 'name');
                 this.set('modelProperties', properties.sort(function (a, b) {
                     return (a.applied === b.applied) ? 0 : (b.applied ? 1 : -1)
                 }));
@@ -427,32 +450,33 @@
                     return prop.applied;
                 });
 
-                /* Commenting out fields array trimming logic
-                var diffIndex = 0;
-                for (var i = includedFields.length - 1; i > 0; i--) {
-                    if (includedFields[i]["index"] < includedFields[i - 1]["index"]) {
-                        diffIndex = i;
-                        break;
+                /* 
+                    Commenting out fields array trimming logic
+                    var diffIndex = 0;
+                    for (var i = includedFields.length - 1; i > 0; i--) {
+                        if (includedFields[i]["index"] < includedFields[i - 1]["index"]) {
+                            diffIndex = i;
+                            break;
+                        }
                     }
-                }
-                // Gives the new order of the fields
-                var modified = includedFields.slice(0, diffIndex);
+                    // Gives the new order of the fields
+                    var modified = includedFields.slice(0, diffIndex);
 
-                this.component.fields.forEach(function (f) {
-                    var idx = modified.findIndex(function (k) {
-                        return k.fieldMeta && k.fieldMeta.fieldId == f.fieldId
+                    this.component.fields.forEach(function (f) {
+                        var idx = modified.findIndex(function (k) {
+                            return k.fieldMeta && k.fieldMeta.fieldId == f.fieldId
+                        });
+                        if (idx === -1) {
+                            modified.push({
+                                fieldMeta: f
+                            })
+                        } else {
+                            modified[idx]["fieldMeta"] = f;
+                        }
+                    })
+                    this.component.fields = modified.map(function (f) {
+                        return f.fieldMeta
                     });
-                    if (idx === -1) {
-                        modified.push({
-                            fieldMeta: f
-                        })
-                    } else {
-                        modified[idx]["fieldMeta"] = f;
-                    }
-                })
-                this.component.fields = modified.map(function (f) {
-                    return f.fieldMeta
-                });
                 */
 
                 this.component.excludeFields = this.modelProperties.filter(function (prop) {
@@ -460,30 +484,31 @@
                 }).map(function (prop) {
                     return prop.name;
                 });
-                includedFields.forEach(function(f){
-                        var prevField = this.component.fields.find(function(field){
-                            return f.name === field.fieldId
-                        })
-                        fields.push(prevField || f.fieldMeta);
+                includedFields.forEach(function (f) {
+                    var prevField = this.component.fields.find(function (field) {
+                        return f.name === field.fieldId
+                    })
+                    fields.push(prevField || f.fieldMeta);
                 }.bind(this))
 
                 this.component.fields = fields;
 
-                this.component.fields = this.component.fields.filter(function(f){
+                this.component.fields = this.component.fields.filter(function (f) {
                     return (this.component.excludeFields.indexOf(f.fieldId) === -1)
                 }.bind(this));
 
                 this.fire('component-updated', this.component);
             },
             showFieldEditor: function (fieldId) {
-                this.set('fieldMeta', {});
-                var field = this.modelProperties.find(function (prop) {
-                    return prop.name === fieldId;
-                });
-                if (fieldId && field) {
+                if (fieldId) {
                     var fmeta = {
                         "fieldId": fieldId
                     };
+                    this.set('fieldMeta', {});
+                    var field = this.modelProperties.find(function (prop) {
+                        return prop.name === fieldId;
+                    });
+                    this.set('isModelField',!!(field && field.index > -1));
                     var boolKeys = ["required", "disabled", "hidden"];
                     var handleKeys = ["label", "container", "class", "uitype", "fieldId"]
                     var componentField = this.component.fields.find(function (prop) {
@@ -607,6 +632,25 @@
             },
             _closeFieldMeta: function () {
                 this.set('panelSelected', 0);
+            },
+            _addNewField:function(){
+                this.showFieldEditor(this.newFieldId);
+                this.splice('modelProperties',0,0,{name:this.newFieldId,applied:true});
+                this.set('newFieldId',"");
+            },
+            _removeField:function(){
+                var index = this.modelProperties.findIndex(function(m){
+                    return m.name === this.fieldMeta.fieldId
+                }.bind(this))
+                if(index > -1){
+                    if(this.isModelField){
+                        this.set('modelProperties.'+index+'.applied',false);
+                    }else{
+                        this.splice('modelProperties',index,1)
+                    }
+                }
+                this.set('panelSelected', 0);
+                this._refineFieldsEntry();
             }
         })
     </script>
