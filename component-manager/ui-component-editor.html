@@ -178,6 +178,13 @@
                 margin: 8px 0px;
                 display: block;
             }
+
+            .prop-list .prop paper-checkbox[status="status-"]{
+                --paper-checkbox-unchecked-background-color:grey;
+            }
+            .prop-list .prop paper-checkbox[status="status-false"]{
+                --paper-checkbox-unchecked-background-color:red;
+            }
         </style>
         <div class="component-container">
             <iron-pages selected="[[panelSelected]]">
@@ -195,8 +202,11 @@
                         <div class="prop-list">
                             <template is="dom-repeat" items="[[modelProperties]]">
                                 <div class="prop layout horizontal justified center">
-                                    <paper-checkbox on-change="_refineFieldsEntry" checked="{{item.applied}}" class="prop-item">[[item.name]]</paper-checkbox>
-                                    <iron-icon icon="icons:settings" on-tap="_openFieldSetting"></iron-icon>
+                                    <paper-checkbox on-change="_refineFieldsEntry" status$="status-[[item.applied]]" checked="{{item.applied}}" class="prop-item">[[item.name]]</paper-checkbox>
+                                    <div>
+                                        <iron-icon icon="icons:delete" on-tap="_UnsetField"></iron-icon>
+                                        <iron-icon icon="icons:settings" on-tap="_openFieldSetting"></iron-icon>
+                                    </div>
                                 </div>
                             </template>
                         </div>
@@ -396,7 +406,7 @@
                         'fieldMeta': {
                             'fieldId': prop
                         },
-                        'applied': this.component.autoInjectFields
+                        'applied': undefined //this.component.autoInjectFields
                     }
                     var isExitingField = properties.find(function (p) {
                         return p.name === modelprop.name
@@ -447,7 +457,7 @@
                 var fields = [];
 
                 var includedFields = this.modelProperties.filter(function (prop) {
-                    return prop.applied;
+                    return JSON.stringify(prop.applied) === "true";
                 });
 
                 /* 
@@ -480,7 +490,7 @@
                 */
 
                 this.component.excludeFields = this.modelProperties.filter(function (prop) {
-                    return !prop.applied;
+                    return JSON.stringify(prop.applied) === "false";
                 }).map(function (prop) {
                     return prop.name;
                 });
@@ -627,6 +637,13 @@
                 } else {
                     this.component.fields.splice(prevFieldIndex, 1, payloadFmeta);
                 }
+                var modelPropIndex = this.modelProperties.findIndex(function (f) {
+                    return f.name === this.fieldMeta.fieldId
+                }.bind(this));
+                if(modelPropIndex === -1){
+                    this.modelProperties.push({name:this.fieldMeta.fieldId,applied:true})
+                }
+
                 this._refineFieldsEntry();
                 this._closeFieldMeta();
             },
@@ -644,11 +661,17 @@
                 }.bind(this))
                 if(index > -1){
                     if(this.isModelField){
-                        this.set('modelProperties.'+index+'.applied',false);
+                        this.set('modelProperties.'+index+'.applied',undefined);
                     }else{
                         this.splice('modelProperties',index,1)
                     }
                 }
+                this.set('panelSelected', 0);
+                this._refineFieldsEntry();
+            },
+            _UnsetField:function(e){
+                var fieldIndex = e.model.index;
+                this.set('modelProperties.'+fieldIndex+'.applied',undefined);
                 this.set('panelSelected', 0);
                 this._refineFieldsEntry();
             }
