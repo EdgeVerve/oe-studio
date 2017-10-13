@@ -88,7 +88,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       </app-drawer>
       <app-header-layout>
         <div class="main-app-content">
-<!--
+          <!--
           <oe-app-route route="{{route}}" config-url="" routes-list="[[designerRoutes]]">
             <iron-pages route-target>
             </iron-pages>
@@ -125,19 +125,19 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         },
         tenantList: {
           type: Array,
-          value: function() {
+          value: function () {
             return [];
           }
         },
         currentSession: {
           type: Object,
-          value: function() {
+          value: function () {
             return {};
           }
         },
         ajaxQueue: {
           type: Number,
-          value: function() {
+          value: function () {
             return 0;
           }
         }
@@ -148,22 +148,31 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         'toggle-left-drawer': 'toggleLeftDrawer',
         'toggle-right-drawer': 'toggleRightDrawer',
         'start-spinner': '_startSpinner',
-        'end-spinner': '_endSpinner'
+        'end-spinner': '_endSpinner',
+        'add-field-to-model': '_addFieldToModel'
       },
 
       /*Drawer Panel control*/
-      toggleRightDrawer: function() {
+      toggleRightDrawer: function () {
         this.$.appConfig.initialize();
         this.$.rightDrawer.toggle();
       },
-      toggleLeftDrawer: function() {
+      toggleLeftDrawer: function () {
         this.$.leftDrawer.toggle();
       },
-
+      _addFieldToModel: function (e) {
+        this.set('route.path', '');
+        Polymer.Base.async(function () {
+          var modelDesigner = this.querySelector('model-designer');
+          if (modelDesigner) {
+            modelDesigner.fire('add-new-field', e.detail);
+          }
+        }.bind(this), 100)
+      },
       /*Common Functions*/
-      attached: function() {
+      attached: function () {
         this._fetchTenants();
-        this.makeAjaxCall('api/BaseUsers/session', 'GET', null, null, null, function(err, response) {
+        this.makeAjaxCall('api/BaseUsers/session', 'GET', null, null, null, function (err, response) {
           if (response) {
             this.set('currentSession', response);
             localStorage.setItem('tenantId', response.tenantId);
@@ -176,72 +185,70 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             this._logOut();
           }
         }.bind(this));
-        this.set('designerRoutes',[
-          {
-            "type": "elem",
-            "name": "model-designer",
-            "path": "",
-            "import": "/bower_components/oe-studio/elements/model-designer.html",
-            "group": "",
-            "retainInstance":true
-          }, {
-            "type": "elem",
-            "name": "ui-designer",
-            "path": "uidesigner",
-            "import": "/bower_components/oe-studio/ui-designer/ui-designer.html",
-            "group": "",
-            "retainInstance":true
-          },{
-            "type": "elem",
-            "name": "route-flow-designer",
-            "path": "routeflow",
-            "import": "/bower_components/oe-studio/routeflow/route-flow-designer.html",
-            "group": "",
-            "retainInstance":true
-          }, {
-            "type": "elem",
-            "name": "resource-manager",
-            "path": "resourcemanager",
-            "import": "/bower_components/oe-studio/resource-manager/resource-manager.html",
-            "group": "",
-            "retainInstance":true
-          }, {
-            "type": "elem",
-            "name": "rule-manager",
-            "path": "rulemanager",
-            "import": "/bower_components/oe-studio/rule-manager/rule-manager.html",
-            "group": "",
-            "retainInstance":true
-          },{
-            "type": "elem",
-            "name": "workflow-designer",
-            "path": "workflow",
-            "import": "/bower_components/oe-workflow-modeler/workflow-designer.html",
-            "group": "",
-            "retainInstance":true
-          }
-        ]);
+        this.set('designerRoutes', [{
+          "type": "elem",
+          "name": "model-designer",
+          "path": "",
+          "import": "/bower_components/oe-studio/elements/model-designer.html",
+          "group": "",
+          "retainInstance": true
+        }, {
+          "type": "elem",
+          "name": "ui-designer",
+          "path": "uidesigner",
+          "import": "/bower_components/oe-studio/ui-designer/ui-designer.html",
+          "group": "",
+          "retainInstance": true
+        }, {
+          "type": "elem",
+          "name": "route-flow-designer",
+          "path": "routeflow",
+          "import": "/bower_components/oe-studio/routeflow/route-flow-designer.html",
+          "group": "",
+          "retainInstance": true
+        }, {
+          "type": "elem",
+          "name": "resource-manager",
+          "path": "resourcemanager",
+          "import": "/bower_components/oe-studio/resource-manager/resource-manager.html",
+          "group": "",
+          "retainInstance": true
+        }, {
+          "type": "elem",
+          "name": "rule-manager",
+          "path": "rulemanager",
+          "import": "/bower_components/oe-studio/rule-manager/rule-manager.html",
+          "group": "",
+          "retainInstance": true
+        }, {
+          "type": "elem",
+          "name": "workflow-designer",
+          "path": "workflow",
+          "import": "/bower_components/oe-workflow-modeler/workflow-designer.html",
+          "group": "",
+          "retainInstance": true
+        }]);
       },
-      _logOut: function() {
+      _logOut: function () {
         this.$.logout.body = {};
         this.$.logout.url = '/auth/logout';
         this.$.logout.generateRequest();
         localStorage.removeItem('auth_token');
       },
-      logoutRedirect: function() {
+      logoutRedirect: function () {
         location.assign('/login');
       },
-      _changeTenant: function(e) {
+      _changeTenant: function (e) {
         var tenant = e.detail;
         if (tenant.tenantId === this.selectedTenant) {
-			this.fire('oe-show-error','Cannot switch to current tenant');
+          this.fire('oe-show-error', 'Cannot switch to current tenant');
           return;
         }
         var url = '/api/BaseUsers/switch-tenant';
         var body = {
           tenantId: tenant.tenantId
         }
-        this.makeAjaxCall(url, 'POST', body, null, null, function(err, response) {
+        this.makeAjaxCall(url, 'POST', body, null, null, function (err, response) {
           if (response && response.tenantId) {
             this.fire('oe-show-success', ('Switching to tenant - ' + response.tenantId));
             localStorage.setItem('tenantId', response.tenantId);
@@ -251,9 +258,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           }
         }.bind(this))
       },
-      _fetchTenants: function() {
+      _fetchTenants: function () {
         var url = '/api/Tenants';
-        this.makeAjaxCall(url, 'GET', null, null, null, function(err, response) {
+        this.makeAjaxCall(url, 'GET', null, null, null, function (err, response) {
           if (response) {
             this.set('tenantList', response);
           } else if (err) {
@@ -261,19 +268,18 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           }
         }.bind(this))
       },
-      _startSpinner: function() {
+      _startSpinner: function () {
         this.ajaxQueue += 1;
         if (this.ajaxQueue > 0) {
           this.set('showSpinner', true);
         }
       },
-      _endSpinner: function() {
+      _endSpinner: function () {
         this.ajaxQueue -= 1;
         if (this.ajaxQueue == 0) {
           this.set('showSpinner', false);
         }
       }
     });
-
   </script>
 </dom-module>

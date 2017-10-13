@@ -22,8 +22,8 @@
                 display: inline-block;
             }
 
-            #field-delete-icon{
-                float:right;
+            #field-delete-icon {
+                float: right;
             }
 
             .prop-list {
@@ -167,23 +167,28 @@
                 max-height: 180px;
                 overflow: auto;
             }
-            
-            paper-button{
+
+            paper-button {
                 font-size: 12px;
                 height: 30px;
                 background: var(--accent-color);
             }
-            .add-field-label{
+
+            .add-field-label {
                 font-size: 12px;
                 margin: 8px 0px;
                 display: block;
             }
 
-            .prop-list .prop paper-checkbox[status="status-"]{
-                --paper-checkbox-unchecked-background-color:grey;
+            .prop-list .prop paper-checkbox[status="status-"] {
+                --paper-checkbox-unchecked-background-color: grey;
             }
-            .prop-list .prop paper-checkbox[status="status-false"]{
-                --paper-checkbox-unchecked-background-color:red;
+
+            .prop-list .prop paper-checkbox[status="status-false"] {
+                --paper-checkbox-unchecked-background-color: red;
+            }
+            #addToUI{
+                margin: 0px 8px;
             }
         </style>
         <div class="component-container">
@@ -215,7 +220,14 @@
                                 <label class="add-field-label">Field Id</label>
                                 <oe-input no-label-float label="field Id" value="{{newFieldId}}"></oe-input>
                             </div>
-                            <paper-button on-tap="_addNewField">Add Field</paper-button>
+                            <paper-button on-tap="_addNewField" id="addToUI">
+                                <iron-icon icon="add"></iron-icon>
+                                <label>screen</label>
+                            </paper-button>
+                            <paper-button on-tap="_addModelField">
+                                <iron-icon icon="add"></iron-icon>
+                                <label>model</label>
+                            </paper-button>
                         </div>
                     </div>
                 </div>
@@ -518,7 +530,7 @@
                     var field = this.modelProperties.find(function (prop) {
                         return prop.name === fieldId;
                     });
-                    this.set('isModelField',!!(field && field.index > -1));
+                    this.set('isModelField', !!(field && field.index > -1));
                     var boolKeys = ["required", "disabled", "hidden"];
                     var handleKeys = ["label", "container", "class", "uitype", "fieldId"]
                     var componentField = this.component.fields.find(function (prop) {
@@ -640,8 +652,11 @@
                 var modelPropIndex = this.modelProperties.findIndex(function (f) {
                     return f.name === this.fieldMeta.fieldId
                 }.bind(this));
-                if(modelPropIndex === -1){
-                    this.modelProperties.push({name:this.fieldMeta.fieldId,applied:true})
+                if (modelPropIndex === -1) {
+                    this.modelProperties.push({
+                        name: this.fieldMeta.fieldId,
+                        applied: true
+                    })
                 }
 
                 this._refineFieldsEntry();
@@ -650,28 +665,45 @@
             _closeFieldMeta: function () {
                 this.set('panelSelected', 0);
             },
-            _addNewField:function(){
+            _addNewField: function () {
                 this.showFieldEditor(this.newFieldId);
-                this.splice('modelProperties',0,0,{name:this.newFieldId,applied:true});
-                this.set('newFieldId',"");
+                this.splice('modelProperties', 0, 0, {
+                    name: this.newFieldId,
+                    applied: true
+                });
+                this.set('newFieldId', "");
             },
-            _removeField:function(){
-                var index = this.modelProperties.findIndex(function(m){
+            _addModelField:function(){
+                var isExist = this.modelProperties.find(function(s){
+                    return s.name === this.newFieldId;
+                }.bind(this));
+                if(isExist){
+                    this.fire('oe-show-error','Model Property already exists');
+                    return;
+                }
+                this.fire('add-field-to-model',{
+                    'model':this.component.modelName,
+                    'fieldId':this.newFieldId
+                });
+                this._addNewField();
+            },
+            _removeField: function () {
+                var index = this.modelProperties.findIndex(function (m) {
                     return m.name === this.fieldMeta.fieldId
                 }.bind(this))
-                if(index > -1){
-                    if(this.isModelField){
-                        this.set('modelProperties.'+index+'.applied',undefined);
-                    }else{
-                        this.splice('modelProperties',index,1)
+                if (index > -1) {
+                    if (this.isModelField) {
+                        this.set('modelProperties.' + index + '.applied', undefined);
+                    } else {
+                        this.splice('modelProperties', index, 1)
                     }
                 }
                 this.set('panelSelected', 0);
                 this._refineFieldsEntry();
             },
-            _UnsetField:function(e){
+            _UnsetField: function (e) {
                 var fieldIndex = e.model.index;
-                this.set('modelProperties.'+fieldIndex+'.applied',undefined);
+                this.set('modelProperties.' + fieldIndex + '.applied', undefined);
                 this.set('panelSelected', 0);
                 this._refineFieldsEntry();
             }

@@ -125,7 +125,22 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.fetchViews();
       },
       listeners: {
-        'refresh-model-list': 'getModelList'
+        'refresh-model-list': 'getModelList',
+        'add-new-field':'_addNewField'
+      },
+      _addNewField:function(e){
+        var model = e.detail.model;
+        var propName = e.detail.fieldId;
+        var modelObj = this.modelList.find(function(m){
+          return m.name === model;
+        })
+        this.$.createmodel.fire('add-property-in-dialog', modelObj);
+        Polymer.Base.async(function(){
+          var propertyGrid = this.$.createmodel.$.createmodeldialog.$.propertyGrid;
+          var len = propertyGrid.propertyList.length;
+          propertyGrid.set('propertyList.'+(len-1)+'.__name__',propName);
+          Polymer.dom.flush();
+        }.bind(this),100);
       },
       toggleLeftDrawer: function () {
         this.fire('toggle-left-drawer');
