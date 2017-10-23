@@ -385,15 +385,30 @@
                 var self = this;
                 var apiurl = '/api/UIComponents';
                 var payload = this.uiComponent;
-                this.modelMeta.modelProperties.forEach(function (prop) {
-                    if (prop.applied) {
-                        payload.fields.push({
+                if(payload.autoInjectFields){
+                    payload.excludeFields = this.modelMeta.modelProperties.filter(function(p){
+                        return !p.applied;
+                    }).map(function(prop){
+                        return prop.name;
+                    })
+                }else{
+                    payload.fields = this.modelMeta.modelProperties.filter(function(p){
+                        return p.applied;
+                    }).map(function(prop){
+                        return {
                             fieldId: prop.name
-                        })
-                    } else {
-                        payload.excludeFields.push(prop.name);
-                    }
-                })
+                        };
+                    })
+                }
+                // this.modelMeta.modelProperties.forEach(function (prop) {
+                //     if (prop.applied) {
+                //         payload.fields.push({
+                //             fieldId: prop.name
+                //         })
+                //     } else {
+                //         payload.excludeFields.push(prop.name);
+                //     }
+                // })
                 this.makeAjaxCall(apiurl, 'post', payload, null, null, function (err, res) {
                     if (!err) {
                         self.fire('component-created', res);
