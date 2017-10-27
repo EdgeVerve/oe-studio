@@ -56,12 +56,10 @@
   <script>
     MetaPolymer({
       is: ":componentName",
-      properties: {:modelAlias: {
+      properties: {
+        :modelAlias: {
           type: 'object',
-          notify: true,
-          value: function () {
-            return {}
-          }
+          notify: true
         }
       },
       behaviors: [OEUtils.FormValidationBehavior, OEUtils.ModelHandler, OEUtils.FormMessagesBehavior]
