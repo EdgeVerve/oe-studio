@@ -57,10 +57,7 @@
       properties: {
         :modelAlias: {
           type: 'object',
-          notify: true,
-          value: function() {
-            return {}
-          }
+          notify: true
         }
       },
       behaviors: [OEUtils.FormValidationBehavior, OEUtils.ModelHandler, OEUtils.FormMessagesBehavior]
