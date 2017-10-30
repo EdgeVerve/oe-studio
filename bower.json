@@ -9,7 +9,7 @@
     "lodash": "^4.3.0",
     "jquery-ui": "^1.11.4",
     "oe-ui": "^1.0.0",
-    "oe-charts": "^1.0.0",
+    "oe-charts": "^0.9.1",
     "roboto-fontface": "^0.4.5",
     "inflection": "^1.10.0",
     "materialize": "#0.97.7",
