@@ -2,8 +2,7 @@
 ©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
 -->
 <link rel="import" href="../redux-store.html">
-<link rel="import" href="../elements/module-switcher.html">
-<link rel="import" href="../elements/tenant-info.html">
+<link rel="import" href="../elements/studio-bottom-panel.html">
 <link rel="import" href="ui-page-list.html">
 
 <dom-module id="ui-toolbar">
@@ -43,14 +42,6 @@
       border-radius: 0px;
     }
     
-    .application-logo {
-      padding: 6px 9px;
-      cursor: pointer;
-      background: var(--dark-primary-color);
-      height: 40px;
-      width: 48px;
-      box-sizing: border-box;
-    }
     
     .preview-icon {
       width: 40px;
@@ -122,10 +113,8 @@
 
   </style>
   <template>
-		<app-toolbar>
-			<iron-icon src="../images/Logo.png" class="application-logo" on-tap="toggleLeftDrawer"></iron-icon>
-			<module-switcher></module-switcher>
-			<div class="flex layout horizontal center justified action-panel">
+		<studio-bottom-panel>
+      <div class="flex layout horizontal center justified action-panel">
 				<div class="flex toolbar-menu" hidden$="{{hidePagePanel}}">
 					<ui-page-list active-page="{{activePage}}" id="pageList" has-active-page="{{hasActivePage}}"></ui-page-list>
 				</div>
@@ -187,8 +176,7 @@
 					</paper-menu-button>
 				</div>
 			</div>
-			<tenant-info></tenant-info>
-		</app-toolbar>
+    </studio-bottom-panel>
 	</template>
   <script>
     Polymer({
@@ -261,9 +249,6 @@
       },
       toggleCodePanel: function() {
         this.fire('toggle-code-panel');
-      },
-      toggleLeftDrawer: function() {
-        this.fire('toggle-left-drawer');
       },
       undo: function() {
         this.dispatch('undo');

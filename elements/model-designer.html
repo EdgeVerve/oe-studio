@@ -6,15 +6,10 @@ here transfers the rights to the third party and open source components, except 
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="model-work-area.html">
-<link rel="import" href="module-switcher.html">
-<link rel="import" href="tenant-info.html">
+<link rel="import" href="studio-bottom-panel.html">
 <dom-module id="model-designer">
   <template>
     <style>
-      app-toolbar {
-        color: var(--default-text-color);
-      }
-
       paper-menu-button {
         box-sizing: border-box;
         height: 40px;
@@ -63,10 +58,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     <div class="module-container">
       <model-work-area id="createmodel" sidebar-status="[[toolBar]]" view-list="{{viewList}}"></model-work-area>
     </div>
-    <app-toolbar>
-      <iron-icon src="../images/Logo.png" class="application-logo" on-tap="toggleLeftDrawer"></iron-icon>
-      <module-switcher></module-switcher>
-      <div class="flex layout horizontal center">
+    <studio-bottom-panel>
+      <div class="layout horizontal center">
         <paper-menu-button no-overlap vertical-align="bottom">
           <paper-button class="dropdown-trigger">
             <iron-icon icon="oe-designer-icons:sidebar"></iron-icon>
@@ -92,18 +85,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           </div>
         </paper-menu-button>
         <paper-tooltip for="panel-settings">Panel Settings</paper-tooltip>
-        <!-- <paper-menu-button class="custom-menu" no-overlap vertical-align="bottom">
-          <paper-button class="dropdown-trigger">
-            Sync
-          </paper-button>
-          <paper-menu class="dropdown-content">
-            <paper-item on-tap="uploadModelMetadata">Upload</paper-item>
-            <paper-item on-tap="downloadModelMetadata">Download</paper-item>
-          </paper-menu>
-        </paper-menu-button> -->
       </div>
-      <tenant-info></tenant-info>
-    </app-toolbar>
+    </studio-bottom-panel>
   </template>
   <script>
     Polymer({
@@ -141,9 +124,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           propertyGrid.set('propertyList.'+(len-1)+'.__name__',propName);
           Polymer.dom.flush();
         }.bind(this),100);
-      },
-      toggleLeftDrawer: function () {
-        this.fire('toggle-left-drawer');
       },
       fetchViews: function () {
         this.makeAjaxCall('api/ModelViews', 'GET', null, null, null, function (err, response) {

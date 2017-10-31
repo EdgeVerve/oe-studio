@@ -5,41 +5,17 @@ remain with the applicable third party licensors or the open source community as
 here transfers the rights to the third party and open source components, except as expressly permitted. 
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
 <link rel="import" href="routeflow-workarea.html">
-<link rel="import" href="../elements/module-switcher.html">
-<link rel="import" href="../elements/tenant-info.html">
+<link rel="import" href="../elements/studio-bottom-panel.html">
 <dom-module id="route-flow-designer">
   <template>
-    <style>
-      app-toolbar {
-        color: var(--default-text-color);
-      }
-
-      .application-logo {
-        padding: 6px 9px;
-        cursor: pointer;
-        background: var(--dark-primary-color);
-        height: 40px;
-        width: 48px;
-        box-sizing: border-box;
-      }
-    </style>
     <div class="module-container">
       <routeflow-workarea></routeflow-workarea>
     </div>
-    <app-toolbar>
-      <iron-icon src="../images/Logo.png" class="application-logo" on-tap="toggleLeftDrawer"></iron-icon>
-      <div class="flex">
-        <module-switcher></module-switcher>
-      </div>
-      <tenant-info></tenant-info>
-    </app-toolbar>
+    <studio-bottom-panel></studio-bottom-panel>
   </template>
   <script>
     Polymer({
-      is: 'route-flow-designer',
-      toggleLeftDrawer: function () {
-        this.fire('toggle-left-drawer');
-      }
+      is: 'route-flow-designer'
     });
   </script>
 </dom-module>

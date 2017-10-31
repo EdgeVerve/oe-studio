@@ -172,19 +172,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       /*Common Functions*/
       attached: function () {
         this._fetchTenants();
-        this.makeAjaxCall('api/BaseUsers/session', 'GET', null, null, null, function (err, response) {
-          if (response) {
-            this.set('currentSession', response);
-            localStorage.setItem('tenantId', response.tenantId);
-            this.set('selectedTenant', response.tenantId);
-            this.set('currentSession.isAdmin', (this.currentSession.roles.indexOf(
-              'admin') != -1));
-            this.fire('session-fetched', this.currentSession);
-          } else {
-            this.fire('oe-show-error', 'Unable to fetch user information');
-            this._logOut();
-          }
-        }.bind(this));
+        this._fetchSession();
+        this._fetchDesignerData();
         this.set('designerRoutes', [{
           "type": "elem",
           "name": "model-designer",
@@ -267,6 +256,35 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             this.resolveError(err);
           }
         }.bind(this))
+      },
+      _fetchSession:function(){
+        this.makeAjaxCall('api/BaseUsers/session', 'GET', null, null, null, function (err, response) {
+          if (response) {
+            this.set('currentSession', response);
+            localStorage.setItem('tenantId', response.tenantId);
+            this.set('selectedTenant', response.tenantId);
+            this.set('currentSession.isAdmin', (this.currentSession.roles.indexOf(
+              'admin') != -1));
+            this.fire('session-fetched', this.currentSession);
+          } else {
+            this.fire('oe-show-error', 'Unable to fetch user information');
+            this._logOut();
+          }
+        }.bind(this));
+      },
+      _fetchDesignerData:function(){
+        return;
+        this.makeAjaxCall('designer/configuration', 'GET', null, null, null, function (err, response) {
+          if (response) {
+          /* 
+            Perform actions on designer configuration like :
+                1) Import elements from client/all-imports.
+                2) Load selected modules of designer.
+          */
+          } else {
+            this.fire('oe-show-error', 'Unable to designer configuration');
+          }
+        }.bind(this));
       },
       _startSpinner: function () {
         this.ajaxQueue += 1;

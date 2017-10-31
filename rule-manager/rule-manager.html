@@ -7,24 +7,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 <link rel="import" href="rule-listing.html">
 <link rel="import" href="rule-detail.html">
 <link rel="import" href="rule-dialog.html">
-<link rel="import" href="../elements/module-switcher.html">
-<link rel="import" href="../elements/tenant-info.html">
+<link rel="import" href="../elements/studio-bottom-panel.html">
 <dom-module id="rule-manager">
   <template>
     <style>
-      app-toolbar {
-        color: var(--default-text-color);
-      }
-
-      .application-logo {
-        padding: 6px 9px;
-        cursor: pointer;
-        background: var(--dark-primary-color);
-        height: 40px;
-        width: 48px;
-        box-sizing: border-box;
-      }
-
       .rule-detail-panel {
         width: calc(100% - 250px);
       }
@@ -61,13 +47,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       </div>
       <rule-dialog id="ruleDialog" rule-list="{{ruleList}}"></rule-dialog>
     </div>
-    <app-toolbar>
-      <iron-icon src="../images/Logo.png" class="application-logo" on-tap="toggleLeftDrawer"></iron-icon>
-      <div class="flex">
-        <module-switcher></module-switcher>
-      </div>
-      <tenant-info></tenant-info>
-    </app-toolbar>
+    <studio-bottom-panel></studio-bottom-panel>
   </template>
   <script>
     Polymer({
@@ -81,9 +61,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           type: Object,
           notify: true
         }
-      },
-      toggleLeftDrawer: function () {
-        this.fire('toggle-left-drawer');
       },
       listeners: {
         'add-rule': 'addRule',
