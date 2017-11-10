@@ -1251,9 +1251,21 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       _addRule: function (e) {
         var editRuleDialog = this.$.addRuleDlg;
-        editRuleDialog.set('modelObj', e.detail);
         editRuleDialog.set('isEditMode', false);
+        e.detail.properties = this._getBaseProperties(e.detail, e.detail.base);
+        editRuleDialog.set('modelObj', e.detail);
         editRuleDialog.openDialog();
+      },
+      _getBaseProperties(model, baseModelName) {
+        if (baseModelName && (baseModelName.toLowerCase() === 'persistedmodel' || baseModelName.toLowerCase ===
+          'model')) {
+          return model.properties;
+        } else {
+          var baseModel = this.modelList.find(function (d) {
+            return (d.name === baseModelName && !d.variantOf) || (d.name === baseModelName && d.name !== d.base);
+          });
+          return model.properties.concat(this._getBaseProperties(baseModel, baseModel.base));
+        }
       },
       _manageStartupData: function (e) {
         var dialog = this.$.manageDataDialog;
