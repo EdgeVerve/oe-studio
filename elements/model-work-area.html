@@ -457,7 +457,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         'attach-model-rule': '_attachModelRule',
         'attach-data-acl': '_attachDataAcl',
         'attach-dynamic-acl': '_attachDynamicAcl',
-        'attach-workflow': '_attachWorkflow'
+        'attach-workflow': '_attachWorkflow',
+        'edit-model':'_handleModelEditor',
+        'clone-model':'_handleModelEditor',
+        'add-property-in-dialog':'_handleModelEditor',
+        'add-validation-in-dialog':'_handleModelEditor',
+        'add-relation-in-dialog':'_handleModelEditor',
+        'add-acl-in-dialog':'_handleModelEditor'
       },
       observers: [
         '_viewChanged(_selectedTab.currentZoom, currentX, currentY)',
@@ -1224,7 +1230,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         Polymer.dom.flush();
         this.$.workarea.appendChild(elem);
         this._setjsPlumbParams(elem);
-
+        return elem;
       },
       _viewChanged: function () {
         var workarea = this.$.workarea;
@@ -1264,6 +1270,57 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         var attachWorkflowDlg = this.$.attachWorkflowDlg;
         attachWorkflowDlg.set('modelObj', e.detail);
         attachWorkflowDlg.openDialog();
+      },
+      _handleModelEditor:function(e){
+        var data = JSON.parse(JSON.stringify(e.detail));
+        var action = e.type;
+        var editor = this.$.createmodeldialog;
+        editor.set('isEditMode', true);
+        editor.set('editModel', true);
+        editor.set('vm',data);
+        editor.openDialog();
+        switch(action){
+          case 'edit-model' :
+                  editor._setFlags(1); 
+                  break;
+          case 'clone-model' :
+                editor.set('isEditMode', false);
+                editor.set('editModel', false);
+                editor.set('renderInWorkArea', true);
+                var modelObj = data;
+                modelObj.name = 'CopyOf' + modelObj.name;
+                delete modelObj.id;
+                delete modelObj._version;
+                delete modelObj._createdBy;
+                delete modelObj._createdOn;
+                delete modelObj._modifiedBy;
+                delete modelObj._modifiedOn;
+                delete modelObj._isDeleted;
+                editor.set('vm',modelObj);
+                Polymer.dom.flush();
+                editor._setFlags(1); 
+                break;
+          case 'add-property-in-dialog' : 
+                editor.selected = 1;
+                editor._validateTab();
+                editor.$.propertyGrid._addProperty();
+                break;
+          case 'add-validation-in-dialog' : 
+                editor.selected = 2;
+                editor._validateTab();
+                editor.$.validationGrid._addValidation();
+                break;
+          case 'add-relation-in-dialog': 
+                editor.selected = 3;
+                editor._validateTab();
+                editor.$.relationGrid._addRelation();
+                break;
+          case 'add-acl-in-dialog' :
+                editor.selected = 4;
+                editor._validateTab();
+                editor.$.aclGrid._addacl();
+                break;
+        }
       },
       ready: function () {
         var self = this;
@@ -1391,66 +1448,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             };
             self.relationName = '';
           });
-          self.addEventListener('edit-model', function (e) {
-            self.$.createmodeldialog.set('isEditMode', true);
-            self.$.createmodeldialog.set('editModel', true);
-            self.$.createmodeldialog.set('vm', JSON.parse(JSON.stringify(e.detail)));
-            self.$.createmodeldialog._setFlags(1);
-            self.$.createmodeldialog.openDialog();
-          });
-          self.addEventListener('add-property-in-dialog', function (e) {
-            self.$.createmodeldialog.set('isEditMode', true);
-            self.$.createmodeldialog.set('editModel', true);
-            self.$.createmodeldialog.set('vm', JSON.parse(JSON.stringify(e.detail)));
-            self.$.createmodeldialog.openDialog();
-            self.$.createmodeldialog.selected = 1;
-            self.$.createmodeldialog._validateTab();
-            self.$.createmodeldialog.$.propertyGrid._addProperty();
-          });
-          self.addEventListener('add-validation-in-dialog', function (e) {
-            self.$.createmodeldialog.set('isEditMode', true);
-            self.$.createmodeldialog.set('editModel', true);
-            self.$.createmodeldialog.set('vm', JSON.parse(JSON.stringify(e.detail)));
-            self.$.createmodeldialog.openDialog();
-            self.$.createmodeldialog.selected = 2;
-            self.$.createmodeldialog._validateTab();
-            self.$.createmodeldialog.$.validationGrid._addValidation();
-          });
-          self.addEventListener('add-relation-in-dialog', function (e) {
-            self.$.createmodeldialog.set('isEditMode', true);
-            self.$.createmodeldialog.set('editModel', true);
-            self.$.createmodeldialog.set('vm', JSON.parse(JSON.stringify(e.detail)));
-            self.$.createmodeldialog.openDialog();
-            self.$.createmodeldialog.selected = 3;
-            self.$.createmodeldialog._validateTab();
-            self.$.createmodeldialog.$.relationGrid._addRelation();
-          });
-          self.addEventListener('add-acl-in-dialog', function (e) {
-            self.$.createmodeldialog.set('isEditMode', true);
-            self.$.createmodeldialog.set('editModel', true);
-            self.$.createmodeldialog.set('vm', JSON.parse(JSON.stringify(e.detail)));
-            self.$.createmodeldialog.openDialog();
-            self.$.createmodeldialog.selected = 4;
-            self.$.createmodeldialog._validateTab();
-            self.$.createmodeldialog.$.aclGrid._addacl();
-          });
-          self.addEventListener('clone-model', function (e) {
-            self.$.createmodeldialog.set('isEditMode', false);
-            self.$.createmodeldialog.set('editModel', false);
-            self.$.createmodeldialog.set('renderInWorkArea', true);
-            var modelObj = JSON.parse(JSON.stringify(e.detail));
-            modelObj.name = 'CopyOf' + modelObj.name;
-            delete modelObj.id;
-            delete modelObj._version;
-            delete modelObj._createdBy;
-            delete modelObj._createdOn;
-            delete modelObj._modifiedBy;
-            delete modelObj._modifiedOn;
-            delete modelObj._isDeleted;
-            self.$.createmodeldialog.set('vm', modelObj);
-            self.$.createmodeldialog._setFlags(1);
-            self.$.createmodeldialog.openDialog();
-          });
           self.addEventListener('upload-data', function (e) {
             self.$.modelDataDialog.set('modelObj', e.detail);
             self.$.modelDataDialog.openDialog();
@@ -1507,16 +1504,19 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           self.newConnection = true;
           self.removeModel = false;
           if (e.detail.newmodel && e.detail.renderInWorkArea) {
-            var elem = document.createElement('model-container');
+            var elem =  self.createModelContainer(e.detail.model);
             elem.classList.add('new');
-            elem.modelObj = e.detail.model;
-            self.push('workSpaceModelList', elem.modelObj);
-            self.set('workSpaceModelCount', self.workSpaceModelList.length);
-            self.$.workarea.appendChild(elem);
-            elem.style.left = Math.round(Math.random() * 100) + 'px';
-            elem.style.top = Math.round(Math.random() * 100) + 'px';
-            self._setjsPlumbParams(elem);
             self._showExistingRelations();
+            // var elem = document.createElement('model-container');
+            // elem.classList.add('new');
+            // elem.modelObj = e.detail.model;
+            // self.push('workSpaceModelList', elem.modelObj);
+            // self.set('workSpaceModelCount', self.workSpaceModelList.length);
+            // self.$.workarea.appendChild(elem);
+            // elem.style.left = Math.round(Math.random() * 100) + 'px';
+            // elem.style.top = Math.round(Math.random() * 100) + 'px';
+            // self._setjsPlumbParams(elem);
+            // self._showExistingRelations();
           } else {
             //update model in the workspacemodels list after editing
             var modelNodes = self.$.workarea.querySelectorAll('model-container');
