@@ -273,9 +273,24 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }.bind(this));
       },
       _fetchDesignerData:function(){
-        return;
-        this.makeAjaxCall('designer/configuration', 'GET', null, null, null, function (err, response) {
+        var self = this;
+        this.makeAjaxCall('designer/config', 'GET', null, null, null, function (err, response) {
           if (response) {
+            if (response.imports) {
+              var imports = response.imports;
+              var importsArr = [];
+              imports.forEach(function (href) {
+                importsArr.push(self._importLink.bind(null, href));
+              });
+              async.parallel(importsArr, function (err, result) {
+                var errLink = result.filter(function (obj) {
+                  if (obj.error) { return obj }
+                }).map(obj => obj.error);
+                if (errLink.length > 0) {
+                  self.fire('oe-show-error', 'Link import failed for ' + errLink);
+                }
+              });
+            }
           /* 
             Perform actions on designer configuration like :
                 1) Import elements from client/all-imports.
@@ -297,6 +312,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         if (this.ajaxQueue == 0) {
           this.set('showSpinner', false);
         }
+      },
+      _importLink: function(href, cb) {
+        Polymer.Base.importHref(href, function(e){
+              cb(null, {"success": href});
+            }, function(e){
+              cb(null, {"error": href});
+        });
       }
     });
   </script>
