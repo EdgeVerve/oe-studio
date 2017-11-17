@@ -10,6 +10,7 @@
                 box-sizing: border-box;
                 background: grey;
                 padding: 8px;
+                width:calc(100vw - 320px);
                 --hover-color: blue;
                 --selection-color: orange;
             }
@@ -55,10 +56,33 @@
             .current-selection:before {
                 background: var(--selection-color);
             }
+            
+            .empty-state {
+                height: 100%;
+                text-align: center;
+            }
+
+            .empty-state .main-label {
+                font-size: 24px;
+                font-family: 'Roboto-Light';
+            }
+
+            .empty-state .sub-label {
+                font-size: 12px;
+                margin-top: 8px;
+            }
+
+            .empty-state-icon {
+                height: 40px;
+                width: 40px;
+            }
         </style>
         <div class="component-container" on-click="_handleClick">
-            <div id="previewBox">
-
+            <div id="previewBox"></div>
+            <div class="empty-state layout vertical center-center" hidden$="[[component.id]]">
+                <iron-icon icon="assignment" class="empty-state-icon"></iron-icon>
+                <div class="main-label">Manage your Forms</div>
+                <div class="sub-label">Create/Select a Form from the bottom panel to start</div>
             </div>
         </div>
     </template>
@@ -194,7 +218,8 @@
                     var polyScript = polymerScriptTag.innerHTML;
 
                     polyScript = polyScript.replace('MetaPolymer(','Polymer(')
-                    polyScript = polyScript.replace(new RegExp('is:\\s"'+this.component.name+'"'),'is:"'+newEleId+'"')
+                    polyScript = polyScript.replace(new RegExp('is:\\s"'+this.component.name+'"'),'is:"'+newEleId+'"');
+                    polyScript = polyScript.replace(new RegExp("is:\\s'"+this.component.name+"'"),'is:"'+newEleId+'"');
                     
                     var customScript = document.createElement('script');   
                     customScript.type = 'text/javascript';

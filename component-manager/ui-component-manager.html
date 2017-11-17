@@ -82,7 +82,10 @@
             },
             pageSelectedHandle: function (e) {
                 var self = this;
-                this.set('uiComponent', e.detail);
+                var comp = e.detail;
+                comp.fields = comp.fields || [];
+                comp.excludeFields = comp.excludeFields || [];
+                this.set('uiComponent', comp);
                 this.set('showActions', true);
                 this.set('componentStack', []);
                 this.set('stackIndex', -1);

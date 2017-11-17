@@ -11,6 +11,7 @@
                 color: #fff;
                 box-shadow: 0px -2px 1px rgba(0, 0, 0, 0.61) inset;
                 height: 100%;
+                width:330px;
             }
 
             .more-props {
@@ -197,10 +198,10 @@
                     <label class="component-name">Component Name : [[component.name]]</label>
                     <oe-input label="Rest URL" value="{{component.restUrl}}"></oe-input>
                     <oe-combo label="Template Name" listdata="[[templateList]]" value="{{component.templateName}}" valueproperty="file" displayproperty="file"></oe-combo>
-                    <oe-combo id="modelName" show-refresh value="{{component.modelName}}" required label="Models" displayproperty="name" valueproperty="name"
+                    <oe-combo id="modelName" show-refresh value="{{component.modelName}}" label="Models" displayproperty="name" valueproperty="name"
                         listurl="/api/ModelDefinitions?filter[fields][name]=true"></oe-combo>
-                    <div hidden$="[[!component.modelName]]">
-                        <div class="more-props">
+                    <div>
+                        <div class="more-props" hidden$="[[!component.modelName]]">
                             <paper-toggle-button checked="{{component.autoInjectFields}}">Auto Inject Fields</paper-toggle-button>
                             <div class="helper-text">Properties updated in the model will be injected in the form automatically</div>
                         </div>
@@ -408,27 +409,29 @@
                     }
                     properties.push(obj);
                 })
-                var modelData = resp[this.component.modelName];
-                Object.keys(modelData.properties).filter(function (prop) {
-                    return !(prop[0] == '_' || prop == 'id' || prop == 'scope')
-                }).forEach(function (prop, idx) {
-                    var modelprop = {
-                        'index': idx,
-                        'name': prop,
-                        'fieldMeta': {
-                            'fieldId': prop
-                        },
-                        'applied': undefined //this.component.autoInjectFields
-                    }
-                    var isExitingField = properties.find(function (p) {
-                        return p.name === modelprop.name
-                    })
-                    if (isExitingField) {
-                        isExitingField.index = modelprop.index;
-                    } else {
-                        properties.push(modelprop);
-                    }
-                }.bind(this));
+                if(resp && resp[this.component.modelName]){
+                    var modelData = resp[this.component.modelName];
+                    Object.keys(modelData.properties).filter(function (prop) {
+                        return !(prop[0] == '_' || prop == 'id' || prop == 'scope')
+                    }).forEach(function (prop, idx) {
+                        var modelprop = {
+                            'index': idx,
+                            'name': prop,
+                            'fieldMeta': {
+                                'fieldId': prop
+                            },
+                            'applied': undefined //this.component.autoInjectFields
+                        }
+                        var isExitingField = properties.find(function (p) {
+                            return p.name === modelprop.name
+                        })
+                        if (isExitingField) {
+                            isExitingField.index = modelprop.index;
+                        } else {
+                            properties.push(modelprop);
+                        }
+                    }.bind(this));
+                }
                 properties = _.uniqBy(properties, 'name');
                 this.set('modelProperties', properties.sort(function (a, b) {
                     return (a.applied === b.applied) ? 0 : (b.applied ? 1 : -1)
@@ -444,8 +447,8 @@
                     return;
                 }
                 if (change.path === "component.modelName") {
-                    this.component.fields = []
-                    this.component.excludeFields = []
+                    //this.component.fields = []
+                    this.component.excludeFields = [];
                 }
                 this.fire('component-updated', this.component);
             },

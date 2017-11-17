@@ -213,6 +213,14 @@
             opacity: 0.54;
             margin-top: 8px;
         }
+
+        /* .template-has-model paper-radio-button[type="component"]{
+            display: none;
+        } */
+        
+        .template-no-model paper-radio-button[type="form"]{
+            display: none;
+        }
     </style>
     <template>
         <div class="layout horizontal container">
@@ -227,8 +235,8 @@
                             requesturl='/api/UIComponents?filter={"where":{"name":"{{uiComponent.name}}"} }' 
                             ensure="absent" error="component name already in use"></oe-async-validator>
                             <oe-combo id="modelName" show-refresh value="{{uiComponent.modelName}}" 
-                            required label="Search Models" displayproperty="name" valueproperty="name" 
-                            listurl="/api/ModelDefinitions?filter[fields][name]=true" on-change="_getModelData"></oe-combo>
+                            label="Search Models" displayproperty="name" valueproperty="name" 
+                            listurl="/api/ModelDefinitions?filter[fields][name]=true" on-pt-item-confirmed="_getModelData" on-blur="_getModelData"></oe-combo>
                             <div hidden$="[[!isModelObtained]]">
                                 <div class="more-props">
                                     <paper-toggle-button checked="{{uiComponent.autoInjectFields}}">Auto Inject Fields</paper-toggle-button>
@@ -246,10 +254,10 @@
                     </div>
                     <div class="step-2 step">
                         <div class="step-title">Choose template</div>
-                        <div class="step-content">
+                        <div class$="step-content template-[[_getTemplateType(uiComponent.modelName)]]">
                             <paper-radio-group selected="{{uiComponent.templateName}}">
                                 <template is="dom-repeat" items="[[templateList]]">
-                                    <paper-radio-button name="{{item.file}}">
+                                    <paper-radio-button name="{{item.file}}" type$="[[item.type]]">
                                         <label>[[item.file]]</label>
                                         <div class="template-desc" hidden$="[[!_getDescription(item.content)]]">[[_getDescription(item.content)]]</div>
                                     </paper-radio-button>
@@ -302,6 +310,7 @@
                 }
             },
             behaviors: [CommonBehavior.EVAjaxBehavior,OEUtils.FormValidationBehavior],
+            observers:['stepChanged(selectedStep)'],
             _computeClass:function(curStep,index){
                 var status = '';
                 if(curStep === index){
@@ -315,16 +324,19 @@
                     return this.uiComponent.templateName ? '' : 'invalid'
                 }
             },
+            _getTemplateType:function(modelName){
+                return (modelName && modelName.length)?"has-model":"no-model";
+            },
             showPageListing: function () {
                 this.fire('hide-create-component');
             },
-            stepChanged: function () {
-                if (this.selectedStep === 1) {
+            stepChanged: function (step) {
+                if (step === 1) {
                     this.set('buttonTitle', 'SAVE');
                 } else {
                     this.set('buttonTitle', 'NEXT');
                 }
-                this.set('hidePrevNavigation', this.selectedStep === 0);
+                this.set('hidePrevNavigation', step === 0);
             },
             showNextStep: function () {
                 if (this.selectedStep === 0) {
@@ -344,10 +356,11 @@
                 }
             },
             _getModelData: function (e) {
-                var model = e.currentTarget.value;
-                this.selectedModel = model;
                 var self = this;
-                this.makeAjaxCall('/api/ModelDefinitions/modelmeta/' + model, 'get', null, null, null,
+                var model = this.uiComponent.modelName;
+                var isValidModel = !this.$.modelName.invalid;
+                if(isValidModel && model && model.length > 0){
+                    this.makeAjaxCall('/api/ModelDefinitions/modelmeta/' + model, 'get', null, null, null,
                     function (
                         err, res) {
                         if (!err) {
@@ -358,12 +371,17 @@
                             //console.log(err);
                         }
                     })
+                }else{
+                    self.set('isModelObtained', false);
+                    self.set('modelMeta.modelProperties', []);
+                }
+                
             },
             generateFieldsArr: function (resp) {
                 // var fields = [];
                 var properties = [];
                 var meta = {}
-                var modelData = resp[this.selectedModel];
+                var modelData = resp[this.uiComponent.modelName];
                 Object.keys(modelData.properties).forEach(function (prop) {
                     var modelprop = {
                         name: prop,
@@ -377,7 +395,7 @@
                     }
                 });
                 meta.modelProperties = properties;
-                meta.modelName = this.selectedModel;
+                meta.modelName = this.uiComponent.modelName;
                 meta.autoInjectFields = true;
                 this.set('modelMeta', meta);
             },
@@ -385,20 +403,22 @@
                 var self = this;
                 var apiurl = '/api/UIComponents';
                 var payload = this.uiComponent;
-                if(payload.autoInjectFields){
-                    payload.excludeFields = this.modelMeta.modelProperties.filter(function(p){
-                        return !p.applied;
-                    }).map(function(prop){
-                        return prop.name;
-                    })
-                }else{
-                    payload.fields = this.modelMeta.modelProperties.filter(function(p){
-                        return p.applied;
-                    }).map(function(prop){
-                        return {
-                            fieldId: prop.name
-                        };
-                    })
+                if(payload.modelName){
+                    if(payload.autoInjectFields){
+                        payload.excludeFields = this.modelMeta.modelProperties.filter(function(p){
+                            return !p.applied;
+                        }).map(function(prop){
+                            return prop.name;
+                        })
+                    }else{
+                        payload.fields = this.modelMeta.modelProperties.filter(function(p){
+                            return p.applied;
+                        }).map(function(prop){
+                            return {
+                                fieldId: prop.name
+                            };
+                        })
+                    }
                 }
                 // this.modelMeta.modelProperties.forEach(function (prop) {
                 //     if (prop.applied) {

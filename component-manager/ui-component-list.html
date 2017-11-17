@@ -452,9 +452,7 @@
                     }
                 }, function (err, results) {
                     if (!err) {
-                        self.set('templateList', results.templateList.filter(function (temp) {
-                            return temp.type === "form"
-                        }) || []);
+                        self.set('templateList', results.templateList || []);
                         self.set('componentList', results.uiComponents || []);
                     }
                 });
@@ -472,11 +470,12 @@
                 return (activePage && (activePage.id == currPage.id)) ? 'iron-selected' : '';
             },
             getComponents: function () {
-                var list = this.componentList.filter(function (obj) {
+                /* var list = this.componentList.filter(function (obj) {
                     return (obj.modelName && obj.templateName)
-                })
-                this.set('polymerCount', list.length);
-                this.set('polymerListEmpty', list.length ? false : true)
+                }) */
+                // var list = this.componentList;
+                this.set('polymerCount', this.componentList.length);
+                this.set('polymerListEmpty', this.componentList.length ? false : true)
                 return list;
             },
             deletePage: function (event) {
@@ -489,7 +488,7 @@
                 var pageIndex = this.componentList.findIndex(function (p) {
                     return p.id == pageData.id;
                 })
-
+                
                 this.splice('componentList', pageIndex, 1);
                 this.fire('oe-show-success', pageData.name + ' successfully deleted');
             },
