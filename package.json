@@ -1,6 +1,6 @@
 {
   "name": "oe-studio",
-  "version": "0.0.1",
+  "version": "0.5.0",
   "description": "Polymer oe-studio test repo",
   "main": "index.html",
   "directories": {
