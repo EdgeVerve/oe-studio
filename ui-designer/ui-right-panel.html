@@ -93,7 +93,7 @@
                     <paper-tab>
                         <iron-icon icon="icons:unfold-less"></iron-icon>
                     </paper-tab>
-                    <paper-tab>
+                    <paper-tab id="asset-manager-tab">
                         <iron-icon icon="image:photo-library"></iron-icon>
                     </paper-tab>
                 </paper-tabs>
@@ -116,7 +116,7 @@
                         <ui-model-manager element="{{element}}"></ui-model-manager>
                     </div>
                     <div class="page-container">
-                        <ui-asset-manager assets={{assets}}></ui-asset-manager>
+                        <ui-asset-manager id="asset-manager" assets={{assets}}></ui-asset-manager>
                     </div>
                 </iron-pages>
             </div>
@@ -171,6 +171,15 @@
             this.set('selectedWidth', event.detail);
           }, 1000);
         }.bind(this))
+
+        //Fetch Assets at the time of tab click
+        var tabButton = this.querySelector("#asset-manager-tab");
+        var assetManager = this.querySelector("#asset-manager");
+        var initialAssetFetcher = function(e){
+          assetManager.getAssets();
+          tabButton.removeEventListener('click',initialAssetFetcher);
+        }.bind(this)
+        tabButton.addEventListener('click',initialAssetFetcher);
       },
       elementChanged: function() {
         this.querySelector('ui-style-manager').set('selected', 0);
