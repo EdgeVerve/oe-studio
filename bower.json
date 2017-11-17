@@ -1,6 +1,6 @@
 {
   "name": "oe-studio",
-  "version": "1.1.0",
+  "version": "0.5.0",
   "description": "OE Designer",
   "main": "oe-designer.html",
   "dependencies": {
@@ -9,7 +9,7 @@
     "lodash": "^4.3.0",
     "jquery-ui": "^1.11.4",
     "oe-ui": "^1.1.0",
-    "oe-charts": "^1.0.0",
+    "oe-charts": "^1.1.0",
     "roboto-fontface": "^0.4.5",
     "inflection": "^1.10.0",
     "materialize": "#0.97.7",
@@ -25,7 +25,7 @@
     "marked-element": "PolymerElements/marked-element#^1.0.0",
     "polymer-redux": "^0.4.0",
     "jsPlumb": "https://github.com/jsplumb/jsPlumb.git#2.4.3",
-    "oe-workflow-modeler": "http://evgit/oecloud.io/oe-workflow-modeler.git#v1.1.0",
+    "oe-workflow-modeler": "^1.1.0",
     "async": "1.5.2"
   },
   "devDependencies": {
