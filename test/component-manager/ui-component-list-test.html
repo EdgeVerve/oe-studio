@@ -243,7 +243,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             });
             test('Initial state', function (done) {
                 flush(function () {
-                    assert.equal(testElement.templateList.length, 1);
+                    assert.equal(testElement.templateList.length, 2);
                     assert.equal(testElement.componentList.length, 2);
                     done();
                 });
@@ -263,7 +263,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     addTrigger.click();
                     flush(function () {
                         createComponent.set('uiComponent.name','new-form')
-                        createComponent.set('uiComponent.modelName','CustomerProfile')
+                        createComponent.set('uiComponent.modelName',undefined)
                         createComponent.set('uiComponent.autoInjectFields',true)
                         createComponent.$.modelName.fire('change');
                         var prevBtn = createComponent.querySelector('.step-navigation-panel .secondary-btn');

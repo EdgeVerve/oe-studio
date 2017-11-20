@@ -119,6 +119,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 testElement = fixture('ui-asset-manager-fixture');
             });
             test('Initial Listing', function (done) {
+                testElement.getAssets();
                 flush(function () {
                     assert.equal(testElement.images.length, 16);
                     assert.equal(testElement.videos.length, 1);
@@ -155,6 +156,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             });
 
             test('Search Assets', function (done) {
+                testElement.getAssets();
                 flush(function () {
                     assert.equal(testElement.images.length, 16);
                     testElement.set('searchText', 'ev-white-logo');

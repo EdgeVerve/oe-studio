@@ -238,7 +238,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                         var unbindIcon =testElement.querySelector('#unbind-model');
                         unbindIcon.click();
                         flush(function(){
-                            assert.equal(testElement.$.typeahead.value,undefined);
+                            assert.notEqual(testElement.$.typeahead.value,'Contact');
                             testElement.set('selectedModel','CustomerProfile');
                             testElement._modelChanged();
                             flush(function(){
