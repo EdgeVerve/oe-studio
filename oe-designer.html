@@ -177,7 +177,20 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       attached: function () {
         this._fetchTenants();
         this._fetchSession();
-        this._fetchDesignerData();
+        this._fetchDesignerData(function (err, response) {
+          if(err){
+            this.fire('oe-show-error', 'Unable to get designer configuration');
+          }
+          if (response) {
+            if (response.imports) {
+              this._importLinks(response.imports, function (errLink) {
+                if (errLink && errLink.length > 0) {
+                    this.fire('oe-show-error', 'Link import failed for ' + errLink);
+                }
+              }.bind(this));
+            }
+          }
+        }.bind(this));
         this.set('designerRoutes', [{
           "type": "elem",
           "name": "model-designer",
@@ -276,19 +289,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           }
         }.bind(this));
       },
-      _fetchDesignerData:function(){
-        return;
-        this.makeAjaxCall('designer/configuration', 'GET', null, null, null, function (err, response) {
+      _fetchDesignerData: function (cb) {
+        this.makeAjaxCall('designer/config', 'GET', null, null, null, function (err, response) {
           if (response) {
-          /* 
-            Perform actions on designer configuration like :
-                1) Import elements from client/all-imports.
-                2) Load selected modules of designer.
-          */
+            cb(null, response);
           } else {
-            this.fire('oe-show-error', 'Unable to designer configuration');
+            cb(err);
           }
-        }.bind(this));
+        });
       },
       _startSpinner: function () {
         this.ajaxQueue += 1;
@@ -301,7 +309,24 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         if (this.ajaxQueue == 0) {
           this.set('showSpinner', false);
         }
-      }
+      },
+      _importLinks: function (imports, linkImportCb) {
+        var importsArr = imports.map(function (href) {
+          return async.apply(function (href, cb) {
+            Polymer.Base.importHref(href, function (e) {
+              cb(null, { "success": href });
+            }, function (e) {
+              cb(null, { "error": href });
+            });
+          }, href);
+        });
+        async.parallel(importsArr, function (err, result) {
+          var errLink = result.filter(function (obj) {
+            if (obj.error) { return obj }
+          }).map(obj => obj.error);
+          linkImportCb(errLink);
+        });
+      },
     });
   </script>
 </dom-module>
