@@ -207,7 +207,7 @@
                         </div>
                         <div class="prop-list">
                             <template is="dom-repeat" items="[[modelProperties]]">
-                                <div class="prop layout horizontal justified center">
+                                <div class="prop layout horizontal justified center" field$="[[item.name]]">
                                     <paper-checkbox on-change="_refineFieldsEntry" status$="status-[[item.applied]]" checked="{{item.applied}}" class="prop-item">[[item.name]]</paper-checkbox>
                                     <div>
                                         <iron-icon icon="icons:delete" on-tap="_UnsetField"></iron-icon>

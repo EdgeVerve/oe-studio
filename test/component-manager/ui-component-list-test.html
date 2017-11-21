@@ -263,9 +263,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     addTrigger.click();
                     flush(function () {
                         createComponent.set('uiComponent.name','new-form')
-                        createComponent.set('uiComponent.modelName',undefined)
+                        createComponent.set('uiComponent.modelName','CustomerProfile');
                         createComponent.set('uiComponent.autoInjectFields',true)
-                        createComponent.$.modelName.fire('change');
+                        createComponent.$.modelName.fire('blur');
                         var prevBtn = createComponent.querySelector('.step-navigation-panel .secondary-btn');
                         var nextBtn = createComponent.querySelector('.step-navigation-panel .primary-btn');
                         flush(function () {
