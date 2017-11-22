@@ -148,10 +148,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }
       },
       _getFetchUrl: function (workflowType, modelName) {
-        var url = workflowType === 'activiti' ? '/api/Activiti_Managers/workflows' :
-          '/api/WorkflowManagers/workflows';
+        var url = workflowType === 'activiti' ? '/Activiti_Managers/workflows' :
+          '/WorkflowManagers/workflows';
         url += '?filter={"where":{"modelName":"' + modelName + '"},"scope":{}}';
-        return url;
+        return OEUtils._getRestApiUrl(url);
       },
       _modelObjChanged: function (newModel) {
         this.set('workflowDef.modelName', newModel.name);

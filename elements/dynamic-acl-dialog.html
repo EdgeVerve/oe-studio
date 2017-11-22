@@ -160,7 +160,7 @@
             }
           }
         }
-        this.makeAjaxCall('api/BaseACLs', 'GET', null, null, params, null, function (err, resp) {
+        this.makeAjaxCall(OEUtils._getRestApiUrl('/BaseACLs'), 'GET', null, null, params, null, function (err, resp) {
           if (err) {
             this.fire('oe-show-error', 'Error fetching ACLs');
           } else {

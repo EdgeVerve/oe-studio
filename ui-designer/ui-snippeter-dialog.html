@@ -69,7 +69,8 @@
           return;
         }
         var self = this;
-        this.makeAjaxCall('/api/DesignerElements', 'POST', this.snippetData, null, null, function(err, resp) {
+        
+        this.makeAjaxCall(OEUtils._getRestApiUrl('/DesignerElements/'), 'POST', this.snippetData, null, null, function(err, resp) {
           if (err) {
             self.resolveError(err);
           } else {

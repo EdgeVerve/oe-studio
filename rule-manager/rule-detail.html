@@ -224,6 +224,9 @@
         }
       },
       behaviors: [CommonBehavior.EVAjaxBehavior],
+      attached:function(){
+        this.decisionTableUrl = OEUtils._getRestApiUrl('/DecisionTables/');
+      },
       ruleChanged: function (newVal, oldVal) {
         if (!newVal || !newVal.id || newVal === oldVal) {
           return
@@ -246,7 +249,7 @@
           }
         }
 
-        this.makeAjaxCall('api/DecisionTables/' + this.rule.id + '/document', 'GET', null, null, null, function (
+        this.makeAjaxCall(this.decisionTableUrl + this.rule.id + '/document', 'GET', null, null, null, function (
           err, resp) {
           if (resp) {
             this.set('rule.document', resp);
@@ -269,7 +272,7 @@
         if (!this.ruleInput) {
           return;
         }
-        this.makeAjaxCall('api/DecisionTables/exec/' + this.rule.name, 'POST', this.ruleInput, null, null,
+        this.makeAjaxCall(this.decisionTableUrl+'exec/' + this.rule.name, 'POST', this.ruleInput, null, null,
           function (err, resp) {
             if (resp) {
               if (typeof resp == 'object') {

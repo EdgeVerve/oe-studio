@@ -180,7 +180,9 @@
         },
         resturl: {
           type: String,
-          value: 'api/DataACLs'
+          value: function(){
+            return OEUtils._getRestApiUrl('/DataACLs');
+          } 
         }
       },
       behaviors: [OEUtils.FormValidationBehavior, OEUtils.ModelHandler, DesignerBehavior.ConstantBehavior],

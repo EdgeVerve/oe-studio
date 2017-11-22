@@ -125,7 +125,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         <paper-button id="add" secondary on-tap="saveRule">SAVE RULE</paper-button>
       </div>
     </paper-dialog>
-    <oe-ajax id="ajax" url="/api/DecisionTables" loading="{{isloading}}" content-type="application/json" handle-as="json" on-error="handleError"
+    <oe-ajax id="ajax" loading="{{isloading}}" content-type="application/json" handle-as="json" on-error="handleError"
       on-response="handleResponse"></oe-ajax>
   </template>
   <script>
@@ -160,6 +160,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }
         var ajax = this.$.ajax;
         this.set('ruleObj.document', this.tempDocObj);
+        ajax.url = OEUtils._getRestApiUrl('/DecisionTables/');
         ajax.body = JSON.stringify(this.ruleObj);
         ajax.method = this.editMode ? 'PUT' : 'POST';
         ajax.generateRequest();

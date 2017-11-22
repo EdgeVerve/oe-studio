@@ -264,7 +264,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       }
     },
     fetchModels: function (cb) {
-      var url = 'api/ModelDefinitions';
+      var url = OEUtils._getRestApiUrl('/ModelDefinitions');
       var method = 'GET';
       this.makeAjaxCall(url, method, null, null, null, function (err, resp) {
         if (resp) {
@@ -494,7 +494,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       dl.setAttribute('download', fileName);
       dl.click();
     },
-
     toCamel: function (word) {
       return word.replace(/(\-[a-z])/g, function ($1) {
         return $1.toUpperCase().replace('-', '');
@@ -511,6 +510,15 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       });
       test = test.substring(0, 1).toUpperCase() + test.substring(1)
       return test
+    },
+    _getRestApiUrl: function(path){
+      var restApiRoot = (window.OEUtils && window.OEUtils.restApiRoot) ? window.OEUtils.restApiRoot : '/api';
+      return restApiRoot + path;
     }
+  }
+  window.OEUtils = window.OEUtils || {};
+  window.OEUtils._getRestApiUrl = function(path){
+      var restApiRoot = (window.OEUtils && window.OEUtils.restApiRoot) ? window.OEUtils.restApiRoot : '/api';
+      return restApiRoot + path;
   }
 </script>

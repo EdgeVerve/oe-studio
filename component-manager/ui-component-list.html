@@ -438,7 +438,7 @@
                             })
                     },
                     uiComponents: function (callback) {
-                        self.makeAjaxCall('/api/UIComponents', 'get', null, null, null,
+                        self.makeAjaxCall(OEUtils._getRestApiUrl('/UIComponents'), 'get', null, null, null,
                             function (err,
                                 res) {
                                 if (err) {
@@ -500,7 +500,7 @@
                 this._handleEditLaunch(pageData);
             },
             updateComponent: function (comp) {
-                var apiurl = '/api/UIComponents';
+                var apiurl = OEUtils._getRestApiUrl('/UIComponents/');
                 var self = this;
                 this.makeAjaxCall(apiurl, 'put', comp, null, null, function (err, res) {
                     if (!err) {
@@ -518,7 +518,7 @@
             _downloadComponent: function (event) {
                 var self = this;
                 var pageData = event.model.page;
-                self.makeAjaxCall('/api/UIComponents/component/' + pageData.name, 'get', null, null, null, {
+                self.makeAjaxCall(OEUtils._getRestApiUrl('/UIComponents/component/') + pageData.name, 'get', null, null, null, {
                     handleAs: 'text'
                 }, function (err, res) {
                     if (err) {
@@ -532,7 +532,7 @@
                 event.stopPropagation();
                 var pageData = event.model.page;
                 var self = this;
-                var elemDeleteUrl = '/api/UIComponents/' + pageData.id;
+                var elemDeleteUrl = OEUtils._getRestApiUrl('/UIComponents/') + pageData.id;
                 self.makeAjaxCall(elemDeleteUrl, 'delete', {}, null, null, function (err) {
                     if (!err) {
                         self.fire('page-deleted', pageData)

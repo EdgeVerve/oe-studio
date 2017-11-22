@@ -214,7 +214,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       saveRule: function () {
         if (this._validityCheck()) {
           this.getRuleDefinitions();
-          var url = 'api/PersonalizationRules';
+          var url = OEUtils._getRestApiUrl('/PersonalizationRules');
           var body = this.selectedRule;
           //body.customScope = body.scope;
           //delete body.scope;

@@ -136,12 +136,13 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       behaviors: [CommonBehavior.EVAjaxBehavior],
       attached: function () {
+        this.decisionTableUrl = OEUtils._getRestApiUrl('/DecisionTables/');
         this.fetchRules();
       },
       downloadRule: function (event) {
         event.stopPropagation();
         event.stopImmediatePropagation();
-        this.makeAjaxCall('api/DecisionTables/' + event.model.rule.id + '/document', 'GET', null,
+        this.makeAjaxCall(this.decisionTableUrl + event.model.rule.id + '/document', 'GET', null,
           null, null,
           function (err, resp) {
             if (resp) {
@@ -161,7 +162,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         if (this.selectedRule && this.selectedRule.id && event.model.rule.id == this.selectedRule.id) {
           isCurrent = true;
         }
-        this.makeAjaxCall('api/DecisionTables/' + event.model.rule.id + '/document', 'DELETE', null,
+        this.makeAjaxCall(this.decisionTableUrl + event.model.rule.id + '/document', 'DELETE', null,
           null, null,
           function (err) {
             if (!err) {
@@ -173,7 +174,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           }.bind(this));
       },
       fetchRules: function () {
-        this.makeAjaxCall('api/DecisionTables', 'GET', null, null, null, function (err, resp) {
+        this.makeAjaxCall(this.decisionTableUrl, 'GET', null, null, null, function (err, resp) {
           if (resp) {
             resp.forEach(function (d) {
               d.checked = false;

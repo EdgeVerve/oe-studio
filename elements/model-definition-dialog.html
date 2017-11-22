@@ -711,7 +711,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           this.attachWorkFlowSetting();
           this.attachMixins();
 
-          var url = 'api/ModelDefinitions';
+          var url = OEUtils._getRestApiUrl('/ModelDefinitions');
           var method = isNewModel ? 'POST' : 'PUT';
           var body = this.modelObj;
           this.makeAjaxCall(url, method, body, null, null, function (err, response) {

@@ -188,7 +188,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       behaviors: [CommonBehavior.EVAjaxBehavior],
       fetchRoutes: function () {
-        this.makeAjaxCall('api/UIRoutes', 'GET', null, null, null, function (err, resp) {
+        this.makeAjaxCall(this.uiRouteUrl, 'GET', null, null, null, function (err, resp) {
           if (resp) {
             resp.forEach(function (d) {
               d.checked = false;
@@ -389,7 +389,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         //pan implementation
         //var workarea = this.$$('#workarea');
         var workzone = this.$.wrapperBg;
-
+        this.uiRouteUrl = OEUtils._getRestApiUrl('/UIRoutes/');
         var mouseMoveEvent = function (ev) {
           this.set('currentX', this.currentX + ev.movementX);
           this.set('currentY', this.currentY + ev.movementY);
@@ -523,7 +523,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             var routeObj = item.routeObj;
             var tempObj = OEUtils.clone(routeObj);
             delete tempObj.checked;
-            var url = 'api/UIRoutes';
+            var url = this.uiRouteUrl;
             var method = 'put';
             var body = tempObj;
             var message, fRoutes, sRoutes;

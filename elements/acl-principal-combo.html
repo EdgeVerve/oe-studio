@@ -68,7 +68,7 @@
 				}
 			},
 			populateRoleList: function() {
-				this.makeAjaxCall('api/BaseRoles', 'GET', null, null, null, null, function(err, res) {
+				this.makeAjaxCall(OEUtils._getRestApiUrl('/BaseRoles'), 'GET', null, null, null, null, function(err, res) {
 					if(err){
 						this.fire('oe-show-error','Error fetching Base Roles')
 					}
@@ -81,7 +81,7 @@
 				}.bind(this));
 			},
 			populateUserList: function() {
-				this.makeAjaxCall('api/BaseUsers', 'GET', null, null, null, null, function(err, res) {
+				this.makeAjaxCall(OEUtils._getRestApiUrl('/BaseUsers'), 'GET', null, null, null, null, function(err, res) {
 					if(err){
 						this.fire('oe-show-error','Error fetching Base Users')
 					}

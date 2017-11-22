@@ -133,7 +133,7 @@
 				<span class="helper-text">Path to Navigate to the element</span>
 				<oe-input class="light-input" label="Navigation Label" id="navLabel" value="{{config.navigationLabel}}"></oe-input>
 				<span class="helper-text">appears on the navigation link</span>
-				<oe-typeahead strict label="Navigation Parent" displayproperty="name" valueproperty="name" searchurl="{{generateSearchUrl(config.navigationLabel)}}" dataurl="/api/NavigationLinks/findOne?filter[where][name][regexp]=/^VALUE_STRING/i" value="{{config.parent}}" id="navParent"></oe-typeahead>
+				<oe-typeahead strict label="Navigation Parent" displayproperty="name" valueproperty="name" searchurl="{{generateSearchUrl(config.navigationLabel)}}" dataurl="[[_getRestApiUrl('/NavigationLinks/findOne?filter[where][name][regexp]=/^VALUE_STRING/i')]]" value="{{config.parent}}" id="navParent"></oe-typeahead>
 				<span class="helper-text">Name of the parent link</span>
 				<oe-input class="light-input" label="Navigation Group" value="{{config.group}}" id="navGroup"></oe-input>
 				<span class="helper-text">Navigation link group</span>
@@ -163,6 +163,9 @@
     observers: [
       '_routeDataChanged(activePage.routeData)'
     ],
+    _getRestApiUrl:function(url){
+      return OEUtils._getRestApiUrl(url);
+    },
     _routeDataChanged: function(newVal, oldVal) {
       if (oldVal != newVal && newVal) {
         var config = {
@@ -197,9 +200,9 @@
             }
           }
         }
-        return '/api/NavigationLinks?filter=' + JSON.stringify(filter);
+        return OEUtils._getRestApiUrl('/NavigationLinks?filter=') + JSON.stringify(filter);
       } else {
-        return '/api/NavigationLinks?filter[where][name][regexp]=/^SEARCH_STRING/i';
+        return OEUtils._getRestApiUrl('/NavigationLinks?filter[where][name][regexp]=/^SEARCH_STRING/i');
       }
     },
 
@@ -217,7 +220,7 @@
 				}
 			}
 		}
-      var routeQuery = '/api/UIRoutes';
+      var routeQuery = OEUtils._getRestApiUrl('/UIRoutes');
       //Get UIRoute for the UIComponent
       self.makeAjaxCall(routeQuery, 'get', null, null, routeFilter, function(err, uiResp) {
         if (!err) {
@@ -231,7 +234,7 @@
 					  }
 				  }
 			  }
-            var navQuery = '/api/NavigationLinks';
+            var navQuery = OEUtils._getRestApiUrl('/NavigationLinks');
             self.makeAjaxCall(navQuery, 'get', null, null, navFilter, function(err, navResp) {
               if (!err) {
                 if (navResp[0]) {
@@ -259,13 +262,13 @@
       }
       var self = this;
       if (deleteInfo.routePresent) {
-        var routeDeleteUrl = '/api/UIRoutes/' + routeData.uiRoute.id
+        var routeDeleteUrl = OEUtils._getRestApiUrl('/UIRoutes/') + routeData.uiRoute.id
         self.makeAjaxCall(routeDeleteUrl, 'delete', {}, null, null, null, function(err1) {
           if (!err1) {
             routeData.uiRoute = null;
             deleteInfo.routeDeleted = true;
             if (deleteInfo.navLinkPresent) {
-              var navDeleteUrl = '/api/NavigationLinks/' + routeData.navigationLink.id
+              var navDeleteUrl = OEUtils._getRestApiUrl('/NavigationLinks/') + routeData.navigationLink.id
               self.makeAjaxCall(navDeleteUrl, 'delete', {}, null,null,null,
                 function(err2) {
                   if (!err2) {
@@ -300,7 +303,7 @@
             'type': 'elem',
             'name': self.activePage.name,
             'path': self.config.url,
-            'import': '/api/UIComponents/component/' + self.activePage.name
+            'import': OEUtils._getRestApiUrl('/UIComponents/component/') + self.activePage.name
           }
         }
         var navPayload = self.routeData.navigationLink || {};
@@ -371,13 +374,13 @@
             'type': 'elem',
             'name': self.activePage.name,
             'path': self.config.url,
-            'import': '/api/UIComponents/component/' + self.activePage.name
+            'import': OEUtils._getRestApiUrl('/UIComponents/component/') + self.activePage.name
           }
         }
          if(self.config.scope){
           uiRoutePayload.scope = self.config.scope;
          }
-        this.makeAjaxCall('/api/UIRoutes', routeMethod, uiRoutePayload, null, null, function(err, uires) {
+        this.makeAjaxCall(OEUtils._getRestApiUrl('/UIRoutes'), routeMethod, uiRoutePayload, null, null, function(err, uires) {
           if (!err) {
             var navPayload = self.routeData.navigationLink || {};
             var navMethod = 'post';
@@ -425,7 +428,7 @@
                if(self.config.scope){
                   navPayload.scope = self.config.scope;
                 }
-              self.makeAjaxCall('/api/NavigationLinks', navMethod, navPayload, null, null,
+              self.makeAjaxCall(OEUtils._getRestApiUrl('/NavigationLinks'), navMethod, navPayload, null, null,
                 function(err, navres) {
                   if (!err) {
                     var rtData = {

@@ -27,7 +27,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                                     displayproperty="display"
                                     valueproperty="value"
                                     listdata='[{"display":"Save","value":"save"},{"display":"Create","value":"create"}, {"display":"Update","value":"update"}, {"display":"Delete","value":"delete"}]'></oe-radio-group>
-                    <oe-combo field-id="workflowBody.workflowDefinitionName" required label="Process Name" value={{vm.workflowBody.workflowDefinitionName}} listurl="/api/WorkflowDefinitions" displayproperty="name" valueproperty="name" allow-free-text></oe-combo>
+                    <oe-combo field-id="workflowBody.workflowDefinitionName" required label="Process Name" value={{vm.workflowBody.workflowDefinitionName}} listurl="[[workflowURL]]" displayproperty="name" valueproperty="name" allow-free-text></oe-combo>
                     <oe-checkbox field-id="wfDependent" label="Workflow Dependent" value={{vm.wfDependent}}></oe-checkbox>
                 </div>
                 <oe-data-table label="Workflow Variables" items={{vm.workflowBody.variables}} record-handling="local" editor-form-url="bower_components/oe-studio/ui-designer/workflow-prop-form.html" columns='[{"key": "name","label": "Name","readOnly": true},{"key": "value","label": "Value","readOnly": true}]'></oe-data-table>
@@ -87,8 +87,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       attached: function() {
         var self = this;
-        self.resturl = '/api/WorkflowManagers/workflows';
-
+        self.resturl = OEUtils._getRestApiUrl('/WorkflowManagers/workflows');
+        self.workflowURL = OEUtils._getRestApiUrl('/WorkflowDefinitions');
         self.use('preInsert', self.preInsert)
       }
     });

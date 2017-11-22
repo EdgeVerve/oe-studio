@@ -387,7 +387,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         var filter = {
           where : {modelName: modelName}  
         };
-        var url = 'api/PersonalizationRules';
+        var url = OEUtils._getRestApiUrl('/PersonalizationRules/');
         this.makeAjaxCall(url, 'GET', null, null, {filter: filter}, function (err, response) {
           if (err) {
             this.resolveError(err);
@@ -415,7 +415,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         this.fire('oe-show-confirm', data);
       },
       _deleteRule: function () {
-        var url = 'api/PersonalizationRules/' + this.selectedRule.id + '/' + this.selectedRule._version;
+        var url = OEUtils._getRestApiUrl('/PersonalizationRules/') + this.selectedRule.id + '/' + this.selectedRule._version;
         var body = this.selectedRule;
         this.makeAjaxCall(url, 'DELETE', body, null, null, function (err, response) {
           if (err) {

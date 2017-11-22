@@ -377,7 +377,7 @@
 			behaviors: [CommonBehavior.EVAjaxBehavior, CommonBehavior.DefaultElementListBehavior],
 			populateElementList: function() {
 				var self = this;
-				this.makeAjaxCall('/api/DesignerElements', 'get', null, null, null, function(err, res) {
+				this.makeAjaxCall(OEUtils._getRestApiUrl('/DesignerElements'), 'get', null, null, null, function(err, res) {
 					var elementList = JSON.parse(JSON.stringify(self.defaultElementList));
 					var groupedElements = {};
 					var editorMap = {};

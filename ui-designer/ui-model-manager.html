@@ -201,8 +201,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         </div>
         <div class="search-panel">
           <oe-typeahead id="typeahead" no-label-float="true" on-pt-item-confirmed="_modelChanged" label="Search Model...
-           " displayproperty="name" valueproperty="name" searchurl="api/ModelDefinitions?filter[where][name][regexp]=/^SEARCH_STRING/i&filter[limit]=10"
-            dataurl="api/ModelDefinitions/findOne?filter[where][name][regexp]=/^VALUE_STRING/i" value="{{selectedModel}}">
+           " displayproperty="name" valueproperty="name" searchurl="[[modelSearchUrl]]"
+            dataurl="[[modelDataUrl]]" value="{{selectedModel}}">
             <div prefix>
               <iron-icon class="search-icon" icon="search"></iron-icon>
             </div>
@@ -261,10 +261,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           observer: '_elementChanged'
         }
       },
+      attached:function(){
+        this.modelDataUrl = OEUtils._getRestApiUrl('/ModelDefinitions/findOne?filter[where][name][regexp]=/^VALUE_STRING/i')
+        this.modelSearchUrl = OEUtils._getRestApiUrl('/ModelDefinitions?filter[where][name][regexp]=/^SEARCH_STRING/i&filter[limit]=10')
+      },
       _modelChanged: function () {
         var model = this.selectedModel;
         this.set('selectedModelName', model);
-        var url = 'api/ModelDefinitions/modelmeta/' + model;
+        var url = OEUtils._getRestApiUrl('ModelDefinitions/modelmeta/') + model;
         this.makeAjaxCall(url, 'get', null, null, null, function (err, resp) {
           if (resp) {
             this.convertToArray(resp);

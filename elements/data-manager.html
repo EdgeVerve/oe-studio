@@ -375,7 +375,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       generateFormUrl: function (modelname) {
         if (modelname) {
-          return '/api/UIcomponents/component/' + modelname.toLowerCase() + '-scopeform.html';
+          var formPath = '/UIcomponents/component/' + modelname.toLowerCase() + '-scopeform.html';
+          return OEUtils._getRestApiUrl(formPath)
         }
       },
       refreshModels: function () {
@@ -711,9 +712,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
       },
       setRestUrl: function (modelObj) {
-        var url = modelObj.plural ? 'api/' + modelObj.plural : 'api/' + inflection.pluralize(
-          modelObj.name);
-        this.set('resturl', url);
+        var url = '/'+(modelObj.plural ? modelObj.plural : inflection.pluralize(modelObj.name));
+        this.set('resturl', OEUtils._getRestApiUrl(url));
         return url;
       },
       separateMethodRoutes: function (tab) {
@@ -813,7 +813,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         var method = this.modelDataObj.method;
         var params = null;
         var pathObj = this.resolvePath(method);
-        var url = resturl || 'api' + pathObj.url;
+        var url = resturl || OEUtils._getRestApiUrl(pathObj.url);
         if (pathObj.filter) {
           params = {
             'filter': pathObj.filter
@@ -844,7 +844,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         var data = this.editableValue;
         var method = this.modelDataObj.method;
         var pathObj = this.resolvePath(method);
-        var url = 'api' + pathObj.url;
+        var url = OEUtils._getRestApiUrl(pathObj.url);
         this.setTotalRecords(null);
         this.set('modelDataObj.method.jsonData', null);
         this.set('modelDataObj.method.isEditable', false);

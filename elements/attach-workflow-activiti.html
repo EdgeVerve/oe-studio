@@ -21,7 +21,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
   </style>
   <template>
         <oe-ajax auto last-response={{workflowDefinitions}} 
-                     url='/api/Activiti_ProcessDefinitions/get'></oe-ajax>
+                     url='[[activitiUrl]]'></oe-ajax>
         <div class="vertical flex layout">
             <div class="layout horizontal col-2">
                 <div class="vertical flex layout">
@@ -61,6 +61,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             }
           }
         }
+      },
+      attached:function(){
+        this.activitiUrl = OEUtils._getRestApiUrl('/Activiti_ProcessDefinitions/get');
       }
     });
 

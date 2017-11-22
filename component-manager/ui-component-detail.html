@@ -114,7 +114,7 @@
                 }
             },
             simulateComponent: function () {
-                this.makeXhrCall('/api/UIComponents/simulate', 'post', this.component, null, function (err,
+                this.makeXhrCall(OEUtils._getRestApiUrl('/UIComponents/simulate'), 'post', this.component, null, function (err,
                     res) {
                     if (err) {
                         this.resolveError(err);
@@ -138,6 +138,7 @@
                     }
                 }.bind(this))
             },
+            
             customEval: function (str) {
                 var script = document.createElement('script');
                 script.type = 'text/javascript';

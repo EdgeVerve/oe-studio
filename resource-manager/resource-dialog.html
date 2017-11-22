@@ -114,7 +114,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         <paper-button id="add" secondary on-tap="saveResource">SAVE</paper-button>
       </div>
     </paper-dialog>
-    <oe-ajax id="ajax" url="/api/UIResources" loading="{{isloading}}" content-type="application/json" handle-as="json" on-error="handleError"
+    <oe-ajax id="ajax" loading="{{isloading}}" content-type="application/json" handle-as="json" on-error="handleError"
       on-response="handleResponse"></oe-ajax>
   </template>
   <script>
@@ -145,6 +145,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           return;
         }
         var ajax = this.$.ajax;
+        ajax.url = OEUtils._getRestApiUrl('/UIResources')
         ajax.body = JSON.stringify(this.resourceObj);
         ajax.method = this.editMode ? 'PUT' : 'POST';
         ajax.generateRequest();

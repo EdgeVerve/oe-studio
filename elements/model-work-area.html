@@ -533,7 +533,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
           if (this._selectedTab.view && this._selectedTab.view.name == this._selectedTab.name) {
             this._selectedTab.view.models = view.models;
-            this.makeAjaxCall('/api/ModelViews', 'PUT', this._selectedTab.view, null, null,
+            this.makeAjaxCall(OEUtils._getRestApiUrl('/ModelViews'), 'PUT', this._selectedTab.view, null, null,
               function (err, response) {
                 if (response) {
                   var index = _.findIndex(this.viewList, {
@@ -776,7 +776,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       _saveView: function (event) {
         var view = event.detail;
-        this.makeAjaxCall('/api/ModelViews', 'PUT', view, null, null, function (err, response) {
+        this.makeAjaxCall(OEUtils._getRestApiUrl('/ModelViews'), 'PUT', view, null, null, function (err, response) {
           if (response) {
             var index = _.findIndex(this.viewList, {
               'name': response.name
@@ -919,7 +919,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             var tempObj = JSON.parse(JSON.stringify(modelObj));
             tempObj = self.modelToObject(tempObj);
             delete tempObj.checked;
-            var url = 'api/ModelDefinitions';
+            var url = OEUtils._getRestApiUrl('/ModelDefinitions/');
             var method = 'put';
             var body = tempObj;
             self.makeAjaxCall(url, method, body, null, null, function (err, response) {
@@ -1050,7 +1050,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       },
       _deleteModel: function (event) {
         var modelObj = event.detail;
-        var url = '/api/ModelDefinitions/' + modelObj.id + '/' + modelObj._version;
+        var url = OEUtils._getRestApiUrl('/ModelDefinitions/') + modelObj.id + '/' + modelObj._version;
         var method = 'delete';
         this.makeAjaxCall(url, method, {}, null, null, function (err, response) {
           if (err) {

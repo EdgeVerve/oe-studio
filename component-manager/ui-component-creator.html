@@ -232,11 +232,11 @@
                             <oe-input label="Page Name" value="{{uiComponent.name}}" field-id="name" required 
                             pattern="^([a-zA-Z0-9]+)((-[a-zA-Z0-9]+)+)$" id="componentName"></oe-input>
                             <oe-async-validator fields='["name"]' model={{uiComponent}} 
-                            requesturl='/api/UIComponents?filter={"where":{"name":"{{uiComponent.name}}"} }' 
+                            requesturl='[[_validateUrl(uiComponent.name)]]' 
                             ensure="absent" error="component name already in use"></oe-async-validator>
                             <oe-combo id="modelName" show-refresh value="{{uiComponent.modelName}}" 
                             label="Search Models" displayproperty="name" valueproperty="name" 
-                            listurl="/api/ModelDefinitions?filter[fields][name]=true" on-pt-item-confirmed="_getModelData" on-blur="_getModelData"></oe-combo>
+                            listurl="[[_getRestApiUrl('/ModelDefinitions?filter[fields][name]=true')]]" on-pt-item-confirmed="_getModelData" on-blur="_getModelData"></oe-combo>
                             <div hidden$="[[!isModelObtained]]">
                                 <div class="more-props">
                                     <paper-toggle-button checked="{{uiComponent.autoInjectFields}}">Auto Inject Fields</paper-toggle-button>
@@ -355,12 +355,19 @@
                     this.selectedStep--;
                 }
             },
+            _getRestApiUrl:function(url){
+                return OEUtils._getRestApiUrl(url);
+            },
+            _validateUrl:function(name){
+                var url = '/UIComponents?filter={"where":{"name":"'+name+'"}}';
+                return OEUtils._getRestApiUrl(url);
+            },
             _getModelData: function (e) {
                 var self = this;
                 var model = this.uiComponent.modelName;
                 var isValidModel = !this.$.modelName.invalid;
                 if(isValidModel && model && model.length > 0){
-                    this.makeAjaxCall('/api/ModelDefinitions/modelmeta/' + model, 'get', null, null, null,
+                    this.makeAjaxCall(OEUtils._getRestApiUrl('/ModelDefinitions/modelmeta/') + model, 'get', null, null, null,
                     function (
                         err, res) {
                         if (!err) {
@@ -401,7 +408,7 @@
             },
             createPage: function () {
                 var self = this;
-                var apiurl = '/api/UIComponents';
+                var apiurl = OEUtils._getRestApiUrl('/UIComponents');
                 var payload = this.uiComponent;
                 if(payload.modelName){
                     if(payload.autoInjectFields){

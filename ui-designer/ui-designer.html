@@ -63,7 +63,7 @@
 			},
 			attached: function() {
 				var self = this;
-
+				this.uiComponentUrl =  OEUtils._getRestApiUrl('/UIComponents/');
 				var x = setInterval(function() {
 					if (OEUtils.designerData.frameLoaded) {
 						self.showPagePanel();
@@ -82,7 +82,7 @@
 			pageSelectedHandle: function(e) {
 				var self = this;
 				var detail = e.detail;
-				self.makeXhrCall(('/api/UIComponents/component/' + detail.name),'get',null,null,function(err, res) {
+				self.makeXhrCall((this.uiComponentUrl+'component/' + detail.name),'get',null,null,function(err, res) {
 					if (err) {
 						self.fire('oe-show-error', 'Error fetching uicomponent')
 					} else {
@@ -391,7 +391,7 @@
 				if (event.detail.pageName) {
 					page.name = event.detail.pageName;
 				}
-				this.makeAjaxCall('/api/UIComponents/', event.detail.method, page, null, null, function(err, res) {
+				this.makeAjaxCall(this.uiComponentUrl, event.detail.method, page, null, null, function(err, res) {
 					if (!err) {
 						this.fire('oe-show-success', 'Element successfully created');
 						this.fire('launch-page', res);
@@ -407,7 +407,7 @@
 					return;
 				}
 				var payload = self._preparePayload();
-				self.makeAjaxCall('/api/UIComponents/', 'put', payload, null, null, function(err, res) {
+				self.makeAjaxCall(this.uiComponentUrl, 'put', payload, null, null, function(err, res) {
 					if (!err) {
 						self.$.toolbar.fire('update-component', res);
 						self.fire('oe-show-success', 'Element successfully created');
@@ -838,7 +838,7 @@
 					}
 				})
 				payload.polymerConfig = self.element.polyConfig;
-				self.makeAjaxCall('/api/UIComponents/', 'put', payload, null, null, function(err, res) {
+				self.makeAjaxCall(this.uiComponentUrl, 'put', payload, null, null, function(err, res) {
 					if (!err) {
 						self.$.toolbar.fire('update-component', res);
 						self.fire('oe-show-success', 'Element successfully created');

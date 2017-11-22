@@ -69,7 +69,8 @@
 				var config = this.config;
 				var method = config.id ? 'put' : 'post';
 				delete config._userDefined;
-				this.makeAjaxCall('/api/DesignerElements/', method, config, null, null, function(err, res) {
+				
+				this.makeAjaxCall(OEUtils._getRestApiUrl('/DesignerElements/'), method, config, null, null, function(err, res) {
 					if (!err) {
 						this.fire('oe-show-success', 'Widget successfully added');
 						this.refreshElementList({"type":"update","value":res});
@@ -82,7 +83,7 @@
 				this.fire('oe-show-confirm', {
 					message: 'Widget ' + this.config.name + ' will be permanently removed. Are you sure?',
 					ok: function() {
-						this.makeAjaxCall('/api/DesignerElements/' + this.config.id, 'delete', null, null, null, function(err, res) {
+						this.makeAjaxCall(OEUtils._getRestApiUrl('/DesignerElements/') + this.config.id, 'delete', null, null, null, function(err, res) {
 							if (!err) {
 								this.fire('oe-show-success', 'Widget deleted successfully');
 								this.refreshElementList({"type":"delete","value":this.config});

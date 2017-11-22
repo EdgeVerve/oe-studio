@@ -199,7 +199,7 @@
                     <oe-input label="Rest URL" value="{{component.restUrl}}"></oe-input>
                     <oe-combo label="Template Name" listdata="[[templateList]]" value="{{component.templateName}}" valueproperty="file" displayproperty="file"></oe-combo>
                     <oe-combo id="modelName" show-refresh value="{{component.modelName}}" label="Models" displayproperty="name" valueproperty="name"
-                        listurl="/api/ModelDefinitions?filter[fields][name]=true"></oe-combo>
+                        listurl="[[_getRestApiUrl('/ModelDefinitions?filter[fields][name]=true')]]"></oe-combo>
                     <div>
                         <div class="more-props" hidden$="[[!component.modelName]]">
                             <paper-toggle-button checked="{{component.autoInjectFields}}">Auto Inject Fields</paper-toggle-button>
@@ -358,6 +358,9 @@
             },
             behaviors: [CommonBehavior.EVAjaxBehavior],
             observers: ['_componentDataChanged(component.*)'],
+            _getRestApiUrl:function(url){
+                return OEUtils._getRestApiUrl(url);
+            },
             attached: function () {
                 this.set('panelSelected', 0);
                 var list = [];

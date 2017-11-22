@@ -201,7 +201,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         reader.readAsText(file, 'UTF-8');
       },
       _handleUpload: function (data) {
-        var url = this.modelObj.plural ? '/api/' + this.modelObj.plural : '/api/' + this.modelObj.name + 's';
+        var plural = this.modelObj.plural  || (this.modelObj.name + 's') ;
+        var url  = OEUtils._getRestApiUrl('/'+plural+'/');
         this.uploadStatus('uploading');
         this.makeAjaxCall(url, 'POST', data, null, null, function (err, response) {
           if (err) {

@@ -115,7 +115,7 @@
               }
             }
 
-		   this.makeAjaxCall('api/DataACLs', 'GET', null, null, params, null, function(err, resp) {
+		   this.makeAjaxCall(OEUtils._getRestApiUrl('/DataACLs'), 'GET', null, null, params, null, function(err, resp) {
               if (!err) {
 				      this.set('dataAcls', resp);
             	formElement.set('modelNameToSave', this.modelObj.name);

@@ -267,7 +267,7 @@
             <div class="step-3 step">
               <div class="step-title">Choose model and customize</div>
               <div class="step-content">
-                <oe-combo show-refresh required="true" label="Search Models" displayproperty="name" valueproperty="name" listurl="/api/ModelDefinitions?filter[fields][name]=true"
+                <oe-combo show-refresh required="true" label="Search Models" displayproperty="name" valueproperty="name" listurl="[[modelSearchUrl]]"
                   on-change="_getModelData"></oe-combo>
                 <div hidden$="[[!isModelObtained]]">
                   <div class="more-props">
@@ -369,6 +369,9 @@
         }
       },
       behaviors: [CommonBehavior.EVAjaxBehavior],
+      attached:function(){
+        this.modelSearchUrl = OEUtils._getRestApiUrl('/ModelDefinitions?filter[fields][name]=true');
+      },
       showPageListing: function() {
         this.fire('hide-create-component');
       },
@@ -487,7 +490,7 @@
         var model = e.currentTarget.value;
         this.selectedModel = model;
         var self = this;
-        this.makeAjaxCall('/api/ModelDefinitions/modelmeta/' + model, 'get', null, null, null, function(
+        this.makeAjaxCall(OEUtils._getRestApiUrl('/ModelDefinitions/modelmeta/') + model, 'get', null, null, null, function(
           err, res) {
           if (!err) {
             self.generateFieldsArr(res);
@@ -523,7 +526,7 @@
       createPage: function() {
         var self = this;
         var payload = {};
-        var apiurl = '/api/UIComponents';
+        var apiurl = OEUtils._getRestApiUrl('/UIComponents');
         var type = this.templateSelected.type;
         if (type == 'html') {
           payload = {

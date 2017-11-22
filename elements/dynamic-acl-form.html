@@ -161,7 +161,9 @@
         },
         resturl: {
           type: String,
-          value: 'api/BaseACLs'
+          value: function(){
+            return OEUtils._getRestApiUrl('/BaseACLs');
+          }
         }
       },
 		behaviors: [OEUtils.FormValidationBehavior, OEUtils.ModelHandler, DesignerBehavior.ConstantBehavior],

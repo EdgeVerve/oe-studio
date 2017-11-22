@@ -217,10 +217,13 @@
     Polymer({
       is: 'rule-mapper-dialog',
       behaviors: [CommonBehavior.EVAjaxBehavior],
+      attached:function(){
+        this.modelRulesUrl = OEUtils._getRestApiUrl('/ModelRules');
+      },
       fetchModelRules: function(modelName) {
         async.parallel({
           decisionTables: function(callback) {
-            this.makeAjaxCall('api/DecisionTables', 'GET', null, null, null, function(err, resp) {
+            this.makeAjaxCall(OEUtils._getRestApiUrl('/DecisionTables/'), 'GET', null, null, null, function(err, resp) {
               if (err) {
                 this.fire('oe-show-error', 'Error fetching DecisionTables');
                 callback(err, null)
@@ -230,7 +233,7 @@
             }.bind(this));
           }.bind(this),
           modelRule: function(callback) {
-            var url = 'api/ModelRules?filter[where][modelName]=' + modelName;
+            var url = this.modelRulesUrl+'?filter[where][modelName]=' + modelName;
             this.makeAjaxCall(url, 'get', null, null, null, function(err, res) {
               if (err) {
                 this.fire('oe-show-error', 'Error fetching ModelRule');
@@ -289,7 +292,7 @@
         payload.modelName = this.modelName;
         payload.defaultRules = this.defaultRules;
         payload.validationRules = this.validationRules;
-        this.makeAjaxCall('api/ModelRules', method, payload, null, null, function(err, resp) {
+        this.makeAjaxCall(this.modelRulesUrl, method, payload, null, null, function(err, resp) {
           if (resp) {
             this.fire('oe-show-success', 'Rules Mapped Successfully');
             this.closeDialog();

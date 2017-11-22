@@ -141,7 +141,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       downloadResource: function (event) {
         event.stopPropagation();
         event.stopImmediatePropagation();
-        this.makeAjaxCall('api/UIResources/content/' + event.model.resource.name, 'GET', null,
+        this.makeAjaxCall(OEUtils._getRestApiUrl('/UIResources/content/') + event.model.resource.name, 'GET', null,
           null, null,
           function (err, resp) {
             if (resp) {
@@ -162,7 +162,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           .id) {
           isCurrent = true;
         }
-        this.makeAjaxCall('api/UIResources/' + event.model.resource.id, 'DELETE', null,
+        this.makeAjaxCall(OEUtils._getRestApiUrl('/UIResources/') + event.model.resource.id, 'DELETE', null,
           null, null,
           function (err) {
             if (!err) {
@@ -175,7 +175,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           }.bind(this));
       },
       fetchResources: function () {
-        this.makeAjaxCall('api/UIResources', 'GET', null, null, null, function (err, resp) {
+        this.makeAjaxCall(OEUtils._getRestApiUrl('/UIResources'), 'GET', null, null, null, function (err, resp) {
           if (resp) {
             resp.forEach(function (d) {
               d.checked = false;

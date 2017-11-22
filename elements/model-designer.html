@@ -126,7 +126,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         }.bind(this),100);
       },
       fetchViews: function () {
-        this.makeAjaxCall('api/ModelViews', 'GET', null, null, null, function (err, response) {
+        this.makeAjaxCall(OEUtils._getRestApiUrl('/ModelViews'), 'GET', null, null, null, function (err, response) {
           if (err) {
             this.resolveError(err);
           } else if (response) {
