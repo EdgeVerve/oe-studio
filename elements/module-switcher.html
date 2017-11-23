@@ -9,7 +9,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     <style>
       :host {
         display: block;
-        width: 285px;
+        max-width: 285px;
         background: var(--light-primary-color);
         border-left: 1px solid var(--secondary-divider-color);
         border-right: 1px solid var(--secondary-divider-color);
@@ -77,9 +77,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         right: 50%;
       }
 
-		paper-tab{
-			z-index: 20;
-		}
+      paper-tab {
+        z-index: 20;
+      }
+
       paper-tab:hover .tooltip {
         visibility: visible;
         opacity: 1;
@@ -106,40 +107,47 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
   <script>
     Polymer({
       is: 'module-switcher',
-      properties: {
-        moduleList: {
-          type: Array,
-          value: [{
-            name: 'Model Defintion',
-            icon: 'oe-designer-icons:model',
-            routePath: ''
-          }, {
-            name: 'UI Designer',
-            icon: 'oe-designer-icons:ui-designer',
-            routePath: 'uidesigner'
-          }, {
-            name: 'Workflow',
-            icon: 'oe-designer-icons:workflow',
-            routePath: 'workflow'
-          }, {
-            name: 'Route Flow Designer',
-            icon: 'oe-designer-icons:route-manager',
-            routePath: 'routeflow'
-          }, {
-            name: 'Rule Manager',
-            icon: 'oe-designer-icons:rules-manager',
-            routePath: 'rulemanager'
-          }, {
-            name: 'Resource Manager',
-            icon: 'oe-designer-icons:resource-manager',
-            routePath: 'resourcemanager'
-          }, {
-            name: 'Component Manager',
-            icon: 'assignment',
-            routePath: 'componentmanager'
-          }]
+      attached: function () {
+        var moduleList = [{
+          name: 'Model Defintion',
+          icon: 'oe-designer-icons:model',
+          routePath: ''
+        }, {
+          name: 'UI Designer',
+          icon: 'oe-designer-icons:ui-designer',
+          routePath: 'uidesigner'
+        }, {
+          name: 'Workflow',
+          icon: 'oe-designer-icons:workflow',
+          routePath: 'workflow'
+        }, {
+          name: 'Route Flow Designer',
+          icon: 'oe-designer-icons:route-manager',
+          routePath: 'routeflow'
+        }, {
+          name: 'Rule Manager',
+          icon: 'oe-designer-icons:rules-manager',
+          routePath: 'rulemanager'
+        }, {
+          name: 'Resource Manager',
+          icon: 'oe-designer-icons:resource-manager',
+          routePath: 'resourcemanager'
+        }, {
+          name: 'Component Manager',
+          icon: 'assignment',
+          routePath: 'componentmanager'
+        }]
+        var designerElement = document.querySelector('oe-designer');
+        if (designerElement) {
+          var selectedModules = designerElement.designerRoutes;
+          moduleList = moduleList.filter(function (mod) {
+            return selectedModules.find(function (m) {
+              return m.path === mod.routePath;
+            })
+          });
         }
-      }
+        this.set('moduleList', moduleList);
+      },
     });
   </script>
 </dom-module>

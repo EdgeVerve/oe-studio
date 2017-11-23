@@ -5,15 +5,6 @@ remain with the applicable third party licensors or the open source community as
 here transfers the rights to the third party and open source components, except as expressly permitted.
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
 <link rel="import" href="all-imports.html">
-<!-- <link rel="import" href="elements/app-config.html"> -->
-<link rel="import" href="elements/studio-bottom-panel.html">
-<!-- <link rel="import" href="elements/model-designer.html">
-<link rel="import" href="ui-designer/ui-designer.html">
-<link rel="import" href="routeflow/route-flow-designer.html">
-<link rel="import" href="resource-manager/resource-manager.html">
-<link rel="import" href="rule-manager/rule-manager.html">
-<link rel="import" href="component-manager/ui-component-manager.html">
-<link rel="import" href="../oe-workflow-modeler/workflow-designer.html"> -->
 <dom-module id="oe-designer">
   <template>
     <style>
@@ -75,12 +66,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         </div>
         <div>
           <paper-button>
-            <iron-icon icon="icons:lock-outline"></iron-icon><span>Change Password</span>
+            <iron-icon icon="icons:lock-outline"></iron-icon>
+            <span>Change Password</span>
           </paper-button>
         </div>
         <div>
           <paper-button id="logOut-btn" on-tap="_logOut">
-            <iron-icon icon="icons:power-settings-new"></iron-icon><span>Log Out</span>
+            <iron-icon icon="icons:power-settings-new"></iron-icon>
+            <span>Log Out</span>
           </paper-button>
         </div>
       </app-drawer>
@@ -89,28 +82,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       </app-drawer>
       <app-header-layout>
         <div class="main-app-content">
-          
-            <oe-app-route route="{{route}}" config-url="" routes-list="[[designerRoutes]]">
-            <iron-pages route-target  attr-for-selected="router-path">
-            <div router-path="workflow">
-              <workflow-designer></workflow-designer>
-              <studio-bottom-panel></studio-bottom-panel>
-            </div>
-            </iron-pages>
+          <oe-app-route route="{{route}}" config-url="" routes-list="[[designerRoutes]]">
+            <iron-pages route-target></iron-pages>
           </oe-app-route>
-       
-          <!-- <iron-pages selected="{{route.path}}" attr-for-selected="router-path">
-            <model-designer router-path=""></model-designer>
-            <div router-path="workflow">
-              <workflow-designer></workflow-designer>
-              <studio-bottom-panel></studio-bottom-panel>
-            </div>
-            <ui-designer router-path="uidesigner"></ui-designer>
-            <route-flow-designer router-path="routeflow"></route-flow-designer>
-            <rule-managerrouter-path="rulemanager"></rule-manager>
-            <resource-manager router-path="resourcemanager"></resource-manager>
-            <ui-component-manager router-path="componentmanager"></ui-component-manager>
-          </iron-pages> -->
         </div>
       </app-header-layout>
     </app-drawer-layout>
@@ -180,88 +154,89 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       /*Common Functions*/
       attached: function () {
         this._fetchDesignerData(function (err, response) {
-          if(err){
+          var modulesList = [{
+            "type": "elem",
+            "name": "model-designer",
+            "path": "",
+            "import": "/bower_components/oe-studio/elements/model-designer.html",
+            "group": "",
+            "retainInstance": true
+          }, {
+            "type": "elem",
+            "name": "ui-designer",
+            "path": "uidesigner",
+            "import": "/bower_components/oe-studio/ui-designer/ui-designer.html",
+            "group": "",
+            "retainInstance": true
+          }, {
+            "type": "elem",
+            "name": "route-flow-designer",
+            "path": "routeflow",
+            "import": "/bower_components/oe-studio/routeflow/route-flow-designer.html",
+            "group": "",
+            "retainInstance": true
+          }, {
+            "type": "elem",
+            "name": "resource-manager",
+            "path": "resourcemanager",
+            "import": "/bower_components/oe-studio/resource-manager/resource-manager.html",
+            "group": "",
+            "retainInstance": true
+          }, {
+            "type": "elem",
+            "name": "rule-manager",
+            "path": "rulemanager",
+            "import": "/bower_components/oe-studio/rule-manager/rule-manager.html",
+            "group": "",
+            "retainInstance": true
+          }, {
+            "type": "elem",
+            "name": "workflow-manager",
+            "path": "workflow",
+            "group": "",
+            "import": "/bower_components/oe-studio/elements/workflow-manager.html",
+            "retainInstance": true
+          }, {
+            "type": "elem",
+            "name": "ui-component-manager",
+            "path": "componentmanager",
+            "import": "/bower_components/oe-studio/component-manager/ui-component-manager.html",
+            "group": "",
+            "retainInstance": true
+          }]
+          if (err) {
             this.fire('oe-show-error', 'Unable to get designer configuration');
           }
           if (response) {
-            if(response.restApiRoot){
+            if (response.restApiRoot) {
               window.OEUtils = window.OEUtils || {};
               window.OEUtils.restApiRoot = response.restApiRoot || '/api';
             }
             if (response.imports) {
               this._importLinks(response.imports, function (errLink) {
                 if (errLink && errLink.length > 0) {
-                    this.fire('oe-show-error', 'Link import failed for ' + errLink);
+                  this.fire('oe-show-error', 'Link import failed for ' + errLink);
                 }
               }.bind(this));
             }
+
             var modules = response.modules || "all";
-            var modulesList =  [{
-                  "type": "elem",
-                  "name": "model-designer",
-                  "path": "",
-                  "import": "/bower_components/oe-studio/elements/model-designer.html",
-                  "group": "",
-                  "retainInstance": true
-                }, {
-                  "type": "elem",
-                  "name": "ui-designer",
-                  "path": "uidesigner",
-                  "import": "/bower_components/oe-studio/ui-designer/ui-designer.html",
-                  "group": "",
-                  "retainInstance": true
-                }, {
-                  "type": "elem",
-                  "name": "route-flow-designer",
-                  "path": "routeflow",
-                  "import": "/bower_components/oe-studio/routeflow/route-flow-designer.html",
-                  "group": "",
-                  "retainInstance": true
-                }, {
-                  "type": "elem",
-                  "name": "resource-manager",
-                  "path": "resourcemanager",
-                  "import": "/bower_components/oe-studio/resource-manager/resource-manager.html",
-                  "group": "",
-                  "retainInstance": true
-                }, {
-                  "type": "elem",
-                  "name": "rule-manager",
-                  "path": "rulemanager",
-                  "import": "/bower_components/oe-studio/rule-manager/rule-manager.html",
-                  "group": "",
-                  "retainInstance": true
-                }, {
-                  "type": "page",
-                  "path": "workflow",
-                  "group": "",
-                  "import": "/bower_components/oe-workflow-modeler/workflow-designer.html",
-                  "retainInstance": true
-                },{
-                  "type": "elem",
-                  "name": "ui-component-manager",
-                  "path": "componentmanager",
-                  "import": "/bower_components/oe-studio/component-manager/ui-component-manager.html",
-                  "group": "",
-                  "retainInstance": true
-                }]
-            if(modules !== "all" && Array.isArray(modules)){
-              modulesList = modulesList.filter(function(module){
-                return (modules.indexOf(module.name) !== -1 || module.name === "model-designer");
+            if (modules !== "all" && Array.isArray(modules)) {
+              modulesList = modulesList.filter(function (module) {
+                return (modules.indexOf(module.path) !== -1 || module.name === "model-designer");
               })
             }
-            var moduleImports = modulesList.map(function(m){return m.import});
-            moduleImports.push("/bower_components/oe-studio/elements/app-config.html")
-            this._importLinks(moduleImports, function (errLink) {
-              if (errLink && errLink.length > 0) {
-                  this.fire('oe-show-error', 'Link import failed for ' + errLink);
-              }
-            }.bind(this));
-            this.set('designerRoutes',modulesList);
           }
-          this._fetchTenants();
-          this._fetchSession();
-        }.bind(this));   
+          this.set('designerRoutes', modulesList);
+          //Import elements with API calls
+          this._importLinks(["/bower_components/oe-studio/api-element-imports.html"], function (errLinks) {
+            if (errLinks.length > 0) {
+              this.fire('oe-show-error', 'Imports failed for API based studio elements')
+            }
+            this._fetchTenants();
+            this._fetchSession();
+          }.bind(this))
+        }.bind(this));
       },
       _logOut: function () {
         this.$.logout.body = {};
@@ -302,8 +277,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           }
         }.bind(this))
       },
-      _fetchSession:function(){
-        this.makeAjaxCall( OEUtils._getRestApiUrl('/BaseUsers/session'), 'GET', null, null, null, function (err, response) {
+      _fetchSession: function () {
+        this.makeAjaxCall(OEUtils._getRestApiUrl('/BaseUsers/session'), 'GET', null, null, null, function (err,
+          response) {
           if (response) {
             this.set('currentSession', response);
             localStorage.setItem('tenantId', response.tenantId);
@@ -342,15 +318,21 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         var importsArr = imports.map(function (href) {
           return async.apply(function (href, cb) {
             Polymer.Base.importHref(href, function (e) {
-              cb(null, { "success": href });
+              cb(null, {
+                "success": href
+              });
             }, function (e) {
-              cb(null, { "error": href });
+              cb(null, {
+                "error": href
+              });
             });
           }, href);
         });
         async.parallel(importsArr, function (err, result) {
           var errLink = result.filter(function (obj) {
-            if (obj.error) { return obj }
+            if (obj.error) {
+              return obj
+            }
           }).map(obj => obj.error);
           linkImportCb(errLink);
         });

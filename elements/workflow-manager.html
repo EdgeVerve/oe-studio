@@ -1,0 +1,22 @@
+<link rel="import" href="../../oe-workflow-modeler/workflow-designer.html">
+<link rel="import" href="studio-bottom-panel.html">
+<dom-module id="workflow-manager">
+    <template>
+        <style>
+            :host{
+                position:relative;
+                display:block;
+                box-sizing:border-box;
+            }
+        </style>
+        <div class="component-container">
+            <workflow-designer></workflow-designer>
+            <studio-bottom-panel></studio-bottom-panel>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is:"workflow-manager"
+        })
+    </script>
+</dom-module>
