@@ -64,7 +64,36 @@ Below are some  Guides that demonstrate oe-studio features :
 * [Managing Resources](./docs/resource-manager.md)
 * [Designing Flows](./docs/route-designer.md)
 
+## Confiuration for designer in oe-cloud
+User can provide designer configuration on server side in `config.json` using the property `designer`.
 
+Currently supported designer config are as follows :
+
+| Config Attribute | Description | Default Value |
+|---|---|---|
+| installationPath | Folder path for oe-studio | client/bower-components
+| mountPath |  Route to navigate to studio | /designer |
+| stylePath |  Array of folder paths to fetch styles |  |
+| assetPath |  Array of folder paths to fetch assets (images, videos, audio etc.) |  |
+| templatePath | Array of folder paths to fetch templates | |
+| restApiRoot | Root URI of REST API (If not provided then uses restApiRoot property of server) | /api |
+| imports | Application's client side files that needs to be imported |  |
+
+
+> Sample Config in `config.json`
+```
+...
+...
+"designer": {
+   "installationPath": "client/bower_components",
+   "mountPath": "/designer",
+   "templatePath": ["client/templates"],
+   "restApiRoot": "/api",
+   "imports": ["all-imports.html"]
+}
+...
+...
+```
 
 ## More information
 Futher detailed documentation on individual modules will be added in future releases.
