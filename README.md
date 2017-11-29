@@ -76,7 +76,6 @@ Currently supported designer config are as follows :
 | stylePath |  Array of folder paths to fetch styles |  |
 | assetPath |  Array of folder paths to fetch assets (images, videos, audio etc.) |  |
 | templatePath | Array of folder paths to fetch templates | |
-| restApiRoot | Root URI of REST API (If not provided then uses restApiRoot property of server) | /api |
 | imports | Application's client side files that needs to be imported |  |
 
 
@@ -88,7 +87,6 @@ Currently supported designer config are as follows :
    "installationPath": "client/bower_components",
    "mountPath": "/designer",
    "templatePath": ["client/templates"],
-   "restApiRoot": "/api",
    "imports": ["all-imports.html"]
 }
 ...
