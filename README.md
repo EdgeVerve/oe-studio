@@ -64,7 +64,7 @@ Below are some  Guides that demonstrate oe-studio features :
 * [Managing Resources](./docs/resource-manager.md)
 * [Designing Flows](./docs/route-designer.md)
 
-## Confiuration for designer in oe-cloud
+## Configuration for designer in oe-cloud
 User can provide designer configuration on server side in `config.json` using the property `designer`.
 
 Currently supported designer config are as follows :
