@@ -11,35 +11,39 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       --iron-icon-height: 20px;
     }
 
-    .col-2>* {
-      width: calc(50% - 16px);
-      box-sizing: border-box;
-      padding-left: 8px;
-      padding-right: 8px;
+    .padding {
+      padding : 6px;
+    }
+    .rpad {
+      padding-right : 12px;
     }
 
   </style>
   <template>
-        <div class="vertical flex layout">
-            <div class="layout horizontal col-2">
-                <div class="vertical flex layout">
-                    <oe-radio-group field-id="operation" required label="Operations" value={{vm.operation}}
-                                    displayproperty="display"
-                                    valueproperty="value"
-                                    listdata='[{"display":"Save","value":"save"},{"display":"Create","value":"create"}, {"display":"Update","value":"update"}, {"display":"Delete","value":"delete"}]'></oe-radio-group>
-                    <oe-combo field-id="workflowBody.workflowDefinitionName" required label="Process Name" value={{vm.workflowBody.workflowDefinitionName}} listurl="[[workflowURL]]" displayproperty="name" valueproperty="name" allow-free-text></oe-combo>
-                    <oe-checkbox field-id="wfDependent" label="Workflow Dependent" value={{vm.wfDependent}}></oe-checkbox>
-                </div>
-                <oe-data-table label="Workflow Variables" items={{vm.workflowBody.variables}} record-handling="local" editor-form-url="bower_components/oe-studio/ui-designer/workflow-prop-form.html" columns='[{"key": "name","label": "Name","readOnly": true},{"key": "value","label": "Value","readOnly": true}]'></oe-data-table>
-
-            </div>
-            <div class="dialog-footer flex horizontal layout end-justified">
-                <div class="layout horizontal center justified">
-                    <paper-button primary on-tap="doSave">Save</paper-button>
-                </div>
-            </div>
+    <div class="layout vertical padding">
+      <div class="layout horizontal padding">
+        <div class="layout vertical flex rpad">
+          <div class="vertical layout">
+            <oe-radio-group field-id="operation" required label="Operations" value={{vm.operation}}
+                            displayproperty="display"
+                            valueproperty="value"
+                            listdata='[{"display":"Save","value":"save"},{"display":"Create","value":"create"}, {"display":"Update","value":"update"}, {"display":"Delete","value":"delete"}]'></oe-radio-group>
+            <oe-combo field-id="workflowBody.workflowDefinitionName" required label="Process Name" value={{vm.workflowBody.workflowDefinitionName}} listurl="[[workflowURL]]" displayproperty="name" valueproperty="name" allow-free-text></oe-combo>
+          </div>
+          <div class="layout horizontal">
+            <oe-checkbox class="layout flex" field-id="wfDependent" label="Workflow Dependent" value={{vm.wfDependent}}></oe-checkbox>
+            <oe-combo class="layout flex" field-id="version" listdata='["none","v1","v2"]' label="Maker-Checker Version" value={{vm.version}}></oe-combo>
+          </div>
         </div>
-    </template>
+        <oe-data-table class="layout flex" label="Workflow Variables" items={{vm.workflowBody.variables}} record-handling="local" editor-form-url="bower_components/oe-studio/ui-designer/workflow-prop-form.html" columns='[{"key": "name","label": "Name","readOnly": true},{"key": "value","label": "Value","readOnly": true}]'></oe-data-table>
+      </div>
+      <div class="dialog-footer flex horizontal layout end-justified">
+        <div class="layout horizontal center justified">
+          <paper-button primary on-tap="doSave">Save</paper-button>
+        </div>
+      </div>
+    </div>
+  </template>
   <script>
     Polymer({
       is: 'attach-workflow-oe-workflow',
