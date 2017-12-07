@@ -714,7 +714,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
       setRestUrl: function (modelObj) {
         var url = '/'+(modelObj.plural ? modelObj.plural : inflection.pluralize(modelObj.name));
         this.set('resturl', OEUtils._getRestApiUrl(url));
-        return url;
+        return this.resturl;
       },
       separateMethodRoutes: function (tab) {
         var methodArr = ['get', 'post', 'delete', 'put'];
