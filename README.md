@@ -31,26 +31,28 @@ oe-cloud based UI app . You can learn about creating a ui-app from https://githu
 ---
 
 # oe-studio modules
+oe-studio comes with a set of predefined plugins/modules to be used inside oe-studio.
+To know more about the modules click on the respective links provided.
 
-* Model Management
-  * Manage oe-cloud based models and their data.
+* Model Manager [git](http://evgit/oecloud.io/oe-model-manager)
+  * Manage oe-cloud based models and their data .
   ![Model Management](docs/images/oe-studio-landing.png)
-* UI designer
+* UI designer [git](http://evgit/oecloud.io/oe-ui-designer)
   * Create simple Polymer based form components and dashboards.
   ![UI designer](docs/images/oe-studio-ui-designer.png)
-* Workflow Modeler
+* Workflow Modeler [git](http://evgit/oecloud.io/oe-workflow-modeler)
   * Manage workflows related to the running application.
   ![Workflow Modeler](docs/images/oe-studio-workflow-modeler.png)
-* Route Manager
+* Route Manager [git](http://evgit/oecloud.io/oe-route-manager)
   * Handle event based navigation through ui-routes.
   ![Route Manager](docs/images/oe-studio-route-manager.png)
-* Rule Manager
+* Rule Manager [git](http://evgit/oecloud.io/oe-rule-manager)
   * Handle Business rule management and execution.
    ![Rule Manager](docs/images/oe-studio-rule-manager.png)
-* Resource Manager
+* Resource Manager [git](http://evgit/oecloud.io/oe-resource-manager)
   * Handle UI Resources.
    ![Resource Manager](docs/images/oe-studio-resource-manager.png)
-* Component Manager
+* Component Manager [git](http://evgit/oecloud.io/oe-component-manager)
   * Manage MetaPolymer based forms. 
    ![Component Manager](docs/images/oe-studio-component-manager.png)
 
@@ -77,6 +79,8 @@ Currently supported designer config are as follows :
 | assetPath |  Array of folder paths to fetch assets (images, videos, audio etc.) |  |
 | templatePath | Array of folder paths to fetch templates | |
 | imports | Application's client side files that needs to be imported |  |
+| modules | Information on the plugins to be available in oe-studio | |
+
 
 
 > Sample Config in `config.json`
@@ -93,8 +97,46 @@ Currently supported designer config are as follows :
 ...
 ```
 
-## More information
-Futher detailed documentation on individual modules will be added in future releases.
+##Modules 
+
+The modules array provided in the `config.json` determines the plugins available to oe-studio. This array should contain objects similar to UIRoutes model data. 
+```
+    [{
+      'name': 'oe-model-manager',
+      'path': '',
+      'import': '/bower_components/oe-model-manager/oe-model-manager.html'
+    }, {
+      'name': 'oe-ui-designer',
+      'path': 'ui-designer',
+      'import': '/bower_components/oe-ui-designer/oe-ui-designer.html'
+    }, {
+      'name': 'oe-route-manager',
+      'path': 'route-manager',
+      'import': '/bower_components/oe-route-manager/oe-route-manager.html'
+    }, {
+      'name': 'oe-resource-manager',
+      'path': 'resource-manager',
+      'import': '/bower_components/oe-resource-manager/oe-resource-manager.html'
+    }, {
+      'name': 'oe-rule-manager',
+      'path': 'rule-manager',
+      'import': '/bower_components/oe-rule-manager/oe-rule-manager.html'
+    }, {
+      'name': 'workflow-designer',
+      'path': 'workflow-designer',
+      'import': '/bower_components/oe-workflow-modeler/workflow-designer.html'
+    }, {
+      'name': 'oe-component-manager',
+      'path': 'component-manager',
+      'import': '/bower_components/oe-component-manager/oe-component-manager.html'
+    }];
+
+```
+---
+
+__Note : When no modules are specified by the application config , the above plugins will be available as defaults for the oe-studio.__
+
+---
 
 ## License
 The project is licensed under MIT License, See [LICENSE](./LICENSE) for more details.
