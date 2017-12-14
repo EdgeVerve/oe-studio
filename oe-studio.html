@@ -93,7 +93,7 @@
                                     module.group = "";
                                     return module;
                                 });
-                                this.set('studioRoutes', modulesList);
+                                this.set('studioRoutes', _.uniqBy(modulesList,'path'));
                             }
                         }
                         var apiElementsUrl = "/bower_components/" + this.is +
