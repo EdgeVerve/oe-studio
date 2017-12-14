@@ -1,0 +1,188 @@
+<script src="../webcomponentsjs/webcomponents-lite.js"></script>
+<script src="oe-studio-utils.js"></script>
+<link rel="import" href="all-imports.html">
+<link rel="import" href="elements/studio-bottom-panel.html">
+<dom-module id="oe-studio-modular">
+    <template>
+        <style>
+             :host {
+                position: relative;
+                display: block;
+                box-sizing: border-box;
+                height: 100vh;
+                width: 100vw;
+                overflow: hidden;
+            }
+
+            iron-pages {
+                height: calc(100vh - 40px);
+                width: 100vw;
+            }
+
+            app-header-layout {
+                z-index: unset;
+            }
+
+            app-header-layout::content #contentContainer {
+                z-index: unset;
+            }
+
+            app-drawer {
+                z-index: 100
+            }
+
+            studio-bottom-panel {
+                height: 40px;
+                width: 100vw;
+            }
+        </style>
+        <div class="studio-container">
+            <app-location route="{{route}}" use-hash-as-path></app-location>
+            <app-drawer-layout fullbleed force-narrow>
+                <app-drawer id="leftDrawer">
+                    <user-studio-config modules="{{studioRoutes}}"></user-studio-config>
+                </app-drawer>
+                <app-drawer id="rightDrawer" align="end">
+                    <app-config id="appConfig" on-close-drawer="toggleRightDrawer"></app-config>
+                </app-drawer>
+                <app-header-layout>
+                    <div class="main-app-content">
+                        <oe-app-route route="{{route}}" id="modulePanel" config-url="" routes-list="[[studioRoutes]]">
+                            <iron-pages route-target id="studioSwitcher"></iron-pages>
+                        </oe-app-route>
+                        <studio-bottom-panel id="footerPanel" selected-route="{{route}}" modules="[[studioRoutes]]"></studio-bottom-panel>
+                    </div>
+                </app-header-layout>
+            </app-drawer-layout>
+        </div>
+        <oe-message-handler fit-bottom duration=3000></oe-message-handler>
+    </template>
+    <script>
+        Polymer({
+            is: "oe-studio-modular",
+            behaviors: [OEUtils.AjaxBehavior],
+            listeners: {
+                'oe-studio-footer-action': '_launchFooterEvent',
+                'oe-studio-module-action': '_launchModuleEvent',
+                'oe-route-change': '_routeChangeHandler',
+                'toggle-left-drawer': '_toggleLeftDrawer',
+                'toggle-right-drawer': '_toggleRightDrawer'
+            },
+            attached: function () {
+                this._getData(STUDIO_CONFIG_URL, function (err, response) {
+                    if (err) {
+                        this.fire(ERROR_TOAST, 'Unable to get studio configuration');
+                    } else {
+                        if (response) {
+                            if (response.restApiRoot) {
+                                window.OEUtils = window.OEUtils || {};
+                                window.OEUtils.restApiRoot = response.restApiRoot || '/api';
+                            }
+                            if (response.imports) {
+                                this._importLinks(response.imports, function (errLink) {
+                                    if (errLink && errLink.length > 0) {
+                                        this.fire(ERROR_TOAST, 'Link import failed for ' +
+                                            errLink);
+                                    }
+                                }.bind(this));
+                            }
+                            if (response.modules) {
+                                var modulesList = response.modules.map(function (module) {
+                                    module.type = "elem";
+                                    module.retainInstance = true
+                                    module.group = "";
+                                    return module;
+                                });
+                                this.set('studioRoutes', modulesList);
+                            }
+                        }
+                        var apiElementsUrl = "/bower_components/" + this.is +
+                            "/api-elements-import.html";
+                        this._importLinks([apiElementsUrl], function (errLinks) {
+                            if (errLinks.length > 0) {
+                                this.fire(ERROR_TOAST,
+                                    'Imports failed for API based studio elements')
+                            }
+                        }.bind(this))
+                    }
+                }.bind(this))
+            },
+            _getData: function (url, cb) {
+                this.makeAjaxCall(url, 'GET', null, null, null, function (err, response) {
+                    if (response) {
+                        cb(null, response);
+                    } else {
+                        cb(err);
+                    }
+                });
+            },
+            _importLinks: function (imports, linkImportCb) {
+                var importsArr = imports.map(function (href) {
+                    return async.apply(function (href, cb) {
+                        Polymer.Base.importHref(href, function (e) {
+                            cb(null, {
+                                "success": href
+                            });
+                        }, function (e) {
+                            cb(null, {
+                                "error": href
+                            });
+                        });
+                    }, href);
+                });
+                async.parallel(importsArr, function (err, result) {
+                    var errLink = result.filter(function (obj) {
+                        if (obj.error) {
+                            return obj
+                        }
+                    }).map(obj => obj.error);
+                    linkImportCb(errLink);
+                });
+            },
+            _routeChangeHandler: function () {
+                var selectedModule = this.$.studioSwitcher.selectedItem;
+                var footerEle;
+                if (selectedModule) {
+                    var routePath = selectedModule.getAttribute('route-path');
+                    footerEle = selectedModule.querySelector('[studio-footer]');
+                    if (footerEle) {
+                        footerEle.setAttribute('route-path', routePath);
+                    }
+                }
+                this.$.footerPanel._setFooter(footerEle);
+            },
+            _toggleLeftDrawer: function () {
+                this.$.leftDrawer.toggle();
+            },
+            _toggleRightDrawer: function () {
+                this.$.rightDrawer.toggle();
+            },
+            _launchFooterEvent: function (evt) {
+                var detail = evt.detail;
+                var footer = this._getRelatedRouteElement(evt, "footer");
+                if (footer && footer.is) {
+                    footer.fire(detail.event, detail.payload);
+                }
+            },
+            _launchModuleEvent: function (evt) {
+                var detail = evt.detail;
+                var target = this._getRelatedRouteElement(evt, "module");
+                if (target && target.is) {
+                    target.fire(detail.event, detail.payload);
+                }
+            },
+            _getRelatedRouteElement: function (evt, type) {
+                var eventParent = evt.path.find(function (ele) {
+                    return (ele.hasAttribute && ele.hasAttribute('route-path'))
+                });
+                if (!eventParent) {
+                    //If the event is fired before the element is moved to footer
+                    return evt.target;
+                }
+                var routePath = eventParent.getAttribute('route-path');
+                var targetContainer = (type === "module") ? this.$.studioSwitcher : this.$.footerPanel._target;
+                return targetContainer.querySelector('[route-path="' + routePath + '"]');
+            }
+        });
+    </script>
+</dom-module>

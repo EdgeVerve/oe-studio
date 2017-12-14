@@ -4,6 +4,7 @@ The Program may contain/reference third party or open source components, the rig
 remain with the applicable third party licensors or the open source community as the case may be and nothing 
 here transfers the rights to the third party and open source components, except as expressly permitted. 
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
+<link rel="import" href="oe-studio-iconset.html">
 <dom-module id="module-switcher">
   <template>
     <style>
@@ -92,11 +93,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
         --iron-icon-height: 16px;
       }
     </style>
-    <app-location route="{{selectedRoute}}" use-hash-as-path></app-location>
     <paper-tabs align-bottom selected="{{selectedRoute.path}}" attr-for-selected="datavalue">
-      <template is="dom-repeat" items="{{moduleList}}">
-        <paper-tab datavalue="{{item.routePath}}">
-          <iron-icon icon="[[item.icon]]" class="module-icon"></iron-icon>
+      <template is="dom-repeat" items="{{modules}}">
+        <paper-tab datavalue="{{item.path}}">
+          <iron-icon icon$="oe-studio-icons:[[item.name]]" class="module-icon"></iron-icon>
           <div class="tooltip">
             [[item.name]]
           </div>
@@ -107,47 +107,18 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
   <script>
     Polymer({
       is: 'module-switcher',
-      attached: function () {
-        var moduleList = [{
-          name: 'Model Defintion',
-          icon: 'oe-designer-icons:model',
-          routePath: ''
-        }, {
-          name: 'UI Designer',
-          icon: 'oe-designer-icons:ui-designer',
-          routePath: 'uidesigner'
-        }, {
-          name: 'Workflow',
-          icon: 'oe-designer-icons:workflow',
-          routePath: 'workflow'
-        }, {
-          name: 'Route Flow Designer',
-          icon: 'oe-designer-icons:route-manager',
-          routePath: 'routeflow'
-        }, {
-          name: 'Rule Manager',
-          icon: 'oe-designer-icons:rules-manager',
-          routePath: 'rulemanager'
-        }, {
-          name: 'Resource Manager',
-          icon: 'oe-designer-icons:resource-manager',
-          routePath: 'resourcemanager'
-        }, {
-          name: 'Component Manager',
-          icon: 'assignment',
-          routePath: 'componentmanager'
-        }]
-        var designerElement = document.querySelector('oe-designer');
-        if (designerElement) {
-          var selectedModules = designerElement.designerRoutes;
-          moduleList = moduleList.filter(function (mod) {
-            return selectedModules.find(function (m) {
-              return m.path === mod.routePath;
-            })
-          });
+      properties:{
+        "modules":{
+          type:Object,
+          value:function(){
+            return []
+          }
+        },
+        "selectedRoute":{
+          type:Object,
+          notify:true
         }
-        this.set('moduleList', moduleList);
-      },
+      }
     });
   </script>
 </dom-module>

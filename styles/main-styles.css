@@ -1,0 +1,19 @@
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    min-height: 28px;
+    padding-top: 100px;
+    border-left: 0 solid transparent;
+    border-right: 0 solid transparent;
+    border-top: 0 solid transparent;
+    border-bottom: 0 solid transparent;
+    background-clip: padding-box;
+    background-color: #9E9E9E;
+}
+
+iron-icon {
+    cursor: pointer;
+}
