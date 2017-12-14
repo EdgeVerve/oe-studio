@@ -2,7 +2,7 @@
 <script src="oe-studio-utils.js"></script>
 <link rel="import" href="all-imports.html">
 <link rel="import" href="elements/studio-bottom-panel.html">
-<dom-module id="oe-studio-modular">
+<dom-module id="oe-studio">
     <template>
         <style>
              :host {
@@ -59,7 +59,7 @@
     </template>
     <script>
         Polymer({
-            is: "oe-studio-modular",
+            is: "oe-studio",
             behaviors: [OEUtils.AjaxBehavior],
             listeners: {
                 'oe-studio-footer-action': '_launchFooterEvent',

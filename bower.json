@@ -1,10 +1,10 @@
 {
-  "name": "oe-studio-modular",
+  "name": "oe-studio",
  
   "description": "modular version of oe-studio",
-  "main": "oe-studio-modular",
+  "main": "oe-studio",
   "keywords": [
-    "oe-studio-modular"
+    "oe-studio"
   ],
   "license": "MIT",
   "homepage": "",
