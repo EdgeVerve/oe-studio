@@ -22,7 +22,7 @@ oe-cloud based UI app . You can learn about creating a ui-app from https://githu
 
 ### Once you have the ui app
 
-* add oe-studio as a bower dependency.
+* add oe-studio as a bower dependency e.g. "oe-studio": "^0.5.0".
 * bower install 
 * node .
 * Use username and password as "admin" to login.
