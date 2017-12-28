@@ -108,6 +108,21 @@
                         cb(err);
                     }
                 });
+            },
+            _logOut: function () {
+                var url = 'api/BaseUsers/logout';
+                this.makeAjaxCall(url, 'POST', {}, null, null, function (err, response) {
+                    this._logoutRedirect();
+                }.bind(this));
+            },
+            _logoutRedirect: function() {
+                sessionStorage.removeItem('auth_token');
+                sessionStorage.removeItem('username');
+                sessionStorage.removeItem('currentTenant');
+                sessionStorage.removeItem('tenantId');
+                localStorage.removeItem('auth_token');
+                localStorage.removeItem('swagger_accessToken');
+                location.assign('/login');
             }
         })
     </script>
