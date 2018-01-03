@@ -1,0 +1,70 @@
+<!--
+©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+-->
+<link rel="import" href="module-switcher.html">
+<link rel="import" href="tenant-info.html">
+
+<dom-module id="studio-bottom-panel">
+  <style>
+    :host {
+      color: var(--default-text-color);
+      display: block;
+    }
+
+    app-toolbar {
+        height: 40px;
+        background: var(--default-primary-color);
+        padding: 0px;
+    }
+
+
+    .application-logo {
+      padding: 6px 9px;
+      cursor: pointer;
+      background: var(--dark-primary-color);
+      height: 40px;
+      width: 48px;
+      box-sizing: border-box;
+    }
+  </style>
+  <template>
+		<app-toolbar>
+			<iron-icon src="../images/Logo.png" class="application-logo" on-tap="toggleLeftDrawer"></iron-icon>
+			<module-switcher modules=[[modules]] selected-route="{{selectedRoute}}"></module-switcher>
+      <div id="customize-panel" class="flex">
+          <iron-pages id="footer-content-panel" attr-for-selected="route-path"></iron-pages>
+      </div>
+			<tenant-info></tenant-info>
+		</app-toolbar>
+	</template>
+  <script>
+    Polymer({
+      is: 'studio-bottom-panel',
+      properties:{
+        modules:{
+          type:Object,
+          value:function(){return []}
+        },
+        selectedRoute:{
+          type:Object,
+          notify:true
+        }
+      },
+      attached:function(){
+        var ironPage = this.querySelector('#footer-content-panel');
+        this.set('_target',ironPage);
+      },
+      toggleLeftDrawer: function() {
+        this.fire('toggle-left-drawer');
+      },
+      _setFooter:function(footerElem){
+        if(footerElem && footerElem.is){
+          footerElem.set('hidden',false);
+          Polymer.dom(this._target).appendChild(footerElem);
+          Polymer.dom.flush();
+        }
+        this._target.set('selected',this.selectedRoute.path);
+      }
+    })
+  </script>
+</dom-module>

@@ -2,199 +2,141 @@
 
 ## Introduction
 
-OE Studio, is a web based tool that is developed to make working with oe-cloud easier. This tools provides end user a web interface using which he/she (particularly developer) will be able to perform several tasks like creating models, posting and retrieving data from models and other operations with ease
+OE Studio, is a web based tool that is developed to make working with oe-cloud based application easier. 
 
+
+This tools provides end user a web interface using which he/she (particularly developer) will be able to perform several tasks like creating models, posting and retrieving data from models and other operations with ease.
+
+---
+---
+__Note : This is an experimental component which may go through major modifications in future releases.__
+
+---
 ---
 
 ## Installing OE Studio
 
-# If you have only oe-cloud
+### Prerequisite  : 
+oe-cloud based UI app . You can learn about creating a ui-app from https://github.com/EdgeVerve/oe-ui-app .
 
-* git clone https://github.com/EdgeVerve/oe-cloud.git
-* cd oe-cloud
-* npm install --no-optional
-* bower install
+
+### Once you have the ui app
+
+* add oe-studio as a bower dependency e.g. "oe-studio": "^0.5.0".
+* bower install 
 * node .
-* Browse oe-designer at localhost:3000/designer
-
-Use username and password as "admin" to login
-
----
-
-# Model Administration 
-
-### List of Existing Models :-
-In the side pan of oe-studio tool, all the existing models are listed as shown in the image below. A model can be selected by clicking on the model name.
-
-<img src="images/documentationImages/existingModels.png" width="500" height="400">
+* Use username and password as "admin" to login.
+* Browse oe-studio at localhost:3000/designer
 
 ---
 
-### Search for a model : -
+# oe-studio modules
+oe-studio comes with a set of predefined plugins/modules to be used inside oe-studio.
+To know more about the modules click on the respective links provided.
 
-There is a search option to find a model from the list. Refer the image below.
+* Model Manager [git](http://evgit/oecloud.io/oe-model-manager)
+  * Manage oe-cloud based models and their data .
+  ![Model Management](docs/images/oe-studio-landing.png)
+* UI designer [git](http://evgit/oecloud.io/oe-ui-designer)
+  * Create simple Polymer based form components and dashboards.
+  ![UI designer](docs/images/oe-studio-ui-designer.png)
+* Workflow Modeler [git](http://evgit/oecloud.io/oe-workflow-modeler)
+  * Manage workflows related to the running application.
+  ![Workflow Modeler](docs/images/oe-studio-workflow-modeler.png)
+* Route Manager [git](http://evgit/oecloud.io/oe-route-manager)
+  * Handle event based navigation through ui-routes.
+  ![Route Manager](docs/images/oe-studio-route-manager.png)
+* Rule Manager [git](http://evgit/oecloud.io/oe-rule-manager)
+  * Handle Business rule management and execution.
+   ![Rule Manager](docs/images/oe-studio-rule-manager.png)
+* Resource Manager [git](http://evgit/oecloud.io/oe-resource-manager)
+  * Handle UI Resources.
+   ![Resource Manager](docs/images/oe-studio-resource-manager.png)
+* Component Manager [git](http://evgit/oecloud.io/oe-component-manager)
+  * Manage MetaPolymer based forms. 
+   ![Component Manager](docs/images/oe-studio-component-manager.png)
 
-<img src="images/documentationImages/searchModel.png" width="500" height="400">
 
+## Demo flows
+Below are some  Guides that demonstrate oe-studio features :
+
+* [Creating dashboard](./docs/create-dashboard.md)
+* [Creating a simple listing screen](./docs/create-listing-screen.md)
+* [Creating simple forms](./docs/create-forms.md)
+* [Managing Resources](./docs/resource-manager.md)
+* [Designing Flows](./docs/route-designer.md)
+
+## Configuration for designer in oe-cloud
+User can provide designer configuration on server side in `config.json` using the property `designer`.
+
+Currently supported designer config are as follows :
+
+| Config Attribute | Description | Default Value |
+|---|---|---|
+| installationPath | Folder path for oe-studio | client/bower-components
+| mountPath |  Route to navigate to studio | /designer |
+| stylePath |  Array of folder paths to fetch styles |  |
+| assetPath |  Array of folder paths to fetch assets (images, videos, audio etc.) |  |
+| templatePath | Array of folder paths to fetch templates | |
+| imports | Application's client side files that needs to be imported |  |
+| modules | Information on the plugins to be available in oe-studio | |
+
+
+
+> Sample Config in `config.json`
+```
+...
+...
+"designer": {
+   "installationPath": "client/bower_components",
+   "mountPath": "/designer",
+   "templatePath": ["client/templates"],
+   "imports": ["all-imports.html"]
+}
+...
+...
+```
+
+##Modules 
+
+The modules array provided in the `config.json` determines the plugins available to oe-studio. This array should contain objects similar to UIRoutes model data. 
+```
+    [{
+      'name': 'oe-model-manager',
+      'path': '',
+      'import': '/bower_components/oe-model-manager/oe-model-manager.html'
+    }, {
+      'name': 'oe-ui-designer',
+      'path': 'ui-designer',
+      'import': '/bower_components/oe-ui-designer/oe-ui-designer.html'
+    }, {
+      'name': 'oe-route-manager',
+      'path': 'route-manager',
+      'import': '/bower_components/oe-route-manager/oe-route-manager.html'
+    }, {
+      'name': 'oe-resource-manager',
+      'path': 'resource-manager',
+      'import': '/bower_components/oe-resource-manager/oe-resource-manager.html'
+    }, {
+      'name': 'oe-rule-manager',
+      'path': 'rule-manager',
+      'import': '/bower_components/oe-rule-manager/oe-rule-manager.html'
+    }, {
+      'name': 'workflow-designer',
+      'path': 'workflow-designer',
+      'import': '/bower_components/oe-workflow-modeler/workflow-designer.html'
+    }, {
+      'name': 'oe-component-manager',
+      'path': 'component-manager',
+      'import': '/bower_components/oe-component-manager/oe-component-manager.html'
+    }];
+
+```
 ---
 
-### Creating a new model : -
-
-In the grid region of the tool, there is an icon to create new models. Refer first image below to identify the icon. In order to create a model, click on the icon. After clicking the create model icon, a dialog will pop up with a form to be filled with the required details. First tab of the dialog is all about the model informations. Like - Model name, base model, description of the model, autoscoping values etc. Refere second image
-
-Identify the create model icon.
-
-<img src="images/documentationImages/createNewModel.png" width="500" height="400">
-
-Required model information to create new models. Name of the model is a required field.
-
-<img src="images/documentationImages/modelInformation.png" width="700" height="500">
+__Note : When no modules are specified by the application config , the above plugins will be available as defaults for the oe-studio.__
 
 ---
-
-### Adding model properties
-
-Second tab is to add model properties to the model. Property name and its type is required in order to add a property(Refer image below). The type of property can be a primitive type or it can be a type of another model itself. In the dropdown of property type one will have option to select any desired type(Refer image 2). 
-
-##### Property name
-
-<img src="images/documentationImages/properties.png" height="700" width="1000">
-
-##### Property type
-
-<img src="images/documentationImages/modelProperty.png" height="700" width="1000">
-
-Property validations can be added. Example - If a property should have some minimum or maximum value then it can be added here. Refere the below image.
-
-<img src="images/documentationImages/propertyValidation.png" height="700" width="1000">
-
-Added property can be delete if required. One can select multiple properties at once to delete all selected ones. Refer the below image.
-
-<img src="images/documentationImages/deleteProperty.png" height="700" width="1000">
-
----
-
-### Adding model relations
-
-Relations may exist among the models. Example - An account must belongs to some customer. So there exist a relation between these two. Relation name, type and related models are required fields. Refer the image below.
-
-Relation type can be of anything from the dropdown.
-
-<img src="images/documentationImages/relationType.png" height="700" width="1000">
-
-Relation of the current model must exist with some other model. One can choose the model from all model list.
-Refer the image below.
-
-<img src="images/documentationImages/relationWithModel.png" height="700" width="1000">
-
-Model can be saved at any time using the save button (right bottom). One can add properties , relations or validations later on using edit model option.
-
----
-
-### Editing a model : -
-
-An existing model can be edited with new values of properties, relations, validations, ACls. Existing properties, relations, validations and ACLs can also be edited. These operations can be done in the same way as how to create a new model.
-
-<img src="images/documentationImages/editModel.png" height="700" width="1000">
-
-Same dialog (create model dialog) will pop up when clicked on edit model option. 
-
-<img src="images/documentationImages/editedModelView.png" height="700" width="1000">
-
-After all the edits , model can be saved using the save button (bottom right).
-  
-<img src="images/documentationImages/editedModelSave.png" height="700" width="1000">
-
----
-
-# Data Management
-
-This part of oe-studio provides the facility to interact with data.
-
-### Data management operations : -
-
-There are three options for the data management.
-1. View Data.
-2. Post Data.
-3. Upload Data. (Refer below image.)
-
-<img src="images/documentationImages/modelOperations.png" height="700" width="1000">
-
-### View Data : -
-
-This option is to view the existing data either in grid or Json from.
-
-<img src="images/documentationImages/viewDataGridView.png" height="700" width="1000">
-
-Json view is to see the data in JSON format.
-
-<img src="images/documentationImages/viewData.png" height="700" width="1000">
-
-Query can be passed to get the data according to filter condition.
-
-<img src="images/documentationImages/viewDataFilter.png" height="700" width="1000">
-
----
-
-### Data post : -
-
-This option is to post new data using auto generated form or direct through Json structured form of data. It also provides method to update or delete existing data through Json format.
-
-To post data in an interactive way, a from is auto generated according to the property type of the model. All the required fields appear with mandatory sign. (Refer the image below.) 
-
-<img src="images/documentationImages/postdataUsingForm.png" height="700" width="1000">
-
-Json format of posting data is also available. One can post multiple records at a time. 
-
-<img src="images/documentationImages/jsonPostData.png" height="700" width="1000">
-
-Existing records can be updated by selecting "PUT" method from the method dropdown. "Id" field is required in case of any update queries. If "Id" field is not provided then the record will be posted as a new record.
-
-<img src="images/documentationImages/putOperationToUpdateData.png" height="700" width="1000">
-
-A record can be deleted by selecting "DELETE" method from the method dropdown. "_version" and "Id" fields are mandatory in order to delete the record successfully.
-
-<img src="images/documentationImages/deleteOperationToDeleteData.png" height="700" width="1000">
-
----
-
-### Upload Data : -
-
-This option provides bulk upload of json data to the model through file. The data should be in json structure.
-
-The data file can be dropped to the circular area(refer image below) or the file can be browsed using the browse icon.
-
-<img src="images/documentationImages/fileUpload.png" height="700" width="1000">
-
-If the upload is successful then the following status will appear. In case of any error, the error message will be displayed. If the data is in array form and some of the elements are not according to the model properties then these elements will be discarded and rest will be posted successfully.
-
-<img src="images/documentationImages/fileUploadSuccess.png" height="700" width="1000">
-
-Posted data can be viewed by selecting the view data from the same dialog.(Refer the image below.)
-
-<img src="images/documentationImages/viewDataAfterFileUpload.png" height="700" width="1000">
-
----
-
-### Model detailed report : -
-
-By selecting the detailed report option one can see the details of the model.
-
-<img src="images/documentationImages/detailedReport.png" height="700" width="1000">
-
-This option provides detailed information of a model. Like - Model name, its relations, properties and validation. 
-
-<img src="images/documentationImages/detailedView.png" height="700" width="1000">
-
-### Service Personalization : -
-
-Select Manage rule option from the model operations.
-Refer image below.
-
-<img src="images/documentationImages/personalizationRulesMenu" height="700" width="1000">
-
-## More information
-Please refer wiki documentation for more information on installation and usage.
 
 ## License
 The project is licensed under MIT License, See [LICENSE](./LICENSE) for more details.

@@ -1,0 +1,90 @@
+<!--
+©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+-->
+<dom-module id="oe-layout-styles">
+  <template>
+    <style>
+        /*Container Child Element Layout*/
+
+	.layout.horizontal.oe-rl-25-75 > *:nth-child(odd) {
+		width: 25%;
+		box-sizing: border-box;
+	}
+
+	.layout.horizontal.oe-rl-25-75 > *:nth-child(even) {
+		width: 75%;
+		box-sizing: border-box;
+	}
+
+	.layout.horizontal.oe-rl-2eq > * {
+		width: 50%;
+		box-sizing: border-box;
+        padding-left: 8px;
+        padding-right: 8px;
+	}
+
+	.layout.horizontal.oe-rl-75-25 > *:nth-child(odd) {
+		width: 75%;
+		box-sizing: border-box;
+        padding-left: 8px;
+        padding-right: 8px;
+	}
+
+	.layout.horizontal.oe-rl-75-25 > *:nth-child(even) {
+		width: 25%;
+		box-sizing: border-box;
+        padding-left: 8px;
+        padding-right: 8px;
+	}
+
+	.layout.horizontal.oe-rl-3eq > * {
+		width: 33.33%;
+		box-sizing: border-box;
+        padding-left: 8px;
+        padding-right: 8px;
+	}
+
+	.layout.horizontal.oe-rl-343 > *:nth-child(3n+1) {
+		width: 30%;
+		box-sizing: border-box;
+        padding-left: 8px;
+        padding-right: 8px;
+	}
+
+	.layout.horizontal.oe-rl-343 > *:nth-child(3n+2) {
+		width: 40%;
+		box-sizing: border-box;
+        padding-left: 8px;
+        padding-right: 8px;
+	}
+
+	.layout.horizontal.oe-rl-343 > *:nth-child(3n+0) {
+		width: 30%;
+		box-sizing: border-box;
+        padding-left: 8px;
+        padding-right: 8px;
+	}
+
+	.layout.horizontal.oe-rl-4eq > * {
+		width: 25%;
+		box-sizing: border-box;
+        padding-left: 8px;
+        padding-right: 8px;
+	}
+
+    @media only screen and (max-width: 400px) {
+         .layout.horizontal.oe-rl-25-75 > *,
+         .layout.horizontal.oe-rl-2eq > *,
+         .layout.horizontal.oe-rl-75-25 > *,
+         .layout.horizontal.oe-rl-3eq > *,
+         .layout.horizontal.oe-rl-343 > *,
+         .layout.horizontal.oe-rl-4eq > *{
+            width:100% !important;
+            box-sizing: border-box;
+            padding-left: 8px;
+            padding-right: 8px;
+         }
+    }
+    </style>
+  </template>
+</dom-module>

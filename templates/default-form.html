@@ -1,6 +1,14 @@
+<!--
+©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+-->
+<!--
+        @author Rohit_Khode
+        @description Default form template from oe-studio
+-->
+<link rel="import" href="/bower_components/oe-studio/styles/oe-layout-styles.html">
 <dom-module id=":componentName">
   <template>
-    <style>
+    <style include="oe-layout-styles">
 
     </style>
     <div class="content layout vertical">
@@ -49,10 +57,7 @@
       properties: {
         :modelAlias: {
           type: 'object',
-          notify: true,
-          value: function() {
-            return {}
-          }
+          notify: true
         }
       },
       behaviors: [OEUtils.FormValidationBehavior, OEUtils.ModelHandler, OEUtils.FormMessagesBehavior]

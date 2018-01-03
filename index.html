@@ -26,33 +26,26 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="PSK">
-    <!-- Add to homescreen for Safari on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="OE Studio">
-    <script src="bower_components/oe-studio/scripts/oe-css-parser.js"></script>
-    <script src="bower_components/oe-studio/scripts/appcommon.js"></script>
-    <!-- endbuild -->
-    <!-- Because this project uses vulcanize this should be your only html import
-       in this file. All other imports should go in elements.html -->
-    <link rel="import" href="bower_components/oe-studio/oe-designer.html">
-    <link rel="import" href="bower_components/oe-studio/styles/oe-styles.html">
+
+    <script>
+        window.OEUtils = window.OEUtils || {designerData:{}};
+        var baseUrl = window.location.protocol;
+        baseUrl = '//' + window.location.host;
+        window.OEUtils.baseurl = baseUrl;
+        window.OEUtils.uibaseroute = baseUrl;
+      </script>
+    <link rel="import" href="bower_components/oe-studio/oe-studio.html">
+    <link rel="import" href="bower_components/oe-ui-misc/styles/oe-studio-styles.html">
     <style is="custom-style" include="shared-styles"></style>
+    
 </head>
 
 <body unresolved>
   <span id="browser-sync-binding"></span>
-  <oe-designer></oe-designer>
-  <script>
-    document.onreadystatechange = function () {
-      if (document.readyState === 'complete') {
-        var elem = document.getElementById('evfcssparser');
-        if (elem) {
-          OEUtils.designerData.classList = window.OEUtils.designer.xExtractCSS(elem.contentDocument.styleSheets);
-        }
-      }
-    }
-  </script>
+  <oe-studio></oe-studio>
 </body>
 
 </html>

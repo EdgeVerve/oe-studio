@@ -1,6 +1,20 @@
+<!--
+©2015-2016 EdgeVerve Systems Limited (a fully owned Infosys subsidiary), Bangalore, India. All Rights Reserved.
+-->
+<!--
+        @author Rohit_Khode
+        @description Default form template from oe-studio with scope field
+-->
 <dom-module id=":componentName">
   <template>
-    <style>
+    <style include="oe-layout-styles">
+      :host{
+            display: block;
+            position: relative;
+            padding: 0px 16px 16px 16px;
+            background: #FFF;
+      }
+
       #fields>* {
         width: calc(100% - 16px);
         margin: 0px 8px;
@@ -43,12 +57,10 @@
   <script>
     MetaPolymer({
       is: ":componentName",
-      properties: {:modelAlias: {
+      properties: {
+        :modelAlias: {
           type: 'object',
-          notify: true,
-          value: function () {
-            return {}
-          }
+          notify: true
         }
       },
       behaviors: [OEUtils.FormValidationBehavior, OEUtils.ModelHandler, OEUtils.FormMessagesBehavior]

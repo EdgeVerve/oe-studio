@@ -1,0 +1,129 @@
+<dom-module id="user-studio-config">
+    <template>
+        <style>
+             :host {
+                position: relative;
+                display: block;
+                box-sizing: border-box;
+            }
+
+            .user-details {
+                padding: 16px;
+                height: 100px;
+                background: var(--light-primary-color);
+                color: var(--default-text-color);
+            }
+
+            .user-icon {
+                background: var(--default-primary-color);
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                margin-right: 16px;
+            }
+
+            .user-icon iron-icon {
+                --iron-icon-width: 30px;
+                --iron-icon-height: 30px;
+            }
+
+            .user-name {
+                font-size: 18px;
+                letter-spacing: 0.7px;
+            }
+
+            #logOut-btn span {
+                margin: 0px 6px;
+            }
+
+            .module-selection-list {
+                padding: 0px 16px;
+                margin: 8px 0px;
+            }
+
+            .module-item {
+                padding: 0px 8px;
+                height: 30px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+            }
+        </style>
+        <div class="component-container">
+            <div class="user-details layout horizontal center">
+                <div class="user-icon layout horizontal center-center">
+                    <iron-icon icon="social:person"></iron-icon>
+                </div>
+                <div class="user-name">[[currentSession.username]]</div>
+            </div>
+            <div class="module-selection-list">
+                <template is="dom-repeat" items="[[modules]]">
+                    <div class="module-item layout horizontal center">
+                        <label>[[item.name]]</label>
+                    </div>
+                </template>
+            </div>
+            <div>
+                <paper-button id="logOut-btn" on-tap="_logOut">
+                    <iron-icon icon="icons:power-settings-new"></iron-icon>
+                    <span>Log Out</span>
+                </paper-button>
+            </div>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "user-studio-config",
+            properties: {
+                modules: {
+                    type: Object,
+                    value: function () {
+                        return []
+                    }
+                }
+            },
+            behaviors: [OEUtils.AjaxBehavior],
+            listeners: {},
+            attached: function () {
+                this._fetchSession();
+            },
+            _fetchSession: function () {
+                var sessionAPI = OEUtils._getRestApiUrl(USER_SESSION_URL);
+                this._getData(sessionAPI, function (err, response) {
+                    if (response) {
+                        this.set('currentSession', response);
+                        localStorage.setItem('tenantId', response.tenantId);
+                        this.set('selectedTenant', response.tenantId);
+                        this.set('currentSession.isAdmin', (response.roles.indexOf('admin') != -1));
+                        this.fire('session-fetched', this.currentSession);
+                    } else {
+                        this.fire('oe-show-error', 'Unable to fetch user information');
+                        this._logOut();
+                    }
+                }.bind(this))
+            },
+            _getData: function (url, cb) {
+                this.makeAjaxCall(url, 'GET', null, null, null, function (err, response) {
+                    if (response) {
+                        cb(null, response);
+                    } else {
+                        cb(err);
+                    }
+                });
+            },
+            _logOut: function () {
+                var url = 'api/BaseUsers/logout';
+                this.makeAjaxCall(url, 'POST', {}, null, null, function (err, response) {
+                    this._logoutRedirect();
+                }.bind(this));
+            },
+            _logoutRedirect: function() {
+                sessionStorage.removeItem('auth_token');
+                sessionStorage.removeItem('username');
+                sessionStorage.removeItem('currentTenant');
+                sessionStorage.removeItem('tenantId');
+                localStorage.removeItem('auth_token');
+                localStorage.removeItem('swagger_accessToken');
+                location.assign('/login');
+            }
+        })
+    </script>
+</dom-module>

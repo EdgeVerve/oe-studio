@@ -5,7 +5,7 @@ remain with the applicable third party licensors or the open source community as
 here transfers the rights to the third party and open source components, except as expressly permitted. 
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. -->
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../behaviours/designer-wrapper-behaviors.html">
+
 <dom-module id="app-config">
 	<style>
 		:host {
@@ -112,7 +112,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 							<iron-icon icon="icons:clear" on-tap="closeDrawer"></iron-icon>
 						</div>
 						<div class="layout vertical justified center" hidden=[[disableSwitch]]>
-							<oe-combo class="combo-box" id="tenantCombo" label="Choose Tenant" listdata="{{tenantList}}" displayproperty="tenantName" value="{{selectedTenant}}" listurl="/api/Tenants" invalid='{{invalidTenant}}'>
+							<oe-combo class="combo-box" id="tenantCombo" label="Choose Tenant" listdata="{{tenantList}}" displayproperty="tenantName" value="{{selectedTenant}}" listurl="[[tenantUrl]]" invalid='{{invalidTenant}}'>
 							</oe-combo>
 							<paper-button on-tap="switchTenant" id="switchTenantBtn" secondary disabled="[[!validateTenant(selectedTenant,invalidTenant)]]">SWITCH TENANT</paper-button>
 						</div>
@@ -177,6 +177,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 					value: 'roles'
 				}];
 				this.selectedView = 0;
+				this.tenantUrl = OEUtils._getRestApiUrl('/Tenants/');
 			},
 			observers: ["tenantsUpdated(tenantList.*)"],
 			initialize: function() {
@@ -207,7 +208,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 				} else {
 					//Save current tenant and switch to view tenant page
 					if (this.$.tenantForm.validate()) {
-						var url = '/api/Tenants'
+						var url = this.tenantUrl;
 						var method = this.editState ? 'PUT' : 'POST'
 						this.makeAjaxCall(url, method, this.newTenant, null, null, function(err) {
 							if (err) {

@@ -5,12 +5,12 @@ remain with the applicable third party licensors or the open source community as
 here transfers the rights to the third party and open source components, except as expressly permitted. 
 Any unauthorized reproduction, storage, transmission in any form or by any means (including without limitation to electronic, mechanical, printing, photocopying, recording or  otherwise), or any distribution of this Program,or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under the law. */
 module.exports = {
-testTimeout: 60 * 1000,
+  testTimeout: 60 * 1000,
   plugins: {
-	  sauce :{
+    sauce: {
       disabled: true
     },
-    local : {
+    local: {
       browsers: ['chrome']
     },
     istanbul: {
@@ -18,27 +18,27 @@ testTimeout: 60 * 1000,
       reporters: ['text-summary', 'lcov'],
       include: [
         '/**/*.js',
-		'/**/*.html'
+        '/**/*.html'
       ],
       exclude: [
-		'/bower_components/**/*.html',
-		'/bower_components/**/*.js',
-		'/coverage/**/*.html',
-		'/coverage/**/*.js',
-		'/node_modules/**/*.html',
-		'/node_modules/**/*.js',
-		'/test/**/*.html',
-		'/test/**/*.js',
-		'/scripts/*.js'
+        '/bower_components/**/*.html',
+        '/bower_components/**/*.js',
+        '/coverage/**/*.html',
+        '/coverage/**/*.js',
+        '/node_modules/**/*.html',
+        '/node_modules/**/*.js',
+        '/test/**/*.html',
+        '/test/**/*.js',
+        '/scripts/*.js'
       ]
-	  // ,
+      // ,
       // thresholds: {
-        // global: {
-			// lines: 40,
-			// statements: 40,
-			// functions: 40,
-			// branches: 40
-        // }
+      // global: {
+      // lines: 40,
+      // statements: 40,
+      // functions: 40,
+      // branches: 40
+      // }
       // }
     }
   }
