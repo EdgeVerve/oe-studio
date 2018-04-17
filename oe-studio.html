@@ -80,12 +80,8 @@
                                 window.OEUtils.restApiRoot = response.restApiRoot || '/api';
                             }
                             if (response.imports) {
-                                this._importLinks(response.imports, function (errLink) {
-                                    if (errLink && errLink.length > 0) {
-                                        this.fire(ERROR_TOAST, 'Link import failed for ' +
-                                            errLink);
-                                    }
-                                }.bind(this));
+                                OEUtils.uiDesignerData = OEUtils.uiDesignerData || {}
+                                OEUtils.uiDesignerData.iframeImports = response.imports;
                             }
                             if (response.modules) {
                                 var modulesList = response.modules.map(function (module) {
