@@ -1,87 +1,106 @@
 <dom-module id=":componentName">
     <template>
-    <style include="iron-flex iron-flex-alignment">
-        :host{
-            display: block;
-            box-sizing: border-box;
-        }
-        .navigation-panel{
-            padding: 8px;
-            height:40px;
-        }
-        .navigation-panel paper-button{
-            border-radius: 0px;
-        }
-        .form-container{
-            padding: 0px 16px;
-        }
-        .dynamic-container{
-            padding:16px;
-            margin-bottom: 8px;
-            width:100%;
-            overflow: auto;
-            display: block;
-            box-sizing: border-box;
-            background: #FFF;
-        }
-        .stepper-container{
-            padding: 16px;
-            box-sizing: border-box;
-        }
-        #stepper{
-            --oe-stepper-circle-size:30px;
-            --oe-stepper-step-font-size:20px;
-            --oe-stepper-label-width:130px;
-            --oe-stepper-icon-bg:var(--default-primary-color);
-            --oe-stepper-filling-color:var(--default-primary-color);
-            --oe-stepper-data:{
-                padding-left:8px;
-            };
-            pointer-events:none;
-        }
-        .left-panel-message {
-            font-family: Rubik-Light;
-            font-size: 20px;
-            color: #000000;
-            padding: 20px 0px 40px;
-        }
-        #tab-container.layout.vertical .dynamic-container{
-            height:calc(100vh - 200px);
-        }
-        #tab-container.layout.vertical .form-container{
-            margin-top: 4px;
-            border-top:1px solid rgba(0,0,0,0.2);
-        }
-        #tab-container.layout.horizontal .dynamic-container{
-            height: calc(100vh - 140px);
-        }
-        #tab-container.layout.horizontal .stepper-container{
-            height: calc(100vh - 140px);
-        }
-    </style>
-    <div class="content layout vertical">
-        <div class="oeform layout vertical">
-            <div id="tab-container" class$="layout [[_getVerticalClass(isVerticalLayout)]] justified">
-                <div class="stepper-container flex-1 layout vertical">
-                    <h2 class="model-name">:modelName</h2>
-                    <oe-stepper id="stepper" class="flex" vertical={{!isVerticalLayout}} steps='[[stepperSteps]]' value=[[selectedStep]]></oe-stepper>
-                </div>
-                <div class="flex-4 form-container">
-                    <iron-pages id="form-pages" selected={{selectedStep}}></iron-pages>
-                    <div class="layout horizontal justified center navigation-panel">
-                        <paper-button raised={{selectedStep}} on-tap="_goPrev">
-                            <iron-icon icon="chevron-left"></iron-icon>
-                            <oe-i18n-msg msgid="prev">Prev</oe-i18n-msg>
-                        </paper-button>
-                        <paper-button raised on-tap="_gotoNextorSave">
-                            <oe-i18n-msg msgid="[[_computeBtnText(stepperSteps,selectedStep)]]"></oe-i18n-msg>
-                            <iron-icon icon="[[_computeBtnIcon(stepperSteps,selectedStep)]]"></iron-icon>
-                        </paper-button>
+        <style include="iron-flex iron-flex-alignment">
+            :host {
+                display: block;
+                box-sizing: border-box;
+            }
+
+            .model-name{
+                padding: 0px 16px;
+            }
+            .navigation-panel {
+                padding: 8px;
+                height: 40px;
+            }
+
+            .navigation-panel paper-button {
+                border-radius: 4px;
+                min-width: 80px;
+            }
+            .navigation-panel paper-button iron-icon{
+                --iron-icon-width:20px;
+                --iron-icon-height:20px;
+                padding:0px 8px;
+            }
+
+            .form-container {
+                padding: 0px 16px;
+            }
+
+            .dynamic-container {
+                padding: 16px;
+                margin-bottom: 8px;
+                width: 100%;
+                overflow: auto;
+                display: block;
+                box-sizing: border-box;
+                background: #FFF;
+            }
+
+            .stepper-container {
+                padding: 16px;
+                box-sizing: border-box;
+            }
+
+            #stepper {
+                pointer-events: none;
+                --oe-stepper-circle-size: 30px;
+                --oe-stepper-step-font-size: 20px;
+                --oe-stepper-label-width: 130px;
+                --oe-stepper-icon-bg: var(--default-primary-color);
+                --oe-stepper-filling-color: var(--default-primary-color);
+                --oe-stepper-data: {
+                    padding-left: 8px;
+                }
+            }
+
+            .left-panel-message {
+                font-family: Rubik-Light;
+                font-size: 20px;
+                color: #000000;
+                padding: 20px 0px 40px;
+            }
+
+
+            #tab-container.layout.vertical .form-container {
+                margin-top: 4px;
+                border-top: 1px solid rgba(0, 0, 0, 0.2);
+                height: calc(100vh - 200px);
+            }
+
+
+            #tab-container.layout.horizontal .form-container {
+                height: calc(100vh - 140px);
+            }
+
+            #tab-container.layout.horizontal .stepper-container {
+                border-right: 1px solid rgba(0, 0, 0, 0.2);
+            }
+        </style>
+        <div class="content layout vertical">
+            <div class="oeform layout vertical">
+                <h2 class="model-name">:modelName</h2>
+                <div id="tab-container" class$="layout [[_getVerticalClass(isVerticalLayout)]] justified">
+                    <div class="stepper-container flex-1 layout vertical">
+                        <oe-stepper id="stepper" spread-value="30" class="flex" vertical={{!isVerticalLayout}} steps='[[stepperSteps]]' value=[[selectedStep]]></oe-stepper>
+                    </div>
+                    <div class="flex-4 form-container layout vertical justified">
+                        <iron-pages id="form-pages" class="flex" selected={{selectedStep}}></iron-pages>
+                        <div class="layout horizontal justified center navigation-panel">
+                            <paper-button class="layout horizontal justified center" raised={{selectedStep}} on-tap="_goPrev">
+                                <iron-icon icon="chevron-left"></iron-icon>
+                                <oe-i18n-msg msgid="prev">Prev</oe-i18n-msg>
+                            </paper-button>
+                            <paper-button class="layout horizontal justified center" raised on-tap="_gotoNextorSave">
+                                <oe-i18n-msg msgid="[[_computeBtnText(stepperSteps,selectedStep)]]"></oe-i18n-msg>
+                                <iron-icon icon="[[_computeBtnIcon(stepperSteps,selectedStep)]]"></iron-icon>
+                            </paper-button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </template>
     <script>
         MetaPolymer({
