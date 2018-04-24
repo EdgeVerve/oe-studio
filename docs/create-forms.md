@@ -77,10 +77,9 @@ Templates are  bare backbone structures on which the form is rendered. It has CS
 <link rel="import" href="/bower_components/oe-checkbox/oe-checkbox.html">
 <link rel="import" href="/bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="/bower_components/oe-validators/behaviors/oe-model-handler.html">
-<link rel="import" href="/bower_components/oe-validators/behaviors/oe-form-validation-behavior.html">
-<link rel="import" href="/bower_components/oe-validators/behaviors/oe-model-handler.html">
-<link rel="import" href="/bower_components/oe-validators/oe-validators.html">
+<link rel="import" href="/bower_components/oe-ui-forms/behaviors/oe-model-handler.html">
+<link rel="import" href="/bower_components/oe-ui-forms/behaviors/oe-form-validation-behavior.html">
+<link rel="import" href="/bower_components/oe-ui-forms/behaviors/oe-model-handler.html">
 
 
 <dom-module id=":componentName">
