@@ -125,6 +125,10 @@
                 var currentPage = ironPages.selectedItem;
                 if(currentPage.validate){
                     currentPage.validate().then(function(status){
+                        var stepErrorPath = 'stepperSteps.'+this.selectedStep+'.hasError';
+                        var stepCompletedPath = 'stepperSteps.'+this.selectedStep+'.isCompleted';
+                        this.set(stepErrorPath,!status.valid);
+                        this.set(stepCompletedPath,status.valid);
                         if(!status.valid){
                             this.fire('oe-show-error',currentPage.error);
                             return;

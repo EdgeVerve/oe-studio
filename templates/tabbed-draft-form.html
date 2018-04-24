@@ -128,8 +128,12 @@
                 var currentPage = ironPages.selectedItem;
                 if (currentPage.validate) {
                     currentPage.validate().then(function (status) {
-                        if (!status.valid) {
-                            this.fire('oe-show-error', currentPage.error);
+                        var stepErrorPath = 'stepperSteps.'+this.selectedStep+'.hasError';
+                        var stepCompletedPath = 'stepperSteps.'+this.selectedStep+'.isCompleted';
+                        this.set(stepErrorPath,!status.valid);
+                        this.set(stepCompletedPath,status.valid);
+                        if(!status.valid){
+                            this.fire('oe-show-error',currentPage.error);
                             return;
                         }
                         if (this.stepperSteps.length === (this.selectedStep + 1)) {
