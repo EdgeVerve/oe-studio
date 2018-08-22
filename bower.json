@@ -36,11 +36,7 @@
     "oe-ui": "^1.0.0",
     "oe-ui-forms": "^1.0.0",
     "oe-model-manager": "^0.6.0",
-    "oe-ui-designer": "^0.6.0",
-    "oe-route-manager": "^0.6.0",
-    "oe-rule-manager": "^0.6.0",
-    "oe-resource-manager": "^0.6.0",
-    "oe-component-manager": "^0.6.0",
+    "oe-feel-designer":"^0.6.0",
     "oe-workflow-modeler": "^1.0.0"
   },
   "resolutions": {

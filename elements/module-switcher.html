@@ -96,7 +96,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
     <paper-tabs align-bottom selected="{{selectedRoute.path}}" attr-for-selected="datavalue">
       <template is="dom-repeat" items="{{modules}}">
         <paper-tab datavalue="{{item.path}}">
-          <iron-icon icon$="oe-studio-icons:[[item.name]]" class="module-icon"></iron-icon>
+          <iron-icon icon$="[[_getIcon(item)]]" class="module-icon"></iron-icon>
           <div class="tooltip">
             [[item.name]]
           </div>
@@ -118,6 +118,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
           type:Object,
           notify:true
         }
+      },
+      _getIcon:function(item){
+        return item.icon?item.icon:("oe-studio-icons:"+item.name);
       }
     });
   </script>
