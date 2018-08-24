@@ -43,6 +43,9 @@ To know more about the modules click on the respective links provided.
 * Rule Manager [git](http://evgit/oecloud.io/oe-feel-designer)
   * Handle Decision table and Decision graph management and execution.
    ![Rule Manager](docs/images/oe-studio-rule-manager.png)
+* Component Manager (experimental) [git](http://evgit/oecloud.io/oe-component-manager)
+  * Manage MetaPolymer based forms. 
+   ![Component Manager](docs/images/oe-studio-component-manager.png)
 * Route Manager (experimental) [git](http://evgit/oecloud.io/oe-route-manager)
   * Handle event based navigation through ui-routes.
   ![Route Manager](docs/images/oe-studio-route-manager.png)
@@ -52,9 +55,7 @@ To know more about the modules click on the respective links provided.
 * Resource Manager (experimental) [git](http://evgit/oecloud.io/oe-resource-manager)
   * Handle UI Resources.
    ![Resource Manager](docs/images/oe-studio-resource-manager.png)
-* Component Manager (experimental) [git](http://evgit/oecloud.io/oe-component-manager)
-  * Manage MetaPolymer based forms. 
-   ![Component Manager](docs/images/oe-studio-component-manager.png)
+
 
 
 ## Demo flows
@@ -113,6 +114,10 @@ The modules array provided in the `config.json` determines the plugins available
       'name': 'oe-feel-designer',
       'path': 'rule-manager',
       'import': '/bower_components/oe-feel-designer/oe-feel-designer.html'
+    }, {
+      'name': 'oe-component-manager',
+      'path': 'component-manager',
+      'import': '/bower_components/oe-component-manager/oe-component-manager.html'
     }]
 
 ```
