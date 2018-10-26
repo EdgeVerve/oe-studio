@@ -1,7 +1,9 @@
-/*
-  ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
-  Bangalore, India. All Rights Reserved.
-*/
+/**
+ *
+ * ©2017-2018 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
+ * Bangalore, India. All Rights Reserved.
+ *
+ */
 
 // EVENT NAMES
 const SUCCESS_TOAST = 'oe-show-success';
