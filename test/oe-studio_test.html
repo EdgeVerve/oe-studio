@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <title>oe-studio test</title>
+
+  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../node_modules/@polymer/test-fixture/test-fixture.js"></script>
+    <script src="../node_modules/chai/chai.js"></script>
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
+
+  <script src="../node_modules/fakerest/dist/FakeRest.min.js"></script>
+  <script src="../node_modules/sinon/pkg/sinon.js"></script>
+
+  <script type="module" src="../oe-studio.js"></script>
+</head>
+
+<body>
+  <test-fixture id="simple">
+    <template>
+      <oe-studio></oe-studio>
+    </template>
+  </test-fixture>
+
+  <script type="module">
+    import { DomApi } from "@polymer/polymer/lib/legacy/polymer.dom";
+    import '@polymer/iron-test-helpers/mock-interactions';
+    import 'oe-component-manager/oe-component-manager.js';
+
+    var fakeAjax = [
+      {
+        "method": "GET",
+        "url": /designer\/config/,
+        "response": {
+          "installationPath": "client/node_modules",
+          "mountPath": "/designer",
+          "templatePath": [],
+          "stylePath": [],
+          "modules": [
+            {
+              "name": "oe-component-manager",
+              "path": "component-manager",
+              "type": "elem",
+              "import": "../../../oe-component-manager/oe-component-manager.js"
+            },
+            {
+              "name": "paper-button",
+              "path": "paper-button",
+              "type": "elem",
+              "import": "/node_modules/@polymer/paper-button/paper-button.js"
+            }
+          ],
+          "restApiRoot": "/api",
+          "assetPath": ["client/images"]
+        }
+      },
+      {
+        "method": "GET",
+        "url": /api\/BaseUsers\/session/,
+        "response": {
+          "username": "judith",
+          "userid": "3bca9774-f4d9-11e6-bc64-92361f002003",
+          "tenantId": "demotenant",
+          "roles": ["customer"]
+        }
+      }
+    ];
+
+    suite('studio load', function () {
+      var el, server;
+      setup(function (done) {
+        server = sinon.fakeServer.create();
+        server.autoRespond = true;
+        server.respondImmediately = true;
+
+        fakeAjax.forEach(function (conf) {
+          (function (fake) {
+            server.respondWith(fake.method, fake.url, function (req) {
+              req.respond(200, 'application/json', JSON.stringify(fake.response));
+            });
+            console.log("Added fake server for : ", fake.method + " on " + fake.url);
+          })(conf);
+        });
+
+        el = fixture('simple');
+        flush(function () {
+          done();
+        })
+      })
+
+      test('check initial settings', function (done) {
+        assert.equal(el.studioRoutes.length, 2);
+        assert.equal(el.studioRoutes[0].name, "oe-component-manager");
+        assert.equal(el.$.leftDrawer.opened, false);
+        var userInfo = el.shadowRoot.querySelector('user-info-panel');
+        el.$.footerPanel.toggleLeftDrawer();
+        flush(function () {
+          assert.equal(el.$.leftDrawer.opened, true);
+          el.$.footerPanel.toggleLeftDrawer();
+          assert.equal(userInfo.currentSession.username, "judith");
+          done();
+        });
+      });
+
+      test('load studio module', function (done) {
+        assert.equal(el.studioRoutes.length, 2);
+        assert.equal(el.route.path, "");
+        el.set("route", {
+          prefix: "",
+          path: "component-manager",
+          __queryParams: {}
+        });
+        el.async(function () {
+          assert.equal(el.$.studioSwitcher.selectedItem.tagName, "OE-COMPONENT-MANAGER");
+          el.set("route", {
+            prefix: "",
+            path: "/",
+            __queryParams: {}
+          });
+          done();
+        }, 1000);
+      });
+
+      test('log out from studio', function (done) {
+        var userInfo = el.shadowRoot.querySelector('user-info-panel');
+        assert.equal(userInfo.currentSession.username, "judith");
+        var logOutBtn = userInfo.shadowRoot.querySelector('#logOut-btn');
+        logOutBtn.click();
+        done();
+      });
+    });
+  </script>
+</body>
+
+</html>

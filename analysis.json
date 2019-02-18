@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "`oe-studio`\n A shell element that loads the other oe-studio modules and displays them",
+      "summary": "",
+      "path": "oe-studio.js",
+      "properties": [],
+      "methods": [
+        {
+          "name": "connectedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 88,
+              "column": 2
+            },
+            "end": {
+              "line": 121,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_routeChangeHandler",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 123,
+              "column": 2
+            },
+            "end": {
+              "line": 134,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_toggleLeftDrawer",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 136,
+              "column": 2
+            },
+            "end": {
+              "line": 138,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_toggleRightDrawer",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 140,
+              "column": 2
+            },
+            "end": {
+              "line": 142,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        }
+      ],
+      "staticMethods": [],
+      "demos": [
+        {
+          "url": "demo/index.html",
+          "description": ""
+        }
+      ],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 27,
+          "column": 0
+        },
+        "end": {
+          "line": 144,
+          "column": 1
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "name": "OeStudio",
+      "attributes": [],
+      "events": [],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "oe-studio",
+      "mixins": [
+        "OECommonMixin"
+      ]
+    }
+  ]
+}
