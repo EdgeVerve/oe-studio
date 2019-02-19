@@ -21,11 +21,11 @@
     "@polymer/paper-tabs": "3.0.1",
     "@polymer/paper-tooltip": "3.0.1",
     "@polymer/polymer": "3.1.0",
-    "oe-app-route": "git+http://10.73.97.24/polymer-3/oe-app-route.git#master",
-    "oe-component-manager": "git+http://10.73.97.24/polymer-3/oe-component-manager.git#master",
-    "oe-data-table": "git+http://10.73.97.24/polymer-3/oe-data-table.git#master",
-    "oe-message-handler": "git+http://10.73.97.24/polymer-3/oe-message-handler.git#master",
-    "oe-mixins": "git+http://10.73.97.24/polymer-3/oe-mixins.git#master"
+    "oe-app-route": "git+http://evgit/oecloud.io/oe-app-route.git#master",
+    "oe-component-manager": "git+http://evgit/oecloud.io/oe-component-manager.git#master",
+    "oe-data-table": "git+http://evgit/oecloud.io/oe-data-table.git#master",
+    "oe-message-handler": "git+http://evgit/oecloud.io/oe-message-handler.git#master",
+    "oe-mixins": "git+http://evgit/oecloud.io/oe-mixins.git#master"
   },
   "devDependencies": {
     "@polymer/iron-demo-helpers": "3.0.2",
