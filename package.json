@@ -32,7 +32,7 @@
     "@webcomponents/webcomponentsjs": "2.2.7",
     "@polymer/iron-component-page": "4.0.1",
     "@polymer/iron-test-helpers": "3.0.1",
-    "fakerest": "^2.1.0",
+    "fakerest": "2.1.0",
     "@polymer/test-fixture": "4.0.2",
     "axe-core": "3.1.2",
     "chai": "4.2.0",
