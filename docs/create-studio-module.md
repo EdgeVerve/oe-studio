@@ -10,7 +10,7 @@ In addition to the 6 modules provided by default by the oe-studio, you can creat
 ```
         <oe-ui-footer studio-footer hidden></oe-ui-footer>
 ```
-*   The module-footer will be extracted from the module and attached seperatly as a part of studio footer. Hence no data should be directly shared between the module and its footer. However `Redux` stores can be used to keep the module and footer in sync like [oe-component-manager](http://evgit/oecloud.io/oe-component-manager/blob/master/oe-component-manager.html).
+*   The module-footer will be extracted from the module and attached seperatly as a part of studio footer. Hence no data should be directly shared between the module and its footer. However `Redux` stores can be used to keep the module and footer in sync like [oe-component-manager](https://github.com/EdgeVerve/oe-component-manager/blob/master/oe-component-manager.html).
 *   All interactions between the module-footer and main-module should be through events and event details.
 *   Events fired from footer for main module should be fired as shown below.
 
@@ -30,10 +30,10 @@ In addition to the 6 modules provided by default by the oe-studio, you can creat
 			});
 ```
 
-*   The module and the module-footer can listen to the events using default Polymer Listeners.  [oe-model-footer](http://evgit/oecloud.io/oe-model-manager/blob/master/elements/oe-model-footer.html) and [oe-ui-designer](http://evgit/oecloud.io/oe-ui-designer/blob/master/oe-ui-designer.html) can bew viewed as reference for the implementation. 
+*   The module and the module-footer can listen to the events using default Polymer Listeners.  [oe-model-footer](https://github.com/EdgeVerve/oe-model-manager/blob/master/elements/oe-model-footer.html) and [oe-ui-designer](https://github.com/EdgeVerve/oe-ui-designer/blob/master/oe-ui-designer.html) can bew viewed as reference for the implementation.
 
 ##Usage
-Once the component is created the component can be plugged into the studio by adding it as a module in server's `config.json` like 
+Once the component is created the component can be plugged into the studio by adding it as a module in server's `config.json` like
 * * *
 ```
     {

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-OE Studio, is a web based tool that is developed to make working with oe-cloud based application easier. 
+OE Studio, is a web based tool that is developed to make working with oe-cloud based application easier.
 
 
 This tools provides end user a web interface using which he/she (particularly developer) will be able to perform several tasks like creating models, posting and retrieving data from models and other operations with ease.
@@ -16,14 +16,14 @@ __Note : This is an experimental component which may go through major modificati
 
 ## Installing OE Studio
 
-### Prerequisite  : 
+### Prerequisite  :
 oe-cloud based UI app . You can learn about creating a ui-app from https://github.com/EdgeVerve/oe-ui-app .
 
 
 ### Once you have the ui app
 
 * add oe-studio as a bower dependency e.g. "oe-studio": "^0.5.0".
-* bower install 
+* bower install
 * node .
 * Use username and password as "admin" to login.
 * Browse oe-studio at localhost:3000/designer
@@ -34,25 +34,25 @@ oe-cloud based UI app . You can learn about creating a ui-app from https://githu
 oe-studio comes with a set of predefined plugins/modules to be used inside oe-studio.
 To know more about the modules click on the respective links provided.
 
-* Model Manager [git](http://evgit/oecloud.io/oe-model-manager)
+* Model Manager [git](https://github.com/EdgeVerve/oe-model-manager)
   * Manage oe-cloud based models and their data .
   ![Model Management](docs/images/oe-studio-landing.png)
-* Workflow Modeler [git](http://evgit/oecloud.io/oe-workflow-modeler)
+* Workflow Modeler [git](https://github.com/EdgeVerve/oe-workflow-modeler)
   * Manage workflows related to the running application.
   ![Workflow Modeler](docs/images/oe-studio-workflow-modeler.png)
-* Rule Manager [git](http://evgit/oecloud.io/oe-feel-designer)
+* Rule Manager [git](https://github.com/EdgeVerve/oe-feel-designer)
   * Handle Decision table and Decision graph management and execution.
    ![Rule Manager](docs/images/oe-studio-rule-manager.png)
-* Component Manager (experimental) [git](http://evgit/oecloud.io/oe-component-manager)
-  * Manage MetaPolymer based forms. 
+* Component Manager (experimental) [git](https://github.com/EdgeVerve/oe-component-manager)
+  * Manage MetaPolymer based forms.
    ![Component Manager](docs/images/oe-studio-component-manager.png)
-* Route Manager (experimental) [git](http://evgit/oecloud.io/oe-route-manager)
+* Route Manager (experimental) [git](https://github.com/EdgeVerve/oe-route-manager)
   * Handle event based navigation through ui-routes.
   ![Route Manager](docs/images/oe-studio-route-manager.png)
-* UI designer (experimental) [git](http://evgit/oecloud.io/oe-ui-designer)
+* UI designer (experimental) [git](https://github.com/EdgeVerve/oe-ui-designer)
   * Create simple Polymer based form components and dashboards.
   ![UI designer](docs/images/oe-studio-ui-designer.png)
-* Resource Manager (experimental) [git](http://evgit/oecloud.io/oe-resource-manager)
+* Resource Manager (experimental) [git](https://github.com/EdgeVerve/oe-resource-manager)
   * Handle UI Resources.
    ![Resource Manager](docs/images/oe-studio-resource-manager.png)
 
@@ -98,9 +98,9 @@ Currently supported designer config are as follows :
 ...
 ```
 
-##Modules 
+##Modules
 
-The modules array provided in the `config.json` determines the plugins available to oe-studio. This array should contain objects similar to UIRoutes model data. 
+The modules array provided in the `config.json` determines the plugins available to oe-studio. This array should contain objects similar to UIRoutes model data.
 ```
     [{
       'name': 'oe-model-manager',
@@ -131,6 +131,6 @@ __Note : When no modules are specified by the application config , the above plu
 The project is licensed under MIT License, See [LICENSE](./LICENSE) for more details.
 
 ## Contributing
-We welcome contributions. Some of the best ways to contribute are to try things out, file bugs, and join in design conversations. 
+We welcome contributions. Some of the best ways to contribute are to try things out, file bugs, and join in design conversations.
 
 ### [How to contribute](./CONTRIBUTION.md)
