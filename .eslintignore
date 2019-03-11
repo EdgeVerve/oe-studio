@@ -1,6 +1,6 @@
-/workflow/index.min.js
-/workflow/main.js
-/scripts/redux.js
-node_modules
-bower_components
+node_modules/*
+bower_components/*
+test/*
+demo/*
 wct.conf.js
+coverage/*

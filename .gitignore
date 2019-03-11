@@ -1,5 +1,3 @@
-bower_components
-coverage
-node_modules
-Gruntfile.js
-lint*.txt
+/node_modules/
+/coverage/
+package-lock.json
