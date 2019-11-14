@@ -1,7 +1,7 @@
 {
   "name": "oe-studio",
   "description": "Modular version of oe-studio Polymer 3 elements",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "main": "oe-studio.js",
   "scripts": {
     "test": "polymer test --module-resolution node --skip-selenium-install",
@@ -9,35 +9,40 @@
     "doc": "polymer analyze *.js > analysis.json"
   },
   "dependencies": {
-    "@polymer/app-layout": "3.0.2",
-    "@polymer/app-route": "3.0.2",
-    "@polymer/font-roboto": "3.0.2",
-    "@polymer/iron-icon": "3.0.1",
-    "@polymer/iron-icons": "3.0.1",
-    "@polymer/iron-pages": "3.0.1",
-    "@polymer/paper-button": "3.0.1",
-    "@polymer/paper-radio-button": "3.0.1",
-    "@polymer/paper-radio-group": "3.0.1",
-    "@polymer/paper-tabs": "3.0.1",
-    "@polymer/paper-tooltip": "3.0.1",
-    "@polymer/polymer": "3.1.0",
-    "oe-app-route": "2.0.0",
-    "oe-component-manager": "2.0.0",
-    "oe-data-table": "2.0.0",
-    "oe-message-handler": "2.0.0",
-    "oe-mixins": "2.0.0"
+    "@polymer/app-layout": "^3.0.2",
+    "@polymer/app-route": "^3.0.2",
+    "@polymer/font-roboto": "^3.0.2",
+    "@polymer/iron-icon": "^3.0.1",
+    "@polymer/iron-icons": "^3.0.1",
+    "@polymer/iron-pages": "^3.0.1",
+    "@polymer/paper-button": "^3.0.1",
+    "@polymer/paper-radio-button": "^3.0.1",
+    "@polymer/paper-radio-group": "^3.0.1",
+    "@polymer/paper-tabs": "^3.0.1",
+    "@polymer/paper-tooltip": "^3.0.1",
+    "@polymer/polymer": "^3.1.0",
+    "oe-app-route": "^2.0.0",
+    "oe-component-manager": "^2.0.0",
+    "oe-data-table": "^2.0.0",
+    "oe-message-handler": "^2.0.0",
+    "oe-mixins": "^2.0.0"
   },
   "devDependencies": {
-    "@polymer/iron-demo-helpers": "3.0.2",
-    "@webcomponents/webcomponentsjs": "2.2.7",
-    "@polymer/iron-component-page": "4.0.1",
-    "@polymer/iron-test-helpers": "3.0.1",
+    "@polymer/iron-demo-helpers": "^3.0.2",
+    "@webcomponents/webcomponentsjs": "^2.2.7",
+    "@polymer/iron-component-page": "^4.0.1",
+    "@polymer/iron-test-helpers": "^3.0.1",
     "fakerest": "2.1.0",
-    "@polymer/test-fixture": "4.0.2",
+    "@polymer/test-fixture": "^4.0.2",
     "axe-core": "3.1.2",
     "chai": "4.2.0",
     "mocha": "5.2.0",
     "sinon": "7.2.3",
     "wct-mocha": "1.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EdgeVerve/oe-studio.git"
   }
 }
