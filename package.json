@@ -1,7 +1,7 @@
 {
   "name": "oe-studio",
   "description": "Modular version of oe-studio Polymer 3 elements",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "main": "oe-studio.js",
   "scripts": {
     "test": "polymer test --module-resolution node --skip-selenium-install",
@@ -21,11 +21,11 @@
     "@polymer/paper-tabs": "^3.0.1",
     "@polymer/paper-tooltip": "^3.0.1",
     "@polymer/polymer": "^3.1.0",
-    "oe-app-route": "git+http://evgit/oecloud.io/oe-app-route.git#master",
-    "oe-component-manager": "git+http://evgit/oecloud.io/oe-component-manager.git#master",
-    "oe-data-table": "git+http://evgit/oecloud.io/oe-data-table.git#master",
-    "oe-message-handler": "git+http://evgit/oecloud.io/oe-message-handler.git#master",
-    "oe-mixins": "git+http://evgit/oecloud.io/oe-mixins.git#master"
+    "oe-app-route": "git+http://evgit/oecloud.io/oe-app-route.git#2.2.0",
+    "oe-component-manager": "git+http://evgit/oecloud.io/oe-component-manager.git#2.2.0",
+    "oe-data-table": "git+http://evgit/oecloud.io/oe-data-table.git#2.2.0",
+    "oe-message-handler": "git+http://evgit/oecloud.io/oe-message-handler.git#2.2.0",
+    "oe-mixins": "git+http://evgit/oecloud.io/oe-mixins.git#2.2.0"
   },
   "devDependencies": {
     "@polymer/iron-demo-helpers": "^3.0.2",
